@@ -1,0 +1,12 @@
+*.pdf
+*.tex
+.DS_Store
+*/.DS_Store
+figures-pdf/
+figures-hi_res/
+figures-low_res/
+private/
+local/
+scripts/
+onosproject.github.io/
+_build/

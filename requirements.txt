@@ -1,0 +1,7 @@
+Sphinx~=3.1.1
+doc8~=0.8.0
+reuse~=0.11.1
+docutils==0.16
+sphinx-rtd-theme~=0.4.3
+sphinxcontrib-spelling~=4.3.0
+git+https://github.com/zdw/sphinx-multiversion@ec7c01cdaf2f9241245e84483dfb9bc0d0dffc62
