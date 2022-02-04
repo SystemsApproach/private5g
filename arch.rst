@@ -148,11 +148,39 @@ become clear in the following discussion.
 ----------------------
 
 .. Establish the distinction between the over-the-air interface and
-   the RAN, and introduce the minimum terminology needed in the
-   rest of this chapter (most notably, QCI). Could draw parallel to
-   optical link. The radio tranmission chapter is alreay a minimal
-   primer, so this section will likely be pretty short.
-   
+   the RAN, and introduce the minimum terminology needed in the rest
+   of this chapter (most notably, the opportunity to differential
+   quality-of-service). Could draw parallel to optical link. The radio
+   tranmission chapter is alreay a minimal primer, so this section
+   will likely be pretty short.
+
+Before describing the two major subsystems of the mobile cellular
+network—the RAN and Mobile Core—we first call attention to the
+obvious: that the basestations that comprise the RAN communicate with
+UEs via radio transmission. This book is not about the physics of this
+over-the-air interface, and only skims the surface of the information
+theory and coding theory that underlies it. But identifying the
+abstract properties of wireless communication is an essential
+foundation for understanding the rest of the 5G architecture.
+
+If you imagine the basestations as implementing a multi-layer protocol
+stack (which as we'll see in Chapter 4, they do), then radio
+transmission is the responsibility of the Physical (PHY) layer at the
+bottom of that stack. Chapter 3 introduces radio transimission with
+enough detail to lay the necessary foundation, so we're able to
+understand all the layers that come above it.
+
+Notably, the RAN is responsible for managing how the radio spectrum is
+shared among thousands or millions of UEs connected to hundreds or
+thousands of basestations in a geographic region, such as a metro
+area. Our primary task in Chapter 3 is to establish an abstraction
+interface by which the RAN can manage that spectrum without having to
+worry about the details of waveforms, modulation, signal-to-noise
+ratios, or coding algorithms. All important topics, to be sure, but
+the realm of information theorist rather than system design that is
+the focus of this book. For the purpose of this chapter, all we need
+to know is that it is possible to offer different levels service to
+different UEs; we'll see what that means in the next chapter.
 
 2.3 Radio Access Network
 ------------------------
@@ -328,17 +356,17 @@ Standard* (AES) is one of the options for encryption. Note that this
 authentication exchange is initially in the clear since the Base 
 Station to UE link is not yet secure. 
 
-Once the UE and Core-CP are satisfied with each other's identity, the 
-Core-CP informs the other components of the parameters they will need 
-to service the UE (Step 3). This includes: (a) instructing the Core-UP 
-to initialize the user plane (e.g., assign an IP address to the UE and 
-set the appropriate QCI parameter); (b) instructing the Base Station 
-to establish an encrypted channel to the UE; and (c) giving the UE the 
-symmetric key it will need to use the encrypted channel with the Base 
-Station.  The symmetric key is encrypted using the public key of the 
-UE (so only the UE can decrypt it, using its secret key). Once 
-complete, the UE can use the end-to-end user plane channel through the 
-Core-UP (Step 4). 
+Once the UE and Core-CP are satisfied with each other's identity, the
+Core-CP informs the other components of the parameters they will need
+to service the UE (Step 3). This includes: (a) instructing the Core-UP
+to initialize the user plane (e.g., assign an IP address to the UE and
+set the appropriate level of service); (b) instructing the Base
+Station to establish an encrypted channel to the UE; and (c) giving
+the UE the symmetric key it will need to use the encrypted channel
+with the Base Station.  The symmetric key is encrypted using the
+public key of the UE (so only the UE can decrypt it, using its secret
+key). Once complete, the UE can use the end-to-end user plane channel
+through the Core-UP (Step 4).
 
 There are three additional details of note about this process. First,
 the secure control channel between the UE and the Core-CP set up 
@@ -346,13 +374,13 @@ during Step 2 remains available, and is used by the Core-CP to send
 additional control instructions to the UE during the course of the 
 session. 
 
-Second, the user plane channel established during Step 4 is referred 
-to as the *Default Bearer Service*, but additional channels can be 
-established between the UE and Core-UP, each with a potentially 
-different QCI value. This might be done on an 
-application-by-application basis, for example, under the control of 
+Second, the user plane channel established during Step 4 is referred
+to as the *Default Bearer Service*, but additional channels can be
+established between the UE and Core-UP, each with a potentially
+different level of service. This might be done on an
+application-by-application basis, for example, under the control of
 the Mobile Core doing *Deep Packet Inspection* (DPI) on the traffic,
-looking for flows that require special treatment. 
+looking for flows that require special treatment.
 
 .. _fig-per-hop:
 .. figure:: figures/Slide35.png 
