@@ -156,31 +156,51 @@ become clear in the following discussion.
 
 Before describing the two major subsystems of the mobile cellular
 network—the RAN and Mobile Core—we first call attention to the
-obvious: that the basestations that comprise the RAN communicate with
+obvious: that the base stations that comprise the RAN communicate with
 UEs via radio transmission. This book is not about the physics of this
 over-the-air interface, and only skims the surface of the information
 theory and coding theory that underlies it. But identifying the
 abstract properties of wireless communication is an essential
 foundation for understanding the rest of the 5G architecture.
 
-If you imagine the basestations as implementing a multi-layer protocol
-stack (which as we'll see in Chapter 4, they do), then radio
-transmission is the responsibility of the Physical (PHY) layer at the
-bottom of that stack. Chapter 3 introduces radio transimission with
-enough detail to lay the necessary foundation, so we're able to
-understand all the layers that come above it.
+If you imagine the base stations as implementing a multi-layer
+protocol stack (which as we'll see in Chapter 4, they do), then radio
+transmission is the responsibility of the bottom-most layers of that
+stack. Chapter 3 introduces radio transimission with enough detail to
+lay the necessary foundation, so we're able to understand all the
+layers that come above it.
 
 Notably, the RAN is responsible for managing how the radio spectrum is
 shared among thousands or millions of UEs connected to hundreds or
 thousands of basestations in a geographic region, such as a metro
 area. Our primary task in Chapter 3 is to establish an abstraction
 interface by which the RAN can manage that spectrum without having to
-worry about the details of waveforms, modulation, signal-to-noise
-ratios, or coding algorithms. All important topics, to be sure, but
-the realm of information theorist rather than system design that is
-the focus of this book. For the purpose of this chapter, all we need
-to know is that it is possible to offer different levels service to
-different UEs; we'll see what that means in the next chapter.
+worry about the details of waveforms, modulation, or coding
+algorithms. All important topics, to be sure, but the realm of
+information theorist rather than system design that is the focus of
+this book.
+
+For the purpose of this chapter, all we need to know is that there are
+two fundamental pieces of information shared between the higher layers
+of the base station stack that manage the RAN as a whole, and the
+lower layers of the stack that manage radio transmissions on a
+particular base station. One is the signal-to-noise ratio that the
+base station observes when communicating with a given UE. This is
+called the *Channel Quality Indicator (CQI)* and it is passed *up*
+from the radio. The second is the quality-of-service the network wants
+to give a particular UE. This is called the *QoS Class Indicator
+(QCI)* and it is passed *down* to the radio. We will fill in more
+details about both of these parameters in Chapter 3, but this
+high-level summary is sufficient to describe the RAN and Mobile Core.
+
+.. sidebar:: Uniqueness of Wireless Links
+
+   Talk about quality of the "link" being continuous in a wireless
+   network, versus discrete in a wireline network (the link is up or
+   it is down). Quality plays a role in handover, but it's more
+   complicated than "picking the best." You have to play the value
+   delivered to a given UE against the aggregate goodness of the
+   shared spectrum.
 
 2.3 Radio Access Network
 ------------------------
@@ -259,7 +279,9 @@ Fifth, each base station coordinates UE handovers with neighboring
 base stations, using direct station-to-station links. Exactly like the
 station-to-core connectivity shown in the previous figure, these links
 are used to transfer both control plane (SCTP over IP) and user plane
-(GTP over UDP/IP) packets.
+(GTP over UDP/IP) packets. The decsion as to when to do a handover is
+based on the CQI values being reported by the radio on each of the
+base stations within range of the UE.
 
 .. _fig-handover:
 .. figure:: figures/Slide07.png 
@@ -295,19 +317,16 @@ option of either spreading the physical payloads across multiple base
 stations or across multiple carrier frequencies of a single base
 station (including Wi-Fi).
 
-Note that as outlined in Chapter 2, scheduling is complex and
-multi-faceted, even when viewed as a localized decision at a single
-base station. What we now see is that there is also a global element,
-whereby it’s possible to forward traffic to a different base station
-(or to multiple base stations) in an effort to make efficient use of
-the radio spectrum over a larger geographic area.
-
 In other words, the RAN as a whole (i.e., not just a single base
 station) not only supports handovers (an obvious requirement for
-mobility), but also *link aggregation* and *load balancing*, mechanisms
-that are familiar to anyone who understands the Internet. We will
-revisit how such RAN-wide (global) decisions can be made using SDN
-techniques in a later chapter.
+mobility), but also *link aggregation* and *load balancing*,
+mechanisms that are familiar to anyone who understands the
+Internet. These functions imply a global decision-making process,
+whereby it’s possible to forward traffic to a different base station
+(or to multiple base stations) in an effort to make efficient use of
+the radio spectrum over a larger geographic area. We will revisit how
+such RAN-wide (global) decisions can be made using SDN techniques in a
+later chapter.
 
 2.4 Mobile Core
 ---------------
@@ -333,7 +352,10 @@ each UE has an operator-provided SIM card, which uniquely identifies
 the subscriber (i.e., phone number) and establishes the radio 
 parameters (e.g., frequency band) needed to communicate with that 
 operator's Base Stations. The SIM card also includes a secret key that 
-the UE uses to authenticate itself. 
+the UE uses to authenticate itself.
+
+.. Talk about IMSIs here, and that the Core maps phone numbers into an
+   IMSI. Also an opportunityt to explain how roaming works.
 
 .. _fig-secure:
 .. figure:: figures/Slide34.png 
@@ -360,13 +382,13 @@ Once the UE and Core-CP are satisfied with each other's identity, the
 Core-CP informs the other components of the parameters they will need
 to service the UE (Step 3). This includes: (a) instructing the Core-UP
 to initialize the user plane (e.g., assign an IP address to the UE and
-set the appropriate level of service); (b) instructing the Base
-Station to establish an encrypted channel to the UE; and (c) giving
-the UE the symmetric key it will need to use the encrypted channel
-with the Base Station.  The symmetric key is encrypted using the
-public key of the UE (so only the UE can decrypt it, using its secret
-key). Once complete, the UE can use the end-to-end user plane channel
-through the Core-UP (Step 4).
+set the appropriate QCI); (b) instructing the Base Station to
+establish an encrypted channel to the UE; and (c) giving the UE the
+symmetric key it will need to use the encrypted channel with the Base
+Station.  The symmetric key is encrypted using the public key of the
+UE (so only the UE can decrypt it, using its secret key). Once
+complete, the UE can use the end-to-end user plane channel through the
+Core-UP (Step 4).
 
 There are three additional details of note about this process. First,
 the secure control channel between the UE and the Core-CP set up 
@@ -377,14 +399,14 @@ session.
 Second, the user plane channel established during Step 4 is referred
 to as the *Default Bearer Service*, but additional channels can be
 established between the UE and Core-UP, each with a potentially
-different level of service. This might be done on an
-application-by-application basis, for example, under the control of
-the Mobile Core doing *Deep Packet Inspection* (DPI) on the traffic,
-looking for flows that require special treatment.
+different QCI. This might be done on an application-by-application
+basis, for example, under the control of the Mobile Core doing *Deep
+Packet Inspection* (DPI) on the traffic, looking for flows that
+require special treatment.
 
 .. _fig-per-hop:
 .. figure:: figures/Slide35.png 
-    :width: 600px 
+    :width: 500px 
     :align: center 
 	    
     Sequence of per-hop tunnels involved in an end-to-end User Plane 
