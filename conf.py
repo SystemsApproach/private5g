@@ -38,7 +38,7 @@ def get_version():
 
 # -- Project information -----------------------------------------------------
 
-project = u'5G Connectivity Service: A Systems Approach'
+project = u'Software-Defined 5G: A Systems Approach'
 copyright = u'2019, 2020'
 author = u'Larry Peterson, Oguz Sunay, and Bruce Davie'
 
@@ -195,7 +195,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'book.tex', u'5G Connectivity Service: A Systems Approach',
+    (master_doc, 'book.tex', u'Software-Defined 5G: A Systems Approach',
      u'Peterson, Sunay, and Davie', 'manual', True),
 ]
 
@@ -218,7 +218,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, '5G Connectivity Service', u'5G Connectivity Service',
+    (master_doc, 'Software-Defined 5G', u'Software-Defined 5G',
      author, 'Peterson, Sunay, and Davie', 'A Systems Approach',
      'Miscellaneous'),
 ]

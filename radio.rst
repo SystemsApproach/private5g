@@ -6,6 +6,9 @@ Chapter 3:  Radio Transmission
    but probably needs to include more discussion on small cells. May
    include an overview of WiFi-6 (at the radio/scheduling level).
 
+   Emphasizes use cases, which can be anchored in features of the
+   radio (which the rest of the stack then need to take into account).
+   
 For anyone familiar with wireless access technologies like Wi-Fi, the
 cellular network is most unique due to its approach to sharing the
 available radio spectrum among its many users, all the while allowing
@@ -13,12 +16,12 @@ those users to remain connected while moving. This has resulted in a
 highly dynamic and adaptive approach, in which coding, modulation and
 scheduling play a central role.
 
-As we will see in this chapter, cellular networks use a
+As we will see in this chapter, mobile cellular networks use a
 reservation-based strategy, whereas Wi-Fi is contention-based. This
 difference is rooted in each system’s fundamental assumption about
 utilization: Wi-Fi assumes a lightly loaded network (and hence
-optimistically transmits when the wireless link is idle and backs off if
-contention is detected), while 4G and 5G cellular networks assume (and
+optimistically transmits when the wireless link is idle and backs off
+if contention is detected), while 4G and 5G networks assume (and
 strive for) high utilization (and hence explicitly assign different
 users to different “shares” of the available radio spectrum).
 
@@ -157,8 +160,8 @@ To start, we drill down on these schedulable units. We return to the
 broader issue of the *air interface* that makes efficient use of the
 spectrum in the concluding section.
 
-Multiplexing in 4G
-~~~~~~~~~~~~~~~~~~
+3.2.1 Multiplexing in 4G
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 The 4G approach to multiplexing downstream transmissions is called
 *Orthogonal Frequency-Division Multiple Access (OFDMA)*, a specific
@@ -244,8 +247,8 @@ architecture open to innovations like this is one of our goals, and as
 we will see in the next section, becomes even more important in 5G where
 the scheduler operates with even more degrees of freedom.
 
-Multiplexing in 5G
-~~~~~~~~~~~~~~~~~~
+3.2.2 Multiplexing in 5G
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 The transition from 4G to 5G introduces additional flexibility in
 how the radio spectrum is scheduled, making it possible to adapt the
@@ -333,8 +336,8 @@ depth in a later chapter.
     CQI feedback from receivers and the QCI parameters associated with
     each class of service.
 
-3.3 New Radio (NR)
-------------------
+3.3 New Use Cases
+-----------------
 
 We conclude by noting that while the previous section describes 5G as
 introducing additional degrees of freedom into how data is scheduled

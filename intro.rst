@@ -6,8 +6,8 @@ Chapter 1:  Introduction
    goal is showing how this technology can be integrated into edge
    clouds running in enterprises (and used as part of their Industry
    Transformation 4.0). In other words, in addition to describing the
-   technology, this book is also about democratizing the access
-   network (which is related to Rural Broadband).
+   technology, this book is also about (a) democratizing the access
+   network, and (b) applying the technology to new use cases.
    
    Also talk about two enabling technologies: SDN and Cloud
    Native. These can easily be positioned as two aspects of the
