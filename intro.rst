@@ -192,6 +192,14 @@ in later chapters. Ensuring that the allocated spectrum is used
 
 .. This section focuses on the traditional Telco perspective
 
+.. _fig-global:
+.. figure:: figures/Slide1.png 
+    :width: 600px
+    :align: center
+    
+    This figure belongs somewhere in this section. Talk about
+    the RAN being logically global.
+
 The cellular network is part of the access network that implements the
 Internet’s so-called *last mile*. Other access technologies include
 *Passive Optical Networks (PON)*, colloquially known as
@@ -227,6 +235,14 @@ term “Central Office” as a synonym for both types of edge sites.
 
 .. This section pivots to the new cloud perspective
    
+.. _fig-enterprise:
+.. figure:: figures/ops/Slide1.png 
+    :width: 700px
+    :align: center
+    
+    This figure belongs somewhere in this section. Talk about
+    the enterprise-centric (private 5g) story.
+
 Because of their wide distribution and close proximity to end users,
 Central Offices are also an ideal place to host the edge cloud. But this
 raises the question: What exactly is the edge cloud?

@@ -12,6 +12,8 @@ Chapter 6:  Managed Cloud Service
    big part of the democratization story. Avoid pivoting to a full
    operationalization discussion, which we tell elsewhere (which we
    likely introduce as part of Background material in Chapter 1).
+   Probably focus on "user/operator" perspective (rather than
+   "under the covers" perspective).
 
 This chapter identifies all the subsystems that go into building and
 operationalizing a cloud capable of running an assortment of
@@ -56,7 +58,7 @@ or more server racks interconnected by a leaf-spine switching fabric,
 with an SDN control plane (denoted SD-Fabric) managing the fabric.
 
 .. _fig-ace:
-.. figure:: figures/tmp/Slide3.png
+.. figure:: figures/ops/Slide3.png
    :width: 400px
    :align: center
 
@@ -126,7 +128,7 @@ managing all the centralized and edge subsystems (as introduced in the
 next section).
 
 .. _fig-aether:
-.. figure:: figures/tmp/Slide4.png
+.. figure:: figures/ops/Slide4.png
    :width: 600px
    :align: center
 
@@ -281,7 +283,7 @@ division between those that *use* cloud services and those that
 *operate* cloud services.
 
 .. _fig-amp:
-.. figure:: figures/tmp/Slide5.png
+.. figure:: figures/ops/Slide5.png
    :width: 600px
    :align: center
 
@@ -330,7 +332,7 @@ hardware, and the inventory-tracking required to manage physical
 assets.
 
 .. _fig-provision:
-.. figure:: figures/tmp/Slide6.png
+.. figure:: figures/ops/Slide6.png
    :width: 500px
    :align: center
 
@@ -376,7 +378,7 @@ comprehensive testing regime, and typically, a procedure by which
 developers inspect and comment on each others’ code.
 
 .. _fig-lifecycle:
-.. figure:: figures/tmp/Slide7.png 
+.. figure:: figures/ops/Slide7.png 
    :width: 600px 
    :align: center 
 
@@ -420,7 +422,7 @@ connectivity service, for example, users only care about being able to
 authorize devices and set QoS parameters on an end-to-end basis.
 
 .. _fig-control:
-.. figure:: figures/tmp/Slide8.png
+.. figure:: figures/ops/Slide8.png
    :width: 400px
    :align: center
 
@@ -458,7 +460,7 @@ consumable dashboards (similar to the example shown in :numref:`Figure
 %s <fig-monitor>`).
 
 .. _fig-monitor:
-.. figure:: figures/tmp/Slide18.png
+.. figure:: figures/ops/Slide9.png
    :width: 500px
    :align: center
 

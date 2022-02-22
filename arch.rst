@@ -26,6 +26,9 @@ Chapter 2:  Architecture
    different usage scenarios; it’s a matter of economics. But now we
    have options we didn’t have before.
 
+   A concluding section will introduce cross-cutting issues: slicing
+   and security.
+   
 This chapter identifies the main architectural components of mobile
 cellular networks. It includes components that are common to both 4G
 and 5G, which establishes a foundation for understanding the advanced
@@ -64,7 +67,7 @@ industrial and agricultural machines, robots, home appliances, medical
 devices, and so on.
 
 .. _fig-cellular:
-.. figure:: figures/Slide01.png 
+.. figure:: figures/Slide2.png 
     :width: 600px
     :align: center
 	    
@@ -139,7 +142,7 @@ denote this idea.) The importance of these two distinctions will
 become clear in the discussion that follows.
 
 .. _fig-cups:
-.. figure:: figures/Slide02.png 
+.. figure:: figures/Slide3.png 
     :width: 400px
     :align: center
     
@@ -215,7 +218,8 @@ radio technology. For our purposes, the key is the set of new *use
 cases* the upgraded radio technology enables, and why. We introduce
 these improvements to the radio in Chapter 3, and tie them to the use
 cases they enable. Subsequent chapters will then explain how the RAN
-and Mobile Core need to evolve so as to deliver on this potential.
+and Mobile Core are expected to evolve so as to deliver on this
+potential.
 
 2.3 Radio Access Network
 ------------------------
@@ -235,7 +239,7 @@ ISDN) to denote a data channel, as opposed to a channel that
 carries signaling information.
 
 .. _fig-active-ue:
-.. figure:: figures/Slide03.png 
+.. figure:: figures/Slide4.png 
     :width: 500px
     :align: center
 
@@ -248,7 +252,7 @@ signaling traffic enables UE authentication, registration, and
 mobility tracking.
 
 .. _fig-control-plane:
-.. figure:: figures/Slide04.png 
+.. figure:: figures/Slide5.png 
     :width: 500px
     :align: center
 	    
@@ -259,7 +263,7 @@ Third, for each active UE, the base station establishes one or more
 tunnels between the corresponding Mobile Core User Plane component.
 
 .. _fig-user-plane:
-.. figure:: figures/Slide05.png 
+.. figure:: figures/Slide6.png 
     :width: 500px
     :align: center
 	    
@@ -282,7 +286,7 @@ were circuit-based, which is not surprising given its origins as a voice
 network.
 
 .. _fig-tunnels:
-.. figure:: figures/Slide06.png 
+.. figure:: figures/Slide7.png 
     :width: 500px
     :align: center
 	    
@@ -299,7 +303,7 @@ based on the CQI values being reported by the radio on each of the
 base stations within range of the UE, coupled with each
 
 .. _fig-handover:
-.. figure:: figures/Slide07.png 
+.. figure:: figures/Slide8.png 
     :width: 500px
     :align: center
 	    
@@ -310,7 +314,7 @@ a UE from multiple base stations, which may or may not be part of a UE
 handover from one base station to another.
 
 .. _fig-link-aggregation:
-.. figure:: figures/Slide08.png 
+.. figure:: figures/Slide9.png 
     :width: 500px
     :align: center
 	    
@@ -373,7 +377,7 @@ itself.
    IMSI. Also an opportunityt to explain how roaming works.
 
 .. _fig-secure:
-.. figure:: figures/Slide34.png 
+.. figure:: figures/Slide10.png 
     :width: 600px 
     :align: center 
 	    
@@ -420,7 +424,7 @@ Packet Inspection* (DPI) on the traffic, looking for flows that
 require special treatment.
 
 .. _fig-per-hop:
-.. figure:: figures/Slide35.png 
+.. figure:: figures/Slide11.png 
     :width: 500px 
     :align: center 
 	    
@@ -507,7 +511,7 @@ substituting Internet-of-Things (IoT) would be an illustrative
 example.
 
 .. _fig-hybrid:
-.. figure:: figures/tmp/Slide2.png
+.. figure:: figures/ops/Slide2.png
    :width: 700px
    :align: center
 
@@ -536,3 +540,17 @@ Once we deconstruct the individual components in more details in the
 next three chapters, we return to the question of how the resulting
 set of components can be assembled into an operational edge cloud in
 Chapter 6. The end result is 5G connectivity as a managed cloud service.
+
+2.6 Network Slicing
+-------------------
+
+Having just decomposed the mobile cellular architecture into its
+constituent componets, we conclude by introducing the cross-cutting
+issue of end-to-end slicing.
+
+.. Introduce slicing here, and visit the details for each component,
+   with the cloud chapter showing how it allgets tied back together.
+   Arguably, since the Cloud chapter is where everything gets
+   integrated, this topic could be introduced in 2.5. (Security could
+   be another e2e topic, but it primarily falls to the Core, so makes
+   sense in 2.4.

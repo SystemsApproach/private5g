@@ -41,7 +41,7 @@ addressed by a combination of coding and modulation, as depicted in
 :numref:`Figure %s <fig-modulation>`.
 
 .. _fig-modulation:
-.. figure:: figures/Slide09.png 
+.. figure:: figures/Slide12.png 
     :width: 500px
     :align: center
 
@@ -68,7 +68,7 @@ following multiple paths from the transmitter to the receiver, who may
 also be moving.
 
 .. _fig-multipath:
-.. figure:: figures/Slide10.png 
+.. figure:: figures/Slide13.png 
     :width: 600px
     :align: center
 
@@ -105,7 +105,7 @@ the wireless channel is a central challenge to address in the cellular
 network.  
 
 .. _fig-coherence:
-.. figure:: figures/Slide11.png 
+.. figure:: figures/Slide14.png 
     :width: 500px
     :align: center
 
@@ -188,7 +188,7 @@ using *Quadrature Amplitude Modulation (QAM)*, 16-QAM yields 4 bits per
 symbol and 64-QAM yields 6 bits per symbol.
 
 .. _fig-sched-grid:
-.. figure:: figures/Slide12.png 
+.. figure:: figures/Slide15.png 
     :width: 600px
     :align: center
 	    
@@ -328,7 +328,7 @@ multiple classes at any given time. We explore this idea in much more
 depth in a later chapter.
 
 .. _fig-scheduler:
-.. figure:: figures/Slide13.png 
+.. figure:: figures/Slide16.png 
     :width: 600px
     :align: center
 
@@ -336,7 +336,64 @@ depth in a later chapter.
     CQI feedback from receivers and the QCI parameters associated with
     each class of service.
 
-3.3 New Use Cases
+3.3 Virtualized Scheduler (Slicing)
+-----------------------------------
+
+.. Currently split the original RAN slicing story between here
+   (focused on scheduler) and the RAN chapter (focused on the
+   RIC's control of the scheduler). To be reevaluated...
+
+The discussion up to this point presumes a single scheduler is
+suitable for all workloads, but different applications have different
+requirements for how their traffic gets scheduled. For example, some
+applications care about latency and others care more about bandwidth.
+
+While in principle one could define an uber scheduler that takes
+dozens of different factors into account, we instead design a
+mechanism that allows the underlying resources (in this case radio
+spectrum) to be "sliced" between different uses.  The key to slicing
+is to add a layer of indirection to the scheduler.
+
+As shown in :numref:`Figure %s <fig-hypervisor>`, the idea is to
+perform a second mapping of Virtual RBs to Physical RBs. This sort of
+virtualization is common in resource allocators throughout computing
+systems because we want to separate how many resources are allocated
+to each user from the decision as to which physical resources are
+actually assigned. This virtual-to-physical mapping is performed by a
+layer typically known as a *Hypervisor*, and the important thing to
+keep in mind is that it is totally agnostic about which user’s segment
+is affected by each translation.
+
+.. _fig-hypervisor:
+.. figure:: figures/Slide26.png 
+    :width: 600px
+    :align: center
+
+    Wireless Hypervisor mapping virtual resource blocks to
+    physical resource blocks.
+
+Having decoupled the Virtual RBs from Physical RBs, it is now possible
+to define multiple Virtual RB sets (of varying sizes), each with its own
+scheduler. :numref:`Figure %s <fig-multi-sched>` gives an example with two
+equal-sized RB sets, where the important consequence is that having made
+the macro-decision that the Physical RBs are divided into two equal
+partitions, the scheduler associated with each partition is free to
+allocate Virtual RBs completely independent from each other. For
+example, one scheduler might be designed to deal with high-bandwidth
+video traffic and another scheduler might be optimized for low-latency
+IoT traffic. Alternatively, a certain fraction of the available capacity
+could be reserved for premium customers or other high-priority traffic
+(e.g., public safety), with the rest shared among everyone else.
+
+.. _fig-multi-sched:
+.. figure:: figures/Slide27.png 
+    :width: 600px
+    :align: center
+
+    Multiple schedulers running on top of wireless
+    hypervisor.
+
+3.4 New Use Cases
 -----------------
 
 We conclude by noting that while the previous section describes 5G as

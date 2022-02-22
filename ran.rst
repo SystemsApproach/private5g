@@ -33,7 +33,7 @@ you can think of each as corresponding to a microservice (if that is
 helpful).
 
 .. _fig-pipeline:
-.. figure:: figures/Slide14.png 
+.. figure:: figures/Slide17.png 
     :width: 600px
     :align: center
 	    
@@ -95,7 +95,7 @@ split-points, with the partition shown in :numref:`Figure %s
 this book.
 
 .. _fig-split-ran:
-.. figure:: figures/Slide15.png 
+.. figure:: figures/Slide18.png 
     :width: 600px
     :align: center
 
@@ -112,7 +112,7 @@ part of the MAC stage is responsible for all real-time scheduling
 decisions.
 
 .. _fig-ran-hierarchy:
-.. figure:: figures/Slide16.png 
+.. figure:: figures/Slide19.png 
     :width: 400px
     :align: center
 	    
@@ -189,7 +189,7 @@ in the CU, as opposed to the ~1ms control loop required by the MAC
 scheduler running in the DU.
 
 .. _fig-rrc-split:
-.. figure:: figures/Slide18.png 
+.. figure:: figures/Slide20.png 
     :width: 600px
     :align: center
 	    
@@ -249,7 +249,7 @@ scheduler. Specifically, the R-NIB includes the following state.
       -  RRM Control Configuration
 
 .. _fig-ran-controller:
-.. figure:: figures/Slide19.png 
+.. figure:: figures/Slide21.png 
     :width: 500px
     :align: center
 	    
@@ -309,7 +309,59 @@ respectively, in O-RAN documents for SD-RAN.
    <https://cseweb.ucsd.edu/~vahdat/papers/b4-sigcomm13.pdf>`__.  ACM
    SIGCOMM, August 2013.
 
-4.4 Architect to Evolve
+4.4 RAN Slicing
+----------------------
+
+.. The bulk of the RAN Slicing description is about virtualizing the
+   scheduler, which is currently in Chapter 3. We could move that
+   here, but for now, we cover  just the RIC-related piece of the
+   original description here. The material is not yet integrated.
+   
+We introduced the idea of virtualizing the radio scheduler in Section
+3.3. Now that we have seen how to split and disaggregate the RAN, we
+can go one level deeper into the implementation details.  The
+real-time scheduler running in each DU receives high-level directives
+from the near-real-time scheduler running in the CU, and as depicted
+in :numref:`Figure %s <fig-slicing-control>`, the DUs follow these
+directives in making their scheduling decisions *on a per-slice
+basis*. A single RAN Slicing control application is responsible for
+the macro-scheduling decision by allocating resources among a set of
+slices. Understanding this implementation detail is important because
+all of these control decisions are implemented by software modules,
+and hence, easily changed or customized. They are not “locked” into
+the underlying system, as they have historically been in 4G’s eNodeBs.
+
+.. _fig-slicing-control:
+.. figure:: figures/Slide28.png 
+    :width: 350px
+    :align: center
+
+    Centralized near-real-time control applications
+    cooperating with distributed real-time RAN schedulers.
+
+In summary, the goal of RAN slicing is to programmatically create
+virtual RAN nodes (base stations) that operate on the same hardware
+and share the spectrum resources according to a given policy for
+different applications, services, users, and so on. Tying RAN slicing
+back to RAN disaggregation, one can imagine several possible
+configurations, depending on the desired level of isolation between
+the slices. :numref:`Figure %s <fig-ran-slicing>` shows four examples,
+all of which assume slices share the antennas and RF components, which
+is effectively the RU: (a) RAN slices share RU, DU, CU-U and CU-C; (b)
+RAN slices share RU and DU, but have their own CU-U and CU-C; (c) RAN
+slices share RU, CU-U and CU-C, but have their own DU; and (d) RAN
+slices share RU, but have their own DU, CU-U and CU-C.
+
+.. _fig-ran-slicing:
+.. figure:: figures/Slide29.png 
+    :width: 700px
+    :align: center
+
+    Four possible configurations of a disaggregated RAN in support of
+    RAN slicing.
+
+
+4.5 Architect to Evolve
 -----------------------
 
 We conclude this description of RAN internals by re-visiting the
@@ -351,7 +403,7 @@ repeated here in :numref:`Figure %s (c) <fig-disagg>`.  The figure
 also shows the additional O-RAN prescribed interfaces.
 
 .. _fig-disagg:
-.. figure:: figures/Slide39.png 
+.. figure:: figures/Slide22.png 
     :width: 450px 
     :align: center
        
