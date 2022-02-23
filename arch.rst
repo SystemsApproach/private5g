@@ -10,7 +10,7 @@ Chapter 2:  Architecture
    realized. In a sense, this chapter doubles as a Requirements
    discussion.
 
-   This chapter use to follow the transimission primer, and so assumes
+   This chapter use to follow the transmission primer, and so assumes
    QCI is already defined. We'll need to include "2.2 Radio Transmission"
    to introduce a few terms and concepts like this. Generally, this
    section will need to set up the over-the-air interface as distinct
@@ -127,19 +127,16 @@ contain sophisticated algorithms for scheduling transmission on the
 radio spectrum—algorithms that are considered valuable intellectual
 property of the equipment vendors—there is significant opportunity to
 open and disaggregate both the RAN and the Mobile Core. This book
-is primary a recipe for how to do that.
+is primarily a recipe for how to do that.
 
-Before getting to those details, :numref:`Figure %s <fig-cups>`
-redraws components from :numref:`Figure %s <fig-cellular>` to
-highlight two important distinctions. The first is that a base station
-has an analog component (depicted by an antenna) and a digital
-component (depicted by a processor pair). The second is that the
-Mobile Core is partitioned into a *Control Plane* and *User Plane*,
-which is similar to the control/data plane split that someone familiar
-with the Internet would recognize. (3GPP has introduced a
-corresponding acronym—\ *CUPS, Control and User Plane Separation*—to
-denote this idea.) The importance of these two distinctions will
-become clear in the discussion that follows.
+Before getting to those details, we have three more architectural
+concepts to introduce. First, :numref:`Figure %s <fig-cups>` redraws
+components from :numref:`Figure %s <fig-cellular>` to highlight the
+fact that a base station has an analog component (depicted by an
+antenna) and a digital component (depicted by a processor pair). This
+book mostly focuses on the latter, but we introduce enough background
+about the over-the-air radio transmission to appreciate its impact on
+the overall architecture.
 
 .. _fig-cups:
 .. figure:: figures/Slide3.png 
@@ -148,7 +145,33 @@ become clear in the discussion that follows.
     
     Mobile Core divided into a Control Plan and a User Plane, an
     architectural feature known as CUPS: Control and User Plane
-    Separation
+    Separation.
+
+The second concept, also depicted in :numref:`Figure %s <fig-cups>`,
+is to partition the Mobile Core into a *Control Plane* and *User
+Plane*. This is similar to the control/data plane split that anyone
+familiar with the Internet would recognize, although 3GPP has
+introduces a corresponding acronym—\ *CUPS, Control and User Plane
+Separation*—to denote this idea.
+
+.. _fig-slice:
+.. figure:: figures/Slide30.png 
+    :width: 500px
+    :align: center
+    
+    Different use cases instantiate distinct *network slices*,
+    connecting devices with applications.
+
+Finally, one of the key aspirational goals of 5G is the ability to
+segregate traffic for different use cases into isolated *network
+slices*, each of which delivers a different levels of service to a
+collection of devices and applications. For example, :numref:`Figure
+%s <fig-slice>` shows two slices, one supporting IoT workloads and the
+other supporting multimedia traffic. As we'll see throughout the book,
+an important question is how slicing is realized end-to-end, across
+the radio, the RAN, and the Mobile Core. This is done through a
+combination of allocating distinct resources to each slice and
+scheduling shared resources on behalf of a set of slices.
 
 2.2 Radio Transmission
 ----------------------
@@ -167,23 +190,33 @@ UEs via electromagetic radio waves. This book is not about the physics
 of this over-the-air communication, and only skims the surface of the
 information theory that underlies it. But identifying the abstract
 properties of wireless communication is an essential foundation for
-understanding the rest of the cellular architecture.
+understanding the rest of the 5G architecture.
 
 If you imagine the base stations as implementing a multi-layer
 protocol stack (which as we'll see in Chapter 4, they do), then radio
 transmission is the responsibility of the bottom-most layers of that
-stack. Chapter 3 introduces radio transimission with enough detail to
-lay the necessary foundation, so we're able to understand all the
-layers that come above it.
+stack, where (a) digital-to-analog conversion happens, and (b) analog
+radio waves are transmitted and received. Chapter 3 introduces radio
+transmission with enough detail to lay the necessary foundation, so
+we're able to understand all the layers that come above it.
 
 Notably, the RAN is responsible for managing how the radio spectrum is
 shared among thousands of UEs connected to hundreds of base stations
-in a geographic region, such as a metro area. The primary purpose of
-Chapter 3 is to establish an abstract interface by which the RAN can
-manage that spectrum without having to worry about the details of
-waveforms, modulation, or coding algorithms. All important topics, to
-be sure, but in the realm of information theory rather than system
-design that is the focus of this book.
+in a geographic region. The primary purpose of Chapter 3 is to
+establish an abstract interface by which the RAN can manage that
+spectrum without having to worry about the details of waveforms,
+modulation, or coding algorithms. All important topics, to be sure,
+but in the realm of information theory rather than system design that
+is the focus of this book.
+
+.. _fig-quality:
+.. figure:: figures/Slide31.png 
+    :width: 300px
+    :align: center
+    
+    Abstractly, measures of singal quality (CQI) and declations
+    of intended data delivery quality (QCI) are passed up and down
+    the RAN stack.
 
 For the purpose of this chapter, all we need to know is that there are
 two fundamental pieces of information shared between the higher layers
@@ -194,9 +227,10 @@ base station observes when communicating with each UE. This is called
 the *Channel Quality Indicator (CQI)* and it is passed *up* from the
 radio. The second is the quality-of-service the network wants to give
 a particular UE. This is called the *QoS Class Indicator (QCI)* and it
-is passed *down* to the radio. We will fill in more details about both
-of these parameters in Chapter 3, but this high-level summary is
-sufficient to introduce the RAN and Mobile Core.
+is passed *down* to the radio. This abstract summary, as shown in
+:numref:`Figure %s <fig-quality>`, is sufficient to introduce the RAN
+and Mobile Core. We will fill in more details about both of these
+parameters in Chapter 3.    
 
 .. sidebar:: Uniqueness of Wireless Links
 
@@ -208,18 +242,17 @@ sufficient to introduce the RAN and Mobile Core.
    shared spectrum.
 
 Finally, like the rest of the mobile cellular network, the radio comes
-with a set of acroynms, with *LTE (Longer-Term Evolution)* and *NR
+with a set of acronyms, with *LTE (Longer-Term Evolution)* and *NR
 (New Radio)* being the two most widely known. These are marketing
 terms commonly associated with the radio technology for 4G and 5G,
 respectively. They are important only in the sense that many of the
-new features promised by 4G and 5G (e.g., increased bandwidth, lower
-latency) can be directly attributed to improvements in the underlying
-radio technology. For our purposes, the key is the set of new *use
-cases* the upgraded radio technology enables, and why. We introduce
-these improvements to the radio in Chapter 3, and tie them to the use
-cases they enable. Subsequent chapters will then explain how the RAN
-and Mobile Core are expected to evolve so as to deliver on this
-potential.
+new features promised by 5G can be directly attributed to improvements
+in the underlying radio technology. For our purposes, the key is the
+set of new *use cases* the upgraded radio technology enables, and
+why. We introduce these improvements to the radio in Chapter 3, and
+tie them to the use cases they enable. Subsequent chapters will then
+explain how the RAN and Mobile Core are expected to evolve so as to
+deliver on this potential.
 
 2.3 Radio Access Network
 ------------------------
@@ -260,7 +293,11 @@ mobility tracking.
     between each UE and the Mobile Core.
 
 Third, for each active UE, the base station establishes one or more
-tunnels between the corresponding Mobile Core User Plane component.
+tunnels to corresponding Mobile Core User Plane component.
+:numref:`Figure %s <fig-user-plane>` shows just two (one for voice and
+one for data), and while in practice 4G was limited to just two, 5G
+aspires to support many such tunnels as part of a generalized network
+slicing mechanism.
 
 .. _fig-user-plane:
 .. figure:: figures/Slide6.png 
@@ -279,11 +316,13 @@ acronym corresponding to (General Packet Radio Service) Tunneling
 Protocol) is a 3GPP-specific tunneling protocol designed to run over
 UDP.
 
-As an aside, it is noteworthy that connectivity between the RAN and the
-Mobile Core is IP-based. This was introduced as one of the main changes
-between 3G and 4G. Prior to 4G, the internals of the cellular network
-were circuit-based, which is not surprising given its origins as a voice
-network.
+It is noteworthy that connectivity between the RAN and the Mobile Core
+is IP-based. This was introduced as one of the main changes between 3G
+and 4G. Prior to 4G, the internals of the cellular network were
+circuit-based, which is not surprising given its origins as a voice
+network. This also helps to explain why in Section 2.1 we
+characterized the RAN Backhaul as an overlay running on top of some
+Layer 2 technology.
 
 .. _fig-tunnels:
 .. figure:: figures/Slide7.png 
@@ -298,9 +337,10 @@ Fifth, each base station coordinates UE handovers with neighboring
 base stations, using direct station-to-station links. Exactly like the
 station-to-core connectivity shown in the previous figure, these links
 are used to transfer both control plane (SCTP over IP) and user plane
-(GTP over UDP/IP) packets. The decsion as to when to do a handover is
+(GTP over UDP/IP) packets. The decision as to when to do a handover is
 based on the CQI values being reported by the radio on each of the
-base stations within range of the UE, coupled with each
+base stations within range of the UE, coupled with the QCI value they
+know the RAN has promised to deliver to the UE.
 
 .. _fig-handover:
 .. figure:: figures/Slide8.png 
@@ -434,7 +474,8 @@ require special treatment.
 In practice, these per-flow tunnels are often bundled into an single
 inter-component tunnel, which makes it impossible to differentiate the
 level of service given to any particular end-to-end UE channel. This
-is a limitation of 4G that 5G has ambitions to correct.
+is a limitation of 4G that 5G has ambitions to correct as part of its
+support for network slicing.
 
 Support for mobility can now be understood as the process of
 re-executing one or more of the steps shown in :numref:`Figure %s
@@ -486,7 +527,7 @@ attention to how this functionality is realized in practice, and we do
 so in a decidely software-based and cloud-centric way. This lays the
 foundation for the rest of the book, and is a marked change from the
 conventional approach, whereby an operator bought closed and
-proprietry base stations and core applicances from one of a handful of
+proprietary base stations and core appliances from one of a handful of
 vendors.
 
 To make the discussion as concrete as possible, we use an open source
@@ -532,25 +573,10 @@ cloud). Also shown in :numref:`Figure %s <fig-hybrid>` is a
 centralized *Control and Management Platform*. This represents all the
 functionality needed to offer Aether as a managed service, with system
 administrators using a portal exported by this platform to operate the
-underlying infrastructure and services within their enterprise. The
-rest of this book is about everything that goes into implementing that
-*Control and Management Platform*.
+underlying infrastructure and services within their enterprise.
    
 Once we deconstruct the individual components in more details in the
 next three chapters, we return to the question of how the resulting
 set of components can be assembled into an operational edge cloud in
 Chapter 6. The end result is 5G connectivity as a managed cloud service.
 
-2.6 Network Slicing
--------------------
-
-Having just decomposed the mobile cellular architecture into its
-constituent componets, we conclude by introducing the cross-cutting
-issue of end-to-end slicing.
-
-.. Introduce slicing here, and visit the details for each component,
-   with the cloud chapter showing how it allgets tied back together.
-   Arguably, since the Cloud chapter is where everything gets
-   integrated, this topic could be introduced in 2.5. (Security could
-   be another e2e topic, but it primarily falls to the Core, so makes
-   sense in 2.4.

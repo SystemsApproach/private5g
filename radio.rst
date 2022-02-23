@@ -396,12 +396,12 @@ could be reserved for premium customers or other high-priority traffic
 3.4 New Use Cases
 -----------------
 
-We conclude by noting that while the previous section describes 5G as
-introducing additional degrees of freedom into how data is scheduled
-for transmission, the end result is a qualitatively more powerful
-radio. This new 5G air interface specification, which is commonly
-referred to as *New Radio (NR)*, enables three new use cases that go
-well beyond simply delivering increased bandwidth:
+We conclude by noting that while the previous two sections describe 5G
+as introducing additional degrees of freedom into how data is
+scheduled for transmission, the end result is a qualitatively more
+powerful radio. This new 5G air interface specification, which is
+commonly referred to as *New Radio (NR)*, enables three new use cases
+that go well beyond simply delivering increased bandwidth:
 
 * Extreme Mobile Broadband
 * Ultra-Reliable Low-Latency Communications

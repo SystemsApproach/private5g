@@ -6,11 +6,11 @@ help people with experience building Internet and Cloud services
 understand the opportunity to bring best-practices from those systems
 to the mobile cellular network. On paper (and in the press) 5G had set
 an ambitious goal of transformative changes, adopting a cloud-inspired
-architecture and suppporting a new set of innovative services. But the
+architecture and supporting a new set of innovative services. But the
 gap between that aspirational story and the reality of 40 years of
 network operators and hardware vendors protecting their incumbent
 advantages made for a challenging pivot. So we started with the
-basics, and set out to explain the fundmental networking concepts and
+basics, and set out to explain the fundamental networking concepts and
 design principles behind the myriad of acronyms that dominate mobile
 cellular networking.
 
