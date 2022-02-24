@@ -6,28 +6,18 @@ Chapter 2:  Architecture
    and terminology, but does not go into implementation details.  The
    main takeaways should be an understanding of the main concepts
    (e.g., support for mobility, slicing/QoS, security/authentication,
-   identity/addresses), but without saying too much about how this is
-   realized. In a sense, this chapter doubles as a Requirements
-   discussion.
+   identity/addresses), but without saying too much about how they are
+   realized.
 
-   This chapter use to follow the transmission primer, and so assumes
-   QCI is already defined. We'll need to include "2.2 Radio Transmission"
-   to introduce a few terms and concepts like this. Generally, this
-   section will need to set up the over-the-air interface as distinct
-   from the RAN.
+   Ideally, this chapter doubles as a Requirements discussion. We need
+   to make a pass that emphasizes that perspective.
 
-   In the big picture, we have to talk about how such a system is
-   managed, and since our goal is to democratize the mobile network,
-   we adopt best practices in cloud-based managed services.
-
-   May want to explain that the components introduced in this chapter
-   can be distributed, for example between the edge and central
-   clouds. Different partitions/distributions will make sense in
-   different usage scenarios; it’s a matter of economics. But now we
-   have options we didn’t have before.
-
-   A concluding section will introduce cross-cutting issues: slicing
-   and security.
+   The last section needs to accomplish two things. One is to explain
+   that we have several degress of freedom in how the individual
+   componets are deployed/distributed, but then zero in on the
+   enterprise and private deployments. The second is to explain that
+   the system as a whole has to be managed and operated, but then zero
+   in on best practices in cloud-based managed services.
    
 This chapter identifies the main architectural components of mobile
 cellular networks. It includes components that are common to both 4G
@@ -517,18 +507,21 @@ assumptions of the Internet protocols that typically run on top of it.
 
 .. Lifted from OPs book (as a starting point)
 
-.. Probably should describe various deployment options before settling
-   into the enterprise (edge cloud) story that we plan to continue
-   throughout the rest of the book.
+.. Needs to describe various deployment options before settling into
+   the enterprise (edge cloud) story that we plan to continue
+   throughout the rest of the book. Main theme is: Orchestrtion is the
+   final component.
 
 The architectural overview presented up to this point focuses on the
 functional elements of the mobile cellular network. We now turn our
-attention to how this functionality is realized in practice, and we do
-so in a decidely software-based and cloud-centric way. This lays the
-foundation for the rest of the book, and is a marked change from the
-conventional approach, whereby an operator bought closed and
-proprietary base stations and core appliances from one of a handful of
-vendors.
+attention to how this functionality is operationalized, and we do so
+in a decidely software-defined and cloud-native way. This lays the
+foundation for the rest of the book, which builds towards supporting
+5G connectivity as a managed cloud service. This is a marked change
+from the conventional Telco approach, whereby an operator bought
+purpose-built devices from a handful of vendors, and then managed them
+using the same Operations and Maintenance (O&M) machinery as was
+originally designed for the phone network.
 
 To make the discussion as concrete as possible, we use an open source
 implementation, called Aether, as an example.  Aether is a
