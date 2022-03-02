@@ -4,6 +4,7 @@ Acknowledgements
 Aether
 Analytics
 Argela
+Azure
 Backhaul
 CLI
 CP
@@ -59,6 +60,7 @@ aspirational
 atacenter 
 backend
 backhaul
+bitrate
 centric
 config
 connectionless
@@ -70,6 +72,7 @@ disaggregate
 disaggregated
 disaggregates
 disaggregating
+downlink
 electromagetic
 eNB
 eNBs
@@ -88,6 +91,7 @@ hyperscalers
 hyperscaler
 instantiation
 interoperate
+invariants
 judgement
 kbps
 kilobits
@@ -129,11 +133,19 @@ transformative
 tunnelled
 uber
 unicast
+uplink
 virtualenv
 virtualized
 waveforms
 wearables
 whitebox
+whitepaper
 wireline
 wireline
 μs
+
+
+
+
+
+

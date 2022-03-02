@@ -30,15 +30,14 @@ Internet-related efforts. To further confuse matters, 3GPP terminology
 often changes with each generation (e.g., a base station is called eNB
 in 4G and gNB in 5G). We address situations like this by using generic
 terminology (e.g., base station), and referencing the 3GPP-specific
-counterpart only when the distinction is helpful.
+counterpart only when the distinction is helpful.  This example is
+only the tip of the terminology iceberg. Marcin Dryjanski’s blog post
+gives a broader perspective on the complexity of terminology in 5G.
 
 .. _reading_terminology:
 .. admonition:: Further Reading
 		
-   This example is only the tip of the terminology iceberg. For a
-   slightly broader perspective on the complexity of terminology in
-   5G, see Marcin Dryjanski’s blog post: `LTE and 5G Differences:
-   System Complexity
+   Marcin Dryjanski. `LTE and 5G Differences: System Complexity
    <https://www.grandmetric.com/blog/2018/07/14/lte-and-5g-differences-system-complexity/>`__.
    July 2018.
 
@@ -48,7 +47,7 @@ counterpart only when the distinction is helpful.
 The mobile cellular network provides wireless connectivity to devices
 that are on the move. These devices, which are known as *User
 Equipment (UE)*, have traditionally corresponded to smartphones and
-tablets, but increasingly includes cars, drones, industrial and
+tablets, but increasingly including cars, drones, industrial and
 agricultural machines, robots, home appliances, medical devices, and
 so on.
 
@@ -641,3 +640,6 @@ next three chapters, we return to the question of how the resulting
 set of components can be assembled into an operational edge cloud in
 Chapter 6. The end result is 5G connectivity as a managed cloud service.
 
+.. Is this the right place to talk about assumed technologies:
+   Kubernetes, Helm, Docker. Could just reproduce 1.3 from the OPs
+   book (Cloud Technology), perhaps in an Appendix.

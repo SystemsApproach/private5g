@@ -27,29 +27,30 @@ Mobile networks, which have a 40-year history that parallels the
 Internet’s, have undergone significant change. The first two
 generations supported voice and then text, with 3G defining the
 transition to broadband access, supporting data rates measured in
-hundreds of kilobits-per-second. Today, the industry is at 4G
-(supporting data rates typically measured in the few
-megabits-per-second) and transitioning to 5G, with the promise of a
-tenfold increase in data rates.
+hundreds of kilobits-per-second. Today, the industry is transitioning
+from 4G (with data rates typically measured in the few
+megabits-per-second) to 5G, with the promise of a tenfold increase in
+data rates.
 
 But 5G is about much more than increased bandwidth. 5G represents a
 fundamental rearchitecting of the access network in a way that
-leverages several key technology trends and sets it on a path to enable
-much greater innovation. In the same way that 3G
-defined the transition from voice to broadband, 5G’s promise is primarily
-about the transition from a single access service (broadband
-connectivity) to a richer collection of edge services and devices. 5G
-is expected to provide support for immersive user interfaces (e.g., AR/VR),
+leverages several key technology trends and sets it on a path to
+enable much greater innovation. In the same way that 3G defined the
+transition from voice to broadband, 5G’s promise is primarily about
+the transition from a single access service (broadband connectivity)
+to a richer collection of edge services and devices. 5G is expected to
+provide support for immersive user interfaces (e.g., AR/VR),
 mission-critical applications (e.g., public safety, autonomous
 vehicles), and the Internet-of-Things (IoT). Because these use cases
 will include everything from home appliances to industrial robots to
 self-driving cars, 5G won’t just support humans accessing the Internet
 from their smartphones, but also swarms of autonomous devices working
-together on their behalf. There is more to supporting these services
-than just improving bandwidth or latency to individual users. As we will see, a fundamentally
-different edge network architecture is required.
+together on their behalf.
 
-The requirements for this architecture are ambitious, and can be
+There is more to supporting these services than just improving
+bandwidth or latency to individual users.  As we will see, a
+fundamentally different edge network architecture is required. The
+requirements for this architecture are ambitious, and can be
 illustrated by three classes of capabilities:
 
 - To support *Massive Internet-of-Things*, potentially including
@@ -70,40 +71,39 @@ These targets will certainly not be met overnight, but that's in keeping
 with each generation of the mobile network being a decade-long
 endeavor.
 
-On top of these quantitative improvements to the capabilities of the access
-network, 5G is being viewed as a chance for building a platform to
-support innovation. Whereas prior access networks were generally
+On top of these quantitative improvements to the capabilities of the
+access network, 5G is being viewed as a chance for building a platform
+to support innovation. Whereas prior access networks were generally
 optimized for known services (such as voice calls and SMS), the
 Internet has been hugely successful in large part because it supported
 a wide range of applications that were not even thought of when it was
 first designed. The 5G network is very much being designed with this
 same goal of enabling all sorts of future applications beyond those we
-fully recognize today.
+fully recognize today. For an example of the grand vision for 5G, see
+the whitepaper from one of the industry leaders.
 
 .. _reading_vision:
 .. admonition:: Further Reading
 
-   For an example of the grand vision for 5G from one of the industry
-   leaders, see `Making 5G NR a Reality
+   Qualcomm Whitepaper. `Making 5G NR a Reality
    <https://www.qualcomm.com/media/documents/files/whitepaper-making-5g-nr-a-reality.pdf>`__.
-   Qualcomm Whitepaper, December 2016.
+   December 2016.
 
-The 5G mobile network, because it is on an
-evolutionary path and not a point solution, includes standardized
-specifications, a range of implementation choices, and a long list of
-aspirational goals. Because this leaves so much room for interpretation,
-our approach to describing 5G is grounded in two mutually supportive
-principles. The first is to apply a *systems lens*, which is to say, we
-explain the sequence of design decisions that lead to a solution rather
-than fall back on enumerating the overwhelming number of acronyms or
-individual point technologies as a
-*fait accompli*. The second is to aggressively disaggregate the system.
-Building a disaggregated, virtualized, and software-defined 5G access
-network is the direction the industry is already headed (for good
-technical and business reasons), but breaking the 5G network down into
-its elemental components is also the best way to explain how 5G works.
-It also helps to illustrate how 5G might evolve in the future to provide
-even more value.
+The 5G mobile network, because it is on an evolutionary path and not a
+point solution, includes standardized specifications, a range of
+implementation choices, and a long list of aspirational goals. Because
+this leaves so much room for interpretation, our approach to
+describing 5G is grounded in two mutually supportive principles. The
+first is to apply a *systems lens*, which is to say, we explain the
+sequence of design decisions that lead to a solution rather than fall
+back on enumerating the overwhelming number of acronyms or individual
+point technologies as a *fait accompli*. The second is to aggressively
+disaggregate the system.  Building a disaggregated, virtualized, and
+software-defined 5G access network is the direction the industry is
+already headed (for good technical and business reasons), but breaking
+the 5G network down into its elemental components is also the best way
+to explain how 5G works.  It also helps to illustrate how 5G might
+evolve in the future to provide even more value.
 
 .. sidebar:: Evolutionary Path
 
@@ -159,17 +159,18 @@ service providers, who in turn sell mobile access service to their
 subscribers.
 
 There is also a shared-license band at 3.5 GHz, called *Citizens
-Broadband Radio Service (CBRS)*, set aside in North America for cellular
-use. Similar spectrum is being set aside in other countries. The CBRS band
-allows 3 tiers of users to share the spectrum: first right of use
-goes to the original owners of this spectrum (naval radars and satellite
-ground stations); followed by priority users who receive this right over
-10MHz bands for three years via regional auctions; and finally the rest
-of the population, who can access and utilize a portion of this band as
-long as they first check with a central database of registered users.
-CBRS, along with standardization efforts to extend cellular networks to
-operate in the unlicensed bands, open the door for private cellular
-networks similar to Wi-Fi.
+Broadband Radio Service (CBRS)*, set aside in North America for
+cellular use. Similar spectrum is being set aside in other
+countries. The CBRS band allows 3 tiers of users to share the
+spectrum: first right of use goes to the original owners of this
+spectrum (naval radars and satellite ground stations); followed by
+priority users who receive this right over 10MHz bands for three years
+via regional auctions; and finally the rest of the population, who can
+access and utilize a portion of this band as long as they first check
+with a central database of registered users.  CBRS, along with
+standardization efforts to extend mobile cellular networks to operate
+in the unlicensed bands, open the door for private cellular networks
+similar to Wi-Fi. This is proving attractive to enterprises.
 
 The specific frequency bands that are licensed for cellular networks
 vary around the world, and are complicated by the fact that network
@@ -183,41 +184,42 @@ allocations opening above 24 GHz.
 While the specific frequency band is not directly relevant to
 understanding 5G from an architectural perspective, it does impact the
 physical-layer components, which in turn has indirect ramifications on
-the overall 5G system. We identify and explain these ramifications
-in later chapters. Ensuring that the allocated spectrum is used
-*efficiently* is also a critical design goal.
+the overall 5G system. We identify and explain these ramifications in
+later chapters, keeping in mind that ensuring the allocated spectrum
+is used *efficiently* is a critical design goal.
 
 1.2 Access Networks
 -------------------
 
 .. This section focuses on the traditional Telco perspective
 
-.. _fig-global:
-.. figure:: figures/Slide1.png 
-    :width: 600px
-    :align: center
-    
-    This figure belongs somewhere in this section. Talk about
-    the RAN being logically global.
-
-The cellular network is part of the access network that implements the
-Internet’s so-called *last mile*. Other access technologies include
-*Passive Optical Networks (PON)*, colloquially known as
-Fiber-to-the-Home. These access networks are provided by both big and
-small network operators. Global network operators like AT&T run access
-networks at thousands of aggregation points-of-presence across a
-country like the US, along with a national backbone that interconnects
-those sites. Small regional and municipal network operators might run
+The mobile cellular network is part of the access network that
+implements the Internet’s so-called *last mile*. Other access
+technologies include *Passive Optical Networks (PON)*, colloquially
+known as Fiber-to-the-Home. These access networks are provided by both
+big and small *Mobile Network Operators (MNOs)*. Global MNOs like AT&T
+run access networks at thousands of aggregation points-of-presence
+across a country like the US, along with a national backbone that
+interconnects those sites. Small regional and municipal MNOs might run
 an access network with one or two points-of-presence, and then connect
 to the rest of the Internet through some large operator’s backbone.
 
-In either case, access networks are physically anchored at thousands of
-aggregation points-of-presence within close proximity to end users,
-each of which serves anywhere from 1,000-100,000 subscribers,
-depending on population density. In practice, the physical deployment
-of these “edge” locations vary from operator to operator, but one
-possible scenario is to anchor both the cellular and wireline access
-networks in Telco *Central Offices*.
+.. _fig-global:
+.. figure:: figures/Slide1.png 
+    :width: 500px
+    :align: center
+    
+    A global mobile network built by first aggregating traffic from
+    hundreds of wireless base stations, and then interconnecting those
+    aggregation points over the Internet.
+
+As illustrated in :numref:`Figure %s <fig-global>`, access networks
+are physically anchored at thousands of aggregation points-of-presence
+within close proximity to end users, each of which serves anywhere
+from 1,000-100,000 subscribers, depending on population density. In
+practice, the physical deployment of these “edge” locations vary from
+operator to operator, but one possible scenario is to anchor both the
+cellular and wireline access networks in Telco *Central Offices*.
 
 Historically, the Central Office—officially known as the *PSTN
 (Public Switched Telephone Network) Central Office*—anchored wired
@@ -230,84 +232,127 @@ it is reasonable to think of them as defining the edge of the
 operator-managed access network. For simplicity, we sometimes use the
 term “Central Office” as a synonym for both types of edge sites.
 
+Finally, one aspect the the mobile network that may not be obvious
+from :numref:`Figure %s <fig-global>` is that it supports global
+connectivity, independent of the Internet (which is technically just
+one of many available backbone technologies). That is, the cellular
+network supports a universal addressing scheme, similar in principle
+(but significantly different in details) from the Internet's universal
+IP-based addressing scheme. This addressing scheme makes it possible
+to establish a voice call between any two cell phones, but of course,
+IP addresses still come into play when trying to establish a data
+(broadband) connection to/from a cell phone or other mobile
+device. Understanding the relationship between mobile addresses and IP
+addresses is a topic we will explore in later chapters.
+
 1.3 Managed Cloud Service
 -------------------------
 
 .. This section pivots to the new cloud perspective
-   
+
+The previous section gives a decidely Telco-centric view of the mobile
+cellular network, which makes sense because Telcos have been the
+dominant MNOs for the past 40+ years. But with 5G's focus on
+broadening the set of services is supports, and embracing general
+platforms that can host yet-to-be-invented applications, the mobile
+cellular network is starting to look a lot like the cloud.
+
+The rest of this book explains what that means in detail, but in a
+nutshell, thinking of 5G connectivity as a cloud service means that
+instead of using purpose-built devices and telephony-based operational
+practices to deliver mobile connectivity, the 5G network is built from
+commodity hardware, software-defined networks, and cloud-based
+operational practices. Like familiar cloud applications, the end
+result is a system that (a) dramatically increases feature velocity,
+and (b) is operated as a managed cloud service.  These advantages are
+available to legacy MNOs, but whether they will fully embrace them is
+yet to be seen, so we do not limit ourselves to existing stakeholders
+or business models. In particular, this book focuses on how
+enterprises can be their own MNOs, or alternatively, acquire 5G
+connectivity as a managed cloud service from non-traditional MNOs.
+
 .. _fig-enterprise:
 .. figure:: figures/ops/Slide1.png 
-    :width: 700px
+    :width: 600px
     :align: center
     
-    This figure belongs somewhere in this section. Talk about
-    the enterprise-centric (private 5g) story.
+    Enterprise-based deployment of 5G connectivity, running as a
+    managed cloud service.
 
-Because of their wide distribution and close proximity to end users,
-Central Offices are also an ideal place to host the edge cloud. But this
-raises the question: What exactly is the edge cloud?
+To this end, :numref:`Figure %s <fig-enterprise>` depicts a simplified
+5G deployment that the rest of this book works toward. At a
+high-level, the figure shows a wide-range of enterprise use cases that
+might take advantage of 5G connectivity, with the data plane of the 5G
+service running on-prem (on an edge cloud running within the
+enterprise), and the control plane of the 5G service running off-prem
+(in the global cloud).\ [#]_ Enterprise administrators control their
+service through a management console, much in the same way they might
+log into an AWS, GCP, or Azure console to control a cloud-based
+storage or compute service. Finally, applications are split between
+the edge and centralized components, taking advantage of what is
+commonly referred to as a *hybrid cloud*.
 
-In a nutshell, the cloud began as a collection of warehouse-sized
-datacenters, each of which provided a cost-effective way to power, cool,
-and operate a scalable number of servers. Over time, this shared
-infrastructure lowered the barrier to deploying scalable Internet
-services, but today, there is increasing pressure to offer
-low-latency/high-bandwidth cloud applications that cannot be effectively
-implemented in centralized datacenters. Augmented Reality (AR), Virtual
-Reality (VR), Internet-of-Things (IoT), and Autonomous Vehicles are all
-examples of this kind of application. This has resulted in a trend to
-move some functionality out of the datacenter and towards the edge of
-the network, closer to end users.
+.. [#] We use the terms "data plane" and "control plane" in the
+       generic sense in this description. As we'll see in Chapter 2,
+       the 5G architecture has a more complex structure and uses
+       different terminology.
+   
+Hosting a 5G connectivity service on an edge cloud is perfectly
+aligned with one of the most pronounce trends in cloud computing:
+moving elements of the cloud from the datacenter to locations that are
+in close proximity to end users and their devices. Before looking at
+how to realize 5G on an edge cloud, we start by considering why edge
+clouds are gaining momentum in the first place.
+
+The cloud began as a collection of warehouse-sized datacenters, each
+of which provided a cost-effective way to power, cool, and operate a
+scalable number of servers. Over time, this shared infrastructure
+lowered the barrier to deploying scalable Internet services, but
+today, there is increasing pressure to offer
+low-latency/high-bandwidth cloud applications that cannot be
+effectively implemented in remote datacenters. Augmented Reality (AR),
+Virtual Reality (VR), Internet-of-Things (IoT), and Autonomous
+Vehicles are all examples of this kind of application. Such
+applications benefit from moving at least part of their functionality
+out of the datacenter and towards the edge of the network, closer to
+end users.
 
 Where this edge is *physically* located depends on who you ask. If you
 ask a network operator that already owns and operates thousands of
 Central Offices, then their Central Offices are an obvious answer.
 Others might claim the edge is located at the 14,000 Starbucks across
 the US, and still others might point to the tens-of-thousands of cell
-towers spread across the globe.
+towers spread across the globe. Our approach is to be location
+agnostic, but to make the discussion concrete, we use enterprises as
+our exemplar deployment.
 
-Our approach is to be location agnostic, but it is worth pointing out
-that the cloud’s migration to the edge coincides with a second trend,
-which is that network operators are re-architecting the access network
-to use the same commodity hardware and best practices in building
-scalable software as the cloud providers. Such a design, which is
-sometimes referred to as CORD *(Central Office Re-architected as a
-Datacenter)*, supports both the access network and edge services
-co-located on a shared cloud platform. This platform is then replicated
-across hundreds or thousands of sites (including, but not limited to,
-Central Offices). So while we shouldn't limit ourselves to the Central
-Office as the only answer to the question of where the edge cloud is
-located, it is becoming a viable option.
+.. sidebar:: CORD: Central Office Re-architected as a Datacenter
 
-.. _reading_cord:
-.. admonition:: Further Reading
+  Concurrent with cloud providers pursing edge deployments, network
+  operators began to re-architect their access network to use the same
+  commodity hardware and best practices in building scalable software
+  as the cloud providers. Such a design, which is sometimes referred
+  to as CORD *(Central Office Re-architected as a Datacenter)*,
+  supports both the access network and edge services co-located on a
+  shared cloud platform. This platform is then replicated across
+  hundreds or thousands of operator sites, including Central Offices.
 
-    To learn about the technical origins of CORD, which was first 
-    applied to fiber-based access networks (PON), see `Central Office 
-    Re-architected as a Datacenter, IEEE Communications, October 2016 
-    <https://wiki.opencord.org/download/attachments/1278027/PETERSON_CORD.pdf>`__. 
+  Traditional network operators did this because they wanted to take
+  advantage of the same economies of scale and feature velocity as
+  cloud providers. CORD gave them a general architecture to work
+  towards, but also an open source Kubernetes-based reference
+  implementation to model their solutions on. That original
+  implementation of CORD is the direct predecessor to the Aether
+  platform we use as a reference implementation in this book.
 
-    To understand the business case for CORD (and CORD-inspired
-    technologies), see the A.D. Little report `Who Dares Wins!
-    How Access Transformation Can Fast-Track Evolution of
-    Operator Production Platforms, September 2019
-    <https://www.adlittle.com/en/who-dares-wins>`__.
-
-When we get into the details of how 5G can be implemented in practice,
-we use CORD as our exemplar. For now, the important thing to understand
-is that 5G is being implemented as software running on commodity
-hardware, rather than embedded in the special-purpose proprietary
-hardware used in past generations. This has a significant impact on how
-we think about 5G (and how we describe 5G), which will increasingly
-become yet another software-based component in the cloud, as opposed to
-an isolated and specialized technology attached to the periphery of the
-cloud.
-
-Keep in mind that our use of CORD as an exemplar is not to imply that
-the edge cloud is limited to Central Offices. CORD is a good exemplar
-because it is designed to host both edge services and access
-technologies like 5G on a common platform, where the Telco Central
-Office is one possible location to deploy such a platform.
+  At the same time network operators began to investigate a CORD-based
+  approach, they also encouraged their vendors to shift from selling
+  hardware appliances to *Virtualized Network Functions (VNFs)*. This
+  is widely known as the *Network Function Virtualization (NFV)*
+  Initiative. Unfortunately, the commercially available VNFs tended to
+  be packaged as a VM that required a one-off configuration, leaving
+  operators with a set of management silos, and far short of the
+  operational uniformity of cloud native systems.
 
 An important takeaway from this discussion is that to understand how 5G
 is being implemented, it is helpful to have a working understanding of
@@ -317,43 +362,36 @@ how clouds are built. This includes the use of *commodity hardware*
 *Software-Defined Networks (SDN)*. It is also helpful to have an
 appreciation for how cloud software is developed, tested, deployed, and
 operated, including practices like *DevOps* and *Continuous Integration
-/ Continuous Deployment (CI/CD)*.
+/ Continuous Deployment (CI/CD)*. We recommend two companion books to
+help fill the gaps in your understanding of these foundational
+technologies.
 
 .. _reading_devops:
 .. admonition:: Further Reading
 
-   If you are unfamiliar with SDN, we recommend a companion book:
-   `Software-Defined Networks: A Systems Approach
-   <https://sdn.systemsapproach.org/>`__. March 2020.
+   `Software-Defined Networks: A Systems Approach 
+   <https://sdn.systemsapproach.org/>`__. November 2021.
 
-   If you are unfamiliar with DevOps—or more generally, with the
-   operational issues cloud providers face—we recommend `Site
-   Reliability Engineering: How Google Runs Production Systems
-   <https://landing.google.com/sre/books/>`__.
+   `Edge Cloud Operations: A Systems Approach 
+   <https://ops.systemsapproach.org/>`__. March 2022.
 
-One final note about terminology. Anyone who has been paying
-attention to the discussion surrounding 5G will have undoubtedly heard
-about *Network Function Virtualization (NFV)*, which involves moving
-functionality that was once embedded in hardware appliances into VMs
-(or, more recently, containers)
-running on commodity servers. In our experience, NFV is a stepping
-stone towards the fully disaggregated and cloud native solution we
-describe in this book, and so we do not dwell on it. You can think of
-the NFV initiative as mostly consistent with the approach taken in
-this book, but making some specific engineering choices that may
-differ in detail from that described here.
+In summary, a major goal of 5G is to take advantage of cloud
+technologies, with traditional MNOs announcing plans to build
+so-called *Telco Clouds*.  What is actually happening instead, is that
+that access technology is being subsumed into the cloud, running as
+yet another cloud native workload. It would be more accurate to refer
+to the resulting system now emerging as the *Cloud-based Telco*. One
+reading of this book is as a roadmap to such an outcome. (More
+information about the related CORD initiative is also available.)
 
-While equating NFV with an implementation choice is perfectly valid,
-there is another interpretation of events that better captures the
-essence of the transformation currently underway. When Telcos began
-the NFV initiative, they imagined incorporating cloud technologies
-into their networks, creating a so-called *Telco Cloud*.  What is
-actually happening instead, is that the Telco's access technology is
-being subsumed into the cloud, running as yet another cloud-hosted
-workload. It would be more accurate to refer to the resulting system
-now emerging as the *Cloud-based Telco*. One reading of this book is
-as a roadmap to such an outcome.
+.. _reading_cord:
+.. admonition:: Further Reading
 
+    L. Peterson, *et al*. `Central Office Re-architected as a
+    Datacenter, IEEE Communications.
+    <https://wiki.opencord.org/download/attachments/1278027/PETERSON_CORD.pdf>`__.
+    IEEE Communications, October 2016.
 
-
-
+    A.D. Little Report. `Who Dares Wins!  How Access Transformation Can
+    Fast-Track Evolution of Operator Production Platforms
+    <https://www.adlittle.com/en/who-dares-wins>`__.  September 2019.

@@ -15,11 +15,24 @@ Chapter 6:  Managed Cloud Service
    Probably focus on "user/operator" perspective (rather than
    "under the covers" perspective).
 
-This chapter identifies all the subsystems that go into building and
-operationalizing a cloud capable of running an assortment of
-cloud-native services. We use Aether to illustrate specific design
-choices, and so we start by describing why an enterprise might install
-a system like Aether in the first place.
+   Current language presumes no specific knowledge of the components
+   (e.g., SD-Core or SD-RAN). We will need to be adjusted to account
+   for the previous chapters.
+
+   Current language assumes the intro to Kubernetes and Helm from Ch1
+   of the OPs book. We will need to provide this background. (See end
+   of 1.3 for a similar issue.)
+
+   Probably need to talk generally about ther configurations and
+   deployments. Maybe in a concluding section.
+
+This chapter describes how to assemble all the pieces described in the
+previous chapters to operationalize a cloud-based 5G connectivity
+service.  Because this necessarily involves engineering choices, we
+use a specific open source implementation, called Aether, as an
+illustrative example. Aether supports private 5G deployments in
+enterprises, so we start by briefly describing why an enterprise might
+install a system like Aether in the first place.
 
 Edge clouds like Aether are an important component of a trend called
 Industry 4.0: A combination of intelligent devices, robust wireless
@@ -37,17 +50,12 @@ so as to minimize human intervention and enable remote operations
 the goal is to create an IT foundation for continually improving
 industrial operations through software.
 
-As for why we refer to Aether as a PaaS for such use cases, the answer
-is somewhat subjective. Generally, a PaaS offers more than virtualized
-compute and storage (that is what IaaS does), and includes additional
-layers of "middleware" to enable application developers to deploy
-their applications without dealing with all the intricacies of
-managing the underlying infrastructure. In the case of Aether, the
-platform includes support for 5G connectivity, including an API that
-edge apps can use to customize that connectivity to better meet their
-objectives.  This does not preclude also loading an ML-platform or an
-IoT-platform onto Aether, further enhancing the application support it
-provides.
+In the case of Aether, the platform includes support for 5G
+connectivity, including an API that edge apps can use to customize
+that connectivity to better meet their objectives.  In addition to
+running the connectivity service, an ML-platform or an IoT-platform
+can also be loaded onto Aether, further enhancing the application
+support it provides.
 
 6.1 Edge Cloud
 --------------
@@ -56,6 +64,10 @@ The edge cloud, which in Aether is called ACE (Aether Connected Edge),
 is a Kubernetes-based cluster. It is a platform that consists of one
 or more server racks interconnected by a leaf-spine switching fabric,
 with an SDN control plane (denoted SD-Fabric) managing the fabric.
+
+.. Need to figure out the right way to introduce SD-Fabric, which will
+   come up in Chapter 5 when we talk about the P4-based UPF. The
+   citation given below is not sufficient.
 
 .. _fig-ace:
 .. figure:: figures/ops/Slide3.png
@@ -72,25 +84,20 @@ with an SDN control plane (denoted SD-Fabric) managing the fabric.
 As shown in :numref:`Figure %s <fig-ace>`, ACE hosts two additional
 microservice-based subsystems on top of this platform; they
 collectively implement *5G-Connectivity-as-a-Service*. The first
-subsystem, SD-RAN, is an SDN-based implementation of the 5G Radio
-Access Network (RAN). It controls the small cell base stations
-deployed throughout the enterprise. The second subsystem, SD-Core, is
-an SDN-based implementation of the User Plane half of the Mobile
-Core. It is responsible for forwarding traffic between the RAN and the
-Internet. The SD-Core Control Plane (CP) runs off-site, and is not
-shown in :numref:`Figure %s <fig-ace>`. Both subsystems (as well as
-the SD-Fabric), are deployed as a set of microservices, but details
-about the functionality implemented by these containers is otherwise
-not critical to this discussion. For our purposes, they are
-representative of any cloud native workload. (The interested reader is
-referred to our companion 5G and SDN books for more information about
-the internal working of SD-RAN, SD-Core, and SD-Fabric.)
+subsystem, SD-RAN, is the SDN-based implementation of the Radio Access
+Network described in Chapter 4. It controls the small cell base
+stations deployed throughout the enterprise. The second subsystem,
+SD-Core, is an SDN-based implementation of the User Plane half of the
+Mobile Core described in Chapter 5. It is responsible for forwarding
+traffic between the RAN and the Internet. The SD-Core Control Plane
+(CP) runs off-site, and is not shown in :numref:`Figure %s
+<fig-ace>`. Both subsystems (as well as the SD-Fabric), are deployed
+as a set of microservices, just as any other cloud native workload.
+(The interested reader is referred to our companion SDN book for more
+information about the internal working of SD-Fabric.)
 
-.. _reading_5g:
+.. _reading_sdn:
 .. admonition:: Further Reading 
-
-   `5G Mobile Networks: A Systems Approach 
-   <https://5G.systemsapproach.org>`__
    
    `Software-Defined Networks: A Systems Approach 
    <https://sdn.systemsapproach.org>`__
@@ -105,8 +112,7 @@ implemented by SD-RAN and SD-Core. This service is offered as a
 managed service, with enterprise system administrators able to use a
 programmatic API (and associated GUI portal) to control that service;
 that is, authorize devices, restrict access, set QoS profiles for
-different devices and applications, and so on. How to provide such a
-runtime control interface is the topic of Chapter 5.
+different devices and applications, and so on.
 
 6.2 Hybrid Cloud
 -----------------
@@ -165,6 +171,8 @@ services.
 6.3 Stakeholders
 ----------------
 
+.. This section includes topics that are tangential to this book.
+   
 With the understanding that our target environment is a collection of
 Kubernetes clusters—some running on bare-metal hardware at edge sites
 and some running in central datacenters—there is an orthogonal issue
@@ -521,3 +529,243 @@ opportunities to make different engineering decisions, along with the
 design rationale behind our choices, as we add more details in the
 chapters that follow.
 
+6.5 Connectivity API
+--------------------
+
+.. Currently just lifted from OPs book. Need to reconcile with Runtime
+   Contol subsection above, and refocus to be on-point.  For example,
+   YANG might be an unnecessary implementation detail: we care about
+   the API and not the models (although the API cares about resources).
+
+This section sketches the data model for Aether's connectivity service
+as a way of illustrating the role Runtime Control plays. These models
+are specified in YANG, but since the Runtime Control API is generated from
+these specs, it is equally valid to think in terms of an API that
+supports REST's GET, POST, PATCH, DELETE operations on a set of
+objects (resources):
+
+* GET: Retrieve an object.
+* POST: Create an object.
+* PUT,  PATCH: Modify an existing object.
+* DELETE: Delete an object.
+
+Each object is an instance of one of the YANG-defined models, where
+every object contains an `id` field that is used to identify the
+object. These identifiers are unique to the model, but not necessarily
+across all models.
+
+Some objects contain references to other objects. For example, many
+objects contain references to the `Enterprise` object, which allows
+them to be associated with a particular enterprise. That is,
+references are constructed using the `id` field of the referenced
+object. Note that one of the features of the mechanisms described in
+the previous section is that they flag attempts to create a reference
+to an object that does not exist and attempts to delete an object
+while there are open references to it from other objects as errors.
+
+In addition to the `id` field, several other fields are also common to
+all models. These include:
+
+* `description`: A human-readable description, used to store additional context about the object.
+* `display-name`: A human-readable name that is shown in the GUI.
+
+As these fields are common to all models, we omit them from the
+per-model descriptions that follow. Note that we use upper case to
+denote a model (e.g., `Enterprise`) and lower case to denote a field
+within a model (e.g., `enterprise`).
+
+6.5.1 Enterprises
+~~~~~~~~~~~~~~~~~
+
+Aether is deployed in enterprises, and so needs to define
+representative set of organizational abstractions. These include
+`Enterprise`, which forms the root of a customer-specific
+hierarchy. The `Enterprise` model is referenced by many other objects,
+and allows those objects to be scoped to a particular Enterprise for
+ownership and role-based access control purposes. `Enterprise`
+contains the following fields:
+
+* `connectivity-service`: A list of backend subsystems that implement
+  connectivity for this enterprise. Corresponds to an API endpoint to
+  the SD-Core, SD-Fabric, and SD-RAN.
+
+`Enterprises` are further divided into `Sites`. A site is a
+point-of-presence for an `Enterprise` and may be either physical or
+logical (i.e. a single geographic location could contain several
+logical sites). `Site` contains the following fields:
+
+* `enterprise`: A link to the `Enterprise` that owns this site.
+* `imsi-definition`: A description of how IMSIs are constructed for
+  this site. Contains the following sub-fields:
+
+   * `mcc`: Mobile country code.
+   * `mnc`: Mobile network code.
+   * `enterprise`: A numeric enterprise id.
+   * `format`: A mask that allows the above three fields to be
+     embedded into an IMSI. For example `CCCNNNEEESSSSSS` will
+     construct IMSIs using a 3-digit MCC, 3-digit MNC, 3-digit ENT,
+     and a 6-digit subscriber.
+
+The `imsi-definition` is specific to the mobile cellular network, and
+corresponds to the unique identifier burned into every SIM card.
+
+6.5.2 Connectivity Service
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Aether models 5G connectivity as a `Slice`, which represents an
+isolated communication channel (and associated QoS parameters) that
+connects a set of devices (modeled as a `Device-Group`) to a set of
+applications (each of which is modeled as an `Application`).  For
+example, an enterprise might configure one slice to carry IoT traffic
+and another slice to carry video traffic. The `Slice` model has the
+following fields:
+
+* `device-group`: A list of `Device-Group` objects that can participate in this `Slice`. Each
+  entry in the list contains both the reference to the `Device-Group` as well as an `enable`
+  field which may be used to temporarily remove access to the group.
+* `application`: A list of `Application` objects that are either allowed or denied for this
+  `Slice`. Each entry in the list contains both a reference to the `Application` as well as an
+  `allow` field which can be set to `true` to allow the application or `false` to deny it.
+* `template`: Reference to the `Template` that was used to initialize this `Slice`.
+* `upf`: Reference to the User Plane Function (`UPF`) that should be used to process packets
+  for this `Slice`. It's permitted for multiple `Slices` to share a single `UPF`.
+* `enterprise`: Reference to the `Enterprise` that owns this `Slice`.
+* `site`: Reference to the `Site` where this `Slice` is deployed.
+* `sst`, `sd`: 3GPP-defined slice identifiers assigned by the operations team.
+* `mbr.uplink`, `mbr.downlink`, `mbr.uplink-burst-size`,
+  `mbr.downlink-burst-size`.  Maximum bit-rate and burst sizes for
+  this slice.
+  
+The rate-related parameters are initialized using a selected
+`template`, as described below. Also note that this example
+illustrates how modeling can be used to enforce invariants, in this
+case, that the `Site` of the `UPF` and `Device-Group` must match the
+`Site` of the `Slice`. That is, the physical devices that connect to a
+slice and the UPF that implements the core segment of the slice must
+be constrained to a single physical location.
+
+At one end of a Slice is a `Device-Group`, which identifies a set of
+devices that are allowed to use the Slice to connect to various
+applications. The `Device-Group` model contains the following fields:
+
+* `imsis`: A list of IMSI ranges. Each range has the following
+  fields:
+
+   * `name`: Name of the range. Used as a key.
+   * `imsi-range-from`: First subscriber in the range.
+   * `imsi-range-to`: Last subscriber in the range. Can be omitted if
+     the range only contains one IMSI.
+* `ip-domain`: Reference to an `IP-Domain` object that describes the
+  IP and DNS settings for UEs within this group.
+* `site`: Reference to the site where this `Device-Group` may be
+  used. Indirectly identifies the `Enterprise` as `Site` contains a
+  reference to `Enterprise`.
+* `mbr.uplink`, `mbr.downlink`: Maximum bit-rate for the device group.
+* `traffic-class`: The traffic class to be used for devices in this group.  
+
+At the other end of a Slice is a list of `Application` objects, which
+specifies the endpoints for the program devices talk to. The
+`Application` model contains the following fields:
+
+* `address`: The DNS name or IP address of the endpoint.
+* `endpoint`: A list of endpoints. Each has the following
+  fields:
+
+   * `name`: Name of the endpoint. Used as a key.
+   * `port-start`: Starting port number.
+   * `port-end`: Ending port number.
+   * `protocol`:  Protocol (`TCP|UDP`) for the endpoint.
+   * `mbr.uplink`, `mbr.downlink`: Maximum bitrate for devices communicating with this
+     application:
+   * `traffice-class`: Traffic class for devices communicating with this application.
+
+* `enterprise`: Link to an `Enterprise` object that owns this application. May be left empty
+  to indicate a global application that may be used by multiple
+  enterprises.
+
+Anyone familiar with 3GPP will recognize Aether's *Slice* abstraction
+as similar to the specification's notion of a "slice".  The `Slice`
+model definition includes a combination of 3GPP-specified identifiers
+(e.g., `sst` and `sd`), and details about the underlying
+implementation (e.g., `upf` denotes the UPF implementation for the
+Core's user plane). Although not yet part of the production system,
+there is a version of `Slice` that also includes fields related to RAN
+slicing, with the Runtime Control subsystem responsible for stitching
+together end-to-end connectivity across the RAN, Core, and Fabric.
+
+.. sidebar:: An API for Platform Services
+
+	*We are using Connectivity-as-a-Service as an illustrative
+	example of the role Runtime Control plays, but APIs can be
+	defined for other platform services using the same
+	machinery. For example, because the SD-Fabric in Aether is
+	implemented with programmable switching hardware, the
+	forwarding plane is instrumented with Inband Network Telemetry
+	(INT). A northbound API then enables fine-grain data
+	collection on a per-flow basis, at runtime, making it possible
+	to write closed-loop control applications on top of Aether.*
+
+	*In a similar spirit, the QoS-related control example given in
+	this section could be augmented with additional objects that
+	provide visibility into, and an opportunity to exert control
+	over, various radio-related parameters implemented by SD-RAN.
+	Doing so would be a step towards a platform API that enables
+	a new class of industry automation edge cloud apps.*
+
+	*In general, Iaas and PaaS offerings need to support
+	application- and user-facing APIs that go beyond the
+	DevOps-level configuration files consumed by the underlying
+	software components (i.e., microservices). Creating these
+	interfaces is an exercise in defining a meaningful abstraction
+	layer, which when done using declarative tooling, becomes an
+	exercise in defining high-level data models. Runtime Control
+	is the management subsystem responsible specifying and
+	implementing the API for such an abstraction layer.*
+	
+
+6.5.3 QoS Profiles
+~~~~~~~~~~~~~~~~~~
+
+Associated with each Slice is a QoS-related profile that governs how
+traffic that slice carries is to be treated. This starts with a
+`Template` model, which defines the valid (accepted) connectivity
+settings. Aether Operations is responsible for defining these (the
+features they offer must be supported by the backend subsystems), with
+enterprises selecting the template they want applied to any instances
+of the connectivity service they create (e.g., via a drop-down
+menu). That is, templates are used to initialize `Slice` objects. The
+`Template` model has the following fields:
+
+* `sst`, `sd`: Slice identifiers, as specified by 3GPP.
+* `mbr.uplink`, `mbr.downlink`: Maximum uplink and downlink bandwidth.
+* `mbr.uplink-burst-size`, `mbr.downlink-burst-size`: Maximum burst size.
+* `traffic-class`: Link to a `Traffic-Class` object that describes the
+  type of traffic.
+
+You will see that the `Device-Group` an `Application` models include
+similar fields. The idea is that QoS parameters are established for
+the slice as a whole (based on the selected `Template`) and then
+individual devices and applications connected to that slice can define
+their own, more-restrictive QoS parameters on an instance-by-instance
+basis.
+  
+The `Traffic-Class` model, in turn, specifies the classes of traffic,
+and includes the following fields:
+
+* `arp`: Allocation and retention priority.
+* `qci`: QoS class identifier.
+* `pelr`: Packet error loss rate.
+* `pdb`: Packet delay budget.
+
+6.5.4 Other Models
+~~~~~~~~~~~~~~~~~~
+
+The above description references other models, which we do not fully
+described here. They include `AP-List`, which specifies a list of
+access points (radios); `IP-Domain`, which specifies IP and DNS
+settings; and `UPF`, which specifies the User Plane Function (the data
+plane element of the SD-Core) that should forward packets on behalf of
+this particular instance of the connectivity service. The `UPF` model
+is necessary because Aether supports two different implementations:
+one runs as a microservice on a server and the other runs as a P4
+program loaded into the switching fabric, as described in Chapter 5.
