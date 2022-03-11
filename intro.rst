@@ -194,15 +194,16 @@ is used *efficiently* is a critical design goal.
 .. This section focuses on the traditional Telco perspective
 
 The mobile cellular network is part of the access network that
-implements the Internet’s so-called *last mile*. Other access
-technologies include *Passive Optical Networks (PON)*, colloquially
-known as Fiber-to-the-Home. These access networks are provided by both
-big and small *Mobile Network Operators (MNOs)*. Global MNOs like AT&T
-run access networks at thousands of aggregation points-of-presence
-across a country like the US, along with a national backbone that
-interconnects those sites. Small regional and municipal MNOs might run
-an access network with one or two points-of-presence, and then connect
-to the rest of the Internet through some large operator’s backbone.
+implements the Internet’s so-called *last mile*. (Another common
+access technology is *Passive Optical Networks (PON)*, colloquially
+known as Fiber-to-the-Home.) These mobile access networks are provided
+by both big and small *Mobile Network Operators (MNOs)*. Global MNOs
+like AT&T run access networks at thousands of aggregation
+points-of-presence across a country like the US, along with a national
+backbone that interconnects those sites. Small regional and municipal
+MNOs might run an access network with one or two points-of-presence,
+and then connect to the rest of the Internet through some large
+operator’s backbone.
 
 .. _fig-global:
 .. figure:: figures/Slide1.png 
@@ -255,7 +256,8 @@ cellular network, which makes sense because Telcos have been the
 dominant MNOs for the past 40+ years. But with 5G's focus on
 broadening the set of services is supports, and embracing general
 platforms that can host yet-to-be-invented applications, the mobile
-cellular network is starting to look a lot like the cloud.
+cellular network is starting to blur the line between the access
+network and the cloud.
 
 The rest of this book explains what that means in detail, but in a
 nutshell, thinking of 5G connectivity as a cloud service means that
@@ -263,13 +265,13 @@ instead of using purpose-built devices and telephony-based operational
 practices to deliver mobile connectivity, the 5G network is built from
 commodity hardware, software-defined networks, and cloud-based
 operational practices. Like familiar cloud applications, the end
-result is a system that (a) dramatically increases feature velocity,
-and (b) is operated as a managed cloud service.  These advantages are
-available to legacy MNOs, but whether they will fully embrace them is
-yet to be seen, so we do not limit ourselves to existing stakeholders
-or business models. In particular, this book focuses on how
-enterprises can be their own MNOs, or alternatively, acquire 5G
-connectivity as a managed cloud service from non-traditional MNOs.
+result is a system that increases both feature velocity and
+operational uniformity.  These advantages are available to legacy
+MNOs, but whether they will fully embrace them is yet to be seen, so
+we do not limit ourselves to existing stakeholders or business
+models. In particular, this book focuses on how enterprises can be
+their own MNOs, or alternatively, acquire 5G connectivity as a managed
+cloud service from non-traditional MNOs.
 
 .. _fig-enterprise:
 .. figure:: figures/ops/Slide1.png 
@@ -288,8 +290,8 @@ enterprise), and the control plane of the 5G service running off-prem
 (in the global cloud).\ [#]_ Enterprise administrators control their
 service through a management console, much in the same way they might
 log into an AWS, GCP, or Azure console to control a cloud-based
-storage or compute service. Finally, applications are split between
-the edge and centralized components, taking advantage of what is
+storage or compute service. Finally, applications are distributed
+across both edge and centralized clouds, taking advantage of what is
 commonly referred to as a *hybrid cloud*.
 
 .. [#] We use the terms "data plane" and "control plane" in the
@@ -347,12 +349,12 @@ our exemplar deployment.
 
   At the same time network operators began to investigate a CORD-based
   approach, they also encouraged their vendors to shift from selling
-  hardware appliances to *Virtualized Network Functions (VNFs)*. This
-  is widely known as the *Network Function Virtualization (NFV)*
-  Initiative. Unfortunately, the commercially available VNFs tended to
-  be packaged as a VM that required a one-off configuration, leaving
-  operators with a set of management silos, and far short of the
-  operational uniformity of cloud native systems.
+  hardware appliances to *Virtualized Network Functions (VNFs)*, as
+  part of an initiative that is widely known as the *Network Function
+  Virtualization (NFV)*. Unfortunately, the commercially available
+  VNFs tended to be packaged as VMs that required a one-off
+  configurations, leaving operators with a set of management silos,
+  and far short of the operational uniformity of cloud native systems.
 
 An important takeaway from this discussion is that to understand how 5G
 is being implemented, it is helpful to have a working understanding of

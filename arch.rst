@@ -19,9 +19,9 @@ Chapter 2:  Architecture
    the system as a whole has to be managed and operated, but then zero
    in on best practices in cloud-based managed services.
    
-This chapter identifies the main architectural components of mobile
-cellular networks, which is partly an exercise in introducing 3GPP
-terminology. For someone that is familiar with the Internet, this
+This chapter identifies the main architectural components of the
+mobile cellular networks, which is partly an exercise in introducing
+3GPP terminology. For someone that is familiar with the Internet, this
 terminology can seem arbitrary (e.g., “eNB” is a “base station”), but
 it is important to keep in mind that this terminology came out of the
 3GPP standardization process, which was historically concerned with
@@ -370,12 +370,12 @@ station (including Wi-Fi).
 In other words, the RAN as a whole (i.e., not just a single base
 station) not only supports handovers (an obvious requirement for
 mobility), but also *link aggregation* and *load balancing*,
-mechanisms that are familiar to anyone who understands the
-Internet. These functions imply a global decision-making process,
-whereby it’s possible to forward traffic to a different base station
-(or to multiple base stations) in an effort to make efficient use of
-the radio spectrum over a larger geographic area. We will revisit how
-such RAN-wide (global) decisions can be made using SDN techniques in
+mechanisms that are similar to those found in other types of networks.
+These functions imply a global decision-making process, whereby it’s
+possible to forward traffic to a different base station (or to
+multiple base stations) in an effort to make efficient use of the
+radio spectrum over a larger geographic area. We will revisit how such
+RAN-wide (global) decisions can be made using SDN techniques in
 Chapter 4.
 
 2.4 Mobile Core
