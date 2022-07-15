@@ -1,17 +1,3 @@
-# Copyright 2019-present Open Networking Foundation
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # -*- coding: utf-8 -*-
 #
 # Configuration file for the Sphinx documentation builder.
@@ -32,21 +18,29 @@
 
 import os
 
+from subprocess import check_output, CalledProcessError
+
 def get_version():
-    with open("VERSION") as f:
-        return f.read().strip()
+
+    try:
+        version = check_output(['cat', 'VERSION'],
+                               universal_newlines=True)
+    except CalledProcessError:
+        return 'unknown version'
+
+    return version.rstrip()
+
+# "version" is used for html build
+version = get_version()
+# "release" is used for LaTeX build
+release = version
+
 
 # -- Project information -----------------------------------------------------
 
-project = u'Software-Defined 5G: A Systems Approach'
-copyright = u'2019, 2020'
-author = u'Larry Peterson, Oguz Sunay, and Bruce Davie'
-
-# The short X.Y version
-version = get_version()
-
-# The full version, including alpha/beta/rc tags
-release = get_version()
+project = u'5G Connectivity Serive: A Systems Approach'
+copyright = u'2022, Systems Approach LLC (Publisher)'
+author = u'Peterson, Sunay, Davie'
 
 # -- General configuration ---------------------------------------------------
 
@@ -55,14 +49,14 @@ release = get_version()
 # needs_sphinx = '1.0'
 
 # make all warnings errors
-warning_is_error = True
+warning_is_error = False
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones. ***Replace "mathjax" with "imgmath" for epub output.***
 extensions = [
+    'sphinx.ext.autosectionlabel',
     'sphinx.ext.coverage',
-    'sphinx.ext.graphviz',
     'sphinx.ext.ifconfig',
     'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
@@ -70,21 +64,6 @@ extensions = [
     'sphinxcontrib.spelling',
     "sphinx_multiversion",
 ]
-
-#extensions = [
-#    'recommonmark',
-#    'sphinx.ext.coverage',
-#    'sphinx.ext.ifconfig',
-#    'sphinx.ext.mathjax',
-#    'sphinx.ext.todo',
-#    'sphinx.ext.autosectionlabel',
-#    'sphinxcontrib.actdiag',
-#    'sphinxcontrib.blockdiag',
-#    'sphinxcontrib.nwdiag',
-#    'sphinxcontrib.packetdiag',
-#    'sphinxcontrib.rackdiag',
-#    'sphinxcontrib.seqdiag',
-#]
 
 # Text files with lists of words that shouldn't fail the spellchecker:
 spelling_word_list_filename=['dict.txt', ]
@@ -96,7 +75,7 @@ templates_path = ['_templates']
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = ['.rst', '.md']
+source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
@@ -111,7 +90,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = [u'_build', 'doc_venv', 'requirements.txt', 'Thumbs.db', '.DS_Store', 'repos', '*/vendor', 'sidebars', 'private', 'status.rst', '*/README.rst', 'CONTRIBUTING.rst']
+exclude_patterns = [u'_build', 'venv-docs', 'requirements.txt', 'Thumbs.db', 'private', '.DS_Store', '*/README.rst']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None
@@ -149,7 +128,7 @@ html_theme_options = {
 html_static_path = ['_static']
 
 # HTML Favicon
-html_favicon = 'bridge.ico'
+html_favicon = '_static/bridge.ico'
 
 # HTML Index
 html_use_index = False
@@ -172,6 +151,7 @@ htmlhelp_basename = 'SystemsApproach'
 
 
 # -- Options for LaTeX output ------------------------------------------------
+#latex_engine = 'xelatex'
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
@@ -182,9 +162,9 @@ latex_elements = {
     #
     'pointsize': '11pt',
 
-    # Additional stuff for the LaTeX preamble.
+    # Get unicode to work
     #
-    # 'preamble': 'private/latex/preamble.tex',
+    'fontenc': '\\usepackage[LGR,T1]{fontenc}',
 
     # Latex figure (float) alignment
     #
@@ -195,8 +175,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'book.tex', u'Software-Defined 5G: A Systems Approach',
-     u'Peterson, Sunay, and Davie', 'manual', True),
+    (master_doc, 'book.tex', u'5G Connectivity Serivce: A Systems Approach',
+     u'Peterson, Sunay, and Davie ', 'manual', True),
 ]
 
 latex_toplevel_sectioning = 'chapter'
@@ -218,13 +198,18 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Software-Defined 5G', u'Software-Defined 5G',
+    (master_doc, '5G Connectivity Service', u'5G Connectivity Service',
      author, 'Peterson, Sunay, and Davie', 'A Systems Approach',
      'Miscellaneous'),
 ]
 
 
 # -- Options for Epub output -------------------------------------------------
+epub_title = project
+epub_description = 'Building a Cloud Management Platform'
+epub_cover = ('_static/cover.jpg', '')
+epub_show_urls = 'False'
+epub_use_index = False
 
 # The unique identifier of the text. This can be a ISBN number
 # or the project homepage.
@@ -241,31 +226,23 @@ epub_exclude_files = ['search.html']
 
 # -- Extension configuration -------------------------------------------------
 
-# blockdiag/etc. config
+# -- options for Intersphinx extension ---------------------------------------
 
-rackdiag_antialias = True
-rackdiag_html_image_format = "SVG"
-rackdiag_fontpath = [
-    "_static/fonts/Inconsolata-Regular.ttf",
-    "_static/fonts/Inconsolata-Bold.ttf",
-]
-
-nwdiag_antialias = True
-nwdiag_html_image_format = "SVG"
-nwdiag_fontpath = [
-    "_static/fonts/Inconsolata-Regular.ttf",
-    "_static/fonts/Inconsolata-Bold.ttf",
-]
+intersphinx_mapping = {
+    'sphinx': ('https://www.sphinx-doc.org/en/master', None),
+    'aether': ('https://docs.aetherproject.org/master', None),
+    'sdcore': ('https://docs.sd-core.opennetworking.org/master', None),
+    'sdran': ('https://docs.sd-ran.org/master', None),
+    'sdran': ('https://docs.sd-fabric.org/master', None),
+    'sysapproach5g': ('https://5g.systemsapproach.org/', None),
+    'sysapproachnet': ('https://book.systemsapproach.org/', None),
+    'sysapproachsdn': ('https://sdn.systemsapproach.org/', None),
+    }
 
 # -- Options for todo extension ----------------------------------------------
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-# -- Configure recommonmark to use AutoStructify -----------------------------
-# Docs: https://recommonmark.readthedocs.io/en/latest/auto_structify.html
-
-#import recommonmark
-#from recommonmark.transform import AutoStructify
 
 # -- Set up Google Analytics
 # -- using approach at https://stackoverflow.com/questions/9444342/adding-a-javascript-script-tag-some-place-so-that-it-works-for-every-file-in-sph/41885884#41885884
@@ -276,18 +253,13 @@ GA_INVOKE_JS = """
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-C4RNJ35K6B');
+  gtag('config', 'G-K101Q1MWLM');
 """
 
 def setup(app):
 
     app.add_css_file('css/rtd_theme_mods.css')
 
-    app.add_config_value('recommonmark_config', {
-            'auto_toc_tree_section': 'Contents',
-            }, True)
 
-#    app.add_transform(AutoStructify)
-
-    app.add_js_file('https://www.googletagmanager.com/gtag/js?id=G-C4RNJ35K6B')
+    app.add_js_file('https://www.googletagmanager.com/gtag/js?id=G-K101Q1MWLM')
     app.add_js_file(None, body=GA_INVOKE_JS)

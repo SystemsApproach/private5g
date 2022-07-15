@@ -24,15 +24,15 @@
   white-space: normal;
 }
 
-
 /* Colors for navigation */
 
 .wy-side-nav-search, .wy-nav-top {
     background: #2F5597;
 }
 
-.wy-menu-vertical header,.wy-menu-vertical p.caption{color:#2F5597}
+/* .wy-menu-vertical header,.wy-menu-vertical p.caption{color:#2F5597} */
 
+.wy-menu-vertical header,.wy-menu-vertical p.caption{color:#6AB0DE}
 
 /* Headings */
 h1, h2 {
@@ -64,4 +64,18 @@ h2 {
 h3 {
   margin-top: 1.5rem;
   font-size: 1.25rem;
+}
+
+.pop {
+    color: #6AB0DE;
+    font-style: italic;
+    font-weight: bold;
+}
+aside.sidebar {
+    margin: 0 0 0.5em 1em;
+    border: 1px solid #ddb;
+    padding: 7px 7px 0 7px;
+    background-color: #ffe;
+    width: 40%;
+    float: right;
 }
