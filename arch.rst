@@ -148,7 +148,7 @@ although as we'll see in later chapters, the implementation details
 differ.
 
 .. _fig-slice:
-.. figure:: figures/Slide30.png 
+.. figure:: figures/Slide4.png 
     :width: 500px
     :align: center
     
@@ -202,7 +202,7 @@ but in the realm of information theory rather than system design that
 is the focus of this book.
 
 .. _fig-quality:
-.. figure:: figures/Slide31.png 
+.. figure:: figures/Slide5.png 
     :width: 300px
     :align: center
     
@@ -263,7 +263,7 @@ ISDN) to denote a data channel, as opposed to a channel that carries
 signaling information.
 
 .. _fig-active-ue:
-.. figure:: figures/Slide4.png 
+.. figure:: figures/Slide6.png 
     :width: 500px
     :align: center
 
@@ -276,7 +276,7 @@ signaling traffic enables UE authentication, registration, and
 mobility tracking.
 
 .. _fig-control-plane:
-.. figure:: figures/Slide5.png 
+.. figure:: figures/Slide7.png 
     :width: 500px
     :align: center
 	    
@@ -291,7 +291,7 @@ aspires to support many such tunnels as part of a generalized network
 slicing mechanism.
 
 .. _fig-user-plane:
-.. figure:: figures/Slide6.png 
+.. figure:: figures/Slide8.png 
     :width: 500px
     :align: center
 	    
@@ -316,7 +316,7 @@ characterized the RAN Backhaul as an overlay running on top of some
 Layer 2 technology.
 
 .. _fig-tunnels:
-.. figure:: figures/Slide7.png 
+.. figure:: figures/Slide9.png 
     :width: 500px
     :align: center
 	    
@@ -334,7 +334,7 @@ base stations within range of the UE, coupled with the QCI value those
 base stations know the RAN has promised to deliver to the UE.
 
 .. _fig-handover:
-.. figure:: figures/Slide8.png 
+.. figure:: figures/Slide10.png 
     :width: 500px
     :align: center
 	    
@@ -345,7 +345,7 @@ a UE from multiple base stations, which may or may not be part of a UE
 handover from one base station to another.
 
 .. _fig-link-aggregation:
-.. figure:: figures/Slide9.png 
+.. figure:: figures/Slide11.png 
     :width: 500px
     :align: center
 	    
@@ -434,7 +434,7 @@ information about the global ramifications is given at the end of the
 section.
 
 .. _fig-secure:
-.. figure:: figures/Slide10.png 
+.. figure:: figures/Slide12.png 
     :width: 600px 
     :align: center 
 	    
@@ -482,7 +482,7 @@ Packet Inspection* (DPI) on the traffic, looking for flows that
 require special treatment.
 
 .. _fig-per-hop:
-.. figure:: figures/Slide11.png 
+.. figure:: figures/Slide13.png 
     :width: 500px 
     :align: center 
 	    

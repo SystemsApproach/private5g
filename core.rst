@@ -67,7 +67,7 @@ device, commonly referred to as an S/PGW. The end result is illustrated
 in :numref:`Figure %s <fig-4g-core>`. 
 
 .. _fig-4g-core:
-.. figure:: figures/Slide23.png 
+.. figure:: figures/Slide21.png 
     :width: 500px 
     :align: center 
 	    
@@ -165,7 +165,7 @@ pairwise connections. This also suggests a well-understood
 implementation strategy. 
 
 .. _fig-5g-core:
-.. figure:: figures/Slide24.png 
+.. figure:: figures/Slide22.png 
     :width: 700px 
     :align: center 
 	    
@@ -211,7 +211,7 @@ stations to it for Standalone (SA) operation. NSA and SA operations
 are illustrated in :numref:`Figure %s <fig-nsa>`.
 
 .. _fig-nsa:
-.. figure:: figures/Slide25.png 
+.. figure:: figures/Slide23.png 
     :width: 600px
     :align: center
 	    

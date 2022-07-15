@@ -41,7 +41,7 @@ addressed by a combination of coding and modulation, as depicted in
 :numref:`Figure %s <fig-modulation>`.
 
 .. _fig-modulation:
-.. figure:: figures/Slide12.png 
+.. figure:: figures/Slide14.png 
     :width: 500px
     :align: center
 
@@ -68,7 +68,7 @@ following multiple paths from the transmitter to the receiver, who may
 also be moving.
 
 .. _fig-multipath:
-.. figure:: figures/Slide13.png 
+.. figure:: figures/Slide15.png 
     :width: 600px
     :align: center
 
@@ -105,7 +105,7 @@ the wireless channel is a central challenge to address in the cellular
 network.  
 
 .. _fig-coherence:
-.. figure:: figures/Slide14.png 
+.. figure:: figures/Slide16.png 
     :width: 500px
     :align: center
 
@@ -188,7 +188,7 @@ using *Quadrature Amplitude Modulation (QAM)*, 16-QAM yields 4 bits per
 symbol and 64-QAM yields 6 bits per symbol.
 
 .. _fig-sched-grid:
-.. figure:: figures/Slide15.png 
+.. figure:: figures/Slide17.png 
     :width: 600px
     :align: center
 	    
@@ -328,7 +328,7 @@ multiple classes at any given time. We explore this idea in much more
 depth in a later chapter.
 
 .. _fig-scheduler:
-.. figure:: figures/Slide16.png 
+.. figure:: figures/Slide18.png 
     :width: 600px
     :align: center
 
@@ -365,7 +365,7 @@ keep in mind is that it is totally agnostic about which user’s segment
 is affected by each translation.
 
 .. _fig-hypervisor:
-.. figure:: figures/Slide26.png 
+.. figure:: figures/Slide19.png 
     :width: 600px
     :align: center
 
@@ -386,7 +386,7 @@ could be reserved for premium customers or other high-priority traffic
 (e.g., public safety), with the rest shared among everyone else.
 
 .. _fig-multi-sched:
-.. figure:: figures/Slide27.png 
+.. figure:: figures/Slide20.png 
     :width: 600px
     :align: center
 
