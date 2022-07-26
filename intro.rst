@@ -259,13 +259,13 @@ platforms that can host yet-to-be-invented applications, the mobile
 cellular network is starting to blur the line between the access
 network and the cloud.
 
-The rest of this book explains what that means in detail, but in a
-nutshell, thinking of 5G connectivity as a cloud service means that
+The rest of this book explains what that means in detail, but as an
+overview, thinking of 5G connectivity as a cloud service means that
 instead of using purpose-built devices and telephony-based operational
 practices to deliver mobile connectivity, the 5G network is built from
 commodity hardware, software-defined networks, and cloud-based
-operational practices. Like familiar cloud applications, the end
-result is a system that increases both feature velocity and
+operational practices. And just as with familiar cloud applications,
+the end result is a system that increases both feature velocity and
 operational uniformity.  These advantages are available to legacy
 MNOs, but whether they will fully embrace them is yet to be seen, so
 we do not limit ourselves to existing stakeholders or business
@@ -375,7 +375,7 @@ technologies.
    <https://sdn.systemsapproach.org/>`__. November 2021.
 
    `Edge Cloud Operations: A Systems Approach 
-   <https://ops.systemsapproach.org/>`__. March 2022.
+   <https://ops.systemsapproach.org/>`__. June 2022.
 
 In summary, a major goal of 5G is to take advantage of cloud
 technologies, with traditional MNOs announcing plans to build

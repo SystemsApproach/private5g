@@ -27,17 +27,13 @@ Chapter 6:  Managed Cloud Service
    deployments. Maybe in a concluding section.
 
 This chapter describes how to assemble all the pieces described in the
-previous chapters to operationalize a cloud-based 5G connectivity
-service.  Because this necessarily involves engineering choices, we
-use a specific open source implementation, called Aether, as an
-illustrative example. Aether supports private 5G deployments in
-enterprises, so we start by briefly describing why an enterprise might
-install a system like Aether in the first place.
-
-Edge clouds like Aether are an important component of a trend called
-Industry 4.0: A combination of intelligent devices, robust wireless
-connectivity, and cloud-based AI/ML capabilities, all working together
-to enable software-based optimization and innovation.
+previous chapters to provide 5G connectivity as a managed cloud
+service. Such a service, which is sometimes referred to as *Private
+5G*, is gaining traction as a way to deliver 5G to enterprises in
+support of a trend known as *Industry 4.0*: A combination of
+intelligent devices, robust wireless connectivity, and cloud-based
+AI/ML capabilities, all working together to enable software-based
+optimization and innovation.
 
 Connecting industry assets to the cloud has the potential to bring
 transformative benefits. This starts with collecting deep operational
@@ -50,28 +46,38 @@ so as to minimize human intervention and enable remote operations
 the goal is to create an IT foundation for continually improving
 industrial operations through software.
 
-In the case of Aether, the platform includes support for 5G
-connectivity, including an API that edge apps can use to customize
-that connectivity to better meet their objectives.  In addition to
-running the connectivity service, an ML-platform or an IoT-platform
-can also be loaded onto Aether, further enhancing the application
-support it provides.
+Rather than describe a cloud-based 5G service in abstract terms, we
+use a particular implementation (the Aether edge cloud introduced in
+Chapter 2) as an illustrative example. Aether is an operational edge
+cloud, built from open source components, and deployed to multiple
+sites. Most importantly, Aether includes an API that edge apps can use
+to customize 5G connectivity to better meet their objectives.
 
-6.1 Edge Cloud
---------------
+6.1 Target Cloud Deployment
+---------------------------
 
-The edge cloud, which in Aether is called ACE (Aether Connected Edge),
-is a Kubernetes-based cluster. It is a platform that consists of one
-or more server racks interconnected by a leaf-spine switching fabric,
-with an SDN control plane (denoted SD-Fabric) managing the fabric.
+We start by describing the target deployment environment...
 
-.. Need to figure out the right way to introduce SD-Fabric, which will
-   come up in Chapter 5 when we talk about the P4-based UPF. The
-   citation given below is not sufficient.
+6.1.1 Edge Cloud
+~~~~~~~~~~~~~~~~
+
+An Aether edge deployment, called ACE (Aether Connected Edge), is a
+Kubernetes-based cluster. It consists of one or more server racks
+interconnected by a leaf-spine switching fabric, with an SDN control
+plane (denoted SD-Fabric) managing the fabric. We briefly saw
+SD-Fabric in Chapter 5 as an implementation option for the Mobile
+Core's User Plane Function (UPF), but for an in-depth description of
+SD-Fabric, we refer you to a companion book.
+
+.. _reading_sdn:
+.. admonition:: Further Reading 
+   
+   `Software-Defined Networks: A Systems Approach 
+   <https://sdn.systemsapproach.org>`__.  November 2021.
 
 .. _fig-ace:
 .. figure:: figures/ops/Slide3.png
-   :width: 400px
+   :width: 350px
    :align: center
 
    Aether Connected Edge (ACE) = The cloud platform (Kubernetes and
@@ -83,39 +89,30 @@ with an SDN control plane (denoted SD-Fabric) managing the fabric.
 	
 As shown in :numref:`Figure %s <fig-ace>`, ACE hosts two additional
 microservice-based subsystems on top of this platform; they
-collectively implement *5G-Connectivity-as-a-Service*. The first
-subsystem, SD-RAN, is the SDN-based implementation of the Radio Access
-Network described in Chapter 4. It controls the small cell base
-stations deployed throughout the enterprise. The second subsystem,
-SD-Core, is an SDN-based implementation of the User Plane half of the
-Mobile Core described in Chapter 5. It is responsible for forwarding
-traffic between the RAN and the Internet. The SD-Core Control Plane
-(CP) runs off-site, and is not shown in :numref:`Figure %s
-<fig-ace>`. Both subsystems (as well as the SD-Fabric), are deployed
-as a set of microservices, just as any other cloud native workload.
-(The interested reader is referred to our companion SDN book for more
-information about the internal working of SD-Fabric.)
-
-.. _reading_sdn:
-.. admonition:: Further Reading 
-   
-   `Software-Defined Networks: A Systems Approach 
-   <https://sdn.systemsapproach.org>`__
+collectively implement *5G-as-a-Service*. The first subsystem, SD-RAN,
+is the SDN-based implementation of the Radio Access Network described
+in Chapter 4. It controls the small cell base stations deployed
+throughout the enterprise. The second subsystem, SD-Core, is an
+SDN-based implementation of the User Plane half of the Mobile Core
+described in Chapter 5. It is responsible for forwarding traffic
+between the RAN and the Internet. The SD-Core Control Plane (CP) runs
+off-site, and is not shown in :numref:`Figure %s <fig-ace>`. Both
+subsystems (as well as the SD-Fabric), are deployed as a set of
+microservices, just as any other cloud native workload.
 
 Once ACE is running in this configuration, it is ready to host a
-collection of edge applications (not shown in :numref:`Figure %s
-<fig-ace>`), and as with any Kubernetes-based cluster, a Helm chart
-would be the preferred way to deploy such applications. What’s unique
-to ACE is the ability to connect such applications to mobile devices
-throughout the enterprise using the 5G Connectivity Service
-implemented by SD-RAN and SD-Core. This service is offered as a
-managed service, with enterprise system administrators able to use a
-programmatic API (and associated GUI portal) to control that service;
-that is, authorize devices, restrict access, set QoS profiles for
-different devices and applications, and so on.
+collection of cloud-native edge applications (not shown in
+:numref:`Figure %s <fig-ace>`). What’s unique to ACE is the ability to
+connect such applications to mobile devices throughout the enterprise
+using the 5G Connectivity Service implemented by SD-RAN and
+SD-Core. This service is offered as a managed service, with enterprise
+system administrators able to use a programmatic API (and associated
+GUI portal) to control that service; that is, authorize devices,
+restrict access, set QoS profiles for different devices and
+applications, and so on.
 
-6.2 Hybrid Cloud
------------------
+6.1.2 Hybrid Cloud
+~~~~~~~~~~~~~~~~~~
 
 While it is possible to instantiate a single ACE cluster in just one
 site, Aether is designed to support multiple ACE deployments, all of
@@ -125,10 +122,9 @@ subsystems running in the central cloud: (1) one or more instances of
 the Mobile Core Control Plane (CP), and (2) the Aether Management
 Platform (AMP).
 
-Each SD-Core CP controls one or more SD-Core UPs, as specified by
-3GPP, the standards organization responsible for 5G. Exactly how CP
-instances (running centrally) are paired with UP instances (running at
-the edges) is a runtime decision, and depends on the degree of
+Each SD-Core CP controls one or more SD-Core UPFs.  Exactly how CP
+instances (running centrally) are paired with UPF instances (running
+at the edges) is a runtime decision, and depends on the degree of
 isolation the enterprise sites require. AMP is responsible for
 managing all the centralized and edge subsystems (as introduced in the
 next section).
@@ -168,10 +164,11 @@ sometimes hosts more than one Kubernetes cluster, for example, one
 running production services and one used for trial deployments of new
 services.
 
-6.3 Stakeholders
-----------------
+6.1.3 Stakeholders
+~~~~~~~~~~~~~~~~~~
 
-.. This section includes topics that are tangential to this book.
+.. This section includes topics that are somewhat tangential to this
+   book, but maybe there's something worth including.
    
 With the understanding that our target environment is a collection of
 Kubernetes clusters—some running on bare-metal hardware at edge sites
@@ -209,86 +206,46 @@ example. OpenVINO is a framework for deploying AI inference models,
 which is interesting in the context of Aether because one of its use
 cases is processing video streams, for example to detect and count
 people that enter the field of view of a collection of 5G-connected
-cameras.
+cameras. For our purposes, OpenVINO is just like the 5G-related
+components we're already incorporating into our hybrid cloud: it is
+deployed as a Kubernetes-based set of microservices.
 
 .. _reading_openvino:
 .. admonition:: Further Reading 
 
    `OpenVINO Toolkit <https://docs.openvino.ai>`__.
 
-On the one hand, OpenVINO is just like the 5G-related components we're
-already incorporating into our hybrid cloud: it is deployed as a
-Kubernetes-based set of microservices. On the other hand, we have to
-ask who is responsible for managing it, which is to say “who
-operationalizes OpenVINO?”
+6.2 Operationalizing the Cloud
+------------------------------
 
-One answer is that the operators that already manage the rest of the
-hybrid cloud also manage the collection of edge applications added to
-cloud. Enterprise admins might activate and control those apps on a
-site-by-site basis, but it is the operations team already responsible
-for provisioning, deploying, and managing those edge clouds that also
-does the same for OpenVINO and any other applications that run on that
-cloud. Generalizing from one edge service (5G connectivity) to
-arbitrarily many edge services has implications for control and
-management (which we’ll discuss throughout the book), but
-fundamentally nothing changes in the course we’ve already set out for
-ourselves.
+.. Compare the "intro blubs" included below (from the Architecture
+   chapter of the OPs book) with the introductory material in each of
+   the subsequent chapters of that book.
 
-Having the cloud operator *curate and manage* a set of edge services
-is the assumption Aether makes (and we assume throughout this book),
-but for completeness, we take note of two other possibilities.  One is
-that we extend our hybrid architecture to support independent
-third-party service providers. Each new edge service acquires its own
-isolated Kubernetes cluster from the edge cloud, and then the
-3rd-party provider subsumes all responsibility for managing the
-service running in that cluster. From the perspective of the cloud
-operator, though, the task just became significantly more difficult
-because the architecture would need to support Kubernetes as a managed
-service, which is sometimes called *Container-as-a-Service (CaaS)*.\ [#]_
-Creating isolated Kubernetes clusters on-demand is a step further than
-we take things in this book, in part because there is a second
-possible answer that seems more likely to happen.
+Once deployed, cloud services have to be operationalized. This is the
+essence of offering 5G as a *managed service*.  In Aether, this
+responsibility falls to the Aether Management Platform (AMP), which as
+shown in :numref:`Figure %s <fig-amp>`, manages both the distributed
+set of ACE clusters and the other control clusters running in the
+central cloud. The following is and overview of AMP. For more details
+about all the subsystems involved in operationalizing an edge cloud,
+we refer you to a companion book.
 
-.. [#] This is not strictly an either-or-situation. It is possible to
-       curate an edge service, provision cluster resources for it, but
-       then delegate operational responsibility to a 3rd-party service
-       provider.
-
-This second approach is that a multi-cloud emerges *within*
-enterprises. Today, most people equate multi-cloud with services
-running across multiple hyperscalers, but with edge clouds becoming
-more common, it seems likely that enterprises invite multiple edge
-clouds onto their local premises, some hyperscaler-provided and some
-not, each hosting a different subset of edge services. For example,
-one edge cloud might host a 5G connectivity service and another might
-host an AI platform like OpenVINO. The question this raises is whether
-the cloud management technologies described in this book still apply
-in that setting. The answer is yes: the fundamental management
-challenges remain the same, the main difference is knowing when to
-directly control a Kubernetes cluster (as we do in this book) and when
-to do so indirectly through the manager for that cluster. There are
-also new problems that are unique to multi-clouds (e.g., inter-cloud
-service discovery), but they are beyond the scope of this book.
-
-6.4 Control and Management
---------------------------
-
-We are now ready to describe the architecture of the Aether Management
-Platform (AMP), which as shown in :numref:`Figure %s <fig-amp>`,
-manages both the distributed set of ACE clusters and the other control
-clusters running in the central cloud. And illustrating the recursive
-nature of the management challenge, AMP is also responsible for
-managing AMP!
+.. _reading_ops:
+.. admonition:: Further Reading 
+   
+   `Edge Cloud Operations:: A Systems Approach 
+   <https://ops.systemsapproach.org>`__.  June 2022.
 
 AMP includes one or more portals targeted at different stakeholders,
-with :numref:`Figure %s <fig-amp>` showing the two examples we focus
-on in this book: a User Portal intended for enterprise admins who
-need to manage services delivered to a local site, and an Operations
-Portal intended for the ops team responsible for keeping Aether
-up-to-date and running smoothly. Again, other stakeholders (classes of
-users) are possible, but this distinction does represent a natural
-division between those that *use* cloud services and those that
-*operate* cloud services.
+with :numref:`Figure %s <fig-amp>` showing the two examples discussed
+in the previous section: a User Portal intended for enterprise admins
+who need to manage services delivered to a local site, and an
+Operations Portal intended for the ops team responsible for keeping
+Aether up-to-date and running smoothly. Again, other stakeholders
+(classes of users) are possible, but this distinction does represent a
+natural division between those that *use* cloud services and those
+that *operate* cloud services.
 
 .. _fig-amp:
 .. figure:: figures/ops/Slide5.png
@@ -322,13 +279,10 @@ available cloud service, running as a collection of microservices. The
 design is cloud-agnostic, so AMP can be deployed in a public cloud
 (e.g., Google Cloud, AWS, Azure), an operator-owned Telco cloud, (e.g,
 AT&T’s AIC), or an enterprise-owned private cloud. For a pilot
-deployment of Aether, AMP runs in the Google Cloud.
+deployment of Aether, AMP runs in the Google Cloud. The rest of this
+section introduces these four subsystems.
 
-The rest of this section introduces these four subsystems, with the
-chapters that follow filling in more detail about each. 
-   
-
-2.4.1 Resource Provisioning
+6.2.1 Resource Provisioning
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Resource Provisioning configures and bootstraps resources (both
@@ -355,14 +309,6 @@ during Lifecycle Management, and (b) initializes the newly deployed
 resources so they are in a state that Lifecycle Management is able to
 control.
 
-Recall from Chapter 1 that we called out the "Aether platform" as
-distinct from the cloud-native workloads that are hosted on the
-platform. This is relevant here because Resource Provisioning has to
-get this platform up-and-running before Lifecycle Management can do
-its job. But in another example of circular dependencies, Lifecycle
-Management then plays a role in keeping the underlying platform
-up-to-date.
-	
 Clearly, the “Install & Inventory” step requires human involvement,
 and some amount of hands-on resource-prep is necessary, but the goal
 is to minimize the operator configuration steps (and associated
@@ -371,11 +317,9 @@ Provisioning system. Also realize that :numref:`Figure %s
 <fig-provision>` is biased towards provisioning a physical cluster,
 such as the edge sites in Aether. For a hybrid cloud that also
 includes one or more virtual clusters running in central datacenters,
-it is necessary to provision those virtual resources as well. Chapter
-3 describes provisioning from this broader perspective, considering
-both physical and virtual resources.
+it is necessary to provision those virtual resources as well.
 
-2.4.2 Lifecycle Management
+6.2.2 Lifecycle Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Lifecycle Management is the process of integrating debugged, extended,
@@ -413,21 +357,21 @@ configuration state needed to successfully deploy the right version of
 each component in the system is the central challenge, which we
 address in Chapter 4.
 
-2.4.3 Runtime Control
+6.2.3 Runtime Control
 ~~~~~~~~~~~~~~~~~~~~~
 
 Once deployed and running, Runtime Control provides a programmatic API
 that can be used by various stakeholders to manage whatever abstract
-service(s) the system offers (e.g., 5G connectivity in the case of
-Aether). As shown in :numref:`Figure %s <fig-control>`, Runtime
-Control partially addresses the “management silo” issue raised in
-Chapter 1, so users do not need to know that connectivity potentially
-spans four different components, or how to control/configure each of
-them individually. (Or, as in the case of the Mobile Core, that
-SD-Core is distributed across two clouds, with the CP sub-part
-responsible for controlling the UP sub-part.) In the case of the
-connectivity service, for example, users only care about being able to
-authorize devices and set QoS parameters on an end-to-end basis.
+service(s) the system offers, such as 5G connectivity.  As shown in
+:numref:`Figure %s <fig-control>`, Runtime Control partially addresses
+the “management silo” issue raised in Chapter 1, so users do not need
+to know that connectivity potentially spans four different components,
+or how to control/configure each of them individually. (Or, as in the
+case of the Mobile Core, that SD-Core is distributed across two
+clouds, with the CP sub-part responsible for controlling the UP
+sub-part.) In the case of the connectivity service, for example, users
+only care about being able to authorize devices and set QoS parameters
+on an end-to-end basis.
 
 .. _fig-control:
 .. figure:: figures/ops/Slide8.png
@@ -437,10 +381,10 @@ authorize devices and set QoS parameters on an end-to-end basis.
    Example use case that requires ongoing runtime control.
 
 Note that :numref:`Figure %s <fig-control>` focuses on
-Connectivity-as-a-Service, but the same idea applies to all services
-the cloud offers to end users. Thus, we can generalize the figure so
-Runtime Control mediates access to any of the underlying microservices
-(or collections of microservices) the cloud designer wishes to make
+5G-as-a-Service, but the same idea applies to all services the cloud
+offers to end users. Thus, we can generalize the figure so Runtime
+Control mediates access to any of the underlying microservices (or
+collections of microservices) the cloud designer wishes to make
 publicly accessible, including the rest of AMP! In effect, Runtime
 Control implements an abstraction layer, codified with a programmatic
 API.
@@ -450,11 +394,10 @@ model (represent) the abstract services to be offered to users; store
 any configuration and control state associated with those models;
 apply that state to the underlying components, ensuring they remain in
 sync with the operator’s intentions; and authorize the set API calls
-users try to invoke on each service. These details are spelled out in
-Chapter 5.
+users try to invoke on each service.
 
 	
-2.4.4 Monitoring and Logging
+6.2.4 Monitoring and Logging
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In addition to controlling service functionality, a running system has
@@ -483,9 +426,13 @@ messages (i.e., text strings explaining various event). Both include a
 timestamp, so it is possible to link quantitative analysis with
 qualitative explanations in support of diagnostics and analytics.
 
-2.4.5 Summary
+6.2.5 Summary
 ~~~~~~~~~~~~~
 
+.. Currently cut-and-pasted. Requires some thought as to what message
+   we're trying to reenforce here. Maybe want to include a little of
+   the DevOps story.
+   
 This overview of the management architecture could lead one to
 conclude that these four subsystems were architected, in a rigorous,
 top-down fashion, to be completely independent.  But that is not
@@ -529,7 +476,7 @@ opportunities to make different engineering decisions, along with the
 design rationale behind our choices, as we add more details in the
 chapters that follow.
 
-6.5 Connectivity API
+6.3 Connectivity API
 --------------------
 
 .. Currently just lifted from OPs book. Need to reconcile with Runtime
@@ -537,31 +484,36 @@ chapters that follow.
    YANG might be an unnecessary implementation detail: we care about
    the API and not the models (although the API cares about resources).
 
-This section sketches the data model for Aether's connectivity service
-as a way of illustrating the role Runtime Control plays. These models
-are specified in YANG, but since the Runtime Control API is generated from
-these specs, it is equally valid to think in terms of an API that
-supports REST's GET, POST, PATCH, DELETE operations on a set of
-objects (resources):
+Resource Provisioning, Lifecycle Management, and Monitoring are
+essential ingredients for offering a managed cloud service, but they
+work largely under-the-covers. The visible aspect of the service is
+the programmatic interface it provides to users, giving them the
+ability to control and customized the underlying connectivity
+service. This API is implemented by the Runtime Control subsystem
+outlined in the previous section, but what we really care about is the
+interface itself. Using Aether as a concrete example, this section
+describes such an API.
+
+Like many cloud services, the API for 5G-as-a-Service is RESTful.
+This means it supports REST's GET, POST, PATCH, and DELETE operations
+on a set of resources (objects):
 
 * GET: Retrieve an object.
 * POST: Create an object.
 * PUT,  PATCH: Modify an existing object.
 * DELETE: Delete an object.
 
-Each object is an instance of one of the YANG-defined models, where
-every object contains an `id` field that is used to identify the
-object. These identifiers are unique to the model, but not necessarily
-across all models.
+Each object, in turn, is typically defined by a data model.  In Aether
+this model is specified in YANG, but rather than dive into the
+particulars of YANG, this section describes the models informally by
+simply identifying and describing the relevant fields.
 
-Some objects contain references to other objects. For example, many
-objects contain references to the `Enterprise` object, which allows
-them to be associated with a particular enterprise. That is,
-references are constructed using the `id` field of the referenced
-object. Note that one of the features of the mechanisms described in
-the previous section is that they flag attempts to create a reference
-to an object that does not exist and attempts to delete an object
-while there are open references to it from other objects as errors.
+Every object contains an `id` field that is used to uniquely identify
+the object.  Some objects contain references to other objects. For
+example, many objects contain references to the `Enterprise` object,
+which allows them to be associated with a particular enterprise. That
+is, references are constructed using the `id` field of the referenced
+object. 
 
 In addition to the `id` field, several other fields are also common to
 all models. These include:
@@ -574,7 +526,7 @@ per-model descriptions that follow. Note that we use upper case to
 denote a model (e.g., `Enterprise`) and lower case to denote a field
 within a model (e.g., `enterprise`).
 
-6.5.1 Enterprises
+6.3.1 Enterprises
 ~~~~~~~~~~~~~~~~~
 
 Aether is deployed in enterprises, and so needs to define
@@ -609,7 +561,7 @@ logical sites). `Site` contains the following fields:
 The `imsi-definition` is specific to the mobile cellular network, and
 corresponds to the unique identifier burned into every SIM card.
 
-6.5.2 Connectivity Service
+6.3.2 Connectivity Service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Aether models 5G connectivity as a `Slice`, which represents an
@@ -683,47 +635,16 @@ specifies the endpoints for the program devices talk to. The
   to indicate a global application that may be used by multiple
   enterprises.
 
-Anyone familiar with 3GPP will recognize Aether's *Slice* abstraction
-as similar to the specification's notion of a "slice".  The `Slice`
-model definition includes a combination of 3GPP-specified identifiers
-(e.g., `sst` and `sd`), and details about the underlying
-implementation (e.g., `upf` denotes the UPF implementation for the
-Core's user plane). Although not yet part of the production system,
-there is a version of `Slice` that also includes fields related to RAN
-slicing, with the Runtime Control subsystem responsible for stitching
-together end-to-end connectivity across the RAN, Core, and Fabric.
+Note that Aether's *Slice* abstraction is similar to 3GPP's
+specification of a "slice".  The `Slice` model definition includes a
+combination of 3GPP-specified identifiers (e.g., `sst` and `sd`), and
+details about the underlying implementation (e.g., `upf` denotes the
+UPF implementation for the Core's user plane). The `Slice` model also
+includes fields related to RAN slicing, with the Runtime Control
+subsystem responsible for stitching together end-to-end connectivity
+across the RAN, Core, and Fabric.
 
-.. sidebar:: An API for Platform Services
-
-	*We are using Connectivity-as-a-Service as an illustrative
-	example of the role Runtime Control plays, but APIs can be
-	defined for other platform services using the same
-	machinery. For example, because the SD-Fabric in Aether is
-	implemented with programmable switching hardware, the
-	forwarding plane is instrumented with Inband Network Telemetry
-	(INT). A northbound API then enables fine-grain data
-	collection on a per-flow basis, at runtime, making it possible
-	to write closed-loop control applications on top of Aether.*
-
-	*In a similar spirit, the QoS-related control example given in
-	this section could be augmented with additional objects that
-	provide visibility into, and an opportunity to exert control
-	over, various radio-related parameters implemented by SD-RAN.
-	Doing so would be a step towards a platform API that enables
-	a new class of industry automation edge cloud apps.*
-
-	*In general, Iaas and PaaS offerings need to support
-	application- and user-facing APIs that go beyond the
-	DevOps-level configuration files consumed by the underlying
-	software components (i.e., microservices). Creating these
-	interfaces is an exercise in defining a meaningful abstraction
-	layer, which when done using declarative tooling, becomes an
-	exercise in defining high-level data models. Runtime Control
-	is the management subsystem responsible specifying and
-	implementing the API for such an abstraction layer.*
-	
-
-6.5.3 QoS Profiles
+6.3.3 QoS Profiles
 ~~~~~~~~~~~~~~~~~~
 
 Associated with each Slice is a QoS-related profile that governs how
@@ -757,7 +678,7 @@ and includes the following fields:
 * `pelr`: Packet error loss rate.
 * `pdb`: Packet delay budget.
 
-6.5.4 Other Models
+6.3.4 Other Models
 ~~~~~~~~~~~~~~~~~~
 
 The above description references other models, which we do not fully
