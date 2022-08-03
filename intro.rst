@@ -251,6 +251,9 @@ addresses is a topic we will explore in later chapters.
 
 .. This section pivots to the new cloud perspective
 
+.. Need to talk about licensing spectrum, which is a big factor (and
+   about CBRS).   
+
 The previous section gives a decidely Telco-centric view of the mobile
 cellular network, which makes sense because Telcos have been the
 dominant MNOs for the past 40+ years. But with 5G's focus on
@@ -319,14 +322,24 @@ applications benefit from moving at least part of their functionality
 out of the datacenter and towards the edge of the network, closer to
 end users.
 
-Where this edge is *physically* located depends on who you ask. If you
-ask a network operator that already owns and operates thousands of
-Central Offices, then their Central Offices are an obvious answer.
-Others might claim the edge is located at the 14,000 Starbucks across
-the US, and still others might point to the tens-of-thousands of cell
-towers spread across the globe. Our approach is to be location
-agnostic, but to make the discussion concrete, we use enterprises as
-our exemplar deployment.
+This trend is sometimes called *Industry 4.0*. The idea is to first
+collect operational data on assets and infrastructure, from sensors,
+video feeds and telemetry from machinery. It then applies ML to this
+data to gain insights, identify patterns and predict outcomes (e.g.,
+when a device is likely to fail). The final step is to automate
+industrial processes so as to minimize human intervention and enable
+remote operations (e.g., power optimization, idling quiescent
+machinery). The overall goal is to create an IT foundation for
+continually improving industrial operations through software.
+
+But precisely where this edge is *physically* located depends on who
+you ask. If you ask a network operator that already owns and operates
+thousands of Central Offices, then their Central Offices are an
+obvious answer.  Others might claim the edge is located at the 14,000
+Starbucks across the US, and still others might point to the
+tens-of-thousands of cell towers spread across the globe. Our approach
+is to be location agnostic, but to make the discussion concrete, we
+use enterprises as our exemplar deployment.
 
 .. sidebar:: CORD: Central Office Re-architected as a Datacenter
 

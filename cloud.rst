@@ -19,51 +19,56 @@ Chapter 6:  Managed Cloud Service
    (e.g., SD-Core or SD-RAN). We will need to be adjusted to account
    for the previous chapters.
 
-   Current language assumes the intro to Kubernetes and Helm from Ch1
-   of the OPs book. We will need to provide this background. (See end
-   of 1.3 for a similar issue.)
 
    Probably need to talk generally about ther configurations and
    deployments. Maybe in a concluding section.
 
 This chapter describes how to assemble all the pieces described in the
 previous chapters to provide 5G connectivity as a managed cloud
-service. Such a service, which is sometimes referred to as *Private
-5G*, is gaining traction as a way to deliver 5G to enterprises in
-support of a trend known as *Industry 4.0*: A combination of
-intelligent devices, robust wireless connectivity, and cloud-based
-AI/ML capabilities, all working together to enable software-based
-optimization and innovation.
+service. Such a service, which is sometimes called *Private 5G*, is
+gaining traction as a way to deliver 5G to enterprises in support of
+Industry 4.0.
 
-Connecting industry assets to the cloud has the potential to bring
-transformative benefits. This starts with collecting deep operational
-data on assets and infrastructure, from sensors, video feeds and
-telemetry from machinery. It also includes applying ML to this data to
-gain insights, identify patterns and predict outcomes (e.g., when a
-device is likely to fail), followed by automating industrial processes
-so as to minimize human intervention and enable remote operations
-(e.g., power optimization, idling quiescent machinery). In general,
-the goal is to create an IT foundation for continually improving
-industrial operations through software.
+The first step in assembling all the components is to implement them
+using cloud native building blocks. We start by introducing those
+building blocks in Section 6.1. The second step is to integrate yet
+another component—a Management Platform—into the solution. The rest of
+this chapter describes how this can be done using open source tools,
+where we use the Aether edge cloud introduced in Chapter 2 as an
+illustrative example of how cloud services can be deployed and
+operationalized at the edge.
+
+The Mangement Platform is responsible for operationalizing a
+collection of cloud services. This includes both *Lifecycle
+Management* (provisioning and upgrading the system) and *Runtime
+Control* (operating the system) over time.
+
+This chapter is about the "other" component... The Mangement Platform.
+
+Note that you'll see "Mgmt/Orchestrator" in Core-specific and
+RAN-specific architecture diagram. We're describing one "up a level"
+that spans both (and the fabric that connects them. (Also related to
+OSS/BSS and the other Telco counterparts.)
+
 
 6.1 Building Blocks
 -------------------
 
 The approach is based commodity hardware and open source software
-buiding blocks. These building blocks will be familar to anyone
-familiar with cloud native applications, but deserve being explicitly
-named in a discussion of mobile celluar networks, which have
-historically been built using closed proprietary hardware devices.
+buiding blocks. These building blocks will be familar to anyone that
+has built a cloud native application, but they deserve to be
+explicitly named in a discussion of mobile celluar networks, which
+have historically been built using closed proprietary hardware
+devices.
 
-The hardware building blocks include bare-metal servers and
-switches that use merchant silicon chips. These might, for example, be
-ARM or x86 processor chips and Tomahawk or Tofino switching chips,
-respectively. A physical cloud cluster is then constructed with the
-hardware building blocks arranged as shown in :numref:`Figure %s
-<fig-hw>`: one or more racks of servers connected by a leaf-spine
-switching fabric. We show the servers above the switching fabric to
-emphasize that software running on the servers controls the
-switches (as we will see in the next section).
+The hardware building blocks include bare-metal servers and switches,
+which might include ARM or x86 processor chips and Tomahawk or Tofino
+switching chips, respectively. A physical cloud cluster is then
+constructed with the hardware building blocks arranged as shown in
+:numref:`Figure %s <fig-hw>`: one or more racks of servers connected
+by a leaf-spine switching fabric. We show the servers above the
+switching fabric to emphasize that software running on the servers
+controls the switches (as we will see in the next section).
 
 .. _fig-hw:
 .. figure:: figures/ops/Slide4.png
@@ -139,13 +144,12 @@ Helm Charts.
 
 Terraform is an infrastructure manager that sets up one or more
 Kubernetes clusters, provisioning them so they are ready to host a
-collection of Helm-specified microservices. It does this using an
-approach known as *Infrastructure-as-Code*, a special case of the more
-general idea of *Configuration-as-Code*, which documents exactly how
-the infrastructure is to be configured in a declarative format that
-can be (a) checked into a repo, and (b) executed just like any piece
-of software.  Terraform assumes an underlying provisioning API (not
-shown in :numref:`Figure %s <fig-hw>`), with Microsoft's Azure
+collection of Helm-specified applications. It does this using an
+approach known as *Infrastructure-as-Code*, which documents exactly
+how the infrastructure is to be configured in a declarative format
+that can be (a) checked into a repo, and (b) executed just like any
+piece of software.  Terraform assumes an underlying provisioning API
+(not shown in :numref:`Figure %s <fig-hw>`), with Microsoft's Azure
 Kubernetes Service (AKS), AWS's Amazon Elastic Kubernetes Service
 (EKS), Google's Google Kubernetes Engine (GKE) and Rancher's Rancher
 Kubernetes Engine (RKE) being widely available examples.
@@ -261,9 +265,6 @@ their laptop.
 
 6.2.3 Stakeholders
 ~~~~~~~~~~~~~~~~~~
-
-.. This section includes topics that are somewhat tangential to this
-   book, but maybe there's something worth including.
    
 With the understanding that our target environment is a collection of
 Kubernetes clusters—some running on bare-metal hardware at edge sites
@@ -275,66 +276,54 @@ the example we use may not be suitable for all situations, it does
 illustrate the design implications.
 
 For Aether, we care about two primary stakeholders: (1) the *cloud
-operators* that manage the hybrid cloud as a whole, and (2) the
-*enterprise users* that decide on a per-site basis how to take
+operators* who manage the hybrid cloud as a whole, and (2) the
+*enterprise users* who decide on a per-site basis how to take
 advantage of the local cloud resources (e.g., what edge applications
 to run and how to slice connectivity resources among those apps).  We
 sometimes call the latter "enterprise admins" to distinguish them from
 "end-users" that might want to manage their own personal devices.
 
-The architecture is multi-tenant in the sense that it authenticates
-and isolates these stakeholders, allowing each to access only those
-objects they are responsible for. This makes the approach agnostic as
-to whether all the edge sites belong to a single organization (with
-that organization also responsible for operating the cloud), or
+Aether is multi-tenant in the sense that it authenticates and isolates
+these stakeholders, allowing each to access only those objects they
+are responsible for. This makes the approach agnostic as to whether
+all the edge sites belong to a single organization (with that
+organization also responsible for operating the cloud), or
 alternatively, there being a separate organization that offers a
 managed service to a set of distinct enterprises (each of which spans
-one or more sites). The architecture can also accommodate end-users,
-and provide them with a "self-service" portal, but we do not elaborate
-on that possibility.
+one or more sites).
 
-There is a potential third stakeholder of note—third-party service
+There is a third stakeholder of note—third-party service
 providers—which points to the larger issue of how we deploy and manage
-additional edge applications. To keep the discussion tangible—but
-remain in the open source arena—we use OpenVINO as an illustrative
-example. OpenVINO is a framework for deploying AI inference models,
-which is interesting in the context of Aether because one of its use
-cases is processing video streams, for example to detect and count
-people that enter the field of view of a collection of 5G-connected
-cameras. For our purposes, OpenVINO is just like the 5G-related
-components we're already incorporating into our hybrid cloud: it is
-deployed as a Kubernetes-based set of microservices.
+the edge applications that take advantage of 5G-as-a-Service. The
+approach Aether adopts is to expect service providers to make their
+applications available either as source code (which works for open
+source or in-house apps), or as standard cloud native artifacts (e.g.,
+Docker images and Helm charts). The alternative would be for edge
+service providers to share operational responsibility for the edge
+cloud with the cloud operator, which is possible if the infrastructure
+running at the edge is either multi-tenant or a multi-cloud.
 
-.. _reading_openvino:
-.. admonition:: Further Reading 
+6.3 Management Platform 
+------------------------
 
-   `OpenVINO Toolkit <https://docs.openvino.ai>`__.
-
-.. Discuss this 3rd stakeholder in the context of Aether:
-   Curated. Also talk about possible alternatives. (Perhaps borrow
-   from the blog.
-
-6.2.4 Operationalization 
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. Compare the "intro blubs" included below (from the Architecture
-   chapter of the OPs book) with the introductory material in each of
-   the subsequent chapters of that book.
-
-Once deployed, 5G-as-a-Service has to be operationalized.; this is the
+Once deployed, 5G-as-a-Service has to be operationalized; this is the
 essence of offering 5G as a *managed service*.  In Aether, this
 responsibility falls to the Aether Management Platform (AMP), which as
 shown in :numref:`Figure %s <fig-amp>`, manages both the distributed
 set of ACE clusters and the other control clusters running in the
-central cloud. The following is and overview of AMP. For more details
-about all the subsystems involved in operationalizing an edge cloud,
-we refer you to a companion book.
+central cloud. The following outlines the role played by AMP in
+delivering 5G-as-a-Service. For more details about all the subsystems
+involved in operationalizing an edge cloud, we refer you to a
+companion book.
 
 .. _reading_ops:
 .. admonition:: Further Reading 
    
    `Edge Cloud Operations:: A Systems Approach 
    <https://ops.systemsapproach.org>`__.  June 2022.
+
+6.3.1 Overview
+~~~~~~~~~~~~~~
 
 AMP includes one or more portals targeted at different stakeholders,
 with :numref:`Figure %s <fig-amp>` showing the two examples discussed
@@ -360,26 +349,76 @@ instead describe the aggregate functionality supported by AMP, which
 is organized around the four subsystems shown in :numref:`Figure %s
 <fig-amp>`.
 
-First, *Resource Provisioning* is responsible for initializing
-resources (e.g., servers, switches) that add, replace, or upgrade
-capacity. It configures and bootstraps both physical and virtual
-resources, bringing them up to a state so Lifecycle Management can
-take over and manage the software running on those resources. It
-includes both the hands-on aspect of installing and physically
-connecting hardware, and the inventory-tracking required to manage
-physical assets. Filling out the Terraform specifications for a
-combination of physical (edge clusters) and virtual (centrlized cloud)
-resources is the key output of resource provisioning.
+.. List goes here, enough to appreciate the simplified picture.
 
-Second, *Lifecycle Management* is responsible for continuous
-integration and deployment of the software components that
-collectively implement 5G-as-a-Service. For every bug-fix, new
-feature, or configuration change checked into a repo, it first
-generates a set of integrated artifacts (e.g., Docker containers and
-Helm charts), and subsequently deploys those artifacts to the
-operational cloud. It includes a comprehensive testing regime, and
-typically, a procedure by which developers inspect and comment on each
-others’ code.
+* **Resource Provisioning** is responsible for initializing resources
+  (e.g., servers, switches) that add, replace, or upgrade capacity.
+  It configures and bootstraps both physical and virtual resources,
+  bringing them up to a state so Lifecycle Management can take over
+  and manage the software running on those resources.
+
+* **Lifecycle Management** is responsible for continuous integration
+  and deployment of the software components that collectively
+  implement 5G-as-a-Service. It adopts the GitOps practice of
+  *Configuration-as-Code*, using Helm Charts and Terraform Templates
+  to specify how functionality is to be deployed and configured.
+
+* **Runtime Control** provides a means to manage services once they
+  are operational. It defines an API that hides the implementation
+  details of the underlying microservices (which in the case of Aether
+  spans four Kubernetes applications and multiple clouds) is userd
+  to manage the provided services (5G connectivity in the case of Aether).
+
+* **Monitoring & Telemetry** is responsible for collecting, archiving,
+  evaluating, and analyzing operational data generated by the
+  underlying components. It makes it possible to diagnose and respond
+  to failures, tune performance, do root cause analysis, perform
+  security audits, and understand when it is necessary to provision
+  additional capacity.
+    
+Although an edge cloud management platform includes all four
+subsystems—as described in detail in the companion book—it is simpler
+to collapase them into a the two dimensional schematic shown in
+:numref:`Figure %s <fig-2D>`. This representation serves our purposes
+because (1) where one draws a line between where resource provisioning
+lifecycle management is somewhat subjective, with provisioning serving
+as "Step 0" of lifecycle management; and (2) runtime control and
+monitoring are often combined in a single user interface, providing a
+way to both monitor (read) and control (write) various parameters of a
+running system, which in turn makes it possible to support closed loop
+control.
+
+.. _fig-2D:
+.. figure:: figures/ops/Slide11.png 
+   :width: 500px 
+   :align: center 
+
+   Simplified representation of the management platform, highlighting
+   the off-line and on-line aspects of cloud management.
+
+As shown in in :numref:`Figure %s <fig-2D>`, Lifecycle Management
+(including Resource Provisioning) runs off-line, beside the hybrid
+cloud. It is how Operators and Developers specify changes to the
+system by checking code (including configuration specs) into a repo,
+which in turn triggers an upgrade of the running system. Runtime
+Control (including Monitoring and Telemetry) runs on-line, layered on
+top of the hybrid cloud being managed. It defines an API that Users
+and Operators use to read and write parameters of the running system.
+
+
+6.3.2 Lifecycle Management
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:numref:`Figure %s <fig-lifecycle>` gives a high-level overview of
+Lifecycle Management, where for every bug-fix, new feature, or
+configuration change checked into a repo, it executes a Continuous
+Integration / Continuous Deployment (CI/CD) toolchain. The toolchain
+first generates a set of integrated artifacts (e.g., Docker
+containers), and subsequently deploys those artifacts to the
+operational cloud according to the deployment artifacts (Helm Charts
+and Terraform Templates). It includes a comprehensive testing regime,
+and typically, a procedure by which developers inspect and comment on
+each others’ code
 
 .. _fig-lifecycle:
 .. figure:: figures/ops/Slide8.png 
@@ -388,19 +427,21 @@ others’ code.
 
    High-level overview of Lifecycle Management. 
 
-:numref:`Figure %s <fig-lifecycle>` gives a high-level overview of
-Lifecycle Management, where it is common to split the integration and
-deployment phases, the latter of which combines the integration
-artifacts from the first phase with the configuration artifacts
-generated by the Resource Provisioning subsystem.  The figure does not
-show any human intervention (after development), which implies any
-patches checked into the code repo trigger integration, and any new
-integration artifacts trigger deployment. This is commonly referred to
-as Continuous Integration / Continuous Deployment (CI/CD), although in
-practice, operator discretion and other factors are also taken into
-account before deployment actually happens.
-  
-Third, *Runtime Control* is responsible for managing services once
+
+There are two takeaways from this overview. The first is that by
+having well-defined artifacts passed between CI and CD (and between
+Resource Provisioning and CD), all three subsystems are loosely
+coupled, and able to perform their respective tasks independently. The
+second is that all authoritative state needed to successfully build
+and deploy the system is contained within the pipeline, specifically,
+as declarative specifications in the Config Repo. This is the
+cornerstone of Configuration-as-Code (also sometimes called GitOps),
+the cloud native approach to CI/CD that we are describing here.
+
+6.3.3 Control API
+~~~~~~~~~~~~~~~~~
+
+*Runtime Control* is responsible for managing services once
 they are up-and-running, which in our case means providing a
 programmatic API that can be used by various stakeholders to manage
 the 5G connectivity service.  As shown in :numref:`Figure %s
@@ -443,48 +484,7 @@ ops-per-second) and a logging component that collects diagnostic
 messages (i.e., text strings explaining various event). Both include a
 timestamp, so it is possible to link quantitative analysis with
 qualitative explanations in support of diagnostics and analytics.
-
-6.2.5 Summary
-~~~~~~~~~~~~~
-
-.. Currently cut-and-pasted. Requires some thought as to what message
-   we're trying to reenforce here. Maybe want to include a little of
-   the DevOps story.
    
-Although we describe the cloud management architecture in terms of
-four subsystems, they are not 100% independent. For example, it's
-difficult to draw a crisp line between where resource provisioning
-ends and lifecycle management begins. One could view provisioning as
-"Step 0" of lifecycle management. As an other example, the runtime
-control and monitoring subsystems are often combined in a single user
-interface, giving operators a way to both read (monitor) and write
-(control) various parameters of a running system. Connecting those two
-subsystems is how we build closed loop control.
-
-These two "simplifications" allow us to reduce the architectural
-overview of the management platform to the two-dimensional
-representation shown in :numref:`Figure %s <fig-2D>`. In one
-dimension, layered on top of the hybrid cloud being managed, is the
-Runtime Control system (including Monitoring and Telemetry to close
-the control loop). Users and Operators read and write parameters of
-the running system via a well-defined REST API. In the other
-dimension, running beside the hybrid cloud, is the Lifecycle
-Management system (including Resource Provisioning as Step 0).
-Operators and Developers specify changes to the system by checking
-code (including configuration specs) into a repo, and then
-periodically triggering an upgrade of the running system.
-
-.. _fig-2D:
-.. figure:: figures/ops/Slide11.png
-   :width: 500px
-   :align: center
-
-   Simplified representation of the management platform.
-
-
-6.3 Connectivity API
---------------------
-
 Given this mediation role, Runtime Control provides mechanisms to
 model (represent) the abstract services to be offered to users; store
 any configuration and control state associated with those models;
@@ -539,8 +539,8 @@ per-model descriptions that follow. Note that we use upper case to
 denote a model (e.g., `Enterprise`) and lower case to denote a field
 within a model (e.g., `enterprise`).
 
-6.3.1 Enterprises
-~~~~~~~~~~~~~~~~~
+Enterprises
+#################
 
 Aether is deployed in enterprises, and so needs to define
 representative set of organizational abstractions. These include
@@ -574,8 +574,8 @@ logical sites). `Site` contains the following fields:
 The `imsi-definition` is specific to the mobile cellular network, and
 corresponds to the unique identifier burned into every SIM card.
 
-6.3.2 Connectivity Service
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Connectivity Service
+#######################
 
 Aether models 5G connectivity as a `Slice`, which represents an
 isolated communication channel (and associated QoS parameters) that
@@ -657,8 +657,8 @@ includes fields related to RAN slicing, with the Runtime Control
 subsystem responsible for stitching together end-to-end connectivity
 across the RAN, Core, and Fabric.
 
-6.3.3 QoS Profiles
-~~~~~~~~~~~~~~~~~~
+QoS Profiles
+####################
 
 Associated with each Slice is a QoS-related profile that governs how
 traffic that slice carries is to be treated. This starts with a
@@ -691,8 +691,8 @@ and includes the following fields:
 * `pelr`: Packet error loss rate.
 * `pdb`: Packet delay budget.
 
-6.3.4 Other Models
-~~~~~~~~~~~~~~~~~~
+Other Models
+##################
 
 The above description references other models, which we do not fully
 described here. They include `AP-List`, which specifies a list of

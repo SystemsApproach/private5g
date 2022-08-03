@@ -38,7 +38,7 @@ release = version
 
 # -- Project information -----------------------------------------------------
 
-project = u'5G Connectivity Serive: A Systems Approach'
+project = u'5G-as-a-Service: A Systems Approach'
 copyright = u'2022, Systems Approach LLC (Publisher)'
 author = u'Peterson, Sunay, Davie'
 
@@ -175,7 +175,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'book.tex', u'5G Connectivity Serivce: A Systems Approach',
+    (master_doc, 'book.tex', u'5G-as-a-Service: A Systems Approach',
      u'Peterson, Sunay, and Davie ', 'manual', True),
 ]
 
@@ -198,7 +198,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, '5G Connectivity Service', u'5G Connectivity Service',
+    (master_doc, '5G-as-a-Service', u'5G-as-a-Service',
      author, 'Peterson, Sunay, and Davie', 'A Systems Approach',
      'Miscellaneous'),
 ]
@@ -206,7 +206,7 @@ texinfo_documents = [
 
 # -- Options for Epub output -------------------------------------------------
 epub_title = project
-epub_description = 'Building a Cloud Management Platform'
+epub_description = 'Building Cloud Native 5G Connectivity for Enterprises'
 epub_cover = ('_static/cover.jpg', '')
 epub_show_urls = 'False'
 epub_use_index = False
