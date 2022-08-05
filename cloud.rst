@@ -32,23 +32,34 @@ Industry 4.0.
 The first step in assembling all the components is to implement them
 using cloud native building blocks. We start by introducing those
 building blocks in Section 6.1. The second step is to integrate yet
-another component—a Management Platform—into the solution. The rest of
-this chapter describes how this can be done using open source tools,
-where we use the Aether edge cloud introduced in Chapter 2 as an
-illustrative example of how cloud services can be deployed and
-operationalized at the edge.
+another component—a Management Platform—into the solution. The
+rest of this chapter describes how this can be done using open source
+tools, where the Aether edge cloud introduced in Chapter 2 serves as
+an illustrative example.
 
-The Mangement Platform is responsible for operationalizing a
-collection of cloud services. This includes both *Lifecycle
-Management* (provisioning and upgrading the system) and *Runtime
-Control* (operating the system) over time.
+Before getting into the details, it is important to remember that
+mobile cell service (both voice and broadband) has been offered as a
+Telco service for 40 years. Treating it as a managed cloud service is
+a significant departure from that history, especially with respect to
+how the resulting connectivity is operated and managed. In particular,
+the cloud-based Management Platform described in this chapter is
+significantly different than the legacy OSS/BSS mechanisms that have
+traditionally been the centerpiece of the Telco management story. The
+terminology is also different, which only matters if you are trying to
+map Telco terminology onto cloud terminology. This is a topic we
+take up in a companinion book.
 
-This chapter is about the "other" component... The Mangement Platform.
+.. _reading_ops:
+.. admonition:: Further Reading 
+   
+   `Edge Cloud Operations:: A Systems Approach 
+   <https://ops.systemsapproach.org>`__.  June 2022.
 
-Note that you'll see "Mgmt/Orchestrator" in Core-specific and
-RAN-specific architecture diagram. We're describing one "up a level"
-that spans both (and the fabric that connects them. (Also related to
-OSS/BSS and the other Telco counterparts.)
+
+.. Maybe should note that you'll see "Mgmt/Orchestrator" in
+   Core-specific and RAN-specific architecture diagram. We're
+   describing one "up a level" that spans both (and the fabric that
+   connects them.
 
 
 6.1 Building Blocks
@@ -79,7 +90,8 @@ controls the switches (as we will see in the next section).
    including commodity servers and switches, interconnected by a
    leaf-spine switching fabric.
 
-The software building blocks start with the following foundation:
+The software building blocks start with the following open source
+components:
 
 1. Docker containers package software functionality.
 
@@ -311,16 +323,11 @@ essence of offering 5G as a *managed service*.  In Aether, this
 responsibility falls to the Aether Management Platform (AMP), which as
 shown in :numref:`Figure %s <fig-amp>`, manages both the distributed
 set of ACE clusters and the other control clusters running in the
-central cloud. The following outlines the role played by AMP in
-delivering 5G-as-a-Service. For more details about all the subsystems
-involved in operationalizing an edge cloud, we refer you to a
-companion book.
+central cloud. The following uses AMP to illustrate how to deliver
+5G-as-a-Service. For more details about all the subsystems involved in
+operationalizing an edge cloud, we refer you to the companion book
+mentioned in the introduction to this chapter.
 
-.. _reading_ops:
-.. admonition:: Further Reading 
-   
-   `Edge Cloud Operations:: A Systems Approach 
-   <https://ops.systemsapproach.org>`__.  June 2022.
 
 6.3.1 Overview
 ~~~~~~~~~~~~~~
@@ -349,8 +356,6 @@ instead describe the aggregate functionality supported by AMP, which
 is organized around the four subsystems shown in :numref:`Figure %s
 <fig-amp>`.
 
-.. List goes here, enough to appreciate the simplified picture.
-
 * **Resource Provisioning** is responsible for initializing resources
   (e.g., servers, switches) that add, replace, or upgrade capacity.
   It configures and bootstraps both physical and virtual resources,
@@ -377,16 +382,15 @@ is organized around the four subsystems shown in :numref:`Figure %s
   additional capacity.
     
 Although an edge cloud management platform includes all four
-subsystems—as described in detail in the companion book—it is simpler
-to collapase them into a the two dimensional schematic shown in
-:numref:`Figure %s <fig-2D>`. This representation serves our purposes
-because (1) where one draws a line between where resource provisioning
-lifecycle management is somewhat subjective, with provisioning serving
-as "Step 0" of lifecycle management; and (2) runtime control and
-monitoring are often combined in a single user interface, providing a
-way to both monitor (read) and control (write) various parameters of a
-running system, which in turn makes it possible to support closed loop
-control.
+subsystems, it is simpler to collapase them into a the two dimensional
+schematic shown in :numref:`Figure %s <fig-2D>`. This representation
+serves our purposes because (1) where one draws a line between where
+resource provisioning lifecycle management is somewhat subjective,
+with provisioning serving as "Step 0" of lifecycle management; and (2)
+runtime control and monitoring are often combined in a single user
+interface, providing a way to both monitor (read) and control (write)
+various parameters of a running system, which in turn makes it
+possible to support closed loop control.
 
 .. _fig-2D:
 .. figure:: figures/ops/Slide11.png 
@@ -397,10 +401,10 @@ control.
    the off-line and on-line aspects of cloud management.
 
 As shown in in :numref:`Figure %s <fig-2D>`, Lifecycle Management
-(including Resource Provisioning) runs off-line, beside the hybrid
-cloud. It is how Operators and Developers specify changes to the
-system by checking code (including configuration specs) into a repo,
-which in turn triggers an upgrade of the running system. Runtime
+(including Resource Provisioning) runs off-line, adjacent to the
+hybrid cloud. It is how Operators and Developers specify changes to
+the system by checking code (including configuration specs) into a
+repo, which in turn triggers an upgrade of the running system. Runtime
 Control (including Monitoring and Telemetry) runs on-line, layered on
 top of the hybrid cloud being managed. It defines an API that Users
 and Operators use to read and write parameters of the running system.
@@ -409,34 +413,105 @@ and Operators use to read and write parameters of the running system.
 6.3.2 Lifecycle Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:numref:`Figure %s <fig-lifecycle>` gives a high-level overview of
-Lifecycle Management, where for every bug-fix, new feature, or
-configuration change checked into a repo, it executes a Continuous
-Integration / Continuous Deployment (CI/CD) toolchain. The toolchain
-first generates a set of integrated artifacts (e.g., Docker
-containers), and subsequently deploys those artifacts to the
-operational cloud according to the deployment artifacts (Helm Charts
-and Terraform Templates). It includes a comprehensive testing regime,
-and typically, a procedure by which developers inspect and comment on
-each others’ code
+:numref:`Figure %s <fig-pipeline>` gives an overview of the
+pipeline/toolchain that make up the two halves of Lifecycle
+Management—Continuous Integration (CI) and Continuous Deployment
+(CD). The key thing to focus on is the Image and Config Repos in the
+middle. They represent the “interface” between the two halves: CI
+produces Docker Images and Helm Charts, storing them in the respective
+Repositories, while CD consumes Docker Images and Helm Charts, pulling
+them from the respective Repositories.
 
-.. _fig-lifecycle:
-.. figure:: figures/ops/Slide8.png 
-   :width: 600px 
-   :align: center 
+.. _fig-pipeline:
+.. figure:: figures/ops/Slide8.png
+   :width: 600px
+   :align: center
 
-   High-level overview of Lifecycle Management. 
+   Overview of the CI/CD pipeline.
 
+The Config Repo also contains declarative specifications of the
+infrastructure artifacts produced by Resource Provisioning,
+specifically, the Terraform templates. These files are input to Lifecycle
+Management, which implies that Terraform gets invoked as part of CI/CD
+whenever these files change. In other words, CI/CD keeps both the
+software-related components in the underlying cloud platform and the
+microservice workloads that run on top of that platform up to date.
 
-There are two takeaways from this overview. The first is that by
+.. sidebar:: Continuous Delivery vs Deployment
+
+    *You will also hear CD refer to "Continuous Delivery" instead of
+    "Continuous Deployment", but we are interested in the complete
+    end-to-end process, so CD will always imply the latter in this
+    book. But keep in mind that "continuous" does not necessarily mean
+    "instantaneous"; there can be a variety of gating functions
+    injected into the CI/CD pipeline to control when and how upgrades
+    get rolled out. The important point is that all the stages in the pipeline
+    are automated.*
+
+    *So what exactly does "Continuous Delivery" mean? Arguably, it's
+    redundant when coupled with "Continuous Integration" since the
+    set of artifacts being produced by the CI half of the pipeline
+    (e.g., Docker images) is precisely what's being delivered. There
+    is no "next step" unless you also deploy those artifacts. It's
+    hair-splitting, but some would argue CI is limited to testing new
+    code and Continuous Delivery corresponds to the final "publish
+    the artifact" step. For our purposes, we lump "publish the
+    artifact" into the CI half of the pipeline.*
+
+There are three takeaways from this overview. The first is that by
 having well-defined artifacts passed between CI and CD (and between
 Resource Provisioning and CD), all three subsystems are loosely
 coupled, and able to perform their respective tasks independently. The
 second is that all authoritative state needed to successfully build
 and deploy the system is contained within the pipeline, specifically,
 as declarative specifications in the Config Repo. This is the
-cornerstone of Configuration-as-Code (also sometimes called GitOps),
-the cloud native approach to CI/CD that we are describing here.
+cornerstone of *Configuration-as-Code* (also sometimes called
+*GitOps*), the cloud native approach to CI/CD that we are describing
+in this book. The third is that there is an opportunity for operators
+to apply discretion to the pipeline, as denoted by the *"Deployment
+Gate"* in the Figure, controlling what features get deployed
+when. This topic is discussed in the sidebar, as well as at other
+points throughout this chapter.
+
+The third repository shown in :numref:`Figure %s <fig-pipeline>` is
+the Code Repo (on the far left). Although not explicitly indicated,
+developers are continually checking new features and bug fixes into
+this repo, which then triggers the CI/CD pipeline. A set of tests and
+code reviews are run against these check-ins, with the output of those
+tests/reviews reported back to developers, who modify their patch sets
+accordingly. (These develop-and-test feedback loops are implied by the
+dotted lines in :numref:`Figure %s <fig-pipeline>`.)
+
+The far right of :numref:`Figure %s <fig-pipeline>` shows the set of
+deployment targets, with *Staging* and *Production* called out as two
+illustrative examples. The idea is that a new version of the software
+is deployed first to a set of Staging clusters, where it is subjected
+to realistic workloads for a period of time, and then rolled out to
+the Production clusters once the Staging deployments give us
+confidence that the upgrade is reliable.
+
+This is a simplified depiction of what happens in practice. In
+general, there can be more than two distinct versions of the cloud
+software deployed at any given time. One reason this happens is that
+upgrades are typically rolled out incrementally (e.g., a few sites at
+a time over an extended period of time), meaning that even the
+production system plays a role in “staging” new releases. For example,
+a new version might first be deployed on 10% of the production
+machines, and once it is deemed reliable, is then rolled out to the
+next 25%, and so on. The exact rollout strategy is a controllable
+parameter, as described in more detail in Section 4.4.
+
+Finally, two of the CI stages shown in :numref:`Figure %s
+<fig-pipeline>` identify a *Testing* component. One is a set of
+component-level tests that are run against each patch set checked into
+the Code Repo. These tests gate integration; fully merging a patch
+into the Code Repo requires first passing this preliminary round of
+tests. Once merged, the pipeline runs a build across all the
+components, and a second round of testing happens on a *Quality
+Assurance (QA)* cluster. Passing these tests gate deployment, but note
+that testing also happens in the Staging clusters, as part of the CD
+end of the pipeline. 
+
 
 6.3.3 Control API
 ~~~~~~~~~~~~~~~~~
