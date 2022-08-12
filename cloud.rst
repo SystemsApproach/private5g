@@ -29,25 +29,25 @@ service. Such a service, which is sometimes called *Private 5G*, is
 gaining traction as a way to deliver 5G to enterprises in support of
 Industry 4.0.
 
-The first step in assembling all the components is to implement them
-using cloud native building blocks. We start by introducing those
-building blocks in Section 6.1. The second step is to integrate yet
-another component—a Management Platform—into the solution. The
-rest of this chapter describes how this can be done using open source
-tools, where the Aether edge cloud introduced in Chapter 2 serves as
-an illustrative example.
+The first step is to implement all the components using cloud native
+building blocks. We start by introducing those building blocks in
+Section 6.1. The second step is to introduce yet another component—a
+*Management Platform*—that is responsible for operationalizing
+5G-as-a-Service. The rest of this chapter describes how to build a
+Management Platform using open source tools.
 
 Before getting into the details, it is important to remember that
 mobile cell service (both voice and broadband) has been offered as a
 Telco service for 40 years. Treating it as a managed cloud service is
-a significant departure from that history, especially with respect to
+a significant departure from that history, especially when it comes to
 how the resulting connectivity is operated and managed. In particular,
 the cloud-based Management Platform described in this chapter is
 significantly different than the legacy OSS/BSS mechanisms that have
 traditionally been the centerpiece of the Telco management story. The
-terminology is also different, which only matters if you are trying to
-map Telco terminology onto cloud terminology. This is a topic we
-take up in a companinion book.
+terminology is also different, but that only matters if you are trying
+to map Telco terminology onto cloud terminology. This is a topic we
+take up in a companinion book, and focus instead on a from-scratch
+cloud-based design.
 
 .. _reading_ops:
 .. admonition:: Further Reading 
@@ -57,7 +57,7 @@ take up in a companinion book.
 
 
 .. Maybe should note that you'll see "Mgmt/Orchestrator" in
-   Core-specific and RAN-specific architecture diagram. We're
+   Core-specific and RAN-specific architecture diagrams. We're
    describing one "up a level" that spans both (and the fabric that
    connects them.
 
@@ -65,8 +65,8 @@ take up in a companinion book.
 6.1 Building Blocks
 -------------------
 
-The approach is based commodity hardware and open source software
-buiding blocks. These building blocks will be familar to anyone that
+The implementation strategy starts with commodity hardware and open
+source software. These building blocks will be familar to anyone that
 has built a cloud native application, but they deserve to be
 explicitly named in a discussion of mobile celluar networks, which
 have historically been built using closed proprietary hardware
@@ -160,11 +160,11 @@ collection of Helm-specified applications. It does this using an
 approach known as *Infrastructure-as-Code*, which documents exactly
 how the infrastructure is to be configured in a declarative format
 that can be (a) checked into a repo, and (b) executed just like any
-piece of software.  Terraform assumes an underlying provisioning API
-(not shown in :numref:`Figure %s <fig-hw>`), with Microsoft's Azure
-Kubernetes Service (AKS), AWS's Amazon Elastic Kubernetes Service
-(EKS), Google's Google Kubernetes Engine (GKE) and Rancher's Rancher
-Kubernetes Engine (RKE) being widely available examples.
+piece of software.  Terraform assumes an underlying provisioning API,
+with Microsoft's Azure Kubernetes Service (AKS), AWS's Amazon Elastic
+Kubernetes Service (EKS), Google's Google Kubernetes Engine (GKE) and
+Rancher's Rancher Kubernetes Engine (RKE) being widely available
+examples.
 
 6.2 Example Deployment
 ----------------------
@@ -219,22 +219,22 @@ off-site, and is not shown in :numref:`Figure %s <fig-ace>`. Both
 subsystems (as well as the SD-Fabric), are deployed as a set of
 microservices, just as any other cloud native workload.
 
-Once ACE is running in this configuration, it is ready to host a
-collection of cloud-native edge applications (not shown in
-:numref:`Figure %s <fig-ace>`). What’s unique to ACE is the ability to
-connect such applications to mobile devices throughout the enterprise
-using the 5G Connectivity Service implemented by SD-RAN and
-SD-Core. This service is offered as a managed service, with enterprise
-system administrators able to use a programmatic API (and associated
-GUI portal) to control that service; that is, authorize devices,
-restrict access, set QoS profiles for different devices and
-applications, and so on.
+Once an edge cluster is running in this configuration, it is ready to
+host a collection of cloud-native edge applications (not shown in
+:numref:`Figure %s <fig-ace>`). What’s unique to our example
+configuration is its ability to connect such applications to mobile
+devices throughout the enterprise using the 5G Connectivity Service
+implemented by SD-RAN and SD-Core. This service is offered as a
+managed service, with enterprise system administrators able to use a
+programmatic API (and associated GUI portal) to control that service;
+that is, authorize devices, restrict access, set QoS profiles for
+different devices and applications, and so on.
 
 6.2.2 Hybrid Cloud
 ~~~~~~~~~~~~~~~~~~
 
 While it is possible to instantiate a single ACE cluster in just one
-site, Aether is designed to support multiple ACE deployments, all of
+site, Aether is designed to support multiple edge deployments, all of
 which are managed from the central cloud. Such a hybrid cloud scenario
 is depicted in :numref:`Figure %s <fig-aether>`, which shows two
 subsystems running in the central cloud: (1) one or more instances of
@@ -274,6 +274,14 @@ Platform, Microsoft Azure, and Amazon’s AWS. They also run as an
 emulated cluster implemented by a system like KIND—Kubernetes in
 Docker—making it possible for developers to run these components on
 their laptop.
+
+Finally, note that while we describe each ACE cluster as starting with
+bare-metal (with AMP responsible for booting the hardware into a state
+that is ready to host Kubernetes workloads), an alternative is to
+start with an edge deployment that is managed by one of the
+hyperscalers as an extension of their core datacenters. Google’s
+Anthos, Microsoft’s Azure Arc, and Amazon’s ECS-Anywhere are examples
+of such edge cloud products.
 
 6.2.3 Stakeholders
 ~~~~~~~~~~~~~~~~~~
@@ -319,15 +327,15 @@ running at the edge is either multi-tenant or a multi-cloud.
 ------------------------
 
 Once deployed, 5G-as-a-Service has to be operationalized; this is the
-essence of offering 5G as a *managed service*.  In Aether, this
-responsibility falls to the Aether Management Platform (AMP), which as
-shown in :numref:`Figure %s <fig-amp>`, manages both the distributed
-set of ACE clusters and the other control clusters running in the
-central cloud. The following uses AMP to illustrate how to deliver
-5G-as-a-Service. For more details about all the subsystems involved in
-operationalizing an edge cloud, we refer you to the companion book
-mentioned in the introduction to this chapter.
-
+essence of offering 5G as a *managed service*.  In general this
+responsibility falls to the Management Platform, which in Aether
+corresponds to the centralized AMP component shown in :numref:`Figure
+%s <fig-amp>`, manages both the distributed set of ACE clusters and
+the other control clusters running in the central cloud. The following
+uses AMP to illustrate how to deliver 5G-as-a-Service. For more
+details about all the subsystems involved in operationalizing an edge
+cloud, we refer you to the companion book mentioned in the
+introduction to this chapter.
 
 6.3.1 Overview
 ~~~~~~~~~~~~~~
@@ -513,8 +521,8 @@ that testing also happens in the Staging clusters, as part of the CD
 end of the pipeline. 
 
 
-6.3.3 Control API
-~~~~~~~~~~~~~~~~~
+6.3.3 Runtime Control
+~~~~~~~~~~~~~~~~~~~~~
 
 *Runtime Control* is responsible for managing services once
 they are up-and-running, which in our case means providing a
@@ -572,15 +580,20 @@ users try to invoke on each service. (from above)
    YANG might be an unnecessary implementation detail: we care about
    the API and not the models (although the API cares about resources).
 
-Resource Provisioning, Lifecycle Management, and Monitoring are
-essential ingredients for offering a managed cloud service, but they
-work largely under-the-covers. The visible aspect of the service is
-the programmatic interface it provides to users, giving them the
-ability to control and customized the underlying connectivity
-service. This API is implemented by the Runtime Control subsystem
-outlined in the previous section, but what we really care about is the
-interface itself. Using Aether as a concrete example, this section
-describes such an API.
+6.4 Connectivity API
+--------------------------
+
+.. Currently cut-and-pasted from OPs book. We probably want to
+   introduce more narrative/intuition, and reduce the use of bulleted
+   lists.
+
+   
+The visible aspect of a 5G service is the programmatic interface it
+provides to users, giving them the ability to control and customized
+the underlying connectivity service. This API is implemented by the
+Runtime Control subsystem outlined in the previous section, but what
+we really care about is the interface itself. Using Aether as a
+concrete example, this section describes such an API.
 
 Like many cloud services, the API for 5G-as-a-Service is RESTful.
 This means it supports REST's GET, POST, PATCH, and DELETE operations
@@ -614,8 +627,8 @@ per-model descriptions that follow. Note that we use upper case to
 denote a model (e.g., `Enterprise`) and lower case to denote a field
 within a model (e.g., `enterprise`).
 
-Enterprises
-#################
+6.4.1 Enterprises
+~~~~~~~~~~~~~~~~~
 
 Aether is deployed in enterprises, and so needs to define
 representative set of organizational abstractions. These include
@@ -649,8 +662,8 @@ logical sites). `Site` contains the following fields:
 The `imsi-definition` is specific to the mobile cellular network, and
 corresponds to the unique identifier burned into every SIM card.
 
-Connectivity Service
-#######################
+6.4.2 Slice Abstraction
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Aether models 5G connectivity as a `Slice`, which represents an
 isolated communication channel (and associated QoS parameters) that
@@ -732,8 +745,8 @@ includes fields related to RAN slicing, with the Runtime Control
 subsystem responsible for stitching together end-to-end connectivity
 across the RAN, Core, and Fabric.
 
-QoS Profiles
-####################
+6.4.3 QoS Profiles
+~~~~~~~~~~~~~~~~~~
 
 Associated with each Slice is a QoS-related profile that governs how
 traffic that slice carries is to be treated. This starts with a
@@ -766,8 +779,8 @@ and includes the following fields:
 * `pelr`: Packet error loss rate.
 * `pdb`: Packet delay budget.
 
-Other Models
-##################
+6.4.4 Other Models
+~~~~~~~~~~~~~~~~~~
 
 The above description references other models, which we do not fully
 described here. They include `AP-List`, which specifies a list of

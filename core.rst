@@ -8,11 +8,11 @@ Chapter 5:  Mobile Core
    Includes new Magma content, mostly in terms of going into much more
    detail about the cloud native implementation than we currently have.
 
-   Includes a distributed implementation, where the User Plane
-   runs at the edge (local breakout) and the Control Plane runs in the
+   Includes a distributed implementation, where the User Plane runs at
+   the edge (local breakout) and the Control Plane runs in the
    cloud. This is where we describe the P4-based implementation of the
-   UPF.  Likely addresses the 4G / 5G / WiFi convergence story (again,
-   as a side discussion).
+   UPF.  May address the 4G / 5G / WiFi convergence story as a side
+   discussion.
 
 While the aggregate functionality remains largely the same as we migrate 
 from 4G to 5G, how that functionality is virtualized and factored into 
@@ -30,8 +30,29 @@ approach to session management.
 5.1 Functional Components
 -------------------------
 
-A terminology and 3GPP-heavy intro to the functional components (for
-completeness) before getting into the cloud-based implementation.
+A terminology and 3GPP-heavy intro to the core (for completenes), but
+the real point of this first section is to introduce and explain the
+functional components; the fundamental "problems" that the core must
+solve. These include session management, mobility management, and
+subscriber authentication/management (which just happen to be names
+of the main three functional elements in the 5G schematic).
+
+Also need to talk about HSS and IMSI assignment/format (from OPs book):
+
+* `imsi-definition`: A description of how IMSIs are constructed for
+  this site. Contains the following sub-fields:
+
+   * `mcc`: Mobile country code.
+   * `mnc`: Mobile network code.
+   * `enterprise`: A numeric enterprise id.
+   * `format`: A mask that allows the above three fields to be
+     embedded into an IMSI. For example `CCCNNNEEESSSSSS` will
+     construct IMSIs using a 3-digit MCC, 3-digit MNC, 3-digit ENT,
+     and a 6-digit subscriber.
+
+.. For now I cut-and-pasted both 4G and 5G (and joint deployment) but
+   we probably want to cut back to just 5G (and deployment may reduce
+   to a sidebar).
 
 4G Mobile Core 
 ~~~~~~~~~~~~~~
@@ -183,8 +204,8 @@ choice rather than part of the specification. We describe our
 implementation choices in later chapters. 
 
 
-5.x Deployment Options
-----------------------
+Deployment Options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. Seems out-of-place, but maybe some of this remains (perhaps boiled
    down to a sidebar.
@@ -235,3 +256,22 @@ the process of incrementally evolving its 4G code base into its
     `Road to 5G: Introduction and Migration
     <https://www.gsma.com/futurenetworks/wp-content/uploads/2018/04/Road-to-5G-Introduction-and-Migration_FINAL.pdf>`__.
     GSMA Report, April 2018.
+
+5.2 Control Plane
+----------------------
+
+Drill down on how one might implement the Mobile Core CP. Probably
+borrows heavily from Magma.
+
+5.3 User Plane
+--------------------
+
+Drill down on implemenatation options for the UPF.
+
+5.3.1 Microservice Implementation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+5.3.2 P4 Implementation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Borrow heavily from MacDavid's paper.

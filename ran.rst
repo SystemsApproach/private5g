@@ -250,7 +250,7 @@ scheduler. Specifically, the R-NIB includes the following state.
 
 .. _fig-ran-controller:
 .. figure:: figures/sdn/Slide5.png 
-    :width: 500px
+    :width: 400px
     :align: center
 	    
     Example set of control applications running on top of
