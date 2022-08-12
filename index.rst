@@ -12,7 +12,7 @@
 
 |
 	    
-Software-Defined 5G: A Systems Approach
+Private 5G-as-a-Service: A Systems Approach
 ===========================================
 
 Larry Peterson, Oguz Sunay, and Bruce Davie

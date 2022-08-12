@@ -11,7 +11,7 @@ was mostly silent about the RAN’s internal structure. We now focus on
 some of the internal details, and in doing so, explain how the RAN is
 being transformed in 5G. This involves first describing the stages in
 the packet processing pipeline, and then showing how these stages are
-being disaggregated, distributed and implemented.
+being disaggregated, distributed, and implemented.
 
 Our approach in this chapter is to incrementally build the RAN from
 the bottom up in the first three sections. Section 4.4 then summarizes
@@ -74,7 +74,7 @@ MAC stage implements the “main loop” for outbound traffic, reading data
 from the upstream RLC and scheduling transmissions to the downstream
 PHY. In particular, since the Scheduler determines the number of bytes
 to transmit to a given UE during each time period (based on all the
-factors outlined in an earlier chapter), it must request (get) a segment
+factors outlined in Chapter 3), it must request (get) a segment
 of that length from the upstream queue. In practice, the size of the
 segment that can be transmitted on behalf of a single UE during a single
 scheduling interval can range from a few bytes to an entire IP packet.
@@ -137,14 +137,14 @@ labeled as follows.
 -  DU-CU connectivity is called the Midhaul
 -  CU-Mobile Core connectivity is called the Backhaul
 
-One observation about the CU (which becomes relevant in a later
-chapter when we incorporate it into a managed cloud service) is that
-one might co-locate the CU and Mobile Core in the same cluster,
-meaning the backhaul is implemented in the cluster switching
-fabric. In such a configuration, the midhaul then effectively serves
-the same purpose as the original backhaul, and the fronthaul is
-constrained by the predictable/low-latency requirements of the MAC
-stage’s real-time scheduler.
+One observation about the CU (which becomes relevant in Chapter 6 when
+we incorporate it into a managed cloud service) is that one might
+co-locate the CU and Mobile Core in the same cluster, meaning the
+backhaul is implemented in the cluster switching fabric. In such a
+configuration, the midhaul then effectively serves the same purpose as
+the original backhaul, and the fronthaul is constrained by the
+predictable/low-latency requirements of the MAC stage’s real-time
+scheduler.
 
 A second observation about the CU shown in :numref:`Figure %s
 <fig-split-ran>` is that it encompasses two functional blocks—the RRC
@@ -201,9 +201,9 @@ Although not shown in :numref:`Figure %s <fig-rrc-split>`, keep in mind
 the RRC, plus the PDCP, form the CU.
 
 Completing the picture, :numref:`Figure %s <fig-ran-controller>` shows
-the Near-RT RIC implemented as an SDN Controller hosting a
-set of SDN control apps. The RIC maintains a *RAN Network Information
-Base (R-NIB)*–a common set of information that can be consumed by numerous
+the Near-RT RIC implemented as an SDN Controller hosting a set of SDN
+control apps. The RIC maintains a *RAN Network Information Base
+(R-NIB)*–a common set of information that can be consumed by numerous
 control apps. The R-NIB includes time-averaged CQI values and other
 per-session state (e.g., GTP tunnel IDs, QCI values for the type of
 traffic), while the MAC (as part of the DU) maintains the
@@ -260,8 +260,10 @@ The example Control Apps in :numref:`Figure %s <fig-ran-controller>`
 include a range of possibilities, but is not intended to be an
 exhaustive list.  The right-most example, RAN Slicing, is the most
 ambitious in that it introduces a new capability: Virtualizing the
-RAN. It is also an idea that has been implemented, which we describe
-in more detail in the next chapter.
+RAN. This is typically called *slicing*, as introduced in Section 3.3.
+
+.. Decide what xApps we want to describe, and match the figure
+   accordingly. The following is just lifted from the original.
 
 The next three (RF Configuration, Semi-Persistent Scheduling, Cipher Key
 Assignment) are examples of configuration-oriented applications. They
@@ -445,8 +447,8 @@ is problematic in that it implicitly couples applications with
 devices, but defining a device-agnostic version is still a
 work-in-progress.   
 
-4.5 Three Control Loops
------------------------
+4.5 Control Loops
+-----------------
 
 .. The way to tie everything together is to show the full
    top-to-bottom picture with the three control loops.

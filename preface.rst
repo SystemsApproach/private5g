@@ -29,4 +29,4 @@ engineering team and the open source community that works with
 them.
 
 | Larry Peterson, Oguz Sunay, and Bruce Davie
-| Sometime in Early 2022 
+| Sometime in 2022 

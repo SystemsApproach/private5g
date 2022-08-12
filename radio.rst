@@ -396,12 +396,13 @@ could be reserved for premium customers or other high-priority traffic
 3.4 New Use Cases
 -----------------
 
-We conclude by noting that while the previous two sections describe 5G
-as introducing additional degrees of freedom into how data is
-scheduled for transmission, the end result is a qualitatively more
-powerful radio. This new 5G air interface specification, which is
-commonly referred to as *New Radio (NR)*, enables three new use cases
-that go well beyond simply delivering increased bandwidth:
+We conclude by noting that up to this point we have describe 5G as
+introducing additional degrees of freedom into how data is scheduled
+for transmission, but when taken as a whole, the end result is a
+qualitatively more powerful radio. This new 5G air interface
+specification, which is commonly referred to as *New Radio (NR)*,
+enables three new use cases that go well beyond simply delivering
+increased bandwidth:
 
 * Extreme Mobile Broadband
 * Ultra-Reliable Low-Latency Communications
@@ -411,20 +412,20 @@ All three correspond to the requirements introduced in Chapter 1, and
 can be attributed to four fundamental improvements in how 5G
 multiplexes data onto the radio spectrum.
 
-The first is the one identified in the previous section: being able to
-change the waveform. This effectively introduces the ability to
-dynamically change the size and number of schedulable resource units,
-which opens the door to making fine-grain scheduling decisions that
-are critical to predictable, low-latency communication.
+The first is being able to change the waveform. This effectively
+introduces the ability to dynamically change the size and number of
+schedulable resource units, which opens the door to making fine-grain
+scheduling decisions that are critical to predictable, low-latency
+communication.
 
 The second is related to the "Multiple Access" aspect of how distinct
 traffic sources are multiplexed onto the available spectrum. In 4G,
 multiplexing happens in both the frequency and time domains for
-downstream traffic (as described in Section 3.2), but multiplexing
-happens in only the frequency domain for upstream traffic. 5G NR
-multiplexes both upstream and downstream traffic in both the time and
-frequency domains. Doing so provides finer-grain scheduling control
-needed by latency-sensitive applications.
+downstream traffic, but multiplexing happens in only the frequency
+domain for upstream traffic. 5G NR multiplexes both upstream and
+downstream traffic in both the time and frequency domains. Doing so
+provides finer-grain scheduling control needed by latency-sensitive
+applications.
 
 The third is related to the new spectrum available to 5G NR, with the
 mmWave allocations opening above 24 GHz being especially

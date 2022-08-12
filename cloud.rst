@@ -421,7 +421,7 @@ and Operators use to read and write parameters of the running system.
 6.3.2 Lifecycle Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:numref:`Figure %s <fig-pipeline>` gives an overview of the
+:numref:`Figure %s <fig-cicd>` gives an overview of the
 pipeline/toolchain that make up the two halves of Lifecycle
 Management—Continuous Integration (CI) and Continuous Deployment
 (CD). The key thing to focus on is the Image and Config Repos in the
@@ -430,7 +430,7 @@ produces Docker Images and Helm Charts, storing them in the respective
 Repositories, while CD consumes Docker Images and Helm Charts, pulling
 them from the respective Repositories.
 
-.. _fig-pipeline:
+.. _fig-cicd:
 .. figure:: figures/ops/Slide8.png
    :width: 600px
    :align: center
@@ -481,16 +481,16 @@ Gate"* in the Figure, controlling what features get deployed
 when. This topic is discussed in the sidebar, as well as at other
 points throughout this chapter.
 
-The third repository shown in :numref:`Figure %s <fig-pipeline>` is
+The third repository shown in :numref:`Figure %s <fig-cicd>` is
 the Code Repo (on the far left). Although not explicitly indicated,
 developers are continually checking new features and bug fixes into
 this repo, which then triggers the CI/CD pipeline. A set of tests and
 code reviews are run against these check-ins, with the output of those
 tests/reviews reported back to developers, who modify their patch sets
 accordingly. (These develop-and-test feedback loops are implied by the
-dotted lines in :numref:`Figure %s <fig-pipeline>`.)
+dotted lines in :numref:`Figure %s <fig-cicd>`.)
 
-The far right of :numref:`Figure %s <fig-pipeline>` shows the set of
+The far right of :numref:`Figure %s <fig-cicd>` shows the set of
 deployment targets, with *Staging* and *Production* called out as two
 illustrative examples. The idea is that a new version of the software
 is deployed first to a set of Staging clusters, where it is subjected
@@ -510,7 +510,7 @@ next 25%, and so on. The exact rollout strategy is a controllable
 parameter, as described in more detail in Section 4.4.
 
 Finally, two of the CI stages shown in :numref:`Figure %s
-<fig-pipeline>` identify a *Testing* component. One is a set of
+<fig-cicd>` identify a *Testing* component. One is a set of
 component-level tests that are run against each patch set checked into
 the Code Repo. These tests gate integration; fully merging a patch
 into the Code Repo requires first passing this preliminary round of
