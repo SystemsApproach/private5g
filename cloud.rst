@@ -25,23 +25,22 @@ Chapter 6:  Managed Cloud Service
 
 This chapter describes how to assemble all the pieces described in the
 previous chapters to provide 5G connectivity as a managed cloud
-service. Such a service, which is sometimes called *Private 5G*, is
-gaining traction as a way to deliver 5G to enterprises in support of
+service. Such a service might be deployed in enterprises in support of
 Industry 4.0.
 
 The first step is to implement all the components using cloud native
 building blocks. We start by introducing those building blocks in
 Section 6.1. The second step is to introduce yet another component—a
-*Management Platform*—that is responsible for operationalizing
+*Cloud Management Platform*—that is responsible for operationalizing
 5G-as-a-Service. The rest of this chapter describes how to build a
-Management Platform using open source tools.
+Management System using open source tools.
 
 Before getting into the details, it is important to remember that
 mobile cell service (both voice and broadband) has been offered as a
 Telco service for 40 years. Treating it as a managed cloud service is
-a significant departure from that history, especially when it comes to
-how the resulting connectivity is operated and managed. In particular,
-the cloud-based Management Platform described in this chapter is
+a significant departure from that history, especially in how the
+resulting connectivity is operated and managed. In particular, the
+cloud-based Management Platform described in this chapter is
 significantly different than the legacy OSS/BSS mechanisms that have
 traditionally been the centerpiece of the Telco management story. The
 terminology is also different, but that only matters if you are trying
@@ -55,6 +54,14 @@ cloud-based design.
    `Edge Cloud Operations:: A Systems Approach 
    <https://ops.systemsapproach.org>`__.  June 2022.
 
+On the topic of terminology, we refer to the collection of components
+involved in operationalizing a cloud service as a "Cloud Mangement
+Platform" even though you will sometimes see it called an
+"Orchestrator". This is because we include both the "off-line"
+elements used to upgrade the service over time (this sub-problem is
+sometimes called Lifecycle Management) and the "on-line" elements used
+to operate the service at runtime (this sub-problem is sometimes
+called Service Orchestration).
 
 .. Maybe should note that you'll see "Mgmt/Orchestrator" in
    Core-specific and RAN-specific architecture diagrams. We're
@@ -244,9 +251,9 @@ Platform (AMP).
 Each SD-Core CP controls one or more SD-Core UPFs.  Exactly how CP
 instances (running centrally) are paired with UPF instances (running
 at the edges) is a runtime decision, and depends on the degree of
-isolation the enterprise sites require. AMP is responsible for
-managing all the centralized and edge subsystems (as introduced in the
-next section).
+isolation the enterprise sites require. AMP is Aether's realization of
+a Cloud Management Platform;it is responsible for managing all the
+centralized and edge subsystems (as introduced in the next section).
 
 .. Discussion variable number of Cores, vs one-per-metro as suggested
    earlier. This is for isolation purposes (and potentially, customization).
@@ -323,19 +330,20 @@ service providers to share operational responsibility for the edge
 cloud with the cloud operator, which is possible if the infrastructure
 running at the edge is either multi-tenant or a multi-cloud.
 
-6.3 Management Platform 
-------------------------
+6.3 Cloud Management Platform 
+------------------------------
 
 Once deployed, 5G-as-a-Service has to be operationalized; this is the
 essence of offering 5G as a *managed service*.  In general this
-responsibility falls to the Management Platform, which in Aether
+responsibility falls to the Cloud Management Platform, which in Aether
 corresponds to the centralized AMP component shown in :numref:`Figure
-%s <fig-amp>`, manages both the distributed set of ACE clusters and
-the other control clusters running in the central cloud. The following
-uses AMP to illustrate how to deliver 5G-as-a-Service. For more
-details about all the subsystems involved in operationalizing an edge
-cloud, we refer you to the companion book mentioned in the
-introduction to this chapter.
+%s <fig-amp>`. AMP manages both the distributed set of ACE clusters
+and the other control clusters running in the central cloud. The
+following uses AMP to illustrate how to deliver 5G-as-a-Service, but
+the approach generalizes because AMP is based on widely used open
+source tools. For more details about all the subsystems involved in
+operationalizing an edge cloud, we refer you to the companion book
+mentioned in the introduction to this chapter.
 
 6.3.1 Overview
 ~~~~~~~~~~~~~~
@@ -392,13 +400,12 @@ is organized around the four subsystems shown in :numref:`Figure %s
 Although an edge cloud management platform includes all four
 subsystems, it is simpler to collapase them into a the two dimensional
 schematic shown in :numref:`Figure %s <fig-2D>`. This representation
-serves our purposes because (1) where one draws a line between where
-resource provisioning lifecycle management is somewhat subjective,
-with provisioning serving as "Step 0" of lifecycle management; and (2)
-runtime control and monitoring are often combined in a single user
-interface, providing a way to both monitor (read) and control (write)
-various parameters of a running system, which in turn makes it
-possible to support closed loop control.
+serves our purposes because (1) where one draws a line between
+resource provisioning and lifecycle management is somewhat subjective;
+and (2) runtime control and monitoring are often combined in a single
+user interface, providing a way to both monitor (read) and control
+(write) various parameters of a running system, which in turn enables
+closed loop control.
 
 .. _fig-2D:
 .. figure:: figures/ops/Slide11.png 
@@ -409,14 +416,13 @@ possible to support closed loop control.
    the off-line and on-line aspects of cloud management.
 
 As shown in in :numref:`Figure %s <fig-2D>`, Lifecycle Management
-(including Resource Provisioning) runs off-line, adjacent to the
-hybrid cloud. It is how Operators and Developers specify changes to
-the system by checking code (including configuration specs) into a
+(including Resource Provisioning) runs off-line, sitting adjacent to
+the hybrid cloud. It is how Operators and Developers specify changes
+to the system by checking code (including configuration specs) into a
 repo, which in turn triggers an upgrade of the running system. Runtime
 Control (including Monitoring and Telemetry) runs on-line, layered on
 top of the hybrid cloud being managed. It defines an API that Users
 and Operators use to read and write parameters of the running system.
-
 
 6.3.2 Lifecycle Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -438,12 +444,12 @@ them from the respective Repositories.
    Overview of the CI/CD pipeline.
 
 The Config Repo also contains declarative specifications of the
-infrastructure artifacts produced by Resource Provisioning,
-specifically, the Terraform templates. These files are input to Lifecycle
-Management, which implies that Terraform gets invoked as part of CI/CD
-whenever these files change. In other words, CI/CD keeps both the
-software-related components in the underlying cloud platform and the
-microservice workloads that run on top of that platform up to date.
+infrastructure artifacts, specifically, the Terraform templates. These
+files are input to Lifecycle Management, which implies that Terraform
+gets invoked as part of CI/CD whenever these files change. In other
+words, CI/CD keeps both the software-related components in the
+underlying cloud platform and the microservice workloads that run on
+top of that platform up to date.
 
 .. sidebar:: Continuous Delivery vs Deployment
 
@@ -468,18 +474,17 @@ microservice workloads that run on top of that platform up to date.
 
 There are three takeaways from this overview. The first is that by
 having well-defined artifacts passed between CI and CD (and between
-Resource Provisioning and CD), all three subsystems are loosely
-coupled, and able to perform their respective tasks independently. The
-second is that all authoritative state needed to successfully build
-and deploy the system is contained within the pipeline, specifically,
-as declarative specifications in the Config Repo. This is the
-cornerstone of *Configuration-as-Code* (also sometimes called
-*GitOps*), the cloud native approach to CI/CD that we are describing
-in this book. The third is that there is an opportunity for operators
-to apply discretion to the pipeline, as denoted by the *"Deployment
-Gate"* in the Figure, controlling what features get deployed
-when. This topic is discussed in the sidebar, as well as at other
-points throughout this chapter.
+operators responsible for resource provisioning and CD), the
+subsystems are loosely coupled, and able to perform their respective
+tasks independently. The second is that all authoritative state needed
+to successfully build and deploy the system is contained within the
+pipeline, specifically, as declarative specifications in the Config
+Repo. This is the cornerstone of *Configuration-as-Code* (also known
+as *GitOps*), the cloud native approach to CI/CD. The third is that
+there is an opportunity for operators to apply discretion to the
+pipeline, as denoted by the *"Deployment Gate"* in the Figure,
+controlling what features get deployed when. This topic is discussed
+in the sidebar.
 
 The third repository shown in :numref:`Figure %s <fig-cicd>` is
 the Code Repo (on the far left). Although not explicitly indicated,
@@ -498,16 +503,16 @@ to realistic workloads for a period of time, and then rolled out to
 the Production clusters once the Staging deployments give us
 confidence that the upgrade is reliable.
 
-This is a simplified depiction of what happens in practice. In
-general, there can be more than two distinct versions of the cloud
-software deployed at any given time. One reason this happens is that
-upgrades are typically rolled out incrementally (e.g., a few sites at
-a time over an extended period of time), meaning that even the
-production system plays a role in “staging” new releases. For example,
-a new version might first be deployed on 10% of the production
-machines, and once it is deemed reliable, is then rolled out to the
-next 25%, and so on. The exact rollout strategy is a controllable
-parameter, as described in more detail in Section 4.4.
+This is a simplified depiction of what happens. In practice, there can
+be more than two distinct versions of the cloud software deployed at
+any given time. One reason this happens is that upgrades are typically
+rolled out incrementally (e.g., a few sites at a time over an extended
+period of time), meaning that even the production system plays a role
+in “staging” new releases. For example, a new version might first be
+deployed on 10% of the production machines, and once it is deemed
+reliable, is then rolled out to the next 25%, and so on. The exact
+rollout strategy is a controllable parameter, as described in more
+detail in Section 4.4.
 
 Finally, two of the CI stages shown in :numref:`Figure %s
 <fig-cicd>` identify a *Testing* component. One is a set of
@@ -520,19 +525,17 @@ Assurance (QA)* cluster. Passing these tests gate deployment, but note
 that testing also happens in the Staging clusters, as part of the CD
 end of the pipeline. 
 
-
 6.3.3 Runtime Control
 ~~~~~~~~~~~~~~~~~~~~~
 
-*Runtime Control* is responsible for managing services once
-they are up-and-running, which in our case means providing a
-programmatic API that can be used by various stakeholders to manage
-the 5G connectivity service.  As shown in :numref:`Figure %s
-<fig-control>`, Runtime Control hides the implementation details of 5G
-connectivity, which spans four different components and multiple
-clouds, providing a coherent service interface that for users that
-care about being able to authorize devices and set QoS parameters on
-an end-to-end basis.
+*Runtime Control* is responsible for managing services once they are
+up-and-running, which in our case means providing a programmatic API
+that can be used by various stakeholders to manage the 5G connectivity
+service.  As shown in :numref:`Figure %s <fig-control>`, Runtime
+Control hides the implementation details of 5G connectivity, which
+spans four different components and multiple clouds. It providing a
+coherent service interface that for users that care about being able
+to authorize devices and set QoS parameters on an end-to-end basis.
 
 .. _fig-control:
 .. figure:: figures/ops/Slide9.png
@@ -540,6 +543,97 @@ an end-to-end basis.
    :align: center
 
    Example use case that requires ongoing runtime control.
+
+We describe this API in Section 6.4. For now, our focus is on the main
+issues Runtime Control must address in order to offer such an API.
+At a high level, it must:
+
+* Support new end-to-end abstractions that may cross multiple backend
+  subsystems.
+
+* Associate control and configuration state with those abstractions.
+
+* Support *versioning* of this configuration state, so changes can be
+  rolled back as necessary, and an audit history may be retrieved of
+  previous configurations.
+
+* Adopt best practices of *performance*, *high availability*,
+  *reliability*, and *security* in how this abstraction layer is
+  implemented.
+
+* Support *Role-Based Access Controls (RBAC)*, so that different
+  principals have different visibility into and control over the
+  underlying abstract objects.
+
+* Be extensible, and so able to incorporate new services and new
+  abstractions for existing services over time.
+
+Central to this role is the requirement that Runtime Control be able
+to represent a set of abstract objects, which is to say, it implements
+a *data model*.  While there are several viable options for the
+specification language used to represent the data model, for Runtime
+Control we use YANG. This is for three reasons. First, YANG is a rich
+language for data modeling, with support for strong validation of the
+data stored in the models and the ability to define relations between
+objects. Second, it is agnostic as to how the data is stored (i.e.,
+not directly tied to SQL/RDBMS or NoSQL paradigms), giving us a
+generous set of engineering options. Finally, YANG is widely used for
+this purpose, meaning there is a robust collection of YANG-based tools
+that we can build upon.
+
+.. _reading_yang:
+.. admonition:: Further Reading
+
+   `YANG - A Data Modeling Language for the Network Configuration Protocol
+   <https://datatracker.ietf.org/doc/html/rfc6020>`__. RFC 6020. October 2010.
+
+
+With this background, :numref:`Figure %s <fig-roc>` shows the internal
+structure of Runtime Control for Aether, which has *x-config*\—a
+microservice that maintains a set of YANG models—at its core.
+x-config, in turn, uses Atomix (a key-value store microservice), to
+make configuration state persistent. Because x-config was originally
+designed to manage configuration state for devices, it uses gNMI as
+its southbound interface to communicate configuration changes to
+devices (or in our case, software services). An Adapter has to be
+written for any service/device that does not support gNMI
+natively. These adapters are shown as part of Runtime Control in
+:numref:`Figure %s <fig-roc>`, but it is equally correct to view each
+adapter as part of the backend component, responsible for making that
+component management-ready. Finally, Runtime Control includes a
+Workflow Engine that is responsible for executing multi-step
+operations on the data model. This happens, for example, when a change
+to one model triggers some action on another model. Each of these
+components are described in more detail in the next section.
+
+.. _fig-roc:
+.. figure:: figures/Slide15.png
+   :width: 500px
+   :align: center
+
+   Internal structure of Runtime Control, and its relationship to
+   backend subsystems (below) and user portals/apps (above).
+
+In summary, the value of a unified Runtime Control API is best
+illustrated by the ability to implement closed-loop control
+applications (and other dashboards) that "read" data collected by the
+Monitoring subsystem; perform some kind of analysis on that data,
+possibly resulting in a decision to take corrective action; and then
+"write" new control directives, which x-config passes along to some
+combination of SD-RAN, SD-Core, and SD-Fabric, or sometimes even to
+the Lifecycle Management subsystem. (We'll see an example of the
+latter in Section 5.3.) This closed-loop scenario is depicted in
+:numref:`Figure %s <fig-roc3>`, which gives a different perspective by
+showing the Monitoring subsystem as a "peer" of Runtime Control
+(rather than below it), although both perspectives are valid.
+
+.. _fig-roc3:
+.. figure:: figures/Slide17.png
+   :width: 500px
+   :align: center
+
+   Another perspective of Runtime Control, illustrating the value of a
+   unified API that supports closed-loop control applications.
 
 Finally, * Monitoring & Telemetry* is responsible for collecting,
 archiving, evaluating, and analyzing operational data generated by the
