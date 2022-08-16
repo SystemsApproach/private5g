@@ -3,26 +3,15 @@ Chapter 6:  Managed Cloud Service
 
 .. This is where we show how all the pieces can be pulled together
    into an end-to-end solution that can be deployed in enterprises as
-   a managed service. Introduce an example use case or two (e.g.,
-   IoT), so we have application(s) that take advantage of the system
-   we just built.
+   a managed service. 
 
-   This is where we talk about the “managed service” aspect of the
-   system, which can’t be ignored because managing a 5G network is a
-   big part of the democratization story. Avoid pivoting to a full
-   operationalization discussion, which we tell elsewhere (which we
-   likely introduce as part of Background material in Chapter 1).
-   Probably focus on "user/operator" perspective (rather than
-   "under the covers" perspective).
+   Current version is one edit pass beyond a cut-and-paste from the
+   OPs book. Still needs a thorough edit even out the level of detail
+   and highlight the essential ideas.
 
-   Current language presumes no specific knowledge of the components
-   (e.g., SD-Core or SD-RAN). We will need to be adjusted to account
-   for the previous chapters.
-
-
-   Probably need to talk generally about ther configurations and
-   deployments. Maybe in a concluding section.
-
+   Would probably benefit from a use case (e.g., IoT) to help tie it
+   all together.
+   
 This chapter describes how to assemble all the pieces described in the
 previous chapters to provide 5G connectivity as a managed cloud
 service. Such a service might be deployed in enterprises in support of
@@ -45,7 +34,7 @@ significantly different than the legacy OSS/BSS mechanisms that have
 traditionally been the centerpiece of the Telco management story. The
 terminology is also different, but that only matters if you are trying
 to map Telco terminology onto cloud terminology. This is a topic we
-take up in a companinion book, and focus instead on a from-scratch
+take up in a companion book, and focus instead on a from-scratch
 cloud-based design.
 
 .. _reading_ops:
@@ -54,28 +43,19 @@ cloud-based design.
    `Edge Cloud Operations:: A Systems Approach 
    <https://ops.systemsapproach.org>`__.  June 2022.
 
-On the topic of terminology, we refer to the collection of components
-involved in operationalizing a cloud service as a "Cloud Mangement
-Platform" even though you will sometimes see it called an
-"Orchestrator". This is because we include both the "off-line"
-elements used to upgrade the service over time (this sub-problem is
-sometimes called Lifecycle Management) and the "on-line" elements used
-to operate the service at runtime (this sub-problem is sometimes
-called Service Orchestration).
-
-.. Maybe should note that you'll see "Mgmt/Orchestrator" in
-   Core-specific and RAN-specific architecture diagrams. We're
+.. Should note (here or in Ch4 & 5) that you'll see "Mgmt/Orchestrator"
+   in Core-specific and RAN-specific architecture diagrams. We're
    describing one "up a level" that spans both (and the fabric that
-   connects them.
+   connects them)
 
 
 6.1 Building Blocks
 -------------------
 
 The implementation strategy starts with commodity hardware and open
-source software. These building blocks will be familar to anyone that
+source software. These building blocks will be familiar to anyone that
 has built a cloud native application, but they deserve to be
-explicitly named in a discussion of mobile celluar networks, which
+explicitly named in a discussion of mobile cellular networks, which
 have historically been built using closed proprietary hardware
 devices.
 
@@ -172,6 +152,12 @@ with Microsoft's Azure Kubernetes Service (AKS), AWS's Amazon Elastic
 Kubernetes Service (EKS), Google's Google Kubernetes Engine (GKE) and
 Rancher's Rancher Kubernetes Engine (RKE) being widely available
 examples.
+
+.. _reading_terraform:
+.. admonition:: Further Reading
+
+   `Terraform Tutorials
+   <https://learn.hashicorp.com/terraform>`__.
 
 6.2 Example Deployment
 ----------------------
@@ -333,14 +319,16 @@ running at the edge is either multi-tenant or a multi-cloud.
 6.3 Cloud Management Platform 
 ------------------------------
 
-Once deployed, 5G-as-a-Service has to be operationalized; this is the
-essence of offering 5G as a *managed service*.  In general this
-responsibility falls to the Cloud Management Platform, which in Aether
-corresponds to the centralized AMP component shown in :numref:`Figure
-%s <fig-amp>`. AMP manages both the distributed set of ACE clusters
-and the other control clusters running in the central cloud. The
-following uses AMP to illustrate how to deliver 5G-as-a-Service, but
-the approach generalizes because AMP is based on widely used open
+Operationalizing the hardware and software components described in the
+previous two sections is the essence of what it means to offer 5G as a
+*managed service*.  This responsibility falls to the Cloud Management
+Platform, which in Aether, corresponds to the centralized AMP
+component shown in :numref:`Figure %s <fig-amp>`. AMP manages both the
+distributed set of ACE clusters and the Core CP clusters running in
+the central cloud.
+
+The following uses AMP to illustrate how to deliver 5G-as-a-Service,
+but the approach generalizes because AMP is based on widely used open
 source tools. For more details about all the subsystems involved in
 operationalizing an edge cloud, we refer you to the companion book
 mentioned in the introduction to this chapter.
@@ -348,15 +336,14 @@ mentioned in the introduction to this chapter.
 6.3.1 Overview
 ~~~~~~~~~~~~~~
 
-AMP includes one or more portals targeted at different stakeholders,
-with :numref:`Figure %s <fig-amp>` showing the two examples discussed
-in the previous section: a User Portal intended for enterprise admins
-who need to manage services delivered to a local site, and an
-Operations Portal intended for the ops team responsible for keeping
-Aether up-to-date and running smoothly. Again, other stakeholders
-(classes of users) are possible, but this distinction does represent a
-natural division between those that *use* cloud services and those
-that *operate* cloud services.
+AMP includes a set of portals targeted at different stakeholders, with
+:numref:`Figure %s <fig-amp>` showing the two examples: a User Portal
+intended for enterprise admins who need to manage services delivered
+to a local site, and an Operations Portal intended for the ops team
+responsible for keeping Aether up-to-date and running smoothly.  Other
+stakeholders (classes of users) are possible, but this distinction
+represents a natural division between those that *use* cloud services
+and those that *operate* cloud services.
 
 .. _fig-amp:
 .. figure:: figures/ops/Slide7.png
@@ -366,10 +353,10 @@ that *operate* cloud services.
    The four subsystems that comprise AMP: Resource Provisioning,
    Lifecycle Management, Runtime Control, and Monitoring & Logging.
    
-We do not focus on these portals, which can be thought of as offering
-a particular class of users a subset of AMP functionality, but we
-instead describe the aggregate functionality supported by AMP, which
-is organized around the four subsystems shown in :numref:`Figure %s
+We do not focus on the portals, which can be thought of as offering a
+particular class of users a subset of AMP functionality, but instead
+describe the aggregate functionality supported by AMP, which is
+organized around the four subsystems shown in :numref:`Figure %s
 <fig-amp>`.
 
 * **Resource Provisioning** is responsible for initializing resources
@@ -387,7 +374,7 @@ is organized around the four subsystems shown in :numref:`Figure %s
 * **Runtime Control** provides a means to manage services once they
   are operational. It defines an API that hides the implementation
   details of the underlying microservices (which in the case of Aether
-  spans four Kubernetes applications and multiple clouds) is userd
+  spans four Kubernetes applications and multiple clouds) is used
   to manage the provided services (5G connectivity in the case of Aether).
 
 * **Monitoring & Telemetry** is responsible for collecting, archiving,
@@ -398,14 +385,17 @@ is organized around the four subsystems shown in :numref:`Figure %s
   additional capacity.
     
 Although an edge cloud management platform includes all four
-subsystems, it is simpler to collapase them into a the two dimensional
-schematic shown in :numref:`Figure %s <fig-2D>`. This representation
-serves our purposes because (1) where one draws a line between
-resource provisioning and lifecycle management is somewhat subjective;
-and (2) runtime control and monitoring are often combined in a single
-user interface, providing a way to both monitor (read) and control
-(write) various parameters of a running system, which in turn enables
-closed loop control.
+subsystems, conceptually we can collapse them into a the two
+dimensional schematic shown in :numref:`Figure %s <fig-2D>`.
+Lifecycle Management (coupled with Resource Provisioning) runs
+off-line, sitting adjacent to the hybrid cloud. It is how Operators
+and Developers first provision and then specify changes to the system
+by checking code (including configuration specs) into a repo, which in
+turn triggers an upgrade of the running system. Runtime Control
+(coupled with Monitoring and Telemetry) runs on-line, layered on top
+of the hybrid cloud being managed. It defines an API that can be used
+to read and write parameters of the running system, which serves as a
+foundation for building closed-loop control.
 
 .. _fig-2D:
 .. figure:: figures/ops/Slide11.png 
@@ -415,20 +405,51 @@ closed loop control.
    Simplified representation of the management platform, highlighting
    the off-line and on-line aspects of cloud management.
 
-As shown in in :numref:`Figure %s <fig-2D>`, Lifecycle Management
-(including Resource Provisioning) runs off-line, sitting adjacent to
-the hybrid cloud. It is how Operators and Developers specify changes
-to the system by checking code (including configuration specs) into a
-repo, which in turn triggers an upgrade of the running system. Runtime
-Control (including Monitoring and Telemetry) runs on-line, layered on
-top of the hybrid cloud being managed. It defines an API that Users
-and Operators use to read and write parameters of the running system.
+6.3.2 Resource Provisioning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-6.3.2 Lifecycle Management
+Resource Provisioning is the process of bringing virtual and physical
+resources online. For physical resources, it has both a hands-on
+component (racking and connecting devices) and a bootstrap component
+(configuring how the resources boot into a "ready" state). When
+utilizing virtual resources (e.g., VMs instantiated on a commercial
+cloud) the "rack and connect" step is carried out by a sequence of API
+calls rather than a hands-on technician.
+
+Because we want to automate the sequence of calls needed to activate
+virtual infrastructure, we adopt an approach known as
+*Infrastructure-as-Code*. This is where Terrafrom comes into play.
+The general idea is to document, in a declarative format that can be
+"executed", exactly what our infrastructure is to look like; how it is
+to be configured.
+
+When a cloud is built from a combination of virtual and physical
+resources, as is the case for a hybrid cloud like Aether, we need a
+seamless way to accommodate both. To this end, our approach is to
+first overlay a *logical structure* on top of hardware resources,
+making them roughly equivalent to the virtual resources we get from a
+commercial cloud provider. This results in a hybrid scenario similar
+to the one shown in :numref:`Figure %s <fig-infra>`.  One way to think
+about this is that the task of booting hardware into the "ready" state
+involves installing and configuring several subsystems that
+collectively form the cloud platform. It is this platform that
+Terraform interacts with, indirectly, through a cloud provisioning API.
+
+.. _fig-infra:
+.. figure:: figures/ops/Slide12.png
+    :width: 450px
+    :align: center
+
+    Resource Provisioning in a hybrid cloud that includes both
+    physical and virtual resources.
+
+
+6.3.3 Lifecycle Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:numref:`Figure %s <fig-cicd>` gives an overview of the
-pipeline/toolchain that make up the two halves of Lifecycle
+Lifecycle Management is concerned with updating and evolving a running
+system over time. :numref:`Figure %s <fig-cicd>` gives an overview of
+the pipeline/toolchain that make up the two halves of Lifecycle
 Management—Continuous Integration (CI) and Continuous Deployment
 (CD). The key thing to focus on is the Image and Config Repos in the
 middle. They represent the “interface” between the two halves: CI
@@ -525,7 +546,7 @@ Assurance (QA)* cluster. Passing these tests gate deployment, but note
 that testing also happens in the Staging clusters, as part of the CD
 end of the pipeline. 
 
-6.3.3 Runtime Control
+6.3.4 Runtime Control
 ~~~~~~~~~~~~~~~~~~~~~
 
 *Runtime Control* is responsible for managing services once they are
@@ -533,9 +554,10 @@ up-and-running, which in our case means providing a programmatic API
 that can be used by various stakeholders to manage the 5G connectivity
 service.  As shown in :numref:`Figure %s <fig-control>`, Runtime
 Control hides the implementation details of 5G connectivity, which
-spans four different components and multiple clouds. It providing a
-coherent service interface that for users that care about being able
-to authorize devices and set QoS parameters on an end-to-end basis.
+spans four different components and multiple clouds. It does this by
+providing a coherent service interface that for users that care about
+being able to authorize devices and set QoS parameters on an
+end-to-end basis.
 
 .. _fig-control:
 .. figure:: figures/ops/Slide9.png
@@ -544,42 +566,39 @@ to authorize devices and set QoS parameters on an end-to-end basis.
 
    Example use case that requires ongoing runtime control.
 
-We describe this API in Section 6.4. For now, our focus is on the main
-issues Runtime Control must address in order to offer such an API.
-At a high level, it must:
+In other words, Runtime Control defines an abstraction layer on top of
+a collection of backend components, effectively turning them into
+externally visible (and controllable) cloud services. Sometimes a
+single backend component implements the entirety of a service, but in
+the case of 5G, which is constructed from a collection of
+disaggregated components, Runtime Control is where we define an API
+that logically integrates those components into a unified and coherent
+service.  It is also an opportunity to “raise the level of
+abstraction” for the underlying subsystems and hiding implementation
+details.
 
-* Support new end-to-end abstractions that may cross multiple backend
-  subsystems.
+We describe this connectivity interface in Section 6.4. For now, our
+focus is on the main issues Runtime Control must address in order to
+offer such an API.  At a high level, it must:
 
-* Associate control and configuration state with those abstractions.
+1. Authenticate the principal wanting to perform the operation.
 
-* Support *versioning* of this configuration state, so changes can be
-  rolled back as necessary, and an audit history may be retrieved of
-  previous configurations.
+2. Determine if that principal has sufficient privilege to carry out the
+   operation.
 
-* Adopt best practices of *performance*, *high availability*,
-  *reliability*, and *security* in how this abstraction layer is
-  implemented.
+3. Push the new parameter setting(s) to one or more backend components.
 
-* Support *Role-Based Access Controls (RBAC)*, so that different
-  principals have different visibility into and control over the
-  underlying abstract objects.
-
-* Be extensible, and so able to incorporate new services and new
-  abstractions for existing services over time.
+4. Record the specified parameter setting(s), so the new value(s)
+   persist.
 
 Central to this role is the requirement that Runtime Control be able
 to represent a set of abstract objects, which is to say, it implements
-a *data model*.  While there are several viable options for the
-specification language used to represent the data model, for Runtime
-Control we use YANG. This is for three reasons. First, YANG is a rich
-language for data modeling, with support for strong validation of the
-data stored in the models and the ability to define relations between
-objects. Second, it is agnostic as to how the data is stored (i.e.,
-not directly tied to SQL/RDBMS or NoSQL paradigms), giving us a
-generous set of engineering options. Finally, YANG is widely used for
-this purpose, meaning there is a robust collection of YANG-based tools
-that we can build upon.
+a *data model*. The API is then generated from this data model, and
+persistent state associated with instances of the models is stored in
+a Key/Value store. Aether uses YANG to specify the models, in part
+because it is a rich language for data modeling, but also because
+there is a robust collection of YANG-based tools that we can build
+upon.
 
 .. _reading_yang:
 .. admonition:: Further Reading
@@ -587,92 +606,81 @@ that we can build upon.
    `YANG - A Data Modeling Language for the Network Configuration Protocol
    <https://datatracker.ietf.org/doc/html/rfc6020>`__. RFC 6020. October 2010.
 
+Finally, changes to the model-defined parameters must be propagated to
+the backend components, and while in practice there is no established
+API for doing this. Aether assumes gNMI as its southbound interface to
+communicate configuration changes to the software services, where an
+Adapter has to be written for any services that do not support gNMI
+natively (not shown in the figure).
 
-With this background, :numref:`Figure %s <fig-roc>` shows the internal
-structure of Runtime Control for Aether, which has *x-config*\—a
-microservice that maintains a set of YANG models—at its core.
-x-config, in turn, uses Atomix (a key-value store microservice), to
-make configuration state persistent. Because x-config was originally
-designed to manage configuration state for devices, it uses gNMI as
-its southbound interface to communicate configuration changes to
-devices (or in our case, software services). An Adapter has to be
-written for any service/device that does not support gNMI
-natively. These adapters are shown as part of Runtime Control in
-:numref:`Figure %s <fig-roc>`, but it is equally correct to view each
-adapter as part of the backend component, responsible for making that
-component management-ready. Finally, Runtime Control includes a
-Workflow Engine that is responsible for executing multi-step
-operations on the data model. This happens, for example, when a change
-to one model triggers some action on another model. Each of these
-components are described in more detail in the next section.
+6.3.5 Monitoring and Telemetry
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. _fig-roc:
-.. figure:: figures/Slide15.png
-   :width: 500px
-   :align: center
+Collecting telemetry data for a running system is an essential
+function of the management platform. It enables operators to monitor
+system behavior, evaluate performance, make informed provisioning
+decisions, respond to failures, identify attacks, and diagnose
+problems. There are three types of telemetry data—*metrics*, *logs*,
+and *traces*\—along with open source software stacks available to help
+collect, store, and act upon each of them.
 
-   Internal structure of Runtime Control, and its relationship to
-   backend subsystems (below) and user portals/apps (above).
+Metrics are quantitative data about a system. These include common
+performance metrics such as link bandwidth, CPU utilization, and
+memory usage, but also binary results corresponding to "up" and
+"down", as well as other state variables that can be encoded
+numerically.  These values are produced and collected periodically
+(e.g., every few seconds), either by reading a counter, or by
+executing a runtime test that returns a value.  These metrics can be
+associated with physical resources such as servers and switches,
+virtual resources such as VMs and containers, or high-level
+abstractions such as the *Connectivity Service* described in the next
+section. Given these many possible sources of data, the job of the
+metrics monitoring stack is to collect, archive, visualize, and
+optionally analyze this data. Prometheus is a popular open source tool
+for storing and querying metrics.
 
-In summary, the value of a unified Runtime Control API is best
-illustrated by the ability to implement closed-loop control
-applications (and other dashboards) that "read" data collected by the
-Monitoring subsystem; perform some kind of analysis on that data,
-possibly resulting in a decision to take corrective action; and then
-"write" new control directives, which x-config passes along to some
-combination of SD-RAN, SD-Core, and SD-Fabric, or sometimes even to
-the Lifecycle Management subsystem. (We'll see an example of the
-latter in Section 5.3.) This closed-loop scenario is depicted in
-:numref:`Figure %s <fig-roc3>`, which gives a different perspective by
-showing the Monitoring subsystem as a "peer" of Runtime Control
-(rather than below it), although both perspectives are valid.
+.. _reading_monitor:
+.. admonition:: Further Reading
 
-.. _fig-roc3:
-.. figure:: figures/Slide17.png
-   :width: 500px
-   :align: center
+   `Prometheus <https://prometheus.io/docs/introduction/overview/>`__.
 
-   Another perspective of Runtime Control, illustrating the value of a
-   unified API that supports closed-loop control applications.
+Logs are the qualitative data that is generated whenever a noteworthy
+event occurs. This information can be used to identify problematic
+operating conditions (i.e., it may trigger an alert), but more
+commonly, it is used to troubleshoot problems after they have been
+detected. Various system components—all the way from the low-level OS
+kernel to high-level cloud services—write messages that adhere to a
+well-defined format to the log. These messages include a timestamp,
+which makes it possible for the logging stack to parse and correlate
+messages from different components. ElasticSearch is a widely used
+tool for storing and analyzing log messages.
 
-Finally, * Monitoring & Telemetry* is responsible for collecting,
-archiving, evaluating, and analyzing operational data generated by the
-underlying components. It makes it possible for operators to diagnose
-and respond to failures, tune performance, do root cause analysis,
-perform security audits, and understand when it is necessary to
-provision additional capacity. This requires mechanisms to observe
-system behavior, collect and archive the resulting data, analyze the
-data and trigger various actions in response, and visualize the data
-in human consumable dashboards (similar to the example shown in
-:numref:`Figure %s <fig-monitor>`).
+.. _reading_logging:
+.. admonition:: Further Reading
 
-.. _fig-monitor:
-.. figure:: figures/ops/Slide10.png
-   :width: 500px
-   :align: center
+   `ElasticSearch
+   <https://www.elastic.co/elasticsearch/>`__.
 
-   Example Aether dashboard, showing the health of one of the
-   subsystems (SD-Core).
+Traces are a record of causal relationships (e.g., Service A calls
+Service B) resulting from user-initiated transactions or jobs. They
+are related to logs, but provide more specialized information about
+the context in which different events happen. Tracing is
+well-understood in a single program, where an execution trace is
+commonly recorded as an in-memory call stack, but traces are
+inherently distributed across a graph of network-connected
+microservices in a cloud setting. This makes the problem challenging,
+but also critically important because it is often the case that the
+only way to understand time-dependent phenomena—such as why a
+particular resource is overloaded—is to understand how multiple
+independent workflows interact with each other.  Jaeger is a popular
+open source tool used for tracing.
 
-In broad terms, it is common to think of this aspect of cloud
-management as having two parts: a monitoring component that collects
-quantitative metrics (e.g., load averages, transmission rates,
-ops-per-second) and a logging component that collects diagnostic
-messages (i.e., text strings explaining various event). Both include a
-timestamp, so it is possible to link quantitative analysis with
-qualitative explanations in support of diagnostics and analytics.
-   
-Given this mediation role, Runtime Control provides mechanisms to
-model (represent) the abstract services to be offered to users; store
-any configuration and control state associated with those models;
-apply that state to the underlying components, ensuring they remain in
-sync with the operator’s intentions; and authorize the set API calls
-users try to invoke on each service. (from above)
+.. _reading_tracing:
+.. admonition:: Further Reading 
 
-.. Currently just lifted from OPs book. Need to reconcile with Runtime
-   Contol subsection above, and refocus to be on-point.  For example,
-   YANG might be an unnecessary implementation detail: we care about
-   the API and not the models (although the API cares about resources).
+   `Jaeger: End-to-End Distributed Tracing 
+   <https://www.jaegertracing.io/>`__. 
+
 
 6.4 Connectivity API
 --------------------------
@@ -681,7 +689,6 @@ users try to invoke on each service. (from above)
    introduce more narrative/intuition, and reduce the use of bulleted
    lists.
 
-   
 The visible aspect of a 5G service is the programmatic interface it
 provides to users, giving them the ability to control and customized
 the underlying connectivity service. This API is implemented by the
