@@ -6,36 +6,37 @@ Chapter 6:  Managed Cloud Service
    a managed service. 
 
    Current version is one edit pass beyond a cut-and-paste from the
-   OPs book. Still needs a thorough edit even out the level of detail
-   and highlight the essential ideas.
+   OPs book. Still needs a thorough edit to even out the level of
+   detail and highlight the essential ideas.
 
    Would probably benefit from a use case (e.g., IoT) to help tie it
    all together.
    
 This chapter describes how to assemble all the pieces described in the
 previous chapters to provide 5G connectivity as a managed cloud
-service. Such a service might be deployed in enterprises in support of
-Industry 4.0.
+service. Such a service might be deployed in enterprises, for example,
+in support of Industry 4.0.
 
 The first step is to implement all the components using cloud native
 building blocks. We start by introducing those building blocks in
 Section 6.1. The second step is to introduce yet another component—a
 *Cloud Management Platform*—that is responsible for operationalizing
-5G-as-a-Service. The rest of this chapter describes how to build a
-Management System using open source tools.
+5G-as-a-Service. The rest of this chapter describes how to build such
+a management system using open source tools.
 
 Before getting into the details, it is important to remember that
 mobile cell service (both voice and broadband) has been offered as a
 Telco service for 40 years. Treating it as a managed cloud service is
-a significant departure from that history, especially in how the
-resulting connectivity is operated and managed. In particular, the
-cloud-based Management Platform described in this chapter is
-significantly different than the legacy OSS/BSS mechanisms that have
-traditionally been the centerpiece of the Telco management story. The
-terminology is also different, but that only matters if you are trying
-to map Telco terminology onto cloud terminology. This is a topic we
-take up in a companion book, and focus instead on a from-scratch
-cloud-based design.
+a significant departure from that history, most notably in how the
+resulting connectivity it provides is operated and managed. As a
+consequence, the Cloud Management Platform described in this chapter
+is significantly different than the legacy OSS/BSS mechanisms that
+have traditionally been the centerpiece of the Telco management
+machinery. The terminology is also different, but that only matters if
+you are trying to map Telco terminology onto cloud terminology (which
+we are not). We take up the "terminology mapping problem" in a
+companion book, and focus instead on a from-scratch cloud-based
+design.
 
 .. _reading_ops:
 .. admonition:: Further Reading 
@@ -141,14 +142,14 @@ Helm Charts.
    `Helm Tutorial
    <https://helm.sh/docs/intro/quickstart/>`__.
 
-Terraform is an infrastructure manager that sets up one or more
-Kubernetes clusters, provisioning them so they are ready to host a
-collection of Helm-specified applications. It does this using an
-approach known as *Infrastructure-as-Code*, which documents exactly
-how the infrastructure is to be configured in a declarative format
-that can be (a) checked into a repo, and (b) executed just like any
-piece of software.  Terraform assumes an underlying provisioning API,
-with Microsoft's Azure Kubernetes Service (AKS), AWS's Amazon Elastic
+Terraform is an infrastructure manager that provisions one or more
+Kubernetes clusters, preparing them to host a collection of
+Helm-specified applications. It does this using an approach known as
+*Infrastructure-as-Code*, which documents exactly how the
+infrastructure is to be configured in a declarative format that can
+be (a) checked into a repo, and (b) executed just like any piece of
+software.  Terraform assumes an underlying provisioning API, with
+Microsoft's Azure Kubernetes Service (AKS), AWS's Amazon Elastic
 Kubernetes Service (EKS), Google's Google Kubernetes Engine (GKE) and
 Rancher's Rancher Kubernetes Engine (RKE) being widely available
 examples.
@@ -166,9 +167,9 @@ Using these building blocks, it is possible to construct a wide range
 of deployment scenarios for a managed 5G service. For illustrative
 purposes, we use a particular deployment based on the Aether edge
 cloud introduced in Chapter 2. Aether is an operational edge cloud
-that has been deployed to multiple sites, and most importantly,
-includes an API that edge apps can use to customize 5G connectivity to
-better meet their objectives.
+that has been deployed to multiple sites, and most importantly for our
+purposes, includes an API that edge apps can use to customize 5G
+connectivity to better meet their objectives.
 
 6.2.1 Edge Cloud
 ~~~~~~~~~~~~~~~~
@@ -230,15 +231,15 @@ While it is possible to instantiate a single ACE cluster in just one
 site, Aether is designed to support multiple edge deployments, all of
 which are managed from the central cloud. Such a hybrid cloud scenario
 is depicted in :numref:`Figure %s <fig-aether>`, which shows two
-subsystems running in the central cloud: (1) one or more instances of
-the Mobile Core Control Plane (CP), and (2) the Aether Management
-Platform (AMP).
+subsystems running in the central cloud: (1) one or more
+instantiations of the Mobile Core Control Plane (CP), and (2) the
+Aether Management Platform (AMP).
 
 Each SD-Core CP controls one or more SD-Core UPFs.  Exactly how CP
 instances (running centrally) are paired with UPF instances (running
 at the edges) is a runtime decision, and depends on the degree of
 isolation the enterprise sites require. AMP is Aether's realization of
-a Cloud Management Platform;it is responsible for managing all the
+a Cloud Management Platform; it is responsible for managing all the
 centralized and edge subsystems (as introduced in the next section).
 
 .. Discussion variable number of Cores, vs one-per-metro as suggested
@@ -264,21 +265,24 @@ in :numref:`Figure %s <fig-aether>` is actually deployed in a logical
 Kubernetes cluster on a commodity cloud. The same is true for
 AMP. Aether’s centralized components are able to run in Google Cloud
 Platform, Microsoft Azure, and Amazon’s AWS. They also run as an
-emulated cluster implemented by a system like KIND—Kubernetes in
-Docker—making it possible for developers to run these components on
+emulated cluster implemented by a system like KIND (Kubernetes in
+Docker), making it possible for developers to run these components on
 their laptop.
 
-Finally, note that while we describe each ACE cluster as starting with
-bare-metal (with AMP responsible for booting the hardware into a state
-that is ready to host Kubernetes workloads), an alternative is to
-start with an edge deployment that is managed by one of the
-hyperscalers as an extension of their core datacenters. Google’s
-Anthos, Microsoft’s Azure Arc, and Amazon’s ECS-Anywhere are examples
-of such edge cloud products.
+Note that variations on this deployment configuration are possible.
+For example, both AMP and the SD-Core CP can be co-located on the edge
+cluster, making it possible for a complete Aether deployment to be
+self-contained in a single site. As another example, while we describe
+each ACE cluster as starting with bare-metal (with AMP responsible for
+booting the hardware into a state that is ready to host Kubernetes
+workloads), an alternative is to start with an edge deployment that is
+managed by one of the hyperscalers as an extension of their
+datacenters. Google’s Anthos, Microsoft’s Azure Arc, and Amazon’s
+ECS-Anywhere are examples of such edge cloud products.
 
 6.2.3 Stakeholders
 ~~~~~~~~~~~~~~~~~~
-   
+
 With the understanding that our target environment is a collection of
 Kubernetes clusters—some running on bare-metal hardware at edge sites
 and some running in central datacenters—there is an orthogonal issue
@@ -311,10 +315,12 @@ the edge applications that take advantage of 5G-as-a-Service. The
 approach Aether adopts is to expect service providers to make their
 applications available either as source code (which works for open
 source or in-house apps), or as standard cloud native artifacts (e.g.,
-Docker images and Helm charts). The alternative would be for edge
-service providers to share operational responsibility for the edge
-cloud with the cloud operator, which is possible if the infrastructure
-running at the edge is either multi-tenant or a multi-cloud.
+Docker images and Helm charts). Either format can be fed into the
+Lifecycle Management pipeline described in Section 6.3.2. The
+alternative would be for edge service providers to share operational
+responsibility for the edge cloud with the cloud operator, which is
+possible if the infrastructure running at the edge is either
+multi-tenant or a multi-cloud.
 
 6.3 Cloud Management Platform 
 ------------------------------
@@ -322,10 +328,10 @@ running at the edge is either multi-tenant or a multi-cloud.
 Operationalizing the hardware and software components described in the
 previous two sections is the essence of what it means to offer 5G as a
 *managed service*.  This responsibility falls to the Cloud Management
-Platform, which in Aether, corresponds to the centralized AMP
-component shown in :numref:`Figure %s <fig-amp>`. AMP manages both the
-distributed set of ACE clusters and the Core CP clusters running in
-the central cloud.
+Platform, which in Aether corresponds to the centralized AMP component
+shown in :numref:`Figure %s <fig-aether>`. AMP manages both the
+distributed set of ACE clusters and one or more SD-Core CP clusters
+running in the central cloud.
 
 The following uses AMP to illustrate how to deliver 5G-as-a-Service,
 but the approach generalizes because AMP is based on widely used open
@@ -333,31 +339,16 @@ source tools. For more details about all the subsystems involved in
 operationalizing an edge cloud, we refer you to the companion book
 mentioned in the introduction to this chapter.
 
-6.3.1 Overview
-~~~~~~~~~~~~~~
-
-AMP includes a set of portals targeted at different stakeholders, with
-:numref:`Figure %s <fig-amp>` showing the two examples: a User Portal
-intended for enterprise admins who need to manage services delivered
-to a local site, and an Operations Portal intended for the ops team
-responsible for keeping Aether up-to-date and running smoothly.  Other
-stakeholders (classes of users) are possible, but this distinction
-represents a natural division between those that *use* cloud services
-and those that *operate* cloud services.
-
 .. _fig-amp:
 .. figure:: figures/ops/Slide7.png
    :width: 600px
    :align: center
 
    The four subsystems that comprise AMP: Resource Provisioning,
-   Lifecycle Management, Runtime Control, and Monitoring & Logging.
-   
-We do not focus on the portals, which can be thought of as offering a
-particular class of users a subset of AMP functionality, but instead
-describe the aggregate functionality supported by AMP, which is
-organized around the four subsystems shown in :numref:`Figure %s
-<fig-amp>`.
+   Lifecycle Management, Service Orchestrator, and Monitoring & Telemetry.
+
+At a high level, AMP is organized around the four subsystems shown in
+:numref:`Figure %s <fig-amp>`:
 
 * **Resource Provisioning** is responsible for initializing resources
   (e.g., servers, switches) that add, replace, or upgrade capacity.
@@ -371,11 +362,10 @@ organized around the four subsystems shown in :numref:`Figure %s
   *Configuration-as-Code*, using Helm Charts and Terraform Templates
   to specify how functionality is to be deployed and configured.
 
-* **Runtime Control** provides a means to manage services once they
-  are operational. It defines an API that hides the implementation
-  details of the underlying microservices (which in the case of Aether
-  spans four Kubernetes applications and multiple clouds) is used
-  to manage the provided services (5G connectivity in the case of Aether).
+* **Service Orchestration** provides a means to manage services once
+  they are operational. It defines an API that hides the
+  implementation details of the underlying microservices, and is used
+  to manage the provided 5G connectivity service.
 
 * **Monitoring & Telemetry** is responsible for collecting, archiving,
   evaluating, and analyzing operational data generated by the
@@ -384,18 +374,17 @@ organized around the four subsystems shown in :numref:`Figure %s
   security audits, and understand when it is necessary to provision
   additional capacity.
     
-Although an edge cloud management platform includes all four
-subsystems, conceptually we can collapse them into a the two
+For simplicity, we can collapse the four subsystems into a the two
 dimensional schematic shown in :numref:`Figure %s <fig-2D>`.
 Lifecycle Management (coupled with Resource Provisioning) runs
-off-line, sitting adjacent to the hybrid cloud. It is how Operators
-and Developers first provision and then specify changes to the system
-by checking code (including configuration specs) into a repo, which in
-turn triggers an upgrade of the running system. Runtime Control
-(coupled with Monitoring and Telemetry) runs on-line, layered on top
-of the hybrid cloud being managed. It defines an API that can be used
-to read and write parameters of the running system, which serves as a
-foundation for building closed-loop control.
+off-line, sitting adjacent to the hybrid cloud. Operators and
+Developers provision and change the system by checking code (including
+configuration specs) into a repo, which in turn triggers an upgrade of
+the running system. Service Orchestration (coupled with Monitoring and
+Telemetry) runs on-line, layered on top of the hybrid cloud being
+managed. It defines an API that can be used to read and write
+parameters of the running system, which serves as a foundation for
+building closed-loop control.
 
 .. _fig-2D:
 .. figure:: figures/ops/Slide11.png 
@@ -405,7 +394,7 @@ foundation for building closed-loop control.
    Simplified representation of the management platform, highlighting
    the off-line and on-line aspects of cloud management.
 
-6.3.2 Resource Provisioning
+6.3.1 Resource Provisioning
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Resource Provisioning is the process of bringing virtual and physical
@@ -444,7 +433,7 @@ Terraform interacts with, indirectly, through a cloud provisioning API.
     physical and virtual resources.
 
 
-6.3.3 Lifecycle Management
+6.3.2 Lifecycle Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Lifecycle Management is concerned with updating and evolving a running
@@ -504,17 +493,18 @@ Repo. This is the cornerstone of *Configuration-as-Code* (also known
 as *GitOps*), the cloud native approach to CI/CD. The third is that
 there is an opportunity for operators to apply discretion to the
 pipeline, as denoted by the *"Deployment Gate"* in the Figure,
-controlling what features get deployed when. This topic is discussed
-in the sidebar.
+controlling what features get deployed when. (Keep in mind that
+"continuous" does not necessarily mean "instantaneous"; there can be a
+variety of gating functions injected into the CI/CD pipeline to
+control when upgrades get rolled out.)
 
-The third repository shown in :numref:`Figure %s <fig-cicd>` is
-the Code Repo (on the far left). Although not explicitly indicated,
-developers are continually checking new features and bug fixes into
-this repo, which then triggers the CI/CD pipeline. A set of tests and
-code reviews are run against these check-ins, with the output of those
-tests/reviews reported back to developers, who modify their patch sets
-accordingly. (These develop-and-test feedback loops are implied by the
-dotted lines in :numref:`Figure %s <fig-cicd>`.)
+The third repository shown in :numref:`Figure %s <fig-cicd>` is the
+Code Repo (on the far left). Developers continually check new features
+and bug fixes into this repo, which triggers the CI/CD pipeline. A set
+of tests and code reviews are run against these check-ins, with the
+output of those tests/reviews reported back to developers, who modify
+their patch sets accordingly. (These develop-and-test feedback loops
+are implied by the dotted lines in :numref:`Figure %s <fig-cicd>`.)
 
 The far right of :numref:`Figure %s <fig-cicd>` shows the set of
 deployment targets, with *Staging* and *Production* called out as two
@@ -524,40 +514,29 @@ to realistic workloads for a period of time, and then rolled out to
 the Production clusters once the Staging deployments give us
 confidence that the upgrade is reliable.
 
-This is a simplified depiction of what happens. In practice, there can
-be more than two distinct versions of the cloud software deployed at
-any given time. One reason this happens is that upgrades are typically
-rolled out incrementally (e.g., a few sites at a time over an extended
-period of time), meaning that even the production system plays a role
-in “staging” new releases. For example, a new version might first be
-deployed on 10% of the production machines, and once it is deemed
-reliable, is then rolled out to the next 25%, and so on. The exact
-rollout strategy is a controllable parameter, as described in more
-detail in Section 4.4.
+Finally, two of the CI stages shown in :numref:`Figure %s <fig-cicd>`
+identify a *Testing* component. One is a set of component-level tests
+that are run against each patch set checked into the Code Repo. These
+tests gate integration; fully merging a patch into the Code Repo
+requires first passing this preliminary round of tests. Once merged,
+the pipeline runs a build across all the components, and a second
+round of testing happens on a *Quality Assurance (QA)*
+cluster. Passing these tests gate deployment, but as just noted,
+testing also happens in the Staging clusters as part of the CD end of
+the pipeline.
 
-Finally, two of the CI stages shown in :numref:`Figure %s
-<fig-cicd>` identify a *Testing* component. One is a set of
-component-level tests that are run against each patch set checked into
-the Code Repo. These tests gate integration; fully merging a patch
-into the Code Repo requires first passing this preliminary round of
-tests. Once merged, the pipeline runs a build across all the
-components, and a second round of testing happens on a *Quality
-Assurance (QA)* cluster. Passing these tests gate deployment, but note
-that testing also happens in the Staging clusters, as part of the CD
-end of the pipeline. 
+6.3.3 Service Orchestration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-6.3.4 Runtime Control
-~~~~~~~~~~~~~~~~~~~~~
-
-*Runtime Control* is responsible for managing services once they are
-up-and-running, which in our case means providing a programmatic API
-that can be used by various stakeholders to manage the 5G connectivity
-service.  As shown in :numref:`Figure %s <fig-control>`, Runtime
-Control hides the implementation details of 5G connectivity, which
-spans four different components and multiple clouds. It does this by
-providing a coherent service interface that for users that care about
-being able to authorize devices and set QoS parameters on an
-end-to-end basis.
+Servcie Orchestration is responsible for managing the Kubernetes
+workloads once they are up-and-running, which in our case means
+providing a programmatic API that can be used by various stakeholders
+to manage the 5G connectivity service.  As shown in :numref:`Figure %s
+<fig-control>`, the Service Orchestrator hides the implementation
+details of 5G connectivity, which spans four different components and
+multiple clouds. It does this by providing a coherent service
+interface that for users that care about being able to authorize
+devices and set QoS parameters on an end-to-end basis.
 
 .. _fig-control:
 .. figure:: figures/ops/Slide9.png
@@ -566,20 +545,20 @@ end-to-end basis.
 
    Example use case that requires ongoing runtime control.
 
-In other words, Runtime Control defines an abstraction layer on top of
-a collection of backend components, effectively turning them into
-externally visible (and controllable) cloud services. Sometimes a
-single backend component implements the entirety of a service, but in
-the case of 5G, which is constructed from a collection of
-disaggregated components, Runtime Control is where we define an API
-that logically integrates those components into a unified and coherent
-service.  It is also an opportunity to “raise the level of
-abstraction” for the underlying subsystems and hiding implementation
-details.
+In other words,the Service Orchestrator defines an abstraction layer
+on top of a collection of backend components, effectively turning them
+into an externally visible (and controllable) cloud service. In some
+situations a single backend component might implement the entirety of
+a service, but in the case of 5G, which is constructed from a
+collection of disaggregated components, Service Orchestration is where
+we define an API that logically integrates those components into a
+unified and coherent whole.  It is also an opportunity to “raise the
+level of abstraction” for the underlying subsystems, hiding
+unnecessary implementation details.
 
 We describe this connectivity interface in Section 6.4. For now, our
-focus is on the main issues Runtime Control must address in order to
-offer such an API.  At a high level, it must:
+focus is on the main issues Service Orchestration must address in
+order to offer such an API.  At a high level, it must:
 
 1. Authenticate the principal wanting to perform the operation.
 
@@ -591,14 +570,14 @@ offer such an API.  At a high level, it must:
 4. Record the specified parameter setting(s), so the new value(s)
    persist.
 
-Central to this role is the requirement that Runtime Control be able
-to represent a set of abstract objects, which is to say, it implements
-a *data model*. The API is then generated from this data model, and
-persistent state associated with instances of the models is stored in
-a Key/Value store. Aether uses YANG to specify the models, in part
-because it is a rich language for data modeling, but also because
-there is a robust collection of YANG-based tools that we can build
-upon.
+Central to this role is the requirement that Service Orchestration be
+able to represent a set of abstract objects, which is to say, it
+implements a *data model*. The API is then generated from this data
+model, and persistent state associated with instances of the models is
+stored in a Key/Value store. Aether uses YANG to specify the models,
+in part because it is a rich language for data modeling, but also
+because there is a robust collection of YANG-based tools that we can
+build upon.
 
 .. _reading_yang:
 .. admonition:: Further Reading
@@ -610,10 +589,10 @@ Finally, changes to the model-defined parameters must be propagated to
 the backend components, and while in practice there is no established
 API for doing this. Aether assumes gNMI as its southbound interface to
 communicate configuration changes to the software services, where an
-Adapter has to be written for any services that do not support gNMI
-natively (not shown in the figure).
+Adapter (not shown in the figure) has to be written for any services
+that do not support gNMI natively.
 
-6.3.5 Monitoring and Telemetry
+6.3.4 Monitoring and Telemetry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Collecting telemetry data for a running system is an essential
@@ -685,16 +664,15 @@ open source tool used for tracing.
 6.4 Connectivity API
 --------------------------
 
-.. Currently cut-and-pasted from OPs book. We probably want to
-   introduce more narrative/intuition, and reduce the use of bulleted
-   lists.
+.. It would be helpful to add a "usage example", maybe as a follow-on
+   Section 6.5.
 
 The visible aspect of a 5G service is the programmatic interface it
 provides to users, giving them the ability to control and customized
 the underlying connectivity service. This API is implemented by the
-Runtime Control subsystem outlined in the previous section, but what
-we really care about is the interface itself. Using Aether as a
-concrete example, this section describes such an API.
+The Service Orchestrator outlined in the previous section, but what we
+really care about is the interface itself. Using Aether as a concrete
+example, this section describes such an API.
 
 Like many cloud services, the API for 5G-as-a-Service is RESTful.
 This means it supports REST's GET, POST, PATCH, and DELETE operations
@@ -708,7 +686,7 @@ on a set of resources (objects):
 Each object, in turn, is typically defined by a data model.  In Aether
 this model is specified in YANG, but rather than dive into the
 particulars of YANG, this section describes the models informally by
-simply identifying and describing the relevant fields.
+describing the relevant fields.
 
 Every object contains an `id` field that is used to uniquely identify
 the object.  Some objects contain references to other objects. For
@@ -740,31 +718,32 @@ ownership and role-based access control purposes. `Enterprise`
 contains the following fields:
 
 * `connectivity-service`: A list of backend subsystems that implement
-  connectivity for this enterprise. Corresponds to an API endpoint to
-  the SD-Core, SD-Fabric, and SD-RAN.
+  connectivity for this enterprise. This list corresponds to the API
+  endpoint for the SD-Core, SD-Fabric, and SD-RAN components.
 
 `Enterprises` are further divided into `Sites`. A site is a
 point-of-presence for an `Enterprise` and may be either physical or
 logical (i.e. a single geographic location could contain several
-logical sites). `Site` contains the following fields:
+logical sites). The`Site` model, in turn, contains the following
+fields:
 
 * `enterprise`: A link to the `Enterprise` that owns this site.
 * `imsi-definition`: A description of how IMSIs are constructed for
-  this site. Contains the following sub-fields:
+  this site. It consists of the following sub-fields:
 
    * `mcc`: Mobile country code.
    * `mnc`: Mobile network code.
    * `enterprise`: A numeric enterprise id.
-   * `format`: A mask that allows the above three fields to be
-     embedded into an IMSI. For example `CCCNNNEEESSSSSS` will
-     construct IMSIs using a 3-digit MCC, 3-digit MNC, 3-digit ENT,
-     and a 6-digit subscriber.
+   * `format`: A mask that defines how the above three fields are
+     encoded in an IMSI. For example `CCCNNNEEESSSSSS` specifies an
+     IMSI with a 3-digit MCC, a 3-digit MNC, a 3-digit ENT, and a 6-digit
+     subscriber.
 
-The `imsi-definition` is specific to the mobile cellular network, and
-corresponds to the unique identifier burned into every SIM card.
+As a reminder, an IMSI is burned into every SIM card, and is used to
+identify and locate UEs throughout the global cellular network.
 
-6.4.2 Slice Abstraction
-~~~~~~~~~~~~~~~~~~~~~~~
+6.4.2 Slices
+~~~~~~~~~~~~
 
 Aether models 5G connectivity as a `Slice`, which represents an
 isolated communication channel (and associated QoS parameters) that
@@ -777,12 +756,14 @@ following fields:
 * `device-group`: A list of `Device-Group` objects that can participate in this `Slice`. Each
   entry in the list contains both the reference to the `Device-Group` as well as an `enable`
   field which may be used to temporarily remove access to the group.
+
 * `application`: A list of `Application` objects that are either allowed or denied for this
   `Slice`. Each entry in the list contains both a reference to the `Application` as well as an
   `allow` field which can be set to `true` to allow the application or `false` to deny it.
 * `template`: Reference to the `Template` that was used to initialize this `Slice`.
-* `upf`: Reference to the User Plane Function (`UPF`) that should be used to process packets
-  for this `Slice`. It's permitted for multiple `Slices` to share a single `UPF`.
+* `upf`: Reference to the User Plane Function (`UPF`) that should be
+  used to process packets for this `Slice`. Multiple `Slices` may share
+  a single `UPF`.
 * `enterprise`: Reference to the `Enterprise` that owns this `Slice`.
 * `site`: Reference to the `Site` where this `Slice` is deployed.
 * `sst`, `sd`: 3GPP-defined slice identifiers assigned by the operations team.
@@ -791,12 +772,13 @@ following fields:
   this slice.
   
 The rate-related parameters are initialized using a selected
-`template`, as described below. Also note that this example
-illustrates how modeling can be used to enforce invariants, in this
-case, that the `Site` of the `UPF` and `Device-Group` must match the
-`Site` of the `Slice`. That is, the physical devices that connect to a
-slice and the UPF that implements the core segment of the slice must
-be constrained to a single physical location.
+`template`, as described below, but these values may be changed at
+runtime. Also note that this example illustrates how modeling can be
+used to enforce invariants, in this case, that the `Site` of the `UPF`
+and `Device-Group` must match the `Site` of the `Slice`. That is, the
+physical devices that connect to a slice and the UPF that implements
+the core segment of the slice must be constrained to a single physical
+location.
 
 At one end of a Slice is a `Device-Group`, which identifies a set of
 devices that are allowed to use the Slice to connect to various
@@ -806,14 +788,14 @@ applications. The `Device-Group` model contains the following fields:
   fields:
 
    * `name`: Name of the range. Used as a key.
-   * `imsi-range-from`: First subscriber in the range.
-   * `imsi-range-to`: Last subscriber in the range. Can be omitted if
+   * `imsi-range-from`: First IMIS in the range.
+   * `imsi-range-to`: Last IMIS in the range. Can be omitted if
      the range only contains one IMSI.
 * `ip-domain`: Reference to an `IP-Domain` object that describes the
   IP and DNS settings for UEs within this group.
 * `site`: Reference to the site where this `Device-Group` may be
-  used. Indirectly identifies the `Enterprise` as `Site` contains a
-  reference to `Enterprise`.
+  used. (This field indirectly identifies the `Enterprise` since a
+  `Site` contains a reference to `Enterprise`.) 
 * `mbr.uplink`, `mbr.downlink`: Maximum bit-rate for the device group.
 * `traffic-class`: The traffic class to be used for devices in this group.  
 
@@ -830,21 +812,21 @@ specifies the endpoints for the program devices talk to. The
    * `port-end`: Ending port number.
    * `protocol`:  Protocol (`TCP|UDP`) for the endpoint.
    * `mbr.uplink`, `mbr.downlink`: Maximum bitrate for devices communicating with this
-     application:
+     application.
    * `traffice-class`: Traffic class for devices communicating with this application.
 
-* `enterprise`: Link to an `Enterprise` object that owns this application. May be left empty
-  to indicate a global application that may be used by multiple
-  enterprises.
+* `enterprise`: Link to an `Enterprise` object that owns this
+  application. May be left empty to indicate a global application that
+  may be used by multiple enterprises.
 
 Note that Aether's *Slice* abstraction is similar to 3GPP's
-specification of a "slice".  The `Slice` model definition includes a
+specification of a "slice", but the `Slice` model includes a
 combination of 3GPP-specified identifiers (e.g., `sst` and `sd`), and
 details about the underlying implementation (e.g., `upf` denotes the
 UPF implementation for the Core's user plane). The `Slice` model also
-includes fields related to RAN slicing, with the Runtime Control
-subsystem responsible for stitching together end-to-end connectivity
-across the RAN, Core, and Fabric.
+includes fields related to RAN slicing, with the Service Orchestrator
+responsible for stitching together end-to-end connectivity across the
+RAN, Core, and Fabric.
 
 6.4.3 QoS Profiles
 ~~~~~~~~~~~~~~~~~~
@@ -872,7 +854,7 @@ individual devices and applications connected to that slice can define
 their own, more-restrictive QoS parameters on an instance-by-instance
 basis.
   
-The `Traffic-Class` model, in turn, specifies the classes of traffic,
+Finally, the `Traffic-Class` model specifies the classes of traffic,
 and includes the following fields:
 
 * `arp`: Allocation and retention priority.
@@ -887,8 +869,9 @@ The above description references other models, which we do not fully
 described here. They include `AP-List`, which specifies a list of
 access points (radios); `IP-Domain`, which specifies IP and DNS
 settings; and `UPF`, which specifies the User Plane Function (the data
-plane element of the SD-Core) that should forward packets on behalf of
+plane element of the SD-Core) that is to forward packets on behalf of
 this particular instance of the connectivity service. The `UPF` model
 is necessary because Aether supports two different implementations:
 one runs as a microservice on a server and the other runs as a P4
-program loaded into the switching fabric, as described in Chapter 5.
+program loaded into the switching fabric. Both implementations are
+described in Chapter 5.
