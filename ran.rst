@@ -6,23 +6,18 @@ Chapter 4:  Radio Access Network
    expanded to include SD-RAN details (some of which may be
    extracted from the SDN book).
 
-The description of the RAN in Chapter 2 focused on functionality, but
-was mostly silent about the RAN’s internal structure. We now focus on
-some of the internal details, and in doing so, explain how the RAN is
-being transformed in 5G. This involves first describing the stages in
-the packet processing pipeline, and then showing how these stages are
-being disaggregated, distributed, and implemented.
-
-Our approach in this chapter is to incrementally build the RAN from
-the bottom up in the first three sections. Section 4.4 then summarizes
-the overall design, with a focus on how the resulting end-to-end
-system is architected to evolve.
+The high-level description of the RAN in Chapter 2 was mostly silent
+about the RAN’s internal structure. We now focus on those internal
+details, and in doing so, explain how the RAN is being transformed in
+5G. This involves first describing the stages in the packet processing
+pipeline, and then showing how these stages are being disaggregated,
+distributed, and implemented.
 
 4.1 Packet Processing Pipeline
 ------------------------------
 
 :numref:`Figure %s <fig-pipeline>` shows the packet processing stages
-implemented by the base station. These stages are specified by the
+historically implemented in the base stations, as specified by the
 3GPP standard. Note that the figure depicts the base station as a
 pipeline (running left-to-right for packets sent to the UE) but it is
 equally valid to view it as a protocol stack (as is typically done in
@@ -68,16 +63,18 @@ The key stages are as follows.
 The last two stages in :numref:`Figure %s <fig-pipeline>` (D/A
 conversion and the RF front-end) are beyond the scope of this book.
 
-While it is simplest to view the stages in :numref:`Figure %s <fig-pipeline>`
-as a pure left-to-right pipeline, in practice the Scheduler running in the
-MAC stage implements the “main loop” for outbound traffic, reading data
-from the upstream RLC and scheduling transmissions to the downstream
-PHY. In particular, since the Scheduler determines the number of bytes
-to transmit to a given UE during each time period (based on all the
-factors outlined in Chapter 3), it must request (get) a segment
-of that length from the upstream queue. In practice, the size of the
-segment that can be transmitted on behalf of a single UE during a single
-scheduling interval can range from a few bytes to an entire IP packet.
+While it is simplest to view the stages in :numref:`Figure %s
+<fig-pipeline>` as a pure left-to-right pipeline, the Scheduler
+described in Section 3.2 (denoted "S" in the figure) runs in the MAC
+stage, and implements the “main loop” for outbound traffic: It reads
+data from the upstream RLC and schedules transmissions to the
+downstream PHY.  Since the Scheduler determines the number of bytes to
+transmit to a given UE during each time period (based on all the
+factors outlined in Chapter 3), it must request (get) a segment of
+that length from the upstream queue. In practice, the size of the
+segment that can be transmitted on behalf of a single UE during a
+single scheduling interval can range from a few bytes to an entire IP
+packet.
 
 4.2 Split RAN
 -------------
@@ -152,7 +149,7 @@ and the PDCP—which lie on the RAN's control plane and user plane,
 respectively. This separation is consistent with the idea of CUPS
 introduced in Chapter 2, and plays an increasingly important role as
 we dig deeper into how the RAN is implemented. For now, we note that
-the two parts are typically referred to as the CU-C and CU-U,
+the two parts are sometimes referred to as the CU-C and CU-U,
 respectively.
 
 .. _reading_backhaul:
@@ -210,43 +207,38 @@ traffic), while the MAC (as part of the DU) maintains the
 instantaneous CQI values required by the real-time
 scheduler. Specifically, the R-NIB includes the following state.
 
--  NODES: Base Stations and Mobile Devices
+* Fixed Nodes (RU/DU/CU Attributes)
 
-   -  Base Station Attributes:
+  -  Identifiers
+  -  Version
+  -  Config Report
+  -  RRM config
+  -  PHY resource usage
 
-      -  Identifiers
-      -  Version
-      -  Config Report
-      -  RRM config
-      -  PHY resource usage
+* Mobile Nodes (UE Attributes)
 
-   -  Mobile Device Attributes:
+  - Devices
 
-      -  Identifiers
-      -  Capability
-      -  Measurement Config
-      -  State (Active/Idle)
+    -  Identifiers
+    -  Capability
+    -  Measurement Config
+    -  State (Active/Idle)
 
--  LINKS: *Actual* between two nodes and *Potential* between UEs and all
-   neighbor cells
+  - Links (*Actual*  and *Potential*)
 
-   -  Link Attributes:
+    -  Identifiers
+    -  Link Type
+    -  Config/Bearer Parameters
+    -  QCI Value
 
-      -  Identifiers
-      -  Link Type
-      -  Config/Bearer Parameters
-      -  QCI Value
+* Virtual Constructs (Slices Attributes)
 
--  SLICES: Virtualized RAN Construct
-
-   -  Slice Attributes:
-
-      -  Links
-      -  Bearers/Flows
-      -  Validity Period
-      -  Desired KPIs
-      -  MAC RRM Configuration
-      -  RRM Control Configuration
+  -  Links
+  -  Bearers/Flows
+  -  Validity Period
+  -  Desired KPIs
+  -  MAC RRM Configuration
+  -  RRM Control Configuration
 
 .. _fig-ran-controller:
 .. figure:: figures/sdn/Slide5.png 
@@ -254,53 +246,40 @@ scheduler. Specifically, the R-NIB includes the following state.
     :align: center
 	    
     Example set of control applications running on top of
-    Near-Real-Time RAN Controller.
+    Near-Real-Time RAN Controller, controlling a distributed set of
+    Split-RAN elements.
 
-The example Control Apps in :numref:`Figure %s <fig-ran-controller>`
-include a range of possibilities, but is not intended to be an
-exhaustive list.  The right-most example, RAN Slicing, is the most
-ambitious in that it introduces a new capability: Virtualizing the
-RAN. This is typically called *slicing*, as introduced in Section 3.3.
+The four example Control Apps (xApps) in :numref:`Figure %s
+<fig-ran-controller>` are not intended to be an exhaustive list, but
+they do represent the sweet spot for SDN, with its emphasis on central
+control over distributed forwarding. These functions—Link Aggregation
+Control, Interference Management, Load Balancing, and Handover
+Control—are currently implemented by individual base stations with
+only local visibility, but they have global consequences. The SDN
+approach is to collect the available input data centrally, make a
+globally optimal decision, and then push the respective control
+parameters back to the base stations for execution. Realizing this
+value in the RAN is still a work-in-progress, but products that take
+this approach are emerging. Evidence using an analogous approach to
+optimize wide-area networks over many years is compelling.
 
-.. Decide what xApps we want to describe, and match the figure
-   accordingly. The following is just lifted from the original.
-
-The next three (RF Configuration, Semi-Persistent Scheduling, Cipher Key
-Assignment) are examples of configuration-oriented applications. They
-provide a programmatic way to manage seldom-changing configuration
-state, thereby enabling zero-touch operations. Coming up with meaningful
-policies (perhaps driven by analytics) is likely to be an avenue for
-innovation in the future.
-
-The left-most four example Control Applications are the sweet spot for
-SDN, with its emphasis on central control over distributed
-forwarding. These functions—Link Aggregation Control, Interference
-Management, Load Balancing, and Handover Control—are currently
-implemented by individual base stations with only local visibility,
-but they have global consequences. The SDN approach is to collect the
-available input data centrally, make a globally optimal decision, and
-then push the respective control parameters back to the base stations
-for execution. Realizing this value in the RAN is still a
-work-in-progress, but products that take this approach are
-emerging. Evidence using an analogous approach to optimize
-wide-area networks over many years is compelling.
-
-While the above loosely categorizes the space of potential control
-apps as either config-oriented or control-oriented, another possible
-characterization is based on the current practice of controlling the
-mobile link at two different levels. At a fine-grain level, per-node
-and per-link control is conducted using Radio Resource Management
-(RRM) functions that are distributed across the individual base
-stations.  RRM functions include scheduling, handover control, link
-and carrier aggregation control, bearer control, and access control.
-At a coarse-grain level, regional mobile network optimization and
-configuration is conducted using *Self-Organizing Network (SON)*
-functions. These functions oversee neighbor lists, manage load
-balancing, optimize coverage and capacity, aim for network-wide
-interference mitigation, centrally configure parameters, and so on. As
-a consequence of these two levels of control, it is not uncommon to
-see reference to *RRM Applications* and *SON Applications*,
-respectively, in O-RAN documents for SD-RAN.
+Another useful characterization of xApps is based on the current
+practice of controlling the mobile link at two different levels. At a
+fine-grain level, per-node and per-link control is conducted using
+Radio Resource Management (RRM) functions that are distributed across
+the individual base stations.  RRM functions include scheduling,
+handover control, link and carrier aggregation control, bearer
+control, and access control.  At a coarse-grain level, regional mobile
+network optimization and configuration is conducted using
+*Self-Organizing Network (SON)* functions. These functions oversee
+neighbor lists, manage load balancing, optimize coverage and capacity,
+aim for network-wide interference mitigation, centrally configure
+parameters, and so on. As a consequence of these two levels of
+control, it is not uncommon to see reference to *RRM Applications* and
+*SON Applications*, respectively, in O-RAN documents for SD-RAN. (The
+Interference Managment xApp in :numref:`Figure %s
+<fig-ran-controller>` is an example of a SON Application, while the
+other three are RRM Applications.)
   
 .. _reading_b4:
 .. admonition:: Further Reading
@@ -319,12 +298,14 @@ respectively, in O-RAN documents for SD-RAN.
    was significant assumed knowledge of ONOS.
 
 Drilling down to the next level of detail, :numref:`Figure %s
-<fig-ric>` shows an exemplar implementation based on a retargeting of
-ONOS for the SD-RAN use case. Most notably, the ONOS-based RIC
-supports a set of RAN-specific north- and south-facing interfaces,
-similar in spirit (but not detail) to the interfaces described in
-earlier chapters (e.g., gNMI, gNOI, OpenFlow). We discuss these
-interfaces in the next subsection.
+<fig-ric>` shows an exemplar implementation of a RIC based on a
+retargeting of the Open Network OS (ONOS) for the SD-RAN use
+case. ONOS was originally designed to support traditional wireline
+network switches using a combination of OpenFlow, P4Runtime, gNMI, and
+gNOI interfaces. The ONOS-based RIC instead supports a set of
+RAN-specific north- and south-facing interfaces, but internally takes
+advantage of the same collection of subsystems (microservices) as
+in the wireline case.
 
 .. _fig-ric:
 .. figure:: figures/sdn/Slide6.png
@@ -358,27 +339,12 @@ interfaces in the next subsection.
    to this strategy.  Whether the operators will be successful in
    their ultimate goal is yet to be seen.
 
-As for the core, the ONOS-based RIC takes advantage of the Topology
-Service (among others) described in Chapter 6, but it also introduces
-two new services: *Control* and *Telemetry*. The Control Service,
-which builds on the Atomix key/value store, manages the control state
-for all the base stations and user devices, including which base
-station is serving each user device, as well as the set of “potential
-links” that could connect the device.  The Telemetry Service, which
-builds on a *Time Series Database (TSDB)*, tracks all the link quality
-information being reported back by the RAN elements. Various of the
-control applications then analyze this data to make informed decisions
-about how the RAN can best meet its data delivery objectives.
 
-The example Control Apps (xApps) in :numref:`Figure %s <fig-ric>`
-include a range of possibilities, but are not intended to be an
-exhaustive list.  These functions—Link Aggregation Control,
-Interference Management, Load Balancing, and Handover Control—are
-currently implemented by individual base stations with only local
-visibility, but they have global consequences. The SDN approach is to
-collect the available input data centrally, make a globally optimal
-decision, and then push the respective control parameters back to the
-base stations for execution.
+Specifically, the ONOS-based RIC includes a Topology Service to keep
+track of the fixed RAN infrastructure, a Control Service to track and
+control the mobile devices, and a Configuration Service to manage
+RAN-wide configuration state. All three of these services take
+advantage of a scalable Key/Value Store.
 
 Returning to the three interfaces called out in :numref:`Figure %s
 <fig-ric>`, each serves a purpose similar to the interfaces described
@@ -417,27 +383,6 @@ Service Model.
 Of course, it is the RAN element, through its published Service Model,
 that defines the relevant set of functions that can be activated, the
 variables that can be reported, and policies that can be set.
-
-Taken together, the A1 and E2 interfaces complete two of the three
-major control loops of the RAN: the outer (non-real-time) loop has the
-Non-RT RIC as its control point and the middle (near-real-time) loop
-has the Near-RT RIC as its control point. The third (inner) control
-loop, which is not shown in :numref:`Figure %s <fig-ric>`, runs inside
-the DU: It includes the real-time Scheduler embedded in the MAC stage
-of the RAN pipeline. The two outer control loops have rough time
-bounds of >>1 s and >10 ms, respectively, and the real-time control
-loop is assumed to be <1 ms.
-
-Focusing on the outer two control loops, the Near RT-RIC opens the
-possibility of introducing policy-based RAN control, whereby
-interrupts (exceptions) to operator-defined policies would signal the
-need for the outer loop to become involved. For example, one can
-imagine developing learning-based controls, where the inference
-engines for these controls would run as applications on the Near
-RT-RIC, and their non-real-time learning counterparts would run
-elsewhere. The Non-RT RIC would then interact with the Near-RT RIC to
-deliver relevant operator policies from the Management Plane to the
-Near RT-RIC over the A1 interface.
 
 Finally, the xApp SDK, which in principle is the RAN counterpart of
 Flow Objectives, is specific to the ONOS-based implementation. It is
