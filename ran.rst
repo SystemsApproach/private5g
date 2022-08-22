@@ -7,23 +7,36 @@ Chapter 4:  Radio Access Network
    extracted from the SDN book).
 
 The high-level description of the RAN in Chapter 2 was mostly silent
-about the RAN’s internal structure. We now focus on those internal
-details, and in doing so, explain how the RAN is being transformed in
-5G. This involves first describing the stages in the packet processing
+about the RAN’s internal structure. We now focus on those details, and
+in doing so, explain how the RAN is being transformed in 5G. This
+involves first describing the stages in the RAN's packet processing
 pipeline, and then showing how these stages are being disaggregated,
 distributed, and implemented.
+
+Note that the deconstruction of the RAN presented in this chapter
+represents a combination of standardized specifications and
+implementation strategies. The former continues to be under the
+purview of the 3GPP, but the latter is primarily influended by a
+second organization: the *Open-RAN Alliance (O-RAN)*. The O-RAN is led
+by network operators (AT&T and China Mobile are the founding members),
+with the goal of catalyzing a software-based implementation of the RAN
+that breaks the vendor lock-in that dominates today’s marketplace.
+Such business forces are certainly a factor in where 5G mobile
+networks are headed, but our goal in this chapter is to identify the
+technical design decisions involved in that evolution.
+
 
 4.1 Packet Processing Pipeline
 ------------------------------
 
 :numref:`Figure %s <fig-pipeline>` shows the packet processing stages
-historically implemented in the base stations, as specified by the
-3GPP standard. Note that the figure depicts the base station as a
-pipeline (running left-to-right for packets sent to the UE) but it is
-equally valid to view it as a protocol stack (as is typically done in
-official 3GPP documents). Also note that (for now) we are agnostic as
-to how these stages are implemented, but since we are ultimately
-heading towards a cloud-based implementation, you can think of each as
+historically bundled in base stations, as specified by the 3GPP
+standard. Note that the figure depicts the base station as a pipeline
+(running left-to-right for packets sent to the UE) but it is equally
+valid to view it as a protocol stack (as is typically done in official
+3GPP documents). Also note that (for now) we are agnostic as to how
+these stages are implemented, but since we are ultimately heading
+towards a cloud-based implementation, you can think of each as
 corresponding to a microservice (if that is helpful).
 
 .. _fig-pipeline:
@@ -87,8 +100,7 @@ historically been "no split," with the entire pipeline shown in
 forward, the 3GPP standard has been extended to allow for multiple
 split-points, with the partition shown in :numref:`Figure %s
 <fig-split-ran>` being actively pursued by the operator-led O-RAN
-(Open RAN) Alliance. It is the split we adopt throughout the rest of
-this book.
+Alliance. It is the split we adopt throughout the rest of this book.
 
 .. _fig-split-ran:
 .. figure:: figures/sdn/Slide2.png 
@@ -102,10 +114,10 @@ This results in a RAN-wide configuration similar to that shown in
 :numref:`Figure %s <fig-ran-hierarchy>`, where a single *Central Unit
 (CU)* running in the cloud serves multiple *Distributed Units (DUs)*,
 each of which in turn serves multiple *Radio Units (RUs)*. Critically,
-the RRC (centralized in the CU) is responsible for only near-real-time
-configuration and control decision making, while the Scheduler that is
-part of the MAC stage is responsible for all real-time scheduling
-decisions.
+the RRC (centralized in the CU) is responsible for making only
+near-real-time configuration and control decisions, while the
+Scheduler that is part of the MAC stage is responsible for all
+real-time scheduling decisions.
 
 .. _fig-ran-hierarchy:
 .. figure:: figures/sdn/Slide3.png 
@@ -125,10 +137,10 @@ geographic area (e.g., a mall, campus, or factory), then a single DU
 would likely service multiple RUs. The use of mmWave in 5G is likely
 to make this later configuration all the more common.
 
-Also note that the split-RAN changes the nature of the Backhaul Network,
-which in 4G connected the base stations (eNBs) back to the Mobile Core.
-With the split-RAN there are multiple connections, which are officially
-labeled as follows.
+Also note that the split-RAN changes the nature of the Backhaul
+Network, which originally connected the base stations back to the
+Mobile Core.  With the split-RAN there are multiple connections, which
+are officially labeled as follows.
 
 -  RU-DU connectivity is called the Fronthaul
 -  DU-CU connectivity is called the Midhaul
@@ -193,19 +205,27 @@ scheduler running in the DU.
     RRC disaggregated into a Mobile Core facing control plane
     component (a proxy) and a Near-Real-Time Controller.
 
-Although not shown in :numref:`Figure %s <fig-rrc-split>`, keep in mind
-(from :numref:`Figure %s <fig-split-ran>`) that all constituent parts of
-the RRC, plus the PDCP, form the CU.
+Although not shown in :numref:`Figure %s <fig-rrc-split>`, keep in
+mind (from :numref:`Figure %s <fig-split-ran>`) that the RRC the PDCP,
+form the CU. Trying to reconcile these two figures is a little bit
+messy, but to a first approximation, the PDCP corresponds to the CU-U
+and RRC-Proxy corresponds to the CU-C, with the RIC "lifted out" and
+responsible for overseeing both.  We postpone a diagram depicting this
+relationship until Section 4.5, where we summarize the end-to-end
+result. For now, the important takeaway is that the SDN-inspired
+refactoring of the RAN is free to both move functionality around and
+introduce new module boundaries, as long as the original 3GPP-defined
+interfaces are preserved.
 
 Completing the picture, :numref:`Figure %s <fig-ran-controller>` shows
 the Near-RT RIC implemented as an SDN Controller hosting a set of SDN
 control apps. The RIC maintains a *RAN Network Information Base
-(R-NIB)*–a common set of information that can be consumed by numerous
+(R-NIB)*—a common set of information that can be consumed by numerous
 control apps. The R-NIB includes time-averaged CQI values and other
 per-session state (e.g., GTP tunnel IDs, QCI values for the type of
 traffic), while the MAC (as part of the DU) maintains the
-instantaneous CQI values required by the real-time
-scheduler. Specifically, the R-NIB includes the following state.
+instantaneous CQI values required by the real-time scheduler.
+Specifically, the R-NIB includes the following state.
 
 * Fixed Nodes (RU/DU/CU Attributes)
 
@@ -245,9 +265,9 @@ scheduler. Specifically, the R-NIB includes the following state.
     :width: 400px
     :align: center
 	    
-    Example set of control applications running on top of
-    Near-Real-Time RAN Controller, controlling a distributed set of
-    Split-RAN elements.
+    Example set of control applications (xApps) running on top of
+    Near-Real-Time RAN Controller (RIC), controlling a distributed set
+    of Split-RAN elements (CU, DU, RU).
 
 The four example Control Apps (xApps) in :numref:`Figure %s
 <fig-ran-controller>` are not intended to be an exhaustive list, but
@@ -258,29 +278,10 @@ Control—are currently implemented by individual base stations with
 only local visibility, but they have global consequences. The SDN
 approach is to collect the available input data centrally, make a
 globally optimal decision, and then push the respective control
-parameters back to the base stations for execution. Realizing this
-value in the RAN is still a work-in-progress, but products that take
-this approach are emerging. Evidence using an analogous approach to
-optimize wide-area networks over many years is compelling.
+parameters back to the base stations for execution. Evidence using an
+analogous approach to optimize wide-area networks over many years (see
+for example B4) is compelling.
 
-Another useful characterization of xApps is based on the current
-practice of controlling the mobile link at two different levels. At a
-fine-grain level, per-node and per-link control is conducted using
-Radio Resource Management (RRM) functions that are distributed across
-the individual base stations.  RRM functions include scheduling,
-handover control, link and carrier aggregation control, bearer
-control, and access control.  At a coarse-grain level, regional mobile
-network optimization and configuration is conducted using
-*Self-Organizing Network (SON)* functions. These functions oversee
-neighbor lists, manage load balancing, optimize coverage and capacity,
-aim for network-wide interference mitigation, centrally configure
-parameters, and so on. As a consequence of these two levels of
-control, it is not uncommon to see reference to *RRM Applications* and
-*SON Applications*, respectively, in O-RAN documents for SD-RAN. (The
-Interference Managment xApp in :numref:`Figure %s
-<fig-ran-controller>` is an example of a SON Application, while the
-other three are RRM Applications.)
-  
 .. _reading_b4:
 .. admonition:: Further Reading
 
@@ -289,6 +290,32 @@ other three are RRM Applications.)
    Globally-Deployed Software Defined WAN
    <https://cseweb.ucsd.edu/~vahdat/papers/b4-sigcomm13.pdf>`__.  ACM
    SIGCOMM, August 2013.
+
+One way to characterize xApps is based on the current practice of
+controlling the mobile link at two different levels. At a fine-grain
+level, per-node and per-link control is conducted using Radio Resource
+Management (RRM) functions that are distributed across the individual
+base stations.  RRM functions include scheduling, handover control,
+link and carrier aggregation control, bearer control, and access
+control.  At a coarse-grain level, regional mobile network
+optimization and configuration is conducted using *Self-Organizing
+Network (SON)* functions. These functions oversee neighbor lists,
+manage load balancing, optimize coverage and capacity, aim for
+network-wide interference mitigation, centrally configure parameters,
+and so on. As a consequence of these two levels of control, it is not
+uncommon to see reference to *RRM Applications* and *SON
+Applications*, respectively, in O-RAN documents for SD-RAN. For
+example, the Interference Managment xApp in :numref:`Figure %s
+<fig-ran-controller>` is a SON Application, while the other three
+xApps are RRM Applications.
+
+Note that this characterization of xApps based on past (pre-SDN)
+implementations of the RAN is helpful as the industry transitions to
+SD-RAN, one could argue that is it will not be particularly useful in
+the long-term. SDN brings a transfomative change to the RAN, and we
+can expect new ways of controlling the RAN that do fit neatly into the
+RRC or SON buckets to emerge over time.
+
 
 4.4 Near Real-Time RIC
 ----------------------
@@ -315,65 +342,40 @@ in the wireline case.
     O-RAN compliant RAN Intelligent Controller (RIC) built by adapting
     and extending ONOS.
 
-.. sidebar:: O-RAN Alliance
-
-   3GPP (3rd Generation Partnership Project) has been responsible for
-   standardizing the mobile cellular network ever since 3G, and
-   O-RAN (Open-RAN Alliance) is a consortium of mobile network
-   operators defining an SDN-based implementation strategy for 5G.
-
-   If you are wondering why there is an O-RAN Alliance in the first
-   place, given that 3GPP is already the standardization body
-   responsible for interoperability across the global cellular
-   network, the answer is that over time 3GPP has become a
-   vendor-dominated organization. O-RAN was created more recently by
-   network operators (AT&T and China Mobile were the founding
-   members), with the goal of catalyzing a software-based
-   implementation that breaks the vendor lock-in dominating today’s
-   marketplace.
-
-   To be more specific, 3GPP defined the possible RAN split points,
-   and O-RAN is specifying (and codifying) the corresponding
-   interfaces.  The E2 interface in particular, which is architected
-   around the idea of supporting different Service Models, is central
-   to this strategy.  Whether the operators will be successful in
-   their ultimate goal is yet to be seen.
-
-
 Specifically, the ONOS-based RIC includes a Topology Service to keep
-track of the fixed RAN infrastructure, a Control Service to track and
+track of the fixed RAN infrastructure, a Device Service to track and
 control the mobile devices, and a Configuration Service to manage
-RAN-wide configuration state. All three of these services take
-advantage of a scalable Key/Value Store.
+RAN-wide configuration state. All three of these services are
+implemented as Kubernetes-based microservices, and take advantage of a
+scalable Key/Value Store.
 
 Returning to the three interfaces called out in :numref:`Figure %s
-<fig-ric>`, each serves a purpose similar to the interfaces described
-in earlier chapters. The first two, **A1** and **E2**, are well on
-their way to being standardized by O-RAN. The third, denoted **xApp
-SDK** in :numref:`Figure %s <fig-ric>`, is specific to the ONOS-based
-implementation (and similar in spirit to Flow Objectives), although
-the O-RAN has a long-term goal of converging on a unified API (and
-corresponding SDK).
+<fig-ric>`, the first two (**A1** and **E2**) are based on
+pre-existing 3GPP standards, with the O-RAN well on its way to
+defining standardized extensions. The third, denoted **xApp SDK** in
+:numref:`Figure %s <fig-ric>`, is specific to the ONOS-based
+implementation. The O-RAN is using it to inform a convergence on a
+unified API (and corresponding SDK) for building RIC-agnostic xApps.
 
-The A1 interface provides a means for the mobile operator's
-management plane—typically called the *OSS/BSS (Operations Support
-System / Business Support System)* in the Telco world—to configure the
-RAN.  We have not discussed the Telco OSS/BSS up to this point, but it is
-safe to assume such a component sits at the top of any Telco software
+The A1 interface provides a means for the mobile operator's management
+plane—typically called the *OSS/BSS (Operations Support System /
+Business Support System)* in the Telco world—to configure the RAN.  We
+have not discussed the Telco OSS/BSS up to this point, but it is safe
+to assume such a component sits at the top of any Telco software
 stack. It is the source of all configuration settings and business
 logic needed to operate a network. You can think of it as the RAN
-counterpart to gNMI/gNOI.
+counterpart to gNMI/gNOI, a pair of configuration APIs commonly used
+to configure cloud devices.
 
 The Near-RT RIC uses the E2 interface to control the underlying RAN
-elements, including the CU, DUs, and RUs. You can think of it as the
-RAN counterpart to OpenFlow. A requirement of the E2 interface is that
-it be able to connect the Near-RT RIC to different types of RAN
-elements from different vendors. This range is reflected in the API,
-which revolves around a *Service Model* abstraction. The idea is that
-each RAN element advertises a Service Model, which effectively defines
-the set of RAN Functions the element is able to support. The RIC then
-issues a combination of the following four operations against this
-Service Model.
+elements, including the CU, DUs, and RUs. A requirement of the E2
+interface is that it be able to connect the Near-RT RIC to different
+types of RAN elements from different vendors. This range is reflected
+in the API, which revolves around a *Service Model* abstraction. The
+idea is that each RAN element advertises a Service Model, which
+effectively defines the set of RAN Functions the element is able to
+support. The RIC then issues a combination of the following four
+operations against this Service Model.
 
 * **Report:** RIC asks the element to report a function-specific value setting.
 * **Insert:** RIC instructs the element to activate a user plane function.
@@ -384,13 +386,12 @@ Of course, it is the RAN element, through its published Service Model,
 that defines the relevant set of functions that can be activated, the
 variables that can be reported, and policies that can be set.
 
-Finally, the xApp SDK, which in principle is the RAN counterpart of
-Flow Objectives, is specific to the ONOS-based implementation. It is
-currently little more than a "pass through" of the E2 interface, which
-implies the xApps must be aware of the available Service Models. This
-is problematic in that it implicitly couples applications with
-devices, but defining a device-agnostic version is still a
-work-in-progress.   
+Finally, the xApp SDK, which is specific to the ONOS-based
+implementation, is currently little more than a "pass through" of the
+E2 interface, which implies the xApps must be aware of the available
+Service Models. This is problematic in that it implicitly couples
+applications with devices, but defining a device-agnostic version is
+still a work-in-progress.
 
 4.5 Control Loops
 -----------------
@@ -414,8 +415,7 @@ components shown in :numref:`Figure %s <fig-disagg1>` illustrates
 horizontal disaggregation of the RAN from a single base station into
 three distinct components: CU, DU and RU. The O-RAN Alliance has
 selected specific disaggregation options from 3GPP and is developing
-open interfaces between these components.  3GPP defines the **N2** and
-**N3** interfaces between the RAN and the Mobile Core.
+open interfaces between these components.
 
 .. _fig-disagg1:
 .. figure:: figures/sdn/Slide7.png 
@@ -430,9 +430,7 @@ and CU-C shown in :numref:`Figure %s <fig-disagg2>`. The control
 plane in question is the 3GPP control plane, where the CU-U realizes a
 pipeline for user traffic and the CU-C focuses on control message
 signaling between Mobile Core and the disaggregated RAN components (as
-well as to the UE). The O-RAN specified interfaces between these
-disaggregated components are also shown in :numref:`Figure %s
-<fig-disagg2>`.
+well as to the UE).
 
 .. _fig-disagg2:
 .. figure:: figures/sdn/Slide8.png 
@@ -489,14 +487,4 @@ elsewhere. The Non-RT RIC would then interact with the Near-RT RIC to
 deliver relevant operator policies from the Management Plane to the
 Near RT-RIC over the A1 interface.
 
-Finally, you may be wondering why there is an O-RAN Alliance in the
-first place, given that 3GPP is already the standardization body
-responsible for interoperability across the global cellular network.
-The answer is that over time 3GPP has become a vendor-dominated
-organization, whereas O-RAN was created more recently by network
-operators. (AT&T and China Mobile were the founding members.) O-RAN’s
-goal is to catalyze a software-based implementation that breaks the
-vendor lock-in that dominates today’s marketplace. The E2 interface
-in particular, which is architected around the idea of supporting
-different Service Models, is central to this strategy. Whether the
-operators will be successful in their ultimate goal is yet to be seen.
+
