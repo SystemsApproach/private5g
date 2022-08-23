@@ -407,26 +407,19 @@ SDK currently makes the gRPC-based API available to xApps.
 4.5 Control Loops
 -----------------
 
-.. The way to tie everything together is to show the full
-   top-to-bottom picture with the three control loops.
-
-   What's RRM?
-
 We conclude this description of RAN internals by re-visiting the
 sequence of steps involved in disaggregation, which as the previous
 three sections reveal, is being pursued in multiple tiers. In doing
 so, we tie up several loose ends, and focus attention on the resulting
 three control loops.
 
-In the first tier of disaggregation, 3GPP standards provide multiple
-options of how horizontal RAN splits can take place. Horizontal
-disaggregation basically splits the RAN pipeline shown in
-:numref:`Figure %s <fig-pipeline>` into the independently operating
-components shown in :numref:`Figure %s <fig-disagg1>` illustrates
-horizontal disaggregation of the RAN from a single base station into
-three distinct components: CU, DU and RU. The O-RAN Alliance has
-selected specific disaggregation options from 3GPP and is developing
-open interfaces between these components.
+In the first tier of disaggregation, 3GPP defines multiple options for
+how the RAN can be split and distributed, with the pipeline shown in
+:numref:`Figure %s <fig-pipeline>` disaggregated into the
+independently operating CU, DU, and RU components shown in
+:numref:`Figure %s <fig-disagg1>`. The O-RAN Alliance has selected
+specific disaggregation options from 3GPP and is developing open
+interfaces between these components.
 
 .. _fig-disagg1:
 .. figure:: figures/sdn/Slide7.png 
@@ -435,13 +428,13 @@ open interfaces between these components.
        
     First tier of RAN disaggregation: Split RAN.
 
-The second tier of disaggregation is vertical, focusing on
-control/user plane separation (CUPS) of the CU, and resulting in CU-U
-and CU-C shown in :numref:`Figure %s <fig-disagg2>`. The control
-plane in question is the 3GPP control plane, where the CU-U realizes a
-pipeline for user traffic and the CU-C focuses on control message
-signaling between Mobile Core and the disaggregated RAN components (as
-well as to the UE).
+The second tier of disaggregation focuses on the control/user plane
+separation (CUPS) of the CU, resulting in the CU-U and CU-C shown in
+:numref:`Figure %s <fig-disagg2>`. The control plane in question is
+the 3GPP control plane, where the CU-U realizes a pipeline for user
+traffic and the CU-C focuses on control message signaling between
+Mobile Core and the disaggregated RAN components (as well as to the
+UE).
 
 .. _fig-disagg2:
 .. figure:: figures/sdn/Slide8.png 
@@ -450,20 +443,22 @@ well as to the UE).
        
     Second tier of RAN disaggregation: CUPS. 
 
-The third tier follows the SDN paradigm by carrying vertical
-disaggregation one step further. It does this by separating most of
-RAN control (RRC functions) from the disaggregated RAN components, and
+The third tier follows the SDN paradigm by separating most of RAN
+control (RRC functions) from the disaggregated RAN components, and
 logically centralizing them as applications running on an SDN
 Controller, which corresponds to the Near-RT RIC shown previously in
 :numref:`Figures %s <fig-rrc-split>` and :numref:`%s
-<fig-ran-controller>`. This SDN-based vertical disaggregation is
-repeated here in :numref:`Figure %s <fig-ctl_loops>`.  The figure also
-shows the additional O-RAN prescribed interfaces, which we already
-discussed in the previous section.
+<fig-ran-controller>`. This SDN-based disaggregation is repeated here
+in :numref:`Figure %s <fig-ctl_loops>`.  The figure also shows the
+O-RAN prescribed interfaces A1 and E2 that we already discussed in the
+previous section. (Note that all the edges in :numref:`Figures %s
+<fig-disagg1>` and :numref:`%s <fig-disagg2>` also correspond to
+3GPP-defined interfaces, but we have not identified them by name
+because their details are outside the scope of this discussion.)
     
 .. _fig-ctl_loops:
 .. figure:: figures/sdn/Slide9.png 
-    :width: 700px 
+    :width: 800px 
     :align: center
        
     Third tier of RAN disaggregation: SDN.
@@ -478,14 +473,16 @@ stage of the RAN pipeline. The two outer control loops have rough time
 bounds of >>1sec and >10ms, respectively, and as we saw in Chapter 2,
 the real-time control loop is assumed to be <1ms.
  
-This raises the question of how specific functionality is distributed  
-between the Non-RT RIC, Near-RT RIC, and DU. Starting with the second  
-pair (i.e., the two inner loops), it is important to recognize that  
-not all RRM functions can be centralized. After horizontal and  
-vertical CUPS disaggregation, the RRM functions are split between CU-C  
-and DU. For this reason, the SDN-based vertical disaggregation focuses  
-on centralizing CU-C-side RRM functions in the Near-RT RIC. In
-addition to RRM control, this includes all the SON applications.
+This raises the question of how specific functionality is distributed
+between the Non-RT RIC, Near-RT RIC, and DU. Starting with the second
+pair (i.e., the two inner loops), it is the case that not all RRC
+functions can be centralized; some need to be implemented in the
+DU. The SDN-based disaggregation then focuses on those that can be
+centralizing, with the Near-RT RIC supporting the RRC applications and
+the SON applications mentioned in Section 4.3.
+
+.. What's an example of an RRC function that needs to be distributed
+   to the DU?
 
 Turning to the outer two control loops, the Near RT-RIC opens the
 possibility of introducing policy-based RAN control, whereby
