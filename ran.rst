@@ -207,9 +207,9 @@ scheduler running in the DU.
 
 Although not shown in :numref:`Figure %s <fig-rrc-split>`, keep in
 mind (from :numref:`Figure %s <fig-split-ran>`) that the RRC the PDCP,
-form the CU. Trying to reconcile these two figures is a little bit
-messy, but to a first approximation, the PDCP corresponds to the CU-U
-and RRC-Proxy corresponds to the CU-C, with the RIC "lifted out" and
+form the CU. Reconciling these two figures is a little bit messy, but
+to a first approximation, the PDCP corresponds to the CU-U and
+RRC-Proxy corresponds to the CU-C, with the RIC "lifted out" and
 responsible for overseeing both.  We postpone a diagram depicting this
 relationship until Section 4.5, where we summarize the end-to-end
 result. For now, the important takeaway is that the SDN-inspired
@@ -224,8 +224,8 @@ control apps. The RIC maintains a *RAN Network Information Base
 control apps. The R-NIB includes time-averaged CQI values and other
 per-session state (e.g., GTP tunnel IDs, QCI values for the type of
 traffic), while the MAC (as part of the DU) maintains the
-instantaneous CQI values required by the real-time scheduler.
-Specifically, the R-NIB includes the following state.
+instantaneous CQI values required by the real-time scheduler.  More
+generally, the R-NIB includes the following state:
 
 * Fixed Nodes (RU/DU/CU Attributes)
 
@@ -251,7 +251,7 @@ Specifically, the R-NIB includes the following state.
     -  Config/Bearer Parameters
     -  QCI Value
 
-* Virtual Constructs (Slices Attributes)
+* Virtual Constructs (Slice Attributes)
 
   -  Links
   -  Bearers/Flows
@@ -270,8 +270,8 @@ Specifically, the R-NIB includes the following state.
     of Split-RAN elements (CU, DU, RU).
 
 The four example Control Apps (xApps) in :numref:`Figure %s
-<fig-ran-controller>` are not intended to be an exhaustive list, but
-they do represent the sweet spot for SDN, with its emphasis on central
+<fig-ran-controller>` does not constitute an exhaustive list, but they
+do represent the sweet spot for SDN, with its emphasis on central
 control over distributed forwarding. These functions—Link Aggregation
 Control, Interference Management, Load Balancing, and Handover
 Control—are currently implemented by individual base stations with
@@ -309,12 +309,12 @@ example, the Interference Managment xApp in :numref:`Figure %s
 <fig-ran-controller>` is a SON Application, while the other three
 xApps are RRM Applications.
 
-Note that this characterization of xApps based on past (pre-SDN)
-implementations of the RAN is helpful as the industry transitions to
-SD-RAN, one could argue that is it will not be particularly useful in
-the long-term. SDN brings a transfomative change to the RAN, and we
-can expect new ways of controlling the RAN that do fit neatly into the
-RRC or SON buckets to emerge over time.
+Keep in mind, however, that this characterization of xApps is based on
+past (pre-SDN) implementations of the RAN. This is helpful as the
+industry transitions to SD-RAN, but the situation is likely to change.
+SDN is transfoming to the RAN, so new ways of controlling the
+RAN—resulting in applications that do fit neatly into the RRC or SON
+buckets—can be expected to emerge over time.
 
 
 4.4 Near Real-Time RIC
@@ -329,10 +329,10 @@ Drilling down to the next level of detail, :numref:`Figure %s
 retargeting of the Open Network OS (ONOS) for the SD-RAN use
 case. ONOS was originally designed to support traditional wireline
 network switches using a combination of OpenFlow, P4Runtime, gNMI, and
-gNOI interfaces. The ONOS-based RIC instead supports a set of
-RAN-specific north- and south-facing interfaces, but internally takes
-advantage of the same collection of subsystems (microservices) as
-in the wireline case.
+gNOI interfaces. For the SD-RAN use case, the ONOS-based RIC instead
+supports a set of RAN-specific north- and south-facing interfaces, but
+internally takes advantage of the same collection of subsystems
+(microservices) as in the wireline case.
 
 .. _fig-ric:
 .. figure:: figures/sdn/Slide6.png
@@ -344,16 +344,14 @@ in the wireline case.
 
 Specifically, the ONOS-based RIC includes a Topology Service to keep
 track of the fixed RAN infrastructure, a Device Service to track and
-control the mobile devices, and a Configuration Service to manage
-RAN-wide configuration state. All three of these services are
-implemented as Kubernetes-based microservices, and take advantage of a
-scalable Key/Value Store.
+control the UEs, and a Configuration Service to manage RAN-wide
+configuration state. All three of these services are implemented as
+Kubernetes-based microservices, and take advantage of a scalable
+Key/Value Store.
 
-Returning to the three interfaces called out in :numref:`Figure %s
-<fig-ric>`, the first two (**A1** and **E2**) are based on
-pre-existing 3GPP standards, with the O-RAN well on its way to
-defining standardized extensions. The third, denoted **xApp SDK** in
-:numref:`Figure %s <fig-ric>`, is specific to the ONOS-based
+Of the three interfaces called out in :numref:`Figure %s <fig-ric>`,
+the **A1** and **E2** interface are based on pre-existing 3GPP
+standards. The third, **xApp SDK**, is specific to the ONOS-based
 implementation. The O-RAN is using it to inform a convergence on a
 unified API (and corresponding SDK) for building RIC-agnostic xApps.
 
@@ -384,14 +382,27 @@ operations against this Service Model.
 
 Of course, it is the RAN element, through its published Service Model,
 that defines the relevant set of functions that can be activated, the
-variables that can be reported, and policies that can be set.
+variables that can be reported, and policies that can be set. While we
+can expect vendor-specific Service Models to be put forward, the O-RAN
+community is working on two vendor-agnostic Service Models. The first,
+called *Key Performance Measurement* (abbreviated *E2SM-KPM*),
+specifies the metrics that can be retrieved from RAN elements; the
+expectation is that xApps use E2SM-KPM to fulfill the requirements for
+Traffic Steering and QoS use cases. The second, called *RAN Control*
+(abbreviated *E2SM-RC*), specifies parameters that can be set to
+control RAN elements; the expectation is that xApps use E2SM-RC to do
+radio bear control, radio access control, and connected mode mobility.
 
 Finally, the xApp SDK, which is specific to the ONOS-based
 implementation, is currently little more than a "pass through" of the
-E2 interface, which implies the xApps must be aware of the available
-Service Models. This is problematic in that it implicitly couples
-applications with devices, but defining a device-agnostic version is
-still a work-in-progress.
+E2 interface. This implies the xApps are expected to be aware of the
+available Service Models. One of the challenges the SDK has to deal
+with is how data passed to/from the RAN elements is encoded. For
+historical reasons, the E2 interface uses ASN.1 formatting, whereas
+the ONOS-RIC internally uses gRPC and Protocol Buffers to commnicate
+between the set of microservices. The south-bound E2 interface in
+:numref:`Figure %s <fig-ric>` translates between the two formats. The
+SDK currently makes the gRPC-based API available to xApps.
 
 4.5 Control Loops
 -----------------
