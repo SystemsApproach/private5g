@@ -448,13 +448,13 @@ control (RRC functions) from the disaggregated RAN components, and
 logically centralizing them as applications running on an SDN
 Controller, which corresponds to the Near-RT RIC shown previously in
 :numref:`Figures %s <fig-rrc-split>` and :numref:`%s
-<fig-ran-controller>`. This SDN-based disaggregation is repeated here
-in :numref:`Figure %s <fig-ctl_loops>`.  The figure also shows the
-O-RAN prescribed interfaces A1 and E2 that we already discussed in the
-previous section. (Note that all the edges in :numref:`Figures %s
-<fig-disagg1>` and :numref:`%s <fig-disagg2>` also correspond to
-3GPP-defined interfaces, but we have not identified them by name
-because their details are outside the scope of this discussion.)
+<fig-ran-controller>`. This SDN-based disaggregation is repeated in
+:numref:`Figure %s <fig-ctl_loops>`, which also shows the O-RAN
+prescribed interfaces A1 and E2 introduced in the previous section.
+(Note that all the edges in :numref:`Figures %s <fig-disagg1>` and
+:numref:`%s <fig-disagg2>` correspond to 3GPP-defined interfaces, but
+we have not identified them by name because their details are outside
+the scope of this discussion.)
     
 .. _fig-ctl_loops:
 .. figure:: figures/sdn/Slide9.png 
@@ -466,9 +466,9 @@ because their details are outside the scope of this discussion.)
 Taken together, the A1 and E2 interfaces complete two of the three
 major control loops of the RAN: the outer (non-real-time) loop has the
 Non-RT RIC as its control point and the middle (near-real-time) loop
-has the Near-RT RIC as its control point. The third (inner) control
-loop, which is shown in :numref:`Figure %s <fig-ctl_loops>` runs
-inside the DU: It includes the real-time Scheduler embedded in the MAC
+has the Near-RT RIC as its control point. The third (innermost)
+control loop—shown in :numref:`Figure %s <fig-ctl_loops>` running
+inside the DU—includes the real-time Scheduler embedded in the MAC
 stage of the RAN pipeline. The two outer control loops have rough time
 bounds of >>1sec and >10ms, respectively, and as we saw in Chapter 2,
 the real-time control loop is assumed to be <1ms.
