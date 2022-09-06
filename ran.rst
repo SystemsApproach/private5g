@@ -361,7 +361,7 @@ Business Support System)* in the Telco world—to configure the RAN.  We
 have not discussed the Telco OSS/BSS up to this point, but it is safe
 to assume such a component sits at the top of any Telco software
 stack. It is the source of all configuration settings and business
-logic needed to operate a network. You can think of it as the RAN
+logic needed to operate a network. You can think of A1 as the RAN's
 counterpart to gNMI/gNOI, a pair of configuration APIs commonly used
 to configure cloud devices.
 
@@ -478,7 +478,7 @@ between the Non-RT RIC, Near-RT RIC, and DU. Starting with the second
 pair (i.e., the two inner loops), it is the case that not all RRC
 functions can be centralized; some need to be implemented in the
 DU. The SDN-based disaggregation then focuses on those that can be
-centralizing, with the Near-RT RIC supporting the RRC applications and
+centralized, with the Near-RT RIC supporting the RRC applications and
 the SON applications mentioned in Section 4.3.
 
 .. What's an example of an RRC function that needs to be distributed

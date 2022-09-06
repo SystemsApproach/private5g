@@ -269,6 +269,32 @@ emulated cluster implemented by a system like KIND (Kubernetes in
 Docker), making it possible for developers to run these components on
 their laptop.
 
+.. sidebar:: Near-Edge vs Far-Edge
+
+   *We use enterprises as the exemplar edge deployment in this book,
+   without prescribing a role for traditional MNOs. When traditional
+   MNOs are involved, it is not uncommon for them to make a
+   distinction between the "near-edge" and the "far-edge", where the
+   far-edge corresponds to the enterprise and the near-edge
+   corresponds to their traditional aggregation points (or Central
+   Offices), as described in Section 1.2. In such a scenario, it is
+   typically the case that the RU and DU are located at the far-edge
+   (on-prem), while the CU—along with both the Control and User Planes
+   of the Mobile Core—run in the near-edge. Such a configuration does
+   not support local breakout, since all traffic must travel to the
+   near-edge before being routed to the edge app (which might be
+   running back in the enterprise).*
+
+   *In contrast, the deployment described in this Chapter has
+   everything except the Mobile Core Control Plane (CP) running
+   on-prem. Moreover, because there is no traditional MNO involved,
+   there is no near-edge to speak of, with the Core CP instead runing
+   in a central cloud. For example, this section describes a
+   deployment with SD-Core (CP) running in the Google Cloud. It is the
+   case, however, that the SD-Core (CP) can optionally run on-prem if
+   a fully local configuration is preferred. Where each component runs
+   is a configuration option.*
+   
 Note that variations on this deployment configuration are possible.
 For example, both AMP and the SD-Core CP can be co-located on the edge
 cluster, making it possible for a complete Aether deployment to be
