@@ -433,7 +433,7 @@ calls rather than a hands-on technician.
 
 Because we want to automate the sequence of calls needed to activate
 virtual infrastructure, we adopt an approach known as
-*Infrastructure-as-Code*. This is where Terrafrom comes into play.
+*Infrastructure-as-Code*. This is where Terraform comes into play.
 The general idea is to document, in a declarative format that can be
 "executed", exactly what our infrastructure is to look like; how it is
 to be configured.
@@ -554,7 +554,7 @@ the pipeline.
 6.3.3 Service Orchestration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Servcie Orchestration is responsible for managing the Kubernetes
+Service Orchestration is responsible for managing the Kubernetes
 workloads once they are up-and-running, which in our case means
 providing a programmatic API that can be used by various stakeholders
 to manage the 5G connectivity service.  As shown in :numref:`Figure %s
