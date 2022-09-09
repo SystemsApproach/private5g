@@ -1,10 +1,12 @@
 Chapter 4:  Radio Access Network
 ================================
 
-.. Focuses on the protocol stack that historically runs in the eNodeB,
-   but is being disaggregated. Borrows from current Chapter 4,
-   expanded to include SD-RAN details (some of which may be
-   extracted from the SDN book).
+.. This chapter would benefit from one or to "case studies" of xApps:
+   detail the info they collect, decisions they make, and settings
+   they push. Perhaps using this to contrast different "decision
+   points" would help explain the value of the three control loops
+   called out in the last section (which would be a good place to put
+   these examples).
 
 The high-level description of the RAN in Chapter 2 was mostly silent
 about the RAN’s internal structure. We now focus on those details, and
