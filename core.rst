@@ -25,9 +25,80 @@ connectivity, the 5G Mobile Core can evolve to also support, for
 example, massive IoT, which has a fundamentally different latency 
 requirement and usage pattern (i.e., many more devices connecting 
 intermittently). This stresses—if not breaks—a one-size-fits-all 
-approach to session management. 
+approach to session management.    
 
-5.1 Functional Components
+5.1  About Identifiers
+----------------------
+
+There are two equally valid views of the Mobile Core. The
+Internet-centric view is that the Mobile Core is essentially a router
+that connects a physical RAN (one of many possible access network
+technologies, no different than WiFi) to the global Internet. In this
+view, IP addresses serve as the unique global identifier that makes it
+possible for any RAN-connected device to connect to any other Internet
+addressable device or service. The 3GPP-centric view is that a
+distributed set of Mobile Cores (interconnected by one or more
+backbone technologies, of which the Internet is just one example)
+cooperate to turn a set of physical RANs into one logically global
+RAN. In this perspective, the IMIS burned into device SIM card serve
+as the global identifier that makes it possible for any two mobile
+devices to call each other.
+
+Both of these perspectives are true, and it's important to acknowledge
+them if you want to understand why the Mobile Core looks the way it
+does, but with broadband communication using Internet protocols like
+HTTP and TCP to access cloud services being the dominant use case,
+this section takes a decidedly Internet-centric perspective of the
+Mobile Core.
+
+Having said that, we start with the 64-bit IMSI (*International Mobile
+Subscriber Identity*), which you can think of playing the same role as
+a 48-bit ethernet address: it uniquely identifies every UE connected
+to the RAN. Like ethernet addresses, which partition the address space
+to ensure assignments are unique, the IMSI also has an internal
+structure, which we specify as follows:
+
+* `MCC`: Mobile Country Code (3-digits).
+* `MNC`: Mobile Network Code (3-digits).
+* `ENT`: Enterprise ID (3-digits).
+* `SUB`: Subscriber ID (6-digits).
+* `Format`: A mask that allows the above four fields to be embedded
+  into an IMSI. For example `CCCNNNEEESSSSSS` is the format we are
+  using.
+
+Note that although 64-bits long, IMSIs are typically represented as a
+15-digit number, where the MCC and MNC are globally asigned to ensure
+unquiness. Because we are interested in enterprise deployments, we
+have split the last 9 digits into Enterprise and Subscriber subfields;
+other operators would likely define other internal structure.
+
+Without going into all the details—because it is only relevant when
+one UE wants to make a voice call or send a text message to another
+UE—the collection of Mobile Core instantiations worldwide cooperate to:
+
+* Map international phone numbers onto the corresponding IMSI (and
+  vice versa).
+* Locate the Mobile Core currently serving a given IMSI (for the
+  purpose of connecting to that UE).
+* Locate the subscriber profile assocated with that IMSI (for the
+  purpose of accounting and billing).
+
+You can imagine a distributed implementation in which each Operator in
+each Country maintains a database with the following 4-tuple
+
+.. math::
+
+   \mathsf{(Phone Number, IMIS, Subscriber Profile, Current Mobile Core)}
+
+such that each database is able to do lookups on the first two keys.
+
+Figure out how to tie this up loose ends...and factor in IP.
+
+
+  
+
+
+5.2 Functional Components
 -------------------------
 
 A terminology and 3GPP-heavy intro to the core (for completenes), but
@@ -36,19 +107,6 @@ functional components; the fundamental "problems" that the core must
 solve. These include session management, mobility management, and
 subscriber authentication/management (which just happen to be names
 of the main three functional elements in the 5G schematic).
-
-Also need to talk about HSS and IMSI assignment/format (from OPs book):
-
-* `imsi-definition`: A description of how IMSIs are constructed for
-  this site. Contains the following sub-fields:
-
-   * `mcc`: Mobile country code.
-   * `mnc`: Mobile network code.
-   * `enterprise`: A numeric enterprise id.
-   * `format`: A mask that allows the above three fields to be
-     embedded into an IMSI. For example `CCCNNNEEESSSSSS` will
-     construct IMSIs using a 3-digit MCC, 3-digit MNC, 3-digit ENT,
-     and a 6-digit subscriber.
 
 .. For now I cut-and-pasted both 4G and 5G (and joint deployment) but
    we probably want to cut back to just 5G (and deployment may reduce
@@ -257,21 +315,21 @@ the process of incrementally evolving its 4G code base into its
     <https://www.gsma.com/futurenetworks/wp-content/uploads/2018/04/Road-to-5G-Introduction-and-Migration_FINAL.pdf>`__.
     GSMA Report, April 2018.
 
-5.2 Control Plane
+5.3 Control Plane
 ----------------------
 
 Drill down on how one might implement the Mobile Core CP. Probably
 borrows heavily from Magma.
 
-5.3 User Plane
+5.4 User Plane
 --------------------
 
 Drill down on implemenatation options for the UPF.
 
-5.3.1 Microservice Implementation
+5.4.1 Microservice Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-5.3.2 P4 Implementation
+5.4.2 P4 Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Borrow heavily from MacDavid's paper.
