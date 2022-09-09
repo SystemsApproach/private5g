@@ -16,10 +16,10 @@ distributed, and implemented.
 Note that the deconstruction of the RAN presented in this chapter
 represents a combination of standardized specifications and
 implementation strategies. The former continues to be under the
-purview of the 3GPP, but the latter is primarily influenced by a
+purview of the 3GPP, but the latter are primarily influenced by a
 second organization: the *Open-RAN Alliance (O-RAN)*. The O-RAN is led
 by network operators (AT&T and China Mobile are the founding members),
-with the goal of catalyzing a software-based implementation of the RAN
+with the goal of developing a software-based implementation of the RAN
 that breaks the vendor lock-in that dominates today’s marketplace.
 Such business forces are certainly a factor in where 5G mobile
 networks are headed, but our goal in this chapter is to identify the
@@ -90,14 +90,14 @@ single scheduling interval can range from a few bytes to an entire IP
 packet.
 
 Also note that a combination of the RRC and PDCP are responsible for
-the observation that a *"base station can be viewed as a specialized
-forwarder"* made in Section 2.3. The control plane logic that decides
-whether this base station should continue processing a packet or
-forward it to another base station runs in the RRC, and the
+the observation made in Section 2.3: that a *"base station can be
+viewed as a specialized forwarder"*. The control plane logic that
+decides whether this base station should continue processing a packet
+or forward it to another base station runs in the RRC, and the
 corresponding data plane mechanism that carries out the forwarding
 decision is implemented in the PDCP. The interface between these two
-elements is defined by the 3GPP spec, but the decision making logic is
-implementation-dependent (and historically proprietary). This control
+elements is defined by the 3GPP spec, but the decision-making logic is
+an implementation choice (and historically proprietary). This control
 logic is generically referred as the *Radio Resource Management
 (RRM)*, not to be confused with the standards-defined RRC stage
 depicted in :numref:`Figure %s <fig-pipeline>`.
@@ -231,6 +231,15 @@ refactoring of the RAN is free to both move functionality around and
 introduce new module boundaries, as long as the original 3GPP-defined
 interfaces are preserved.
 
+.. _fig-ran-controller:
+.. figure:: figures/sdn/Slide5.png 
+    :width: 400px
+    :align: center
+	    
+    Example set of control applications (xApps) running on top of
+    Near-Real-Time RAN Controller (RIC), controlling a distributed set
+    of Split-RAN elements (CU, DU, RU).
+
 Completing the picture, :numref:`Figure %s <fig-ran-controller>` shows
 the Near-RT RIC implemented as an SDN Controller hosting a set of SDN
 control apps. The RIC maintains a *RAN Network Information Base
@@ -273,15 +282,6 @@ generally, the R-NIB includes the following state:
   -  Desired KPIs
   -  MAC RRM Configuration
   -  RRM Control Configuration
-
-.. _fig-ran-controller:
-.. figure:: figures/sdn/Slide5.png 
-    :width: 400px
-    :align: center
-	    
-    Example set of control applications (xApps) running on top of
-    Near-Real-Time RAN Controller (RIC), controlling a distributed set
-    of Split-RAN elements (CU, DU, RU).
 
 The four example Control Apps (xApps) in :numref:`Figure %s
 <fig-ran-controller>` do not constitute an exhaustive list, but they
@@ -387,7 +387,7 @@ top of all Telco software stacks. It is the source of all
 configuration settings and business logic needed to operate a
 network. As a consequence, you can think of A1 as the RAN's
 counterpart to gNMI/gNOI, a pair of configuration APIs commonly used
-to configure cloud devices.
+to configure commodity cloud hardware.
 
 The Near-RT RIC uses the E2 interface to control the underlying RAN
 elements, including the CU, DUs, and RUs. A requirement of the E2
@@ -406,23 +406,22 @@ operations against this Service Model.
 
 Of course, it is the RAN element, through its published Service Model,
 that defines the relevant set of functions that can be activated, the
-variables that can be reported, and policies that can be set. While
-vendor-specific Service Models may be put forward, the O-RAN community
-is working on two vendor-agnostic Service Models. The first, called
-*Key Performance Measurement* (abbreviated *E2SM-KPM*), specifies the
-metrics that can be retrieved from RAN elements. The second, called
-*RAN Control* (abbreviated *E2SM-RC*), specifies parameters that can
-be set to control RAN elements.
+variables that can be reported, and policies that can be set.  The
+O-RAN community is working on two vendor-agnostic Service Models. The
+first, called *Key Performance Measurement* (abbreviated *E2SM-KPM*),
+specifies the metrics that can be retrieved from RAN elements. The
+second, called *RAN Control* (abbreviated *E2SM-RC*), specifies
+parameters that can be set to control RAN elements.
 
-In simple terms, E2SM-KPM defines what values can be *read* from RAN
-elements and E2SM-RC defines what values can be *written* to RAN
-elements. Because the available values can be highly variable across
-all possible devices, we can expect different vendors will support
-only a subset of the entire collection. This will limit the
-"universality" the O-RAN was hoping to achieve in an effort to break
-vendor lock-in, but that outcome is familiar to network operators who
-have been dealing with divergent *Management Information Bases (MIBs)*
-since the earliest days of the Internet.
+In simple terms, E2SM-KPM defines what values can be *read* and
+E2SM-RC defines what values can be *written*. Because the available
+values can be highly variable across all possible devices, we can
+expect different vendors will support only a subset of the entire
+collection. This will limit the "universality" the O-RAN was hoping to
+achieve in an effort to break vendor lock-in, but that outcome is
+familiar to network operators who have been dealing with divergent
+*Management Information Bases (MIBs)* since the earliest days of the
+Internet.
 
 Finally, the xApp SDK, which is specific to the ONOS-based
 implementation, is currently little more than a "pass through" of the
