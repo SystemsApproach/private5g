@@ -14,99 +14,109 @@ Chapter 5:  Mobile Core
    UPF.  May address the 4G / 5G / WiFi convergence story as a side
    discussion.
 
-While the aggregate functionality remains largely the same as we migrate 
-from 4G to 5G, how that functionality is virtualized and factored into 
-individual components changes. The 5G Mobile Core is heavily 
-influenced by the cloud’s march toward a microservice-based (cloud 
-native) architecture. This shift to cloud native is deeper than it might 
-first appear, in part because it opens the door to customization and 
-specialization. Instead of supporting just voice and broadband 
-connectivity, the 5G Mobile Core can evolve to also support, for 
-example, massive IoT, which has a fundamentally different latency 
-requirement and usage pattern (i.e., many more devices connecting 
-intermittently). This stresses—if not breaks—a one-size-fits-all 
-approach to session management.    
+The Mobile Core provides IP connectivity to all the UEs connected to
+the RAN. It authenticates UEs as they connect to the RAN, tracks them
+as they move from one base station to another, ensures that this
+connectivity fulfills the promised QoS requirements, and ultimately,
+meters usage for billing and charging.
 
-5.1  About Identifiers
+Historically, all of these functions were provided in bundled,
+proprietary network appliances, but like the rest of the 5G mobile
+network, these appliances are being disaggregated and implemented as
+cloud services.  In doing so, the goal is to improve feature velocity,
+making it easier to evolve the mobile network to support massive IoT,
+mission-critical applications, and high-speed broadband. It is also
+the case that as the range of use cases grows larger, a
+one-size-fits-all approach will become problematic. The expectation
+is that it should be possible to customize and specialize the Mobile Core
+on an per-application basis.
+
+This chapter introduces the functional elements of the Mobile Core,
+and describes different strategies for implementing that
+functionality.
+
+5.1  Managing Identity
 ----------------------
 
 There are two equally valid views of the Mobile Core. The
-Internet-centric view is that the Mobile Core is essentially a router
-that connects a physical RAN (one of many possible access network
-technologies, no different than WiFi) to the global Internet. In this
-view, IP addresses serve as the unique global identifier that makes it
-possible for any RAN-connected device to connect to any other Internet
-addressable device or service. The 3GPP-centric view is that a
-distributed set of Mobile Cores (interconnected by one or more
-backbone technologies, of which the Internet is just one example)
-cooperate to turn a set of physical RANs into one logically global
-RAN. In this perspective, the IMIS burned into device SIM card serve
-as the global identifier that makes it possible for any two mobile
-devices to call each other.
+Internet-centric view is that each instantiation of the Mobile Core
+serves as a router that connects a physical RAN (one of many possible
+access network technologies, not unlike WiFi) to the global
+Internet. In this view, IP addresses serve as the unique global
+identifier that makes it possible for any RAN-connected device to
+communication with any Internet addressable device or service. The
+3GPP-centric view is that a distributed set of Mobile Cores
+(interconnected by one or more backbone technologies, of which the
+Internet is just one example) cooperate to turn a set of physical RANs
+into a logically global RAN. In this perspective, the IMSI burned into
+device SIM card serves as the global identifier that makes it possible
+for any two mobile devices to call each other.
 
-Both of these perspectives are true, and it's important to acknowledge
-them if you want to understand why the Mobile Core looks the way it
-does, but with broadband communication using Internet protocols like
-HTTP and TCP to access cloud services being the dominant use case,
-this section takes a decidedly Internet-centric perspective of the
-Mobile Core.
+Both of these perspectives are correct, but with broadband
+communication using Internet protocols like HTTP and TCP to access
+cloud services being the dominant use case, this section takes an
+Internet-centric perspective of the Mobile Core. But before getting to
+that, we first need to understand two things about the 3GPP-centric
+perspective.
 
-Having said that, we start with the 64-bit IMSI (*International Mobile
-Subscriber Identity*), which you can think of playing the same role as
-a 48-bit ethernet address: it uniquely identifies every UE connected
-to the RAN. Like ethernet addresses, which partition the address space
-to ensure assignments are unique, the IMSI also has an internal
-structure, which we specify as follows:
+First, while we often talk about the Mobile Core as though it were a
+self-contained component deployed in some geographic region, this is
+really only the case for a single instantiation of the Mobile Core,
+for example, as depicted in :numref:`Figure %s <fig-cellular>` of
+Chapter 2. More generally, however, you can think of the collection of
+all Mobile Core instantiations deployed across the globe as
+cooperating to implement a distributed mobility service.
 
-* `MCC`: Mobile Country Code (3-digits).
-* `MNC`: Mobile Network Code (3-digits).
-* `ENT`: Enterprise ID (3-digits).
-* `SUB`: Subscriber ID (6-digits).
-* `Format`: A mask that allows the above four fields to be embedded
-  into an IMSI. For example `CCCNNNEEESSSSSS` is the format we are
-  using.
+Second, at the heart of this "distributed mobility service" is
+functionality that tracks devices as they move throughout the global
+RAN. The Mobile Core also has significant responsibility managing the
+UEs connected the local physical RAN—which will be our focus
+throughout the rest of this chapter—but it is this global aspect that
+we summarize here.
 
-Note that although 64-bits long, IMSIs are typically represented as a
-15-digit number, where the MCC and MNC are globally asigned to ensure
-unquiness. Because we are interested in enterprise deployments, we
-have split the last 9 digits into Enterprise and Subscriber subfields;
-other operators would likely define other internal structure.
+Recall from Section 2.4 that the 64-bit IMSI included in every SIM
+card uniquely identifies every RAN-connected device. This means you
+can think of this IMSI as playing the same role as a 48-bit ethernet
+address, including how addresses are assigned to ensure uniqueness:
+`(MCC, MNC)` pairs are assigned by a global authority, with each MNO
+deciding how to uniquely assign the rest of the IMSI identifier space
+to devices.
 
-Without going into all the details—because it is only relevant when
-one UE wants to make a voice call or send a text message to another
-UE—the collection of Mobile Core instantiations worldwide cooperate to:
+Unlike ethernet addresses, however, IMSIs are used to locate UEs.  A
+logically centralized database, known as the *Home Locator Register
+(HLR)*, maps IMSIs onto the collection of information needed
+successfully connect to the corresponding UE. This includes (a) which
+Mobile Core instantiation currently connects the UE to the global RAN,
+and (b) what level of service that UE subscribes to. (A second
+database, playing much the same role as DNS in the Internet, maps
+phone numbers to IMSIs.)
 
-* Map international phone numbers onto the corresponding IMSI (and
-  vice versa).
-* Locate the Mobile Core currently serving a given IMSI (for the
-  purpose of connecting to that UE).
-* Locate the subscriber profile assocated with that IMSI (for the
-  purpose of accounting and billing).
+There are, of course, many more details to the process—including how
+to find a UE that has roamed to another MNO's network—but conceptually
+the process is straightforward. For our purposes, the important
+takeaway is that IMSIs are used to locate the Mobile Core
+instantiation that is then responsible for authenticating the UE,
+tacking the UE as it moves from base station to base station within
+that Core's geographic region, and forwarding packets to the UE.
 
-You can imagine a distributed implementation in which each Operator in
-each Country maintains a database with the following 4-tuple
-
-.. math::
-
-   \mathsf{(Phone Number, IMIS, Subscriber Profile, Current Mobile Core)}
-
-such that each database is able to do lookups on the first two keys.
-
-Figure out how to tie this up loose ends...and factor in IP.
-
-
-  
-
+There is one final issue worth highlighting. The odds of someone
+trying to "call" or "text" a UE that corresponds to an IoT device,
+drone, camera, or robot are virtually zero. It is the IP address
+assigned to each UE (by the local Mobile Core) that is used to
+"locate" (route packets to) the UE. In this context, the IMSI plays
+exactly the same role in a physical RAN as an ethernet address plays
+in a LAN, and the Mobile Core serves exactly the same purpose as any
+access router.
 
 5.2 Functional Components
 -------------------------
 
-A terminology and 3GPP-heavy intro to the core (for completenes), but
+A terminology and 3GPP-heavy intro to the core (for completeness), but
 the real point of this first section is to introduce and explain the
 functional components; the fundamental "problems" that the core must
 solve. These include session management, mobility management, and
-subscriber authentication/management (which just happen to be names
-of the main three functional elements in the 5G schematic).
+subscriber authentication/management (which just happen to be names of
+the main three functional elements in the 5G schematic).
 
 .. For now I cut-and-pasted both 4G and 5G (and joint deployment) but
    we probably want to cut back to just 5G (and deployment may reduce
@@ -324,7 +334,7 @@ borrows heavily from Magma.
 5.4 User Plane
 --------------------
 
-Drill down on implemenatation options for the UPF.
+Drill down on implementation options for the UPF.
 
 5.4.1 Microservice Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

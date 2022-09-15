@@ -410,7 +410,8 @@ for every device connected to the global mobile network. Each IMSI is
 a 64-bit, self-describing identifier, which is to say, it includes a
 *Format* field that effectively serves as a mask for extracting other
 relevant fields. For example, the following is the interpretation we
-assume in this book:
+assume in this book (where IMSIs are commonly represented as a
+15-digit decimal number):
 
 * **MCC:** Mobile Country Code (3-digit decimal number).
 
@@ -424,12 +425,13 @@ The first two fields (*MCC*, *MNC*) are universally understood to
 uniquely identify the MNO, while that last two fields are one example
 of how an MNO might use additional hierarchical structure to uniquely
 identify every device it serves. (We are working towards delivering 5G
-connectivity to enterprises, hence the *ENT* field.) The *MCC* and
-*MNC* play a role in roaming: when a UE tries to connect to a "foreign
-network" those fields are used to find the "home network", where the
-rest of the IMSI leads to a subscriber profile that says whether or
-not roaming is enabled for this device. The following walks through
-what happens when a device connects to its home network; more
+connectivity to enterprises, hence the *ENT* field, but other MNOs
+might assign the last 9 digits using some other structure.) The *MCC*
+and *MNC* play a role in roaming: when a UE tries to connect to a
+"foreign network" those fields are used to find the "home network",
+where the rest of the IMSI leads to a subscriber profile that says
+whether or not roaming is enabled for this device. The following walks
+through what happens when a device connects to its home network; more
 information about the global ramifications is given at the end of the
 section.
 
