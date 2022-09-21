@@ -35,6 +35,7 @@ Multipath
 NFV
 NG
 Oguz
+OAuth
 PRB
 Parulkar
 PaaS
@@ -70,6 +71,7 @@ bitrate
 centric
 config
 connectionless
+decapsulating
 decidely
 decrypt
 demultiplexing
@@ -80,6 +82,7 @@ disaggregates
 disaggregating
 downlink
 electromagetic
+encapsulating
 eNB
 eNBs
 eNodeB
@@ -128,6 +131,7 @@ rearchitecting
 repo
 retargeting
 retransmissions
+retransmit 
 roadmap
 rollout
 runtime

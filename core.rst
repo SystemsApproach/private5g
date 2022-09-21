@@ -73,29 +73,41 @@ influences the overall architecture.
 
 Recall from Section 2.4 that the 64-bit IMSI included in every SIM
 card uniquely identifies every RAN-connected device. This means you
-can think of this IMSI as similar to a 48-bit ethernet address,
+can think of this IMSI as similar to a 48-bit 802.11 address,
 including how addresses are assigned to ensure uniqueness: `(MCC,
 MNC)` pairs are assigned by a global authority to every MNO, each of
 which then decides how to uniquely assign the rest of the IMSI
 identifier space to devices.
 
-Unlike ethernet addresses, however, IMSIs are also used to locate UEs.
-A logically centralized database, known as the *Home Subscriber
-Service (HSS)*, maps IMSIs onto the collection of information needed
-successfully connect to the corresponding UE. This includes (a) which
-Mobile Core instantiation currently connects the UE to the global RAN,
-and (b) what level of service that UE subscribes to. A second
-database, playing a similar role as DNS in the Internet, maps phone
-numbers to IMSIs.
+Unlike 802.11 addresses, however, IMSIs are also used to locate (and
+route packets to) UEs. A logically centralized (but hierarchically
+distributed) database maps IMSIs onto the collection of information
+needed to successfully connect to the corresponding UE. This includes
+a combination of relatively *static* information about the level of
+service the UE expects (including the corresponding phone number and
+subscriber profile/account information), and more *dynamic*
+information about the current location of the UE (including which
+Mobile Core instantiation and base station currently connects the UE
+to the global RAN).\ [#]_
+
+.. [#] This logically centralized mapping service has a name, or
+       rather, several names that keep changing from from generation
+       to generation. In 2G and 3G it was called HLR (Home Location
+       Registry). In 4G the HLR maintains only static information and
+       a separate HSS (Home Subscriber Server) maintains the more
+       dynamic information. In 5G the HLR is renamed the UDR (Unified
+       Data Registry) and the HSS is renamed UDM (Unified Data
+       Management). We will see the UDM in Section 5.2 because of the
+       role it plays *within* a single instance of the Mobile Core.
 
 There are, of course, many more details to the process—including how
 to find a UE that has roamed to another MNO's network—but conceptually
 the process is straightforward.  (As a thought experiment, imagine how
-you would build a "logically global ethernet" using just ethernet
-addresses, rather than depending on the additional layer of
-addressesing provided by IP.) For our purposes, the important takeaway
-is that IMSIs are used to locate the Mobile Core instantiation that is
-then responsible for authenticating the UE, tacking the UE as it moves
+you would build a "logically global ethernet" using just 802.11
+addresses, rather than depending on the additional layer of addressing
+provided by IP.) For our purposes, the important takeaway is that
+IMSIs are used to locate the Mobile Core instantiation that is then
+responsible for authenticating the UE, tracking the UE as it moves
 from base station to base station within that Core's geographic
 region, and forwarding packets to/from the UE.
 
@@ -112,14 +124,14 @@ access router.
 -------------------------
 
 The 5G Mobile Core, which 3GPP calls the *NG-Core*, adopts a
-microservice-like architecture, where we say “microservice-like”
-because while the 3GPP specification spells out this level of
-disaggregation, it is really just prescribing a set of functional
-blocks and not an implementation. A set of functional blocks is very
-different from the collection of engineering decisions that go into
-designing a microservice-based system. That said, viewing the
-collection of components shown in :numref:`Figure %s <fig-5g-core>` as
-a set of microservices is a good working model.
+microservice-like architecture. We say “microservice-like” because
+while the 3GPP specification spells out this level of disaggregation,
+it is really just prescribing a set of functional blocks and not an
+implementation. A set of functional blocks is very different from the
+collection of engineering decisions that go into designing a
+microservice-based system. That said, viewing the collection of
+components shown in :numref:`Figure %s <fig-5g-core>` as a set of
+microservices is a good working model.
 
 .. _fig-5g-core:
 .. figure:: figures/Slide22.png 
@@ -136,13 +148,15 @@ lawful intercept, traffic usage reporting, and QoS policing. These are
 all common functions in access routers, even if they go beyond what
 you usually find in enterprise or backbone routers. The other detail
 of note is that because the RAN is an overlay network, the RAN side of
-the UPF is responsible for encapsualting and decapsulating packets
-(as depicted in :numref:`Figure %s <fig-tunnels>` of Section 2.3).
+the UPF is responsible for encapsulating and decapsulating packets
+transmitted to base stations (as depicted in :numref:`Figure %s
+<fig-tunnels>` of Section 2.3).
 
 The rest of the functional elements in :numref:`Figure %s
 <fig-5g-core>` implement the Control Plane (CP). Of these, two
-represent the core of the CP functionality (as sketched in
-:numref:`Figure %s <fig-secure>` of Section 2.4):
+represent the majority of the functionality that's unique to the
+Mobile Core CP (as sketched in :numref:`Figure %s <fig-secure>` of
+Section 2.4):
 
 *  *AMF (Core Access and Mobility Management Function):* Responsible for
    connection and reachability management, mobility management, access
@@ -159,84 +173,81 @@ which base station currently serves each UE. The SMF then allocates an
 IP address to each AMF-authorized UE, and maintains per-device session
 state, as long as the UE is active within the local RAN.
 
-An unusual aspect of the Mobile Core is that the per-UE session state
+One unusual aspect of the Mobile Core is that the per-UE session state
 maintained by the SMF potentially includes a reference to a packet
 buffer (the buffer itself in maintained by the UPF) in which packets
-destine to a UE currently in the middle of a hand-off from one base
-station to another are queued during the transition. This feature was
-originally designed to avoid data loss during a voice call, but its
-value is less obvious when the data is an IP packet, where end-to-end
-protocols like TCP are prepared to retransmit lost packets. (On the
-other hand, if hand-offs are too frequent, they can be problematic for
-TCP.)
+destine to a UE currently in the middle of being handed off from one
+base station to another are queued during the transition. This feature
+was originally designed to avoid data loss during a voice call, but
+its value is less obvious when the data is an IP packet since
+end-to-end protocols like TCP are prepared to retransmit lost
+packets. On the other hand, if hand-offs are too frequent, they can
+be problematic for TCP.
 
 Continuing with our inventory of control-related elements in
 :numref:`Figure %s <fig-5g-core>`, several of them provide generic
 functionality one might find in any microservice based application:
 
 -  *AUSF (Authentication Server Function):* Authenticates UEs, and so
-   could be implemented by an *Authentication Service* like OpenID.
+   is similar to an *Authentication Service* like OpenID.
 
 -  *UDM (Unified Data Management):* Manages user identity (including
-   the generation of authentication credentials), and so could be
-   implemented by an *Authorization Service* like OAuth2.
+   the generation of authentication credentials), and so is similar to an
+   *Authorization Service* like OAuth2.
 
 -  *SDSF (Structured Data Storage Network Function):* Used to store
-   structured data, and so could be implemented by an *SQL Database*
-   like MySQL.
+   structured data, and so is similar to an *SQL Database* like MySQL.
 
 -  *UDSF (Unstructured Data Storage Network Function):* Used to store
-   unstructured data, and so could be implemented by a *Key/Value
-   Store* like MongoDB.
+   unstructured data, and so is similar to a *Key/Value Store* like
+   MongoDB.
 
 -  *NEF (Network Exposure Function):* Exposes select capabilities to
    third-party services (including translation between internal and
-   external representations for data), and so could be implemented by
-   an *API Server* like those adhering to the OpenAPI spec.
+   external representations for data), and so is similar to an *API
+   Server* like OpenAPI.
 
--  *NRF (NF Repository Function):* A means to discover available
-   services, and so could be implemented by a *Discovery Service* like
-   Consul.
+- *NRF (NF Repository Function):* Used to discover available services
+  (network functions), and so is similar to a *Discovery Service* like
+  Consul.
 
 Note that while the above list identifies well-known open source
 counterparts for each 3GPP-specified control function, we do this
-primiarily to help understand the general purpose of each component.
-Unfortunately, simply substituting the open source component is not
-always straightforward, as 3GPP also prescribes several interface
-constraints. We will see how to cope with such issues in Section 5.3,
-where we talk about implementation choices in more detail.
+primarily to help explain the general role each component plays.
+While simply substituting the open source component is sometimes a
+viable implementation option (e.g., MongoDB can be used to implement a
+UDSF), doing so is often not possible. This is because of assumptions
+3GPP makes about the schema for the associated data, or about how
+functionality is factored between related components (e.g., how AUSF,
+UMD, and AMF collectively implement AAA). We will see how to cope with
+such issues in Section 5.3, where we talk about implementation details
+in more detail.
 
-Next, :numref:`Figure %s <fig-5g-core>` shows to other functional
-elements that not so easily categorized, in large part because they
-are forward looking (and hence, under-specified):
+Finally, :numref:`Figure %s <fig-5g-core>` shows two other functional
+elements that are not easily categorized, in large part because they
+are under-specified:
 
--  *PCF (Policy Control Function):* Manages the policy rules, which
-   includes providing a northbound interface that the management plane
-   can use to install those rules.
+- *PCF (Policy Control Function):* Manages the policy rules, which
+   includes a northbound interface that the management plane can use
+   to install those rules.
 
 -  *NSSF (Network Slicing Selector Function):* Manages how network
    slices are selected to serve a given UE.
 
 Keep in mind that even though 3GPP does not directly prescribe a
-microservice implementation, the overall design does point to a cloud
-native solution as the desired end-state for the Mobile Core.  Of
-particular note, introducing distinct storage services means that all
-the other services can be stateless, and hence, more readily scalable.
-Also note that :numref:`Figure %s <fig-5g-core>` adopts an idea that’s
-common in microservice-based systems, namely, to show a *message bus*
-interconnecting all the components rather than including a full set of
-pairwise connections. This also suggests a well-understood
-implementation strategy.
-
-.. Need to explain relationship between UMD and HSS. This may touch
-   on the 4G vs 5G comparison (which might be a helpful thing to
-   include in its own right).
+microservice implementation, the overall design clearly points to a
+cloud native solution as the desired end-state for the Mobile Core.
+Of particular note, introducing distinct storage services means that
+all the other services can be stateless, and hence, more readily
+scalable.  Also note that :numref:`Figure %s <fig-5g-core>` adopts
+another implementation strategy that is common in cloud native
+systems, namely, assuming each component supports a RESTful API.
 
 Deployment Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. Seems out-of-place, but maybe some of this remains (perhaps boiled
-   down to a sidebar.
+   down to a sidebar. Might also introduce some 4G/EPC terminology here.
    
 With an already deployed 4G RAN/EPC in the field and a new 5G
 RAN/NG-Core deployment underway, we can’t ignore the issue of
