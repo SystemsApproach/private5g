@@ -17,23 +17,23 @@ Chapter 5:  Mobile Core
 The Mobile Core provides IP connectivity to the RAN. It authenticates
 UEs as they connect, tracks them as they move from one base station to
 another, ensures that this connectivity fulfills the promised QoS
-requirements, and meters usage for billing and charging.
+requirements, and meters usage for billing.
 
 Historically, all of these functions were provided by a proprietary
 network appliance. But like the rest of the 5G mobile network, this
 appliance is being disaggregated and implemented as a cloud service,
 with the goal of improving feature velocity for new classes of
 applications. It is also the case that as the range of use cases grows
-larger, a one-size-fits-all approach will become problematic. The
-expectation is that it should be possible to customize and specialize
-the Mobile Core on an per-application basis.
+more diverse, a one-size-fits-all approach will become
+problematic. The expectation is that it should be possible to
+customize and specialize the Mobile Core on an per-application basis.
 
 This chapter introduces the functional elements of the Mobile Core,
 and describes different strategies for implementing that
 functionality.
 
-5.1  Managing Identity
-----------------------
+5.1  Identity Management
+------------------------
 
 There are two equally valid views of the Mobile Core. The
 Internet-centric view is that each instantiation of the Mobile Core
@@ -60,11 +60,11 @@ First, while we often talk about the Mobile Core as though it were a
 self-contained component deployed in some geographic region, this is
 really only the case for a single instantiation of the Mobile Core,
 for example, as depicted in :numref:`Figure %s <fig-cellular>` of
-Chapter 2. More generally, you can think of the collection of all
+Chapter 2. More generally, you should think of the collection of all
 Mobile Core instantiations deployed across the globe as cooperating to
 implement a distributed mobility service.
 
-Second, at the heart of this "distributed mobility service" is
+Second, at the heart of this distributed mobility service is
 functionality that tracks devices as they move throughout the global
 RAN. The Mobile Core also has significant responsibility managing the
 UEs connected a given physical RAN—which will be our focus throughout
@@ -73,32 +73,30 @@ influences the overall architecture.
 
 Recall from Section 2.4 that the 64-bit IMSI included in every SIM
 card uniquely identifies every RAN-connected device. This means you
-can think of this IMSI as similar to a 48-bit 802.11 address,
-including how addresses are assigned to ensure uniqueness: `(MCC,
-MNC)` pairs are assigned by a global authority to every MNO, each of
-which then decides how to uniquely assign the rest of the IMSI
-identifier space to devices.
+can think of this IMSI as similar to a 48-bit 802.11 address. This
+includes how addresses are assigned to ensure uniqueness: `(MCC, MNC)`
+pairs are assigned by a global authority to every MNO, each of which
+then decides how to uniquely assign the rest of the IMSI identifier
+space to devices.
 
 Unlike 802.11 addresses, however, IMSIs are also used to locate (and
-route packets to) UEs. A logically centralized (but hierarchically
-distributed) database maps IMSIs onto the collection of information
-needed to successfully connect to the corresponding UE. This includes
-a combination of relatively *static* information about the level of
-service the UE expects (including the corresponding phone number and
-subscriber profile/account information), and more *dynamic*
-information about the current location of the UE (including which
-Mobile Core instantiation and base station currently connects the UE
-to the global RAN).\ [#]_
+route packets to) UEs. A hierarchically distributed database maps
+IMSIs onto the collection of information needed to successfully
+connect to the corresponding UE. This includes a combination of
+relatively *static* information about the level of service the UE
+expects (including the corresponding phone number and subscriber
+profile/account information), and more *dynamic* information about the
+current location of the UE (including which Mobile Core instantiation
+and base station currently connects the UE to the global RAN).
 
-.. [#] This logically centralized mapping service has a name, or
-       rather, several names that keep changing from from generation
-       to generation. In 2G and 3G it was called HLR (Home Location
-       Registry). In 4G the HLR maintains only static information and
-       a separate HSS (Home Subscriber Server) maintains the more
-       dynamic information. In 5G the HLR is renamed the UDR (Unified
-       Data Registry) and the HSS is renamed UDM (Unified Data
-       Management). We will see the UDM in Section 5.2 because of the
-       role it plays *within* a single instance of the Mobile Core.
+This mapping service has a name, or rather, several names that keep
+changing from from generation to generation. In 2G and 3G it was
+called HLR (Home Location Registry). In 4G the HLR maintains only
+static information and a separate HSS (Home Subscriber Server)
+maintains the more dynamic information. In 5G the HLR is renamed the
+UDR (Unified Data Registry) and the HSS is renamed UDM (Unified Data
+Management). We will see the UDM in Section 5.2 because of the role it
+plays *within* a single instance of the Mobile Core.
 
 There are, of course, many more details to the process—including how
 to find a UE that has roamed to another MNO's network—but conceptually
@@ -111,14 +109,25 @@ responsible for authenticating the UE, tracking the UE as it moves
 from base station to base station within that Core's geographic
 region, and forwarding packets to/from the UE.
 
-There is one other issue worth highlighting. The odds of someone
-trying to "call" or "text" a UE that corresponds to an IoT device,
-drone, camera, or robot are virtually zero. It is the IP address
-assigned to each UE (by the local Mobile Core) that is used to
-*locate* (route packets to) the UE. In this context, the IMSI plays
-exactly the same role in a physical RAN as an ethernet address plays
-in a LAN, and the Mobile Core serves exactly the same purpose as any
-access router.
+There are two other observations about mobility and addressing worth
+highlighting.  First, the odds of someone trying to "call" or "text" a
+UE that corresponds to an IoT device, drone, camera, or robot are
+virtually zero. It is the IP address assigned to each UE (by the local
+Mobile Core) that is used to *locate* (route packets to) the UE. In
+this context, the IMSI plays exactly the same role in a physical RAN
+as an 802.11 address plays in a LAN, and the Mobile Core behaves just
+like any access router.
+
+Second, whether a device connects to a RAN or WiFi, it is
+automatically assigned a new IP address any time it moves from one
+wireless coverage domain to another. Even in the RAN case, ongoing
+calls are dropped whenever a device moves between instantiations of
+the Mobile Core (i.e., mobility is supported only *within* the region
+served by a given Mobile Core). But this is typically not a problem
+for either RAN or WiFi because mobile devices are typically clients
+requesting service; they just start making requests with their new IP
+address.
+
 
 5.2 Functional Components
 -------------------------
@@ -126,12 +135,12 @@ access router.
 The 5G Mobile Core, which 3GPP calls the *NG-Core*, adopts a
 microservice-like architecture. We say “microservice-like” because
 while the 3GPP specification spells out this level of disaggregation,
-it is really just prescribing a set of functional blocks and not an
-implementation. A set of functional blocks is very different from the
-collection of engineering decisions that go into designing a
-microservice-based system. That said, viewing the collection of
-components shown in :numref:`Figure %s <fig-5g-core>` as a set of
-microservices is a good working model.
+it is really just describing a set of functional blocks and not
+prescribing an implementation. A set of functional blocks is very
+different from the collection of engineering decisions that go into
+designing a microservice-based system. That said, viewing the
+collection of components shown in :numref:`Figure %s <fig-5g-core>` as
+a set of microservices is a good working model.
 
 .. _fig-5g-core:
 .. figure:: figures/Slide22.png 
@@ -139,7 +148,8 @@ microservices is a good working model.
     :align: center 
 	    
     5G Mobile Core (NG-Core), represented as a collection of
-    microservices.
+    microservices, where 3GPP defines the interfaces connecting the
+    Mobile Core UP ane CP to the RAN (denoted N2 and N3, respectively).
 
 Starting with the User Plane (UP), the *UPF (User Plane Function)*
 forwards traffic between RAN and the Internet. In addition to IP
@@ -186,62 +196,69 @@ be problematic for TCP.
 
 Continuing with our inventory of control-related elements in
 :numref:`Figure %s <fig-5g-core>`, several of them provide generic
-functionality one might find in any microservice based application:
+functionality one might find in any microservice-based application:
 
--  *AUSF (Authentication Server Function):* Authenticates UEs, and so
-   is similar to an *Authentication Service* like OpenID.
+-  *AUSF (Authentication Server Function):* Authenticates UEs.
 
--  *UDM (Unified Data Management):* Manages user identity (including
-   the generation of authentication credentials), and so is similar to an
-   *Authorization Service* like OAuth2.
+-  *UDM (Unified Data Management):* Manages user identity, including
+   the generation of authentication credentials.
 
 -  *SDSF (Structured Data Storage Network Function):* Used to store
-   structured data, and so is similar to an *SQL Database* like MySQL.
+   structured data, and so is similar to an *SQL Database*.
 
 -  *UDSF (Unstructured Data Storage Network Function):* Used to store
-   unstructured data, and so is similar to a *Key/Value Store* like
-   MongoDB.
+   unstructured data, and so is similar to a *Key/Value Store*.
 
 -  *NEF (Network Exposure Function):* Exposes select capabilities to
-   third-party services (including translation between internal and
-   external representations for data), and so is similar to an *API
-   Server* like OpenAPI.
+   third-party services, and so is similar to an *API Server*.
 
 - *NRF (NF Repository Function):* Used to discover available services
-  (network functions), and so is similar to a *Discovery Service* like
-  Consul.
+  (network functions), and so is similar to a *Discovery Service*.
 
-Note that while the above list identifies well-known open source
-counterparts for each 3GPP-specified control function, we do this
-primarily to help explain the general role each component plays.
-While simply substituting the open source component is sometimes a
-viable implementation option (e.g., MongoDB can be used to implement a
-UDSF), doing so is often not possible. This is because of assumptions
-3GPP makes about the schema for the associated data, or about how
-functionality is factored between related components (e.g., how AUSF,
-UMD, and AMF collectively implement AAA). We will see how to cope with
-such issues in Section 5.3, where we talk about implementation details
-in more detail.
+Note that while the above identifies well-known microservices that are
+similar to some of 3GPP-specified control functions, we do this
+primarily to help explain the general role each component plays.  In
+some cases, substituting an existing cloud native component is a
+viable implementation option. For example, MongoDB can be used to
+implement a UDSF. In other cases, however, this is not possible due to
+assumptions 3GPP makes. For example, AUSF, UMD, and AMF collectively
+implement a *Authentication and Authorization Service*, but an option
+like OAuth2 could not be used in their place because (a) UMD is
+assumed to be part of the global identity mapping service discussed in
+Section 5.1, and (b) 3GPP specifies the interface by which the AMF
+connects to the RAN. We will see how to cope with such issues in
+Section 5.3, where we talk about implementation details in more
+detail.
 
 Finally, :numref:`Figure %s <fig-5g-core>` shows two other functional
 elements that are not easily categorized, in large part because they
 are under-specified:
 
-- *PCF (Policy Control Function):* Manages the policy rules, which
-   includes a northbound interface that the management plane can use
-   to install those rules.
+-  *PCF (Policy Control Function):* Manages the policy rules for the
+   rest of the Mobile Core CP.
 
 -  *NSSF (Network Slicing Selector Function):* Manages how network
-   slices are selected to serve a given UE.
+   slices are selected to serve a given UE.   
+
+In both cases, the component exports a northbound interface that the
+management plane (not shown) can use to set policy rules and slice
+parameters.
 
 Keep in mind that even though 3GPP does not directly prescribe a
 microservice implementation, the overall design clearly points to a
 cloud native solution as the desired end-state for the Mobile Core.
 Of particular note, introducing distinct storage services means that
 all the other services can be stateless, and hence, more readily
-scalable.  Also note that :numref:`Figure %s <fig-5g-core>` adopts
-another implementation strategy that is common in cloud native
-systems, namely, assuming each component supports a RESTful API.
+scalable.  Also note that :numref:`Figure %s <fig-5g-core>` shows a
+*message bus* interconnecting all the components rather than
+standardizing a full set of pairwise interfaces.\ [#]_ This suggests a
+well-understood implementation strategy.
+
+.. [#] Only the N2 and N3 interfaces that connect the Mobile Core UP
+       and CP, respectively, to the RAN is prescribed by the 3GPP
+       standard. All other interfaces are defined by the implementation.
+
+
 
 Deployment Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
