@@ -58,8 +58,8 @@ perspective.
 
 First, while we often talk about the Mobile Core as though it were a
 self-contained component deployed in some geographic region, this is
-really only the case for a single instantiation of the Mobile Core,
-for example, as depicted in :numref:`Figure %s <fig-cellular>` of
+really only the case for a single instance of the Mobile Core, for
+example, as depicted in :numref:`Figure %s <fig-cellular>` of
 Chapter 2. More generally, you should think of the collection of all
 Mobile Core instantiations deployed across the globe as cooperating to
 implement a distributed mobility service.
@@ -86,8 +86,8 @@ connect to the corresponding UE. This includes a combination of
 relatively *static* information about the level of service the UE
 expects (including the corresponding phone number and subscriber
 profile/account information), and more *dynamic* information about the
-current location of the UE (including which Mobile Core instantiation
-and base station currently connects the UE to the global RAN).
+current location of the UE (including which Mobile Core and base
+station currently connects the UE to the global RAN).
 
 This mapping service has a name, or rather, several names that keep
 changing from from generation to generation. In 2G and 3G it was
@@ -104,7 +104,7 @@ the process is straightforward.  (As a thought experiment, imagine how
 you would build a "logically global ethernet" using just 802.11
 addresses, rather than depending on the additional layer of addressing
 provided by IP.) For our purposes, the important takeaway is that
-IMSIs are used to locate the Mobile Core instantiation that is then
+IMSIs are used to locate the Mobile Core instance that is then
 responsible for authenticating the UE, tracking the UE as it moves
 from base station to base station within that Core's geographic
 region, and forwarding packets to/from the UE.
@@ -118,13 +118,14 @@ this context, the IMSI plays exactly the same role in a physical RAN
 as an 802.11 address plays in a LAN, and the Mobile Core behaves just
 like any access router.
 
-Second, whether a device connects to a RAN or WiFi, it is
-automatically assigned a new IP address any time it moves from one
-wireless coverage domain to another. Even in the RAN case, ongoing
-calls are dropped whenever a device moves between instantiations of
-the Mobile Core (i.e., mobility is supported only *within* the region
-served by a given Mobile Core). But this is typically not a problem
-for either RAN or WiFi because mobile devices are typically clients
+Second, whether a device connects to a RAN or or some other access
+network, it is automatically assigned a new IP address any time it
+moves from one coverage domain to another. Even in the RAN case,
+ongoing calls are dropped whenever a device moves between
+instantiations of the Mobile Core (i.e., mobility is supported only
+*within* the region served by a given Mobile Core). But this is
+typically not a problem for the RAN (or for any other access network,
+for that matter) because mobile devices are typically clients
 requesting service; they just start making requests with their new IP
 address.
 
@@ -149,7 +150,7 @@ a set of microservices is a good working model.
 	    
     5G Mobile Core (NG-Core), represented as a collection of
     microservices, where 3GPP defines the interfaces connecting the
-    Mobile Core UP ane CP to the RAN (denoted N2 and N3, respectively).
+    Mobile Core CP ane UP to the RAN (denoted N2 and N3, respectively).
 
 Starting with the User Plane (UP), the *UPF (User Plane Function)*
 forwards traffic between RAN and the Internet. In addition to IP
@@ -158,9 +159,9 @@ lawful intercept, traffic usage reporting, and QoS policing. These are
 all common functions in access routers, even if they go beyond what
 you usually find in enterprise or backbone routers. The other detail
 of note is that because the RAN is an overlay network, the RAN side of
-the UPF is responsible for encapsulating and decapsulating packets
-transmitted to base stations (as depicted in :numref:`Figure %s
-<fig-tunnels>` of Section 2.3).
+the UPF (corresponding to the N3 interface) is responsible for
+encapsulating and decapsulating packets transmitted to base stations
+(as depicted in :numref:`Figure %s <fig-tunnels>` of Section 2.3).
 
 The rest of the functional elements in :numref:`Figure %s
 <fig-5g-core>` implement the Control Plane (CP). Of these, two
@@ -226,23 +227,23 @@ implement a *Authentication and Authorization Service*, but an option
 like OAuth2 could not be used in their place because (a) UMD is
 assumed to be part of the global identity mapping service discussed in
 Section 5.1, and (b) 3GPP specifies the interface by which the AMF
-connects to the RAN. We will see how to cope with such issues in
-Section 5.3, where we talk about implementation details in more
-detail.
+connects to the RAN (denoted N2 in the figure). We will see how to
+cope with such issues in Section 5.3, where we talk about
+implementation details in more detail.
 
 Finally, :numref:`Figure %s <fig-5g-core>` shows two other functional
-elements that are not easily categorized, in large part because they
-are under-specified:
+elements that export a northbound interface to the management plane
+(not shown).
 
 -  *PCF (Policy Control Function):* Manages the policy rules for the
    rest of the Mobile Core CP.
 
 -  *NSSF (Network Slicing Selector Function):* Manages how network
-   slices are selected to serve a given UE.   
+   slices are selected to serve a given UE.
 
-In both cases, the component exports a northbound interface that the
-management plane (not shown) can use to set policy rules and slice
-parameters.
+.. Maybe should say something about these management APIs  being
+   implementation dependent, but that 3GPP does prescribe (some of)
+   the settable policy rules and slice parameters.
 
 Keep in mind that even though 3GPP does not directly prescribe a
 microservice implementation, the overall design clearly points to a
@@ -254,8 +255,8 @@ scalable.  Also note that :numref:`Figure %s <fig-5g-core>` shows a
 standardizing a full set of pairwise interfaces.\ [#]_ This suggests a
 well-understood implementation strategy.
 
-.. [#] Only the N2 and N3 interfaces that connect the Mobile Core UP
-       and CP, respectively, to the RAN is prescribed by the 3GPP
+.. [#] Only the N2 and N3 interfaces that connect the Mobile Core CP
+       and UP, respectively, to the RAN are prescribed by the 3GPP
        standard. All other interfaces are defined by the implementation.
 
 

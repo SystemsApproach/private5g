@@ -161,6 +161,17 @@ are officially labeled as follows.
 -  DU-CU connectivity is called the Midhaul
 -  CU-Mobile Core connectivity is called the Backhaul
 
+For more insight into design considerations for interconnecting the
+distributed components of a Split RAN, we recommend the NGMN Alliance
+Report.
+
+.. _reading_backhaul:
+.. admonition:: Further Reading
+
+    `RAN Evolution Project: Backhaul and Fronthaul Evolution
+    <https://www.ngmn.org/wp-content/uploads/NGMN_RANEV_D4_BH_FH_Evolution_V1.01.pdf>`__.
+    NGMN Alliance Report, March 2015.
+
 One observation about the CU (which becomes relevant in Chapter 6 when
 we incorporate it into a managed cloud service) is that one might
 co-locate the CU and Mobile Core in the same cluster, meaning the
@@ -179,15 +190,54 @@ we dig deeper into how the RAN is implemented. For now, we note that
 the two parts are sometimes referred to as the CU-C and CU-U,
 respectively.
 
-.. _reading_backhaul:
+We conclude our description of the split RAN architecture with the
+alternative depiction in :numref:`Figure %s <fig-split-alt>`, which
+for completeness, identifies the standardized interfaces between the
+components (e.g., N2, N3, F1-U, F1-C, and Open Fronthaul). We're not
+going to talk about these interfaces, except to note that they exist
+and there is a corresponding 3GPP specification that spells out the
+details. Instead, we're going to comment on the availability of open
+source implementations for each component.
+
+.. _fig-split-alt:
+.. figure:: figures/sdn/Slide10.png 
+    :width: 150px
+    :align: center
+	    
+    Alternative depiction of the Split-RAN components, showing the
+    3GPP-specified inter-unit interfaces.
+
+With respect to the Central Unit, most of the complexity is in the
+CU-C, which as we'll see in the next section, is being re-engineered
+using SDN, with open source solutions available.  With respect to the
+Radio Unit, nearly all the complexity is in D/A conversion and how the
+resulting analog signal is amplified. Incumbent vendors have
+significant proprietary know-how in this space, which will almost
+certainly remain closed.
+
+With respect to the Distributed Unit, the news is mixed, and
+correspondingly, the figure shows more detail. The High-PHY
+module—which corresponds to all but the RF modulation step of
+:numref:`Figure %s <fig-modulation>` in Section 3.1—is one of the most
+complex components in the RAN stack. An open source implementation of
+the High-PHY, known as FlexRAN, exists and is widely used in
+commercial products. The only caveat is that the software license
+restricts usage to Intel processors, although it is also the case that
+the FlexRAN software exploits Intel-specific hardware capabilities. As
+for the rest of the DU, the MAC is the other source of high-value
+closed technology, particularly in how scheduling is done. There is an
+open source version made available by the Open Air Initiative (OAI),
+but its usage is restricted to research-only deployments.
+
+.. _reading_du-impl:
 .. admonition:: Further Reading
 
-    For more insight into design considerations for
-    interconnecting the distributed components of a Split RAN, see
-    `RAN Evolution Project: Backhaul and Fronthaul Evolution
-    <https://www.ngmn.org/wp-content/uploads/NGMN_RANEV_D4_BH_FH_Evolution_V1.01.pdf>`__.
-    NGMN Alliance Report, March 2015.
+    `FlexRAN: Reference Architecture for Wireless Access
+    <https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/tools/flexran.html>`__.
 
+    `Open Air Interface  <https://openairinterface.org/>`__.
+
+    
 4.3 Software-Defined RAN
 ------------------------
 
