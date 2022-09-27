@@ -534,9 +534,9 @@ Controller, which corresponds to the Near-RT RIC shown previously in
 :numref:`Figure %s <fig-ctl_loops>`, which also shows the O-RAN
 prescribed interfaces A1 and E2 introduced in the previous section.
 (Note that all the edges in :numref:`Figures %s <fig-disagg1>` and
-:numref:`%s <fig-disagg2>` correspond to 3GPP-defined interfaces, but
-we have not identified them by name because their details are outside
-the scope of this discussion.)
+:numref:`%s <fig-disagg2>` correspond to 3GPP-defined interfaces, as
+identified in Section 4.2, but their details are outside the scope of
+this discussion.)
     
 .. _fig-ctl_loops:
 .. figure:: figures/sdn/Slide9.png 
