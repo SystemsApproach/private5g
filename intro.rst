@@ -27,7 +27,7 @@ Mobile networks, which have a 40-year history that parallels the
 Internet’s, have undergone significant change. The first two
 generations supported voice and then text, with 3G defining the
 transition to broadband access, supporting data rates measured in
-hundreds of kilobits-per-second. Today, the industry is transitioning
+hundreds of kilobits per second. Today, the industry is transitioning
 from 4G (with data rates typically measured in the few
 megabits-per-second) to 5G, with the promise of a tenfold increase in
 data rates.
@@ -41,9 +41,9 @@ the transition from a single access service (broadband connectivity)
 to a richer collection of edge services and devices. 5G is expected to
 provide support for immersive user interfaces (e.g., AR/VR),
 mission-critical applications (e.g., public safety, autonomous
-vehicles), and the Internet-of-Things (IoT). Because these use cases
+vehicles), and the Internet of Things (IoT). Because these use cases
 will include everything from home appliances to industrial robots to
-self-driving cars, 5G won’t just support humans accessing the Internet
+self-driving cars, 5G will support not only humans accessing the Internet
 from their smartphones, but also swarms of autonomous devices working
 together on their behalf.
 
@@ -53,9 +53,9 @@ fundamentally different edge network architecture is required. The
 requirements for this architecture are ambitious, and can be
 illustrated by three classes of capabilities:
 
-- To support *Massive Internet-of-Things*, potentially including
+- To support *Massive Internet of Things*, potentially including
   devices with ultra-low energy (10+ years of battery life), ultra-low
-  complexity (10s of bits-per-second), and ultra-high density (1
+  complexity (10s of bits per second), and ultra-high density (1
   million nodes per square kilometer).
 
 - To support *Mission-Critical Control*, potentially including
@@ -136,10 +136,11 @@ helps the reader navigate this rich and rapidly evolving system.
 
 As of 3G, the generational designation corresponds to a standard defined
 by the *3rd Generation Partnership Project (3GPP)*. Even though its name
-has “3G” in it, the 3GPP continues to define the standards for 4G and 5G,
+has “3G” in it, the 3GPP continues to define the standards for 4G, 5G,
+and so on,
 each of which corresponds to a sequence of releases of the standard.
 Release 15 is considered the demarcation point between 4G and 5G, with
-Release 17 scheduled for 2021. Complicating the terminology, 4G
+Release 17 having been completed in 2022. Complicating the terminology, 4G
 was on a multi-release evolutionary path referred to as *Long Term
 Evolution (LTE)*. 5G is on a similar evolutionary path, with several
 expected releases over its lifetime.
@@ -147,7 +148,7 @@ expected releases over its lifetime.
 While 5G is an ambitious advance beyond 4G, it is also the case that
 understanding 4G is the first step to understanding 5G, as several
 aspects of the latter can be explained as bringing a new
-degree-of-freedom to the former. In the chapters that follow, we often
+degree of freedom to the former. In the chapters that follow, we often
 introduce some architectural feature of 4G as a way of laying the
 foundation for the corresponding 5G component.
 
@@ -199,9 +200,9 @@ access technology is *Passive Optical Networks (PON)*, colloquially
 known as Fiber-to-the-Home.) These mobile access networks are provided
 by both big and small *Mobile Network Operators (MNOs)*. Global MNOs
 like AT&T run access networks at thousands of aggregation
-points-of-presence across a country like the US, along with a national
+points of presence across a country like the US, along with a national
 backbone that interconnects those sites. Small regional and municipal
-MNOs might run an access network with one or two points-of-presence,
+MNOs might run an access network with one or two points of presence,
 and then connect to the rest of the Internet through some large
 operator’s backbone.
 
@@ -215,7 +216,7 @@ operator’s backbone.
     aggregation points over the Internet.
 
 As illustrated in :numref:`Figure %s <fig-global>`, access networks
-are physically anchored at thousands of aggregation points-of-presence
+are physically anchored at thousands of aggregation points of presence
 within close proximity to end users, each of which serves anywhere
 from 1,000-100,000 subscribers, depending on population density. In
 practice, the physical deployment of these “edge” locations vary from
@@ -316,7 +317,7 @@ lowered the barrier to deploying scalable Internet services, but
 today, there is increasing pressure to offer
 low-latency/high-bandwidth cloud applications that cannot be
 effectively implemented in remote datacenters. Augmented Reality (AR),
-Virtual Reality (VR), Internet-of-Things (IoT), and Autonomous
+Virtual Reality (VR), Internet of Things (IoT), and Autonomous
 Vehicles are all examples of this kind of application. Such
 applications benefit from moving at least part of their functionality
 out of the datacenter and towards the edge of the network, closer to
@@ -337,7 +338,7 @@ you ask. If you ask a network operator that already owns and operates
 thousands of Central Offices, then their Central Offices are an
 obvious answer.  Others might claim the edge is located at the 14,000
 Starbucks across the US, and still others might point to the
-tens-of-thousands of cell towers spread across the globe. Our approach
+tens of thousands of cell towers spread across the globe. Our approach
 is to be location agnostic, but to make the discussion concrete, we
 use enterprises as our exemplar deployment.
 
