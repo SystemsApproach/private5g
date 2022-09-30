@@ -141,7 +141,7 @@ and so on,
 each of which corresponds to a sequence of releases of the standard.
 Release 15 is considered the demarcation point between 4G and 5G, with
 Release 17 having been completed in 2022. Complicating the terminology, 4G
-was on a multi-release evolutionary path referred to as *Long Term
+was on a multi-release evolutionary path referred to as *Long-Term
 Evolution (LTE)*. 5G is on a similar evolutionary path, with several
 expected releases over its lifetime.
 
@@ -258,17 +258,17 @@ addresses is a topic we will explore in later chapters.
 The previous section gives a decidely Telco-centric view of the mobile
 cellular network, which makes sense because Telcos have been the
 dominant MNOs for the past 40+ years. But with 5G's focus on
-broadening the set of services is supports, and embracing general
+broadening the set of services it supports, and embracing general
 platforms that can host yet-to-be-invented applications, the mobile
 cellular network is starting to blur the line between the access
 network and the cloud.
 
-The rest of this book explains what that means in detail, but as an
+The rest of this book explains what that means in detail. As an
 overview, thinking of 5G connectivity as a cloud service means that
 instead of using purpose-built devices and telephony-based operational
 practices to deliver mobile connectivity, the 5G network is built from
 commodity hardware, software-defined networks, and cloud-based
-operational practices. And just as with familiar cloud applications,
+operational practices. And, just as with familiar cloud applications,
 the end result is a system that increases both feature velocity and
 operational uniformity.  These advantages are available to legacy
 MNOs, but whether they will fully embrace them is yet to be seen, so

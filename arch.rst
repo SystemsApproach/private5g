@@ -21,9 +21,9 @@ Chapter 2:  Architecture
    
 This chapter identifies the main architectural components of the
 mobile cellular networks, which is partly an exercise in introducing
-3GPP terminology. For someone that is familiar with the Internet, this
+3GPP terminology. For someone who is familiar with the Internet, this
 terminology can seem arbitrary (e.g., “eNB” is a “base station”), but
-it is important to keep in mind that this terminology came out of the
+keep in mind that this terminology came out of the
 3GPP standardization process, which was historically concerned with
 telephony and almost completely disconnected from the IETF and other
 Internet-related efforts. To further confuse matters, 3GPP terminology
@@ -45,11 +45,13 @@ gives a broader perspective on the complexity of terminology in 5G.
 ------------
 
 The mobile cellular network provides wireless connectivity to devices
-that are on the move. These devices, which are known as *User
+that are (potentially) on the move. These devices, which are known as *User
 Equipment (UE)*, have traditionally corresponded to smartphones and
-tablets, but increasingly including cars, drones, industrial and
+tablets, but increasingly include cars, drones, industrial and
 agricultural machines, robots, home appliances, medical devices, and
-so on.
+so on. In some cases, the UEs may be devices that do not move, e.g.,
+router interfaces using cellular connectivity to provide broadband
+access to remote dwellings.
 
 .. _fig-cellular:
 .. figure:: figures/Slide2.png 
@@ -62,7 +64,7 @@ so on.
 As shown in :numref:`Figure %s <fig-cellular>`, the mobile cellular
 network consists of two main subsystems: the *Radio Access Network
 (RAN)* and the *Mobile Core*. The RAN manages the radio spectrum,
-making sure it is used efficiently and meets the quality-of-service
+making sure it is used efficiently and meets the quality of service
 requirements of every user.  It corresponds to a distributed
 collection of base stations. As noted above, these are cryptically
 named *eNodeB* or *eNB* (which is short for *evolved Node B*) in 4G.
@@ -184,7 +186,7 @@ essential foundation for understanding the rest of the 5G
 architecture.
 
 If you imagine the base stations as implementing a multi-layer
-protocol stack (which as we'll see in Chapter 4, they do), then radio
+protocol stack (which, as we'll see in Chapter 4, they do), then radio
 transmission is the responsibility of the bottom-most layers of that
 stack, where (a) digital/analog conversion happens, and (b) analog
 radio waves are transmitted/received. Chapter 3 introduces radio
@@ -216,7 +218,7 @@ RAN as a whole, and the lower layers of the stack that manage radio
 transmissions on a particular base station. One is the signal-to-noise
 ratio that the base station observes when communicating with each
 UE. This is called the *Channel Quality Indicator (CQI)* and it is
-passed *up* from the radio. The other is the quality-of-service the
+passed *up* from the radio. The other is the quality of service the
 network wants to give a particular UE. This is called the *QoS Class
 Indicator (QCI)* and it is passed *down* to the radio. This abstract
 summary, as shown in :numref:`Figure %s <fig-quality>`, is sufficient
@@ -233,7 +235,7 @@ about both of these parameters in Chapter 3.
    shared spectrum.
 
 Finally, like the rest of the mobile cellular network, the radio comes
-with a set of acronyms, with *LTE (Longer-Term Evolution)* and *NR
+with a set of acronyms, with *LTE (Long-Term Evolution)* and *NR
 (New Radio)* being the two most widely known. These are marketing
 terms commonly associated with the radio technology for 4G and 5G,
 respectively. They are important only in the sense that many of the
@@ -249,8 +251,8 @@ this potential.
 ------------------------
 
 We now describe the RAN by sketching the role each base station plays.
-Keep in mind this is kind of like describing the Internet by explaining
-how a router works—a not unreasonable place to start, but it doesn't
+Keep in mind this is like describing the Internet by explaining
+how a router works—not an unreasonable place to start, but it doesn't
 fully do justice to the end-to-end story.
 
 First, each base station establishes the wireless channel for a
