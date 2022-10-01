@@ -64,7 +64,7 @@ Chapter 2. More generally, you should think of the collection of all
 Mobile Core instantiations deployed across the globe as cooperating to
 implement a distributed mobility service.
 
-Second, at the heart of this distributed mobility service is
+Second, at the heart of that distributed mobility service is
 functionality that tracks devices as they move throughout the global
 RAN. The Mobile Core also has significant responsibility managing the
 UEs connected a given physical RAN—which will be our focus throughout
@@ -118,14 +118,14 @@ this context, the IMSI plays exactly the same role in a physical RAN
 as an 802.11 address plays in a LAN, and the Mobile Core behaves just
 like any access router.
 
-Second, whether a device connects to a RAN or or some other access
+Second, whether a device connects to a RAN or some other access
 network, it is automatically assigned a new IP address any time it
 moves from one coverage domain to another. Even in the RAN case,
 ongoing calls are dropped whenever a device moves between
 instantiations of the Mobile Core (i.e., mobility is supported only
 *within* the region served by a given Mobile Core). But this is
 typically not a problem for the RAN (or for any other access network,
-for that matter) because mobile devices are typically clients
+for that matter) because mobile devices are usually clients
 requesting service; they just start making requests with their new IP
 address.
 
