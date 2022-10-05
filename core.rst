@@ -137,11 +137,11 @@ The 5G Mobile Core, which 3GPP calls the *NG-Core*, adopts a
 microservice-like architecture. We say “microservice-like” because
 while the 3GPP specification spells out this level of disaggregation,
 it is really just describing a set of functional blocks and not
-prescribing an implementation. A set of functional blocks is very
-different from the collection of engineering decisions that go into
-designing a microservice-based system. That said, viewing the
+prescribing an implementation. In practice, a set of functional blocks
+is very different from the collection of engineering decisions that go
+into designing a microservice-based system. That said, viewing the
 collection of components shown in :numref:`Figure %s <fig-5g-core>` as
-a set of microservices is a good working model.
+a set of microservices is a reasonable working model (for now).
 
 .. _fig-5g-core:
 .. figure:: figures/Slide22.png 
@@ -181,31 +181,37 @@ Section 2.4):
 In other words, the AMF authorizes access when a UE first connects to
 one of the local base stations, and then tracks (but does not control)
 which base station currently serves each UE. The SMF then allocates an
-IP address to each AMF-authorized UE, and maintains per-device session
-state, as long as the UE is active within the local RAN.
+IP address to each AMF-authorized UE, and directly interacts with the
+UPF to maintain per-device session state.
 
-One unusual aspect of the Mobile Core is that the per-UE session state
-maintained by the SMF potentially includes a reference to a packet
-buffer (the buffer itself in maintained by the UPF) in which packets
+Of particular note, the per-UE session state controlled by the SMF (and
+implemented by the UPF) includes a packet buffer in which packets
 destine to a UE currently in the middle of being handed off from one
 base station to another are queued during the transition. This feature
 was originally designed to avoid data loss during a voice call, but
 its value is less obvious when the data is an IP packet since
 end-to-end protocols like TCP are prepared to retransmit lost
-packets. On the other hand, if hand-offs are too frequent, they can
-be problematic for TCP.
+packets. On the other hand, if hand-offs are too frequent, they can be
+problematic for TCP.
 
-Continuing with our inventory of control-related elements in
-:numref:`Figure %s <fig-5g-core>`, several of them provide generic
-functionality one might find in any microservice-based application:
+Before continuing with our inventory of control-related elements in
+:numref:`Figure %s <fig-5g-core>`, it is important to note we show
+only a fraction of the full set that 3GPP defines. The full set is
+includes a wide-range of possible features, many of which are either
+speculative (i.e., identify potential functionality) or overly prescriptive
+(i.e., identify well-known cloud native microservices). We limit our
+discussion to functional elements that provide unique value in the
+private 5G deployments that we primarily focus on. Of these, several
+provide generic functionality one might find in any microservice-based
+application:
 
 -  *AUSF (Authentication Server Function):* Authenticates UEs.
 
--  *UDM (Unified Data Management):* Manages user identity, including
+-  *UDM (Unified Data Management):* Manages user identity, including 
    the generation of authentication credentials.
 
--  *SDSF (Structured Data Storage Network Function):* Used to store
-   structured data, and so is similar to an *SQL Database*.
+-  *UDR (Unified Data Registry):* Manages user static subscriber
+   related information.
 
 -  *UDSF (Unstructured Data Storage Network Function):* Used to store
    unstructured data, and so is similar to a *Key/Value Store*.
@@ -222,14 +228,20 @@ primarily to help explain the general role each component plays.  In
 some cases, substituting an existing cloud native component is a
 viable implementation option. For example, MongoDB can be used to
 implement a UDSF. In other cases, however, this is not possible due to
-assumptions 3GPP makes. For example, AUSF, UMD, and AMF collectively
-implement a *Authentication and Authorization Service*, but an option
-like OAuth2 could not be used in their place because (a) UMD is
-assumed to be part of the global identity mapping service discussed in
-Section 5.1, and (b) 3GPP specifies the interface by which the AMF
-connects to the RAN (denoted N2 in the figure). We will see how to
-cope with such issues in Section 5.3, where we talk about
-implementation details in more detail.
+assumptions 3GPP makes. For example, AUSF, UMD, UMR, and AMF
+collectively implement a *Authentication and Authorization Service*,
+but an option like OAuth2 could not be used in their place because (a)
+UMD and UMR are assumed to be part of the global identity mapping
+service discussed in Section 5.1, and (b) 3GPP specifies the interface
+by which the various components request service from each other (e.g.,
+AMF connects to the RAN via the N2 depicted in the figure).\ [#]_ We
+will see how to cope with such issues in Section 5.3, where we talk
+about implementation details in more detail.
+
+.. [#] Although not shown in the figure, 3GPP also defines all
+       interfaces exposed by all the functional elements *within* the
+       core (in addition N2 and N3 interfaces exported by the Core as
+       a whole to the RAN).
 
 Finally, :numref:`Figure %s <fig-5g-core>` shows two other functional
 elements that export a northbound interface to the management plane
@@ -241,25 +253,20 @@ elements that export a northbound interface to the management plane
 -  *NSSF (Network Slicing Selector Function):* Manages how network
    slices are selected to serve a given UE.
 
-.. Maybe should say something about these management APIs  being
-   implementation dependent, but that 3GPP does prescribe (some of)
-   the settable policy rules and slice parameters.
+.. Maybe we should include a sidebar on 3GPP's internal APIs and
+   functional specs, as a sort of editorial on how the architecture
+   points to a cloud native implementation, but does so in an overly
+   prescriptive a way that a cloud native engineer would find
+   appalling. (Some of the current blurbage borders on
+   editiorializing, but maybe we should stick to the facts in the main
+   body, and limit our opinions to a sidebar.)
 
 Keep in mind that even though 3GPP does not directly prescribe a
 microservice implementation, the overall design clearly points to a
 cloud native solution as the desired end-state for the Mobile Core.
-Of particular note, introducing distinct storage services means that
+Of particular note, introducing a distinct storage service means that
 all the other services can be stateless, and hence, more readily
-scalable.  Also note that :numref:`Figure %s <fig-5g-core>` shows a
-*message bus* interconnecting all the components rather than
-standardizing a full set of pairwise interfaces.\ [#]_ This suggests a
-well-understood implementation strategy.
-
-.. [#] Only the N2 and N3 interfaces that connect the Mobile Core CP
-       and UP, respectively, to the RAN are prescribed by the 3GPP
-       standard. All other interfaces are defined by the implementation.
-
-
+scalable.
 
 Deployment Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
