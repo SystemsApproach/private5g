@@ -13,8 +13,8 @@ Chapter 2:  Architecture
    to make a pass that emphasizes that perspective.
 
    The last section needs to accomplish two things. One is to explain
-   that we have several degress of freedom in how the individual
-   componets are deployed/distributed, but then zero in on the
+   that we have several degrees of freedom in how the individual
+   components are deployed/distributed, but then zero in on the
    enterprise and private deployments. The second is to explain that
    the system as a whole has to be managed and operated, but then zero
    in on best practices in cloud-based managed services.
@@ -78,6 +78,21 @@ as one or more devices) that serves several purposes.
 -  Ensures this connectivity fulfills the promised QoS requirements.
 -  Tracks user mobility to ensure uninterrupted service.
 -  Tracks subscriber usage for billing and charging.
+
+For readers familiar with Internet architecture and Wi-Fi as a common
+access technology, some of these functions might look a bit
+surprising. For example, Wi-Fi, like most of the Internet, normally
+provides a best-effort service, whereas cellular networks often aim to
+deliver some sort of QoS guarantee. Tracking subscribers for both
+mobility and billing are also not the sort of things we tend to think
+about in the Internet, but they are considered important functions for
+cellular networks. The reasons for these differences are numerous,
+including the typically large costs of acquiring cellular spectrum and
+maintaining the infrastructure to use it such as radio towers. With
+that large investment, there is a desire to recoup costs by charging
+subscribers, and thus to make some sort of service guarantees to those
+subscribers. Much of the complexity of the mobile core follows from
+these requirements being imposed by service providers.
 
 Note that Mobile Core is another example of a generic term. In 4G this
 is called the *Evolved Packet Core (EPC)* and in 5G it is called the
@@ -173,12 +188,12 @@ set of slices.
    the RAN, and introduce the minimum terminology needed in the rest
    of this chapter (most notably, the opportunity to differential
    quality-of-service). Could draw parallel to optical link. The radio
-   tranmission chapter is alreay a minimal primer, so this section
+   transmission chapter is already a minimal primer, so this section
    will likely be pretty short.
 
 Before describing the RAN and Mobile Core subsystems, we first call
 attention to the obvious: that the base stations that comprise the RAN
-communicate with UEs via electromagetic radio waves. This book is not
+communicate with UEs via electromagnetic radio waves. This book is not
 about the physics of this over-the-air communication, and only skims
 the surface of the information theory that underlies it. But
 identifying the abstract properties of wireless communication is an
@@ -208,7 +223,7 @@ is the focus of this book.
     :width: 300px
     :align: center
     
-    Abstractly, measures of singal quality (CQI) and declations
+    Abstractly, measures of signal quality (CQI) and declarations
     of intended data delivery quality (QCI) are passed up and down
     the RAN stack.
 
@@ -553,13 +568,13 @@ map between the IMSI, the phone number, and the subscriber profile.
 
 .. Needs to describe various deployment options before settling into
    the enterprise (edge cloud) story that we plan to continue
-   throughout the rest of the book. Main theme is: Orchestrtion is the
+   throughout the rest of the book. Main theme is: Orchestration is the
    final component.
 
 The architectural overview presented up to this point focuses on the
 functional elements of the mobile cellular network. We now turn our
 attention to how this functionality is operationalized, and we do so
-in a decidely software-defined and cloud-native way. This lays the
+in a decidedly software-defined and cloud-native way. This lays the
 foundation for the rest of the book, which builds towards supporting
 5G connectivity as a managed cloud service. This is a marked change
 from the conventional Telco approach, whereby an operator bought
