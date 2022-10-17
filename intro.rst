@@ -29,7 +29,7 @@ generations supported voice and then text, with 3G defining the
 transition to broadband access, supporting data rates measured in
 hundreds of kilobits per second. Today, the industry is transitioning
 from 4G (with data rates typically measured in the few
-megabits-per-second) to 5G, with the promise of a tenfold increase in
+megabits per second) to 5G, with the promise of a tenfold increase in
 data rates.
 
 But 5G is about much more than increased bandwidth. 5G represents a
@@ -287,7 +287,7 @@ cloud service from non-traditional MNOs.
 
 To this end, :numref:`Figure %s <fig-enterprise>` depicts a simplified
 5G deployment that the rest of this book works toward. At a
-high-level, the figure shows a wide-range of enterprise use cases that
+high level, the figure shows a wide range of enterprise use cases that
 might take advantage of 5G connectivity, with the data plane of the 5G
 service running on-prem (on an edge cloud running within the
 enterprise), and the control plane of the 5G service running off-prem
@@ -373,7 +373,7 @@ use enterprises as our exemplar deployment.
 An important takeaway from this discussion is that to understand how 5G
 is being implemented, it is helpful to have a working understanding of
 how clouds are built. This includes the use of *commodity hardware*
-(both servers and white-box switches), horizontally scalable
+(both servers and bare-metal switches), horizontally scalable
 *microservices* (also referred to as *cloud native*), and
 *Software-Defined Networks (SDN)*. It is also helpful to have an
 appreciation for how cloud software is developed, tested, deployed, and

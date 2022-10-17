@@ -398,16 +398,19 @@ Chapter 4.
 2.4 Mobile Core
 ---------------
 
-The main function of the Mobile Core is to provide external packet
-data network (i.e., Internet) connectivity to mobile subscribers,
-while ensuring that they are authenticated and their observed service
-qualities satisfy their subscription SLAs. An important aspect of the
-Mobile Core is that it needs to manage all subscribers’ mobility by
-keeping track of their last whereabouts at the granularity of the
-serving base station. It is this support for security, mobility, and
-QoS that differentiate the cellular network from Wi-Fi. The following
-also serves to fill in some details about how each individual UE
-connects to the network.
+At the most basic level, the function of the Mobile Core is to provide
+packet data network connectivity to mobile subscribers, i.e., connect
+them to the Internet. (The mobile network assumes that multiple packet
+data networks can exist, but in practice the Internet is the one that
+matters). As we noted above, there is more to providing this
+connectivity than meets the eye: the Mobile Core ensures that
+subscribers are authenticated and aims to deliver the service
+qualities to which they have subscribed. As subscribers may move
+around among base station coverage areas, the Mobile Core needs to
+keeping track of their whereabouts at the granularity of the serving
+base station. The reasons for this tracking are discussed further in
+Chapter 5. It is this support for security, mobility, and QoS that
+differentiates the cellular network from Wi-Fi.
 
 We start with the security architecture, which is grounded in two
 trust assumptions.  First, each base station trusts that it is
@@ -415,11 +418,9 @@ connected to the Mobile Core by a secure private network, over which
 it establishes the tunnels introduced in :numref:`Figure %s
 <fig-tunnels>`: a GTP/UDP/IP tunnel to the Core's User Plane (Core-UP)
 and a SCTP/IP tunnel to the Core's Control Plane (Core-CP). Second,
-each UE has an operator-provided SIM card, which uniquely identifies
-the subscriber and establishes the radio parameters (e.g., frequency
-band) needed to communicate with that operator's base stations. The
-SIM card also includes a secret key that the UE uses to authenticate
-itself.
+each UE has an operator-provided SIM card, which contains information
+that uniquely identifies the subscriber and includes a secret key that
+the UE uses to authenticate itself.
 
 The identifier burned into each SIM card, called an *IMSI
 (International Mobile Subscriber Identity)*, is a globally unique id
