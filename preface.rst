@@ -3,7 +3,7 @@ Preface
 
 When we wrote our introductory 5G book two years ago, our goal was to
 help people with experience building Internet and Cloud services
-understand the opportunity to bring best-practices from those systems
+understand the opportunity to bring best practices from those systems
 to the mobile cellular network. On paper (and in the press) 5G had set
 an ambitious goal of transformative changes, adopting a cloud-inspired
 architecture and supporting a new set of innovative services. But the

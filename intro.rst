@@ -157,7 +157,12 @@ radio spectrum. Unlike Wi-Fi, which permits anyone to use a channel at
 either 2.4 or 5 GHz (these are unlicensed bands), governments have
 auctioned off and licensed exclusive use of various frequency bands to
 service providers, who in turn sell mobile access service to their
-subscribers.
+subscribers. The use of licensed spectrum brings certain benefits such
+as greater control over the quality of service delivered, while also
+imposing costs both in terms of paying for licenses and in the
+complexity of the systems needed to manage access to the spectrum. We
+will explore how these costs and benefits play out in subsequent
+chapters. 
 
 There is also a shared-license band at 3.5 GHz, called *Citizens
 Broadband Radio Service (CBRS)*, set aside in North America for
@@ -170,7 +175,7 @@ via regional auctions; and finally the rest of the population, who can
 access and utilize a portion of this band as long as they first check
 with a central database of registered users.  CBRS, along with
 standardization efforts to extend mobile cellular networks to operate
-in the unlicensed bands, open the door for private cellular networks
+in the unlicensed bands, opens the door for private cellular networks
 similar to Wi-Fi. This is proving attractive to enterprises.
 
 The specific frequency bands that are licensed for cellular networks
@@ -255,7 +260,7 @@ addresses is a topic we will explore in later chapters.
 .. Need to talk about licensing spectrum, which is a big factor (and
    about CBRS).   
 
-The previous section gives a decidely Telco-centric view of the mobile
+The previous section gives a decidedly Telco-centric view of the mobile
 cellular network, which makes sense because Telcos have been the
 dominant MNOs for the past 40+ years. But with 5G's focus on
 broadening the set of services it supports, and embracing general
