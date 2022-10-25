@@ -268,6 +268,38 @@ platforms that can host yet-to-be-invented applications, the mobile
 cellular network is starting to blur the line between the access
 network and the cloud.
 
+.. sidebar:: 5G, Wi-Fi, and the role of spectrum
+
+  WiFi networks use unlicensed radio spectrum that do not require WiFi
+  network operators to get advance regulatory approval.  At the same
+  time, anyone can access the same spectrum, subject to limits on
+  transmission power. As a result, WiFi networks share their bands
+  with devices including baby monitors, cordless phones, etc., so the
+  WiFi MAC layer assumes the presence of physical-layer interference. 
+  Enterprise WiFi deployments, such as those on college campuses and
+  in corporate office buildings, perform more centralized management
+  of interference across multiple overlapping access points, but risk
+  of interference remains and thus the service remains best-effort.
+
+  Cellular access networks typically use licensed spectrum that is
+  owned or leased by the carrier for long periods of time at high
+  cost. Even "lightly licensed" spectrum such as CBRS offers more
+  control over interference than Wi-Fi. Since the cellular radio has
+  exclusive access to spectrum over a geographic region, cellular
+  waveforms are designed for wide-area coverage and high spectral
+  efficiency. Managing access to the spectrum, as we shall see, is an
+  important aspect of the 5G architecture.
+
+  Many of the differences between 5G and Wi-Fi follow from the
+  differences in spectrum and radio characteristics. For example,
+  cellular deployments, with the expense of spectrum being a given,
+  have historically been carried out by well-resourced actors who can
+  acquire land, build and connect towers, and hire skilled
+  staff. However, the rise of enterprise 5G and the availability of
+  lightly licensed spectrum is leading to a blurring of the lines
+  between the two approaches.
+
+
 The rest of this book explains what that means in detail. As an
 overview, thinking of 5G connectivity as a cloud service means that
 instead of using purpose-built devices and telephony-based operational
