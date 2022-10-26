@@ -153,7 +153,7 @@ The second concept, also depicted in :numref:`Figure %s <fig-cups>`,
 is to partition the Mobile Core into a *Control Plane* and *User
 Plane*. This is similar to the control/data plane split that anyone
 familiar with the Internet would recognize, although 3GPP has
-introduces a corresponding acronym—\ *CUPS, Control and User Plane
+introduced a corresponding acronym—\ *CUPS, Control and User Plane
 Separation*—to denote this idea.
 
 Finally, one of the key aspirational goals of 5G is the ability to
@@ -242,12 +242,33 @@ about both of these parameters in Chapter 3.
 
 .. sidebar:: Uniqueness of Wireless Links
 
-   Talk about quality of the "link" being continuous in a wireless
-   network, versus discrete in a wireline network (the link is up or
-   it is down). Quality plays a role in handover, but it's more
-   complicated than "picking the best." You have to play the value
-   delivered to a given UE against the aggregate goodness of the
-   shared spectrum.
+   While it is common in networking to abstract the link layer by
+   treating the link as something that just delivers packets at some
+   rate from point A to point B, there are important differences
+   between wireless links and fixed links that cannot be entirely
+   abstracted away at higher layers. This is especially true when
+   mobile devices are involved, as the quality of a link will vary
+   depending on the distance between transmitter and receiver, the
+   relative velocity of the endpoints, reflections of radio waves from
+   other objects, and interference from other transmitters. All of
+   these factors come into play in determining the Channel Quality
+   Indicator (CQI).
+
+   Further complicating the picture in a mobile network is that a
+   given UE is often within reach of more than one base station,
+   presenting the option to handoff the UE from one base station to
+   another. The decision to do so is not just a matter of picking the
+   base station with the best channel quality, but rather a matter of
+   trying to optimize the whole system, in which the goal is to
+   support as many UEs as possible at the desired quality level given the
+   available spectrum and coverage. 
+
+..   Talk about quality of the "link" being continuous in a wireless
+..   network, versus discrete in a wireline network (the link is up or
+     it is down). Quality plays a role in handover, but it's more
+     complicated than "picking the best." You have to play the value
+     delivered to a given UE against the aggregate goodness of the
+     shared spectrum.
 
 Finally, like the rest of the mobile cellular network, the radio comes
 with a set of acronyms, with *LTE (Long-Term Evolution)* and *NR
