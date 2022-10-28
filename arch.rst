@@ -20,19 +20,22 @@ Chapter 2:  Architecture
    in on best practices in cloud-based managed services.
    
 This chapter identifies the main architectural components of the
-mobile cellular networks, which is partly an exercise in introducing
-3GPP terminology. For someone who is familiar with the Internet, this
-terminology can seem arbitrary (e.g., “eNB” is a “base station”), but
-keep in mind that this terminology came out of the
-3GPP standardization process, which was historically concerned with
-telephony and almost completely disconnected from the IETF and other
-Internet-related efforts. To further confuse matters, 3GPP terminology
-often changes with each generation (e.g., a base station is called eNB
-in 4G and gNB in 5G). We address situations like this by using generic
-terminology (e.g., base station), and referencing the 3GPP-specific
-counterpart only when the distinction is helpful.  This example is
-only the tip of the terminology iceberg. Marcin Dryjanski’s blog post
-gives a broader perspective on the complexity of terminology in 5G.
+mobile cellular networks. We need to introduce some terminology to do
+this, which can be confusing for those whose networking background
+comes from the Internet. This is partly because some of what needs to
+happen in a mobile network, such as keeping track of which base
+station is serving a given mobile device, doesn't really have a
+parallel in fixed networks. On top of that, the terminology came out
+of the 3GPP standardization process, which was historically concerned
+with telephony and almost completely disconnected from the IETF and
+other Internet-related efforts. To further confuse matters, 3GPP
+terminology often changes with each generation (e.g., a base station
+is called eNB in 4G and gNB in 5G). We address situations like this by
+using generic terminology (e.g., base station), and referencing the
+3GPP-specific counterpart only when the distinction is helpful.  This
+example is only the tip of the terminology iceberg. Marcin Dryjanski’s
+blog post gives a broader perspective on the complexity of terminology
+in 5G.
 
 .. _reading_terminology:
 .. admonition:: Further Reading
@@ -91,8 +94,12 @@ including the typically large costs of acquiring cellular spectrum and
 maintaining the infrastructure to use it such as radio towers. With
 that large investment, there is a desire to recoup costs by charging
 subscribers, and thus to make some sort of service guarantees to those
-subscribers. Much of the complexity of the mobile core follows from
-these requirements being imposed by service providers.
+subscribers. There is also a need to maximize the efficiency of
+spectrum usage. Much of the complexity of the mobile core follows from
+these requirements being imposed by service providers. Even when we
+get to enterprises running their own 5G networks, they still need to
+manage the usage of spectrum to obtain the benefits of 5G over Wi-Fi,
+such as more predictable control over latency and bandwidth. 
 
 Note that Mobile Core is another example of a generic term. In 4G this
 is called the *Evolved Packet Core (EPC)* and in 5G it is called the
@@ -101,10 +108,11 @@ is called the *Evolved Packet Core (EPC)* and in 5G it is called the
 network, effectively providing a bridge between the RAN in some
 geographic area and the greater IP-based Internet. 3GPP provides
 significant flexibility in how the Mobile Core is geographically
-deployed, but for our purposes, assuming each instantiation of the
-Mobile Core serves a metropolitan area is a good working model. The
-corresponding RAN would then span several dozens (or even hundreds) of
-cell towers in that geographic area.
+deployed, ranging from minimal deployments (the RAN and the mobile
+core can be co-located) to areas that are hundreds of kilometers
+wide. A common model is that an instantiation of the Mobile Core
+serves a metropolitan area. The corresponding RAN would then span several
+dozens (or even hundreds) of cell towers in that geographic area.
 
 Taking a closer look at :numref:`Figure %s <fig-cellular>`, we see
 that a *Backhaul Network* interconnects the base stations that
@@ -116,7 +124,7 @@ implements Fiber-to-the-Home is a prime candidate for implementing the
 RAN backhaul, with the RAN effectively running as an *overlay* on top
 of whatever technology is used. The backhaul network is obviously a
 necessary part of the RAN, but it is an implementation choice and not
-prescribed by the 3GPP standard.
+prescribed by the 3GPP standard. 
 
 Although 3GPP specifies all the elements that implement the RAN and
 Mobile Core in an open standard—including sub-layers we have not yet
@@ -634,19 +642,21 @@ Kubernetes-based edge cloud, augmented with a 5G-based connectivity
 service. Aether is targeted at enterprises that want to take advantage
 of 5G connectivity in support of edge applications that require
 predictable, low-latency connectivity. In short, “Kubernetes-based”
-means Aether is able to host container-based services, and “5G-based
+means Aether is able to host container-based services, with Kubernetes
+being the platform used to orchestrate the services, and “5G-based
 connectivity” means Aether is able to connect those services to mobile
-devices throughout the enterprise's physical plant.
+devices throughout the enterprise's physical environment.
 
 Aether supports this combination by implementing both the RAN and the
 user plane of the Mobile Core on-prem, as cloud-native workloads
 co-located on the Aether cluster. This is often referred to as *local
 breakout* because it enables direct communication between mobile
 devices and edge applications without data traffic leaving the
-enterprise. This scenario is depicted in :numref:`Figure %s
-<fig-hybrid>`, which does not name the edge applications, but
-substituting Internet-of-Things (IoT) would be an illustrative
-example.
+enterprise, in contrast to what would happen with standard,
+operator-provided 5G service. This scenario is depicted in :numref:`Figure %s
+<fig-hybrid>`, which shows generic edge applications running
+on-prem. Those edge applications might include the local processing of
+sensor data or control applications for the IoT devices, for example.
 
 .. _fig-hybrid:
 .. figure:: figures/ops/Slide3.png
