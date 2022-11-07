@@ -77,6 +77,7 @@ In 5G, base stations are known as *gNB*, where the "g" stands for
 The Mobile Core is a bundle of functionality (conventionally packaged
 as one or more devices) that serves several purposes.
 
+-  Authenticates devices prior to attaching them to the network
 -  Provides Internet (IP) connectivity for both data and voice services.
 -  Ensures this connectivity fulfills the promised QoS requirements.
 -  Tracks user mobility to ensure uninterrupted service.
@@ -160,9 +161,12 @@ the overall architecture.
 The second concept, also depicted in :numref:`Figure %s <fig-cups>`,
 is to partition the Mobile Core into a *Control Plane* and *User
 Plane*. This is similar to the control/data plane split that anyone
-familiar with the Internet would recognize, although 3GPP has
-introduced a corresponding acronym—\ *CUPS, Control and User Plane
-Separation*—to denote this idea.
+familiar with the Internet would recognize, and draws in particular on
+the ideas of software-defined networking (SDN) by placing control and
+user planes in separate devices. 3GPP has introduced a corresponding
+acronym—\ *CUPS, Control and User Plane Separation*—to denote this
+idea. One motivation for CUPS is to enable control plane resources and
+data plane resources to be scaled independently of each other. 
 
 Finally, one of the key aspirational goals of 5G is the ability to
 segregate traffic for different usage domains into isolated *network
@@ -264,7 +268,7 @@ about both of these parameters in Chapter 3.
 
    Further complicating the picture in a mobile network is that a
    given UE is often within reach of more than one base station,
-   presenting the option to handoff the UE from one base station to
+   presenting the option to handover the UE from one base station to
    another. The decision to do so is not just a matter of picking the
    base station with the best channel quality, but rather a matter of
    trying to optimize the whole system, in which the goal is to
@@ -304,7 +308,7 @@ subscriber’s UE upon power-up or upon handover when the UE is active.
 This channel is released when the UE remains idle for a predetermined
 period of time. Using 3GPP terminology, this wireless channel is said
 to provide a *bearer service*. The term “bearer” has historically been
-used in telecommunications (including early wireline technologies like
+used in telecommunications (including early wireline technologies such as
 ISDN) to denote a data channel, as opposed to a channel that carries
 signaling information.
 
@@ -452,7 +456,7 @@ that uniquely identifies the subscriber and includes a secret key that
 the UE uses to authenticate itself.
 
 The identifier burned into each SIM card, called an *IMSI
-(International Mobile Subscriber Identity)*, is a globally unique id
+(International Mobile Subscriber Identity)*, is a globally unique identifier
 for every device connected to the global mobile network. Each IMSI is
 a 64-bit, self-describing identifier, which is to say, it includes a
 *Format* field that effectively serves as a mask for extracting other
