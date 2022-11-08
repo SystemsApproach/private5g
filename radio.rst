@@ -9,12 +9,16 @@ Chapter 3:  Radio Transmission
    Emphasizes use cases, which can be anchored in features of the
    radio (which the rest of the stack then need to take into account).
    
-For anyone familiar with wireless access technologies like Wi-Fi, the
-cellular network is most unique due to its approach to sharing the
-available radio spectrum among its many users, all the while allowing
-those users to remain connected while moving. This has resulted in a
-highly dynamic and adaptive approach, in which coding, modulation and
-scheduling play a central role.
+For anyone familiar with wireless access technologies that offer a
+best-effort service, such as Wi-Fi, the cellular network presents a
+notable contrast. This is mostly because cellular networks carefully
+allocate available radio spectrum among many users (or more precisely,
+UEs), aiming to deliver a certain quality to all active users in a
+coverage area, all the while allowing those users to remain connected
+while moving. They also aim to maximize the efficiency of spectrum
+usage, as it is a finite and often costly resource. This has resulted
+in a highly dynamic and adaptive approach, in which coding, modulation
+and scheduling play a central role.
 
 As we will see in this chapter, mobile cellular networks use a
 reservation-based strategy, whereas Wi-Fi is contention-based. This
@@ -24,6 +28,12 @@ optimistically transmits when the wireless link is idle and backs off
 if contention is detected), while 4G and 5G networks assume (and
 strive for) high utilization (and hence explicitly assign different
 users to different “shares” of the available radio spectrum).
+
+The fact that 4G and 5G networks control spectrum allocation carefully
+is central to their ability to deliver guarantees of bandwidth and
+latency more predictably than Wi-Fi. This in turn is why there
+is so much interest in using 5G in particular for mission-critical
+applications.  
 
 We start by giving a short primer on radio transmission as a way of
 laying a foundation for understanding the rest of the 5G architecture.
@@ -125,14 +135,14 @@ multipath propagation.
 One of the most important consequences of these factors is that the
 transmitter must receive feedback from every receiver to judge how to
 best utilize the wireless medium on their behalf. 3GPP specifies a
-*Channel Quality Indicator (CQI)* for this purpose, where in practice
+*Channel Quality Indicator (CQI)* for this purpose. In practice,
 the receiver sends a CQI status report to the base station periodically
 (e.g., every millisecond in LTE). These CQI messages report the observed
 signal-to-noise ratio, which impacts the receiver’s ability to recover
 the data bits. The base station then uses this information to adapt how
 it allocates the available radio spectrum to the subscribers it is
 serving, as well as which coding and modulation scheme to employ.
-All of these decisions are made by  the scheduler.
+All of these decisions are made by the scheduler.
 
 3.2 Scheduler
 ------------------
@@ -326,6 +336,8 @@ accurate to say that each QCI is associated with a class of traffic
 subscriber might be sending and receiving traffic that belongs to
 multiple classes at any given time. We explore this idea in much more
 depth in a later chapter.
+
+.. Do we? Which chapter?
 
 .. _fig-scheduler:
 .. figure:: figures/Slide18.png 
