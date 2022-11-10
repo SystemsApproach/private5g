@@ -253,14 +253,6 @@ elements that export a northbound interface to the management plane
 -  *NSSF (Network Slicing Selector Function):* Manages how network
    slices are selected to serve a given UE.
 
-.. Maybe we should include a sidebar on 3GPP's internal APIs and
-   functional specs, as a sort of editorial on how the architecture
-   points to a cloud native implementation, but does so in an overly
-   prescriptive a way that a cloud native engineer would find
-   appalling. (Some of the current blurbage borders on
-   editiorializing, but maybe we should stick to the facts in the main
-   body, and limit our opinions to a sidebar.)
-
 Keep in mind that even though 3GPP does not directly prescribe a
 microservice implementation, the overall design clearly points to a
 cloud native solution as the desired end-state for the Mobile Core.
@@ -268,64 +260,89 @@ Of particular note, introducing a distinct storage service means that
 all the other services can be stateless, and hence, more readily
 scalable.
 
-Deployment Options
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+5.3 Control Plane
+----------------------
 
-.. Seems out-of-place, but maybe some of this remains (perhaps boiled
-   down to a sidebar. Might also introduce some 4G/EPC terminology here.
-   
-With an already deployed 4G RAN/EPC in the field and a new 5G
-RAN/NG-Core deployment underway, we can’t ignore the issue of
-transitioning from 4G to 5G (an issue the IP-world has been grappling
-with for 20 years). 3GPP officially spells out multiple deployment
-options, which can be summarized as follows.
+This section describes two different strategies for how one might
+implement the Mobile Core CP. Both correspond to open source projects
+that are readily available for download and experimentation.
 
--  Standalone 4G / Stand-Alone 5G
--  Non-Standalone (4G+5G RAN) over 4G’s EPC
--  Non-Standalone (4G+5G RAN) over 5G’s NG-Core
+5.3.1 SD-Core
+~~~~~~~~~~~~~
 
-The second of the three options, which is generally referred to as
-“NSA“, involves 5G base stations being deployed alongside the
-existing 4G base stations in a given geography to provide a data-rate
-and capacity boost. In NSA, control plane traffic between the user
-equipment and the 4G Mobile Core utilizes (i.e., is forwarded through)
-4G base stations, and the 5G base stations are used only to carry user
-traffic. Eventually, it is expected that operators complete their
-migration to 5G by deploying NG Core and connecting their 5G base
-stations to it for Standalone (SA) operation. NSA and SA operations
-are illustrated in :numref:`Figure %s <fig-nsa>`.
+Our first example, called SD-Core, is a nearly one-for-one translation
+of the functional blocks shown in :numref:`Figure %s <fig-5g-core>`
+into a cloud native implementation. A high-level schematic is shown in
+:numref:`Figure %s <fig-sd-core>`, which we include even though it
+looks quite similar to :numref:`Figure %s <fig-5g-core>` because it
+highlights three implementation details worth calling attention to.
 
-.. _fig-nsa:
-.. figure:: figures/Slide23.png 
+.. _reading_sd-core:
+.. admonition:: Further Reading
+
+    `SD-Core <https://opennetworking.org/sd-core/>`__.
+
+.. _fig-sd-core:
+.. figure:: figures/Slide25.png 
     :width: 600px
     :align: center
 	    
-    NSA and SA options for 5G deployment.
+    SD-Core implementation of the Mobile Core Control Plane, including
+    support for Standalone (SA) deployment of both 4G and 5G.
 
-One reason we call attention to the phasing issue is that we face a
-similar challenge in the chapters that follow. The closer the following
-discussion gets to implementation details, the more specific we have to
-be about whether we are using 4G components or 5G components. As a
-general rule, we use 4G components—particularly with respect to the
-Mobile Core, since that’s what's available in open source today—and trust
-the reader can make the appropriate substitution without loss of
-generality. Like the broader industry, the open source community is in
-the process of incrementally evolving its 4G code base into its
-5G-compliant counterpart.
+First, SD-Core supports both the 5G and 4G versions of the Mobile
+Core,\ [#]_  which share a common User Plane (UPF). We have not discussed
+details of the 4G Core, but the obvious takeaway is that it is much
+less disaggregated.  In particular, the components in the 5G Core are
+stateless and so can be horizontally scaled out as load dictates,
+whereas that is not the case for the 4G Core. (For completeness, the
+rough correspondence between 4G and 5G is: MME-to-AMF, SPGW-C-to-SMF,
+HSS-to-UDM, and PCRF-to-PCF.) Although not shown in the schematic,
+there is also a scalable Key/Value Store microservice based on MongoDB
+that is used to make all Core-related state persistent.
+
+.. [#] SD-Core's 4G Core is a fork of the OMEC project and its 5G Core
+       is a fork of the Free5GC project.
+
+.. Maybe should say more about SD-Core's origin story.
+
+Second, :numref:`Figure %s <fig-sd-core>` illustrates 3GPP's
+*Standalone (SA)* deployment option, in which 4G and 5G networks can
+co-exist. They do share a UPF implementation, but it is instantiated
+separately for each RAN/Core pair, with support for both the 4G and 5G
+interfaces (denoted *S1-U* and *N3*, respectively). Although not
+obvious from the SA example, 3GPP defines an alternative transition
+plan, called *NSA (Non-Standalone)*, in which separate 4G and 5G RANs
+were paired with either a 4G Core or a 5G Core. The details of how
+that works are unimportant, except to make the point that production
+networks almost never get to enjoy a "flag day" on which a new version
+is universally substituted for an old version. A migration plan has to
+be part of the design. More information on this topic can be found in
+a GSMA Report.
 
 .. _reading_migration:
 .. admonition:: Further Reading
 
-    For more insight into 4G to 5G migration strategies, see
     `Road to 5G: Introduction and Migration
     <https://www.gsma.com/futurenetworks/wp-content/uploads/2018/04/Road-to-5G-Introduction-and-Migration_FINAL.pdf>`__.
     GSMA Report, April 2018.
 
-5.3 Control Plane
-----------------------
+Third, :numref:`Figure %s <fig-sd-core>` should make it clear that the
+3GPP has been busy specifying inter-component interfaces. These
+include over-the-air interfaces between base stations and UEs (e.g.,
+*NR Uu*), control interfaces between the Core and both UEs and base
+stations (e.g., *N1* and *N2*, respectfully), a user plane interface
+between the Core and base stations (e.g., *N2*), microservice
+interfaces between the components that implement the Core (e.g.,
+*Nudm*), and a data plane interface between the Core and the backbone
+network (e.g., *N6*). Some of these interfaces are necessary for
+interoperability (e.g., *N1* and *N Uu* make it possible to connect
+your phone to any MNO's network), but others could be seen as
+over-specifying the implementation. We'll see how Magma addresses this
+situation in the next section.
 
-Drill down on how one might implement the Mobile Core CP. Probably
-borrows heavily from Magma.
+5.3.2 Magma
+~~~~~~~~~~~
 
 5.4 User Plane
 --------------------

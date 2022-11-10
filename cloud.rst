@@ -21,17 +21,17 @@ The first step is to implement all the components using cloud native
 building blocks. We start by introducing those building blocks in
 Section 6.1. The second step is to introduce yet another component—a
 *Cloud Management Platform*—that is responsible for operationalizing
-5G-as-a-Service. The rest of this chapter describes how to build such
-a management system using open source tools.
+5G-as-a-Service. The rest of the sections describe how to build such a
+management system using open source tools.
 
 Before getting into the details, it is important to remember that
 mobile cell service (both voice and broadband) has been offered as a
 Telco service for 40 years. Treating it as a managed cloud service is
 a significant departure from that history, most notably in how the
-resulting connectivity it provides is operated and managed. As a
-consequence, the Cloud Management Platform described in this chapter
-is significantly different than the legacy OSS/BSS mechanisms that
-have traditionally been the centerpiece of the Telco management
+connectivity it provides is operated and managed. As a consequence,
+the Cloud Management Platform described in this chapter is
+significantly different than the legacy OSS/BSS mechanisms that have
+traditionally been the centerpiece of the Telco management
 machinery. The terminology is also different, but that only matters if
 you are trying to map Telco terminology onto cloud terminology (which
 we are not). We take up the "terminology mapping problem" in a
@@ -41,7 +41,7 @@ design.
 .. _reading_ops:
 .. admonition:: Further Reading 
    
-   `Edge Cloud Operations:: A Systems Approach 
+   `Edge Cloud Operations: A Systems Approach 
    <https://ops.systemsapproach.org>`__.  June 2022.
 
 .. Should note (here or in Ch4 & 5) that you'll see "Mgmt/Orchestrator"
