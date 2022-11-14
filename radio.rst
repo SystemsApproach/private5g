@@ -175,7 +175,7 @@ spectrum in the concluding section.
 
 The 4G approach to multiplexing downstream transmissions is called
 *Orthogonal Frequency-Division Multiple Access (OFDMA)*, a specific
-application of OFDM that multiplexes data over a set of 12 orthogonal
+application of OFDM that multiplexes data over a set of 12 orthogonal (non-interfering)
 subcarrier frequencies, each of which is modulated independently.\ [#]_ The
 “Multiple Access” in OFDMA implies that data can simultaneously be
 sent on behalf of multiple users, each on a different subcarrier
@@ -189,13 +189,15 @@ between adjacent bands.
        not describe it because the approach is not applicable to 5G.
 
 The use of OFDMA naturally leads to conceptualizing the radio spectrum
-as a 2-D resource, as shown in :numref:`Figure %s <fig-sched-grid>`.
-The minimal schedulable unit, called a *Resource Element (RE)*,
+as a 2-D resource, as shown in :numref:`Figure %s <fig-sched-grid>`,
+with the subcarriers represented in the vertical dimension and the time to
+transmit symbols on each subcarrier represented in the horizontal dimension.  The
+minimal schedulable unit, called a *Resource Element (RE)*,
 corresponds to a 15-kHz band around one subcarrier frequency and the
-time it takes to transmit one OFDMA symbol. The number of bits that can
-be encoded in each symbol depends on the modulation rate, so for example
-using *Quadrature Amplitude Modulation (QAM)*, 16-QAM yields 4 bits per
-symbol and 64-QAM yields 6 bits per symbol.
+time it takes to transmit one OFDMA symbol. The number of bits that
+can be encoded in each symbol depends on the modulation scheme in use.
+For example, using *Quadrature Amplitude Modulation (QAM)*, 16-QAM
+yields 4 bits per symbol and 64-QAM yields 6 bits per symbol.
 
 .. _fig-sched-grid:
 .. figure:: figures/Slide17.png 
@@ -334,8 +336,10 @@ one-to-one relationship between subscribers and a QCI, it is more
 accurate to say that each QCI is associated with a class of traffic
 (often corresponding to some type of application), where a given
 subscriber might be sending and receiving traffic that belongs to
-multiple classes at any given time. We explore this idea in much more
-depth in a later chapter.
+multiple classes at any given time.
+
+.. We explore this idea in much more
+.. depth in a later chapter.
 
 .. Do we? Which chapter?
 
@@ -360,21 +364,25 @@ suitable for all workloads, but different applications have different
 requirements for how their traffic gets scheduled. For example, some
 applications care about latency and others care more about bandwidth.
 
-While in principle one could define an uber scheduler that takes
-dozens of different factors into account, we instead design a
+While in principle one could define a sophisticated scheduler that
+takes dozens of different factors into account, 5G has introduced a
 mechanism that allows the underlying resources (in this case radio
 spectrum) to be "sliced" between different uses.  The key to slicing
-is to add a layer of indirection to the scheduler.
+is to add a layer of indirection between the scheduler and the
+physical resource blocks. Slicing, like much of 5G, has received a
+degree of hype, but it boils down to virtualization at the level of
+the radio scheduler.
 
 As shown in :numref:`Figure %s <fig-hypervisor>`, the idea is to
 perform a second mapping of Virtual RBs to Physical RBs. This sort of
 virtualization is common in resource allocators throughout computing
 systems because we want to separate how many resources are allocated
-to each user from the decision as to which physical resources are
-actually assigned. This virtual-to-physical mapping is performed by a
-layer typically known as a *Hypervisor*, and the important thing to
-keep in mind is that it is totally agnostic about which user’s segment
-is affected by each translation.
+to each user (or virtual machine in the computing case) from the
+decision as to which physical resources are actually assigned. This
+virtual-to-physical mapping is performed by a layer typically known as
+a *Hypervisor*, and the important thing to keep in mind is that it is
+totally agnostic about which user’s segment is affected by each
+translation.
 
 .. _fig-hypervisor:
 .. figure:: figures/Slide19.png 
@@ -397,6 +405,9 @@ IoT traffic. Alternatively, a certain fraction of the available capacity
 could be reserved for premium customers or other high-priority traffic
 (e.g., public safety), with the rest shared among everyone else.
 
+.. Could say something about work-conserving scheduling, i.e. don't
+   waste BW that isn't needed by one slice
+
 .. _fig-multi-sched:
 .. figure:: figures/Slide20.png 
     :width: 600px
@@ -408,7 +419,7 @@ could be reserved for premium customers or other high-priority traffic
 3.4 New Use Cases
 -----------------
 
-We conclude by noting that up to this point we have describe 5G as
+We conclude by noting that up to this point we have described 5G as
 introducing additional degrees of freedom into how data is scheduled
 for transmission, but when taken as a whole, the end result is a
 qualitatively more powerful radio. This new 5G air interface
@@ -426,7 +437,7 @@ multiplexes data onto the radio spectrum.
 
 The first is being able to change the waveform. This effectively
 introduces the ability to dynamically change the size and number of
-schedulable resource units, which opens the door to making fine-grain
+schedulable resource units, which opens the door to making fine-grained
 scheduling decisions that are critical to predictable, low-latency
 communication.
 
@@ -436,7 +447,7 @@ multiplexing happens in both the frequency and time domains for
 downstream traffic, but multiplexing happens in only the frequency
 domain for upstream traffic. 5G NR multiplexes both upstream and
 downstream traffic in both the time and frequency domains. Doing so
-provides finer-grain scheduling control needed by latency-sensitive
+provides finer-grained scheduling control needed by latency-sensitive
 applications.
 
 The third is related to the new spectrum available to 5G NR, with the
@@ -444,7 +455,7 @@ mmWave allocations opening above 24 GHz being especially
 important. This is not only because of the abundance of capacity—which
 makes it possible to set aside dedicated capacity for mission-critical
 applications that require low-latency communication—but also because
-the higher-frequency enables even finer-grain resource blocks (e.g.,
+the higher-frequency enables even finer-grained resource blocks (e.g.,
 scheduling intervals as short as 0.125 ms). Again, this improves
 scheduling granularity to the benefit of applications that cannot
 tolerate unpredictable latency.
@@ -463,9 +474,9 @@ the available radio spectrum to a light-weight (simplified) air
 interface.  This approach started with Release 13 of LTE via two
 complementary technologies: mMTC and NB-IoT (NarrowBand-IoT).  Both
 technologies build on a significantly simplified version of LTE—i.e.,
-limiting the numerology and flexibility needed achieve high spectrum
+limiting the numerology and flexibility needed to achieve high spectrum
 utilization—so as to allow for simpler IoT hardware design. mMTC
-delivers up to 1 Mbps over a 1.4 MHz of bandwidth and NB-IoT delivers a
+delivers up to 1 Mbps over 1.4 MHz of bandwidth and NB-IoT delivers a
 few tens of kbps over 200 kHz of bandwidth; hence the term
 *NarrowBand*.  Both technologies have been designed to support over 1
 million devices per square kilometer. With Release 16, both
@@ -474,11 +485,13 @@ numerology. Starting with Release 17, a simpler version of 5G NR,
 called *NR-Light*, will be introduced as the evolution of mMTC.
 NR-Light is expected to scale the device density even further.
 
+.. check: does slicing get revisited?
+
 As a consequence of all four improvements, 5G NR is designed to
 support partitioning the available bandwidth, with different
 partitions dynamically allocated to different classes of traffic
 (e.g., high-bandwidth, low-latency, and low-complexity). This is the
-essence of *slicing*, an idea we will revisit throughout this book.
+essence of *slicing*, as discussed above.
 Moreover, once traffic with different requirements can be served by
 different slices, 5G NR's approach to multiplexing is general enough
 to support varied scheduling decisions for those slices, each tailored
