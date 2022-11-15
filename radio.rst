@@ -343,6 +343,10 @@ multiple classes at any given time.
 
 .. Do we? Which chapter?
 
+.. Might try to say more about QCI. Check out this reference:
+   https://www.tech-invite.com/3m23/toc/tinv-3gpp-23-501_za.html#e-5-7-3
+   
+
 .. _fig-scheduler:
 .. figure:: figures/Slide18.png 
     :width: 600px
