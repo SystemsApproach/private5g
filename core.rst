@@ -36,18 +36,19 @@ functionality.
 ------------------------
 
 There are two equally valid views of the Mobile Core. The
-Internet-centric view is that each instantiation of the Mobile Core
-serves as a router that connects a physical RAN (one of many possible
-access network technologies, not unlike WiFi) to the global
-Internet. In this view, IP addresses serve as the unique global
-identifier that makes it possible for any RAN-connected device to
-communication with any Internet addressable device or service. The
-3GPP-centric view is that a distributed set of Mobile Cores
-(interconnected by one or more backbone technologies, of which the
-Internet is just one example) cooperate to turn a set of physical RANs
-into one logically global RAN. In this perspective, the IMSI burned
-into device SIM card serves as the global identifier that makes it
-possible for any two mobile devices to communicate with each other.
+Internet-centric view is that each local instantiation of the Mobile
+Core (e.g., serving a metro area) acts as a router that connects a
+physical RAN (one of many possible access network technologies, not
+unlike WiFi) to the global Internet. In this view, IP addresses serve
+as the unique global identifier that makes it possible for any
+RAN-connected device to communication with any Internet addressable
+device or service. The 3GPP-centric view is that a distributed set of
+Mobile Cores (interconnected by one or more backbone technologies, of
+which the Internet is just one example) cooperate to turn a set of
+physical RANs into one logically global RAN. In this perspective, the
+IMSI burned into device SIM card serves as the global identifier that
+makes it possible for any two mobile devices to communicate with each
+other.
 
 Both of these perspectives are correct, but since broadband
 communication using Internet protocols to access cloud services is
@@ -64,7 +65,7 @@ explicitly includes the word "Identity", where the "S" in both IMSI
 and SIM stands for subscriber (a kind of principal), yet the IMSI is
 also used as a global identifier for a UE connected to the mobile
 network. This conflation breaks down when there could be tens or
-hundreds of IoT devices for every person, with no obvious association
+hundreds of IoT devices for every customer, with no obvious association
 among them. Accounting for this problem is an “architecture alignment”
 fix we discuss in the next chapter when we describe how to provide
 Private 5G Connectivity as a managed cloud service.
@@ -137,84 +138,6 @@ typically not a problem when the RAN is being used to deliver
 broadband connectivity because Internet devices are almost always
 clients *requesting* a cloud service; they just start issuing requests
 with their new (dynamically assigned) IP address.
-
-
-
-
-
-
-Also note that while we sometimes talk about the Mobile Core as though
-it were a self-contained component deployed in some geographic region,
-this is really only the case for a single instance of the Mobile Core,
-for example, as depicted in :numref:`Figure %s <fig-cellular>` of
-Chapter 2. More generally, you should think of the collection of all
-Mobile Core instantiations deployed across the globe as cooperating to
-implement a distributed mobility service.
-
-Next, at the heart of that distributed mobility service is
-functionality that tracks devices as they move throughout the global
-RAN. The Mobile Core also has significant responsibility managing the
-UEs connected a given physical RAN—which will be our focus throughout
-the rest of this chapter—but this global-connectivity requirement
-influences the overall architecture.
-
-Recall from Section 2.4 that the 64-bit IMSI included in every SIM
-card uniquely identifies every RAN-connected device. This means you
-can think of this IMSI as similar to a 48-bit 802.11 address. This
-includes how addresses are assigned to ensure uniqueness: `(MCC, MNC)`
-pairs are assigned by a global authority to every MNO, each of which
-then decides how to uniquely assign the rest of the IMSI identifier
-space to devices.
-
-Unlike 802.11 addresses, however, IMSIs are also used to locate (and
-route packets to) UEs. A hierarchically distributed database maps
-IMSIs onto the collection of information needed to successfully
-connect to the corresponding UE. This includes a combination of
-relatively *static* information about the level of service the UE
-expects (including the corresponding phone number and subscriber
-profile/account information), and more *dynamic* information about the
-current location of the UE (including which Mobile Core and base
-station currently connects the UE to the global RAN).
-
-This mapping service has a name, or rather, several names that keep
-changing from from generation to generation. In 2G and 3G it was
-called HLR (Home Location Registry). In 4G the HLR maintains only
-static information and a separate HSS (Home Subscriber Server)
-maintains the more dynamic information. In 5G the HLR is renamed the
-UDR (Unified Data Registry) and the HSS is renamed UDM (Unified Data
-Management). We will see the UDM in Section 5.2 because of the role it
-plays *within* a single instance of the Mobile Core.
-
-There are, of course, many more details to the process—including how
-to find a UE that has roamed to another MNO's network—but conceptually
-the process is straightforward.  (As a thought experiment, imagine how
-you would build a "logically global ethernet" using just 802.11
-addresses, rather than depending on the additional layer of addressing
-provided by IP.) For our purposes, the important takeaway is that
-IMSIs are used to locate the Mobile Core instance that is then
-responsible for authenticating the UE, tracking the UE as it moves
-from base station to base station within that Core's geographic
-region, and forwarding packets to/from the UE.
-
-Finally, there are two other observations about mobility and
-addressing worth highlighting.  First, the odds of someone trying to
-"call" or "text" a UE that corresponds to an IoT device, drone,
-camera, or robot are virtually zero. It is the IP address assigned to
-each UE (by the local Mobile Core) that is used to *locate* (route
-packets to) the UE. In this context, the IMSI plays exactly the same
-role in a physical RAN as an 802.11 address plays in a LAN, and the
-Mobile Core behaves just like any access router.
-
-Second, whether a device connects to a RAN or some other access
-network, it is automatically assigned a new IP address any time it
-moves from one coverage domain to another. Even in the RAN case,
-ongoing calls are dropped whenever a device moves between
-instantiations of the Mobile Core (i.e., mobility is supported only
-*within* the region served by a given Mobile Core). But this is
-typically not a problem for the RAN (or for any other access network,
-for that matter) because mobile devices are usually clients
-requesting service; they just start making requests with their new IP
-address.
 
 
 5.2 Functional Components
