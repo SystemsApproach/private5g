@@ -316,17 +316,17 @@ and 5G Control Planes.
 
 Second, :numref:`Figure %s <fig-sd-core>` illustrates 3GPP's
 *Standalone (SA)* deployment option, in which 4G and 5G networks
-co-exist. They share a UPF implementation, but the UPFs are
-instantiated separately for each RAN/Core pair, with support for both
-the 4G and 5G interfaces, denoted *S1-U* and *N3*, respectively.
-Although not obvious from the SA example, 3GPP defines an alternative
-transition plan, called *NSA (Non-Standalone)*, in which separate 4G
-and 5G RANs were paired with either a 4G Core or a 5G Core. The
-details of how that works are not relevant to this discussion, except
-to make the point that production networks almost never get to enjoy a
-"flag day" on which a new version is universally substituted for an
-old version. A migration plan has to be part of the design. More
-information on this topic can be found in a GSMA Report.
+co-exist and run indepently. They share a UPF implementation, but the
+UPFs are instantiated separately for each RAN/Core pair, with support
+for both the 4G and 5G interfaces, denoted *S1-U* and *N3*,
+respectively.  Although not obvious from the SA example, 3GPP defines
+an alternative transition plan, called *NSA (Non-Standalone)*, in
+which separate 4G and 5G RANs were paired with either a 4G Core or a
+5G Core. The details of how that works are not relevant to this
+discussion, except to make the point that production networks almost
+never get to enjoy a "flag day" on which a new version is universally
+substituted for an old version. A migration plan has to be part of the
+design. More information on this topic can be found in a GSMA Report.
 
 .. _reading_migration:
 .. admonition:: Further Reading
