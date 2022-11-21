@@ -37,9 +37,9 @@ standard. Note that the figure depicts the base station as a pipeline
 (running left-to-right for packets sent to the UE) but it is equally
 valid to view it as a protocol stack (as is typically done in official
 3GPP documents). Also note that (for now) we are agnostic as to how
-these stages are implemented, but since we are ultimately heading
-towards a cloud-based implementation, you can think of each as
-corresponding to a microservice (if that is helpful).
+these stages are implemented. Since we are ultimately heading
+towards a cloud-based implementation, one possible implementation
+strategy would be a microservice per box. 
 
 .. _fig-pipeline:
 .. figure:: figures/sdn/Slide1.png 
@@ -73,7 +73,7 @@ The key stages are as follows.
    frequencies, including Wi-Fi).
 
 -  PHY (Physical Layer) → Responsible for coding and modulation (as
-   discussed in an earlier chapter), including FEC.
+   discussed in Chapter 3), including FEC.
 
 The last two stages in :numref:`Figure %s <fig-pipeline>` (D/A
 conversion and the RF front-end) are beyond the scope of this book.
@@ -115,14 +115,17 @@ historically been "no split," with the entire pipeline shown in
 forward, the 3GPP standard has been extended to allow for multiple
 split-points, with the partition shown in :numref:`Figure %s
 <fig-split-ran>` being actively pursued by the operator-led O-RAN
-Alliance. It is the split we adopt throughout the rest of this book.
+Alliance. It is the split we adopt throughout the rest of this
+book. Note that the split between centralized and distributed
+components mirrors the split made in SDN, with similar motivations. We
+discuss further how SDN techniques are applied to the RAN below.
 
 .. _fig-split-ran:
 .. figure:: figures/sdn/Slide2.png 
     :width: 600px
     :align: center
 
-    Split-RAN processing pipeline distributed across a
+    Split RAN processing pipeline distributed across a
     Central Unit (CU), Distributed Unit (DU), and Radio Unit (RU).
 
 This results in a RAN-wide configuration similar to that shown in
@@ -139,7 +142,7 @@ real-time scheduling decisions.
     :width: 400px
     :align: center
 	    
-    Split-RAN hierarchy, with one CU serving multiple DUs,
+    Split RAN hierarchy, with one CU serving multiple DUs,
     each of which serves multiple RUs.
 
 Because scheduling decisions for radio transmission are made by the
@@ -152,9 +155,9 @@ geographic area (e.g., a mall, campus, or factory), then a single DU
 would likely service multiple RUs. The use of mmWave in 5G is likely
 to make this later configuration all the more common.
 
-Also note that the split-RAN changes the nature of the Backhaul
+Also note that the Split RAN changes the nature of the Backhaul
 Network, which originally connected the base stations back to the
-Mobile Core.  With the split-RAN there are multiple connections, which
+Mobile Core.  With the Split RAN there are multiple connections, which
 are officially labeled as follows.
 
 -  RU-DU connectivity is called the Fronthaul
@@ -191,8 +194,8 @@ the two parts are sometimes referred to as the CU-C and CU-U,
 respectively.
 
 We conclude our description of the split RAN architecture with the
-alternative depiction in :numref:`Figure %s <fig-split-alt>`, which
-for completeness, identifies the standardized interfaces between the
+alternative depiction in :numref:`Figure %s <fig-split-alt>`. 
+For completeness, this figure identifies the standardized interfaces between the
 components (e.g., N2, N3, F1-U, F1-C, and Open Fronthaul). We're not
 going to talk about these interfaces, except to note that they exist
 and there is a corresponding 3GPP specification that spells out the
@@ -204,7 +207,7 @@ source implementations for each component.
     :width: 150px
     :align: center
 	    
-    Alternative depiction of the Split-RAN components, showing the
+    Alternative depiction of the Split RAN components, showing the
     3GPP-specified inter-unit interfaces.
 
 With respect to the Central Unit, most of the complexity is in the
@@ -290,7 +293,7 @@ interfaces are preserved.
 	    
     Example set of control applications (xApps) running on top of
     Near-Real-Time RAN Controller (RIC), controlling a distributed set
-    of Split-RAN elements (CU, DU, RU).
+    of Split RAN elements (CU, DU, RU).
 
 Completing the picture, :numref:`Figure %s <fig-ran-controller>` shows
 the Near-RT RIC implemented as an SDN Controller hosting a set of SDN
