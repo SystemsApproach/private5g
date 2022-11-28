@@ -10,8 +10,13 @@ Chapter 4:  Radio Access Network
 
 The high-level description of the RAN in Chapter 2 was mostly silent
 about the RAN’s internal structure. We now focus on those details, and
-in doing so, explain how the RAN is being transformed in 5G. This
-involves first describing the stages in the RAN's packet processing
+in doing so, explain how the RAN is being transformed in 5G.
+
+You can think of the RAN as having one main job: to transfer packets
+between the mobile core and a set of UEs. This means it is deeply
+involved in the management and scheduling of radio spectrum that we
+discussed in the last chapter, but there is more to it than that. We
+start by describing the stages in the RAN's packet processing
 pipeline, and then showing how these stages are being disaggregated,
 distributed, and implemented.
 
@@ -182,7 +187,8 @@ backhaul is implemented in the cluster switching fabric. In such a
 configuration, the midhaul then effectively serves the same purpose as
 the original backhaul, and the fronthaul is constrained by the
 predictable/low-latency requirements of the MAC stage’s real-time
-scheduler.
+scheduler. This situation is further complicated by the fact that the
+mobile core itself may be disaggregated, as discussed in Chapter 5.
 
 A second observation about the CU shown in :numref:`Figure %s
 <fig-split-ran>` is that it encompasses two functional blocks—the RRC
@@ -211,7 +217,7 @@ source implementations for each component.
     3GPP-specified inter-unit interfaces.
 
 With respect to the Central Unit, most of the complexity is in the
-CU-C, which as we'll see in the next section, is being re-engineered
+CU-C, which, as we'll see in the next section, is being re-engineered
 using SDN, with open source solutions available.  With respect to the
 Radio Unit, nearly all the complexity is in D/A conversion and how the
 resulting analog signal is amplified. Incumbent vendors have
@@ -275,14 +281,14 @@ the MAC scheduler running in the DU.
     component (a proxy) and a Near-Real-Time Controller.
 
 Although not shown in :numref:`Figure %s <fig-rrc-split>`, keep in
-mind (from :numref:`Figure %s <fig-split-ran>`) that the RRC the PDCP,
+mind (from :numref:`Figure %s <fig-split-ran>`) that the RRC and the PDCP,
 form the CU. Reconciling these two figures is a little bit messy, but
 to a first approximation, the PDCP corresponds to the CU-U and
 RRC-Proxy corresponds to the CU-C, with the RIC "lifted out" and
 responsible for overseeing both.  We postpone a diagram depicting this
 relationship until Section 4.5, where we summarize the end-to-end
 result. For now, the important takeaway is that the SDN-inspired
-refactoring of the RAN is free to both move functionality around and
+refactoring of the RAN is free both to move functionality around and to
 introduce new module boundaries, as long as the original 3GPP-defined
 interfaces are preserved.
 
@@ -385,8 +391,8 @@ are RRM Applications.
 Keep in mind, however, that this characterization of xApps is based on
 past (pre-SDN) implementations of the RAN. This is helpful as the
 industry transitions to SD-RAN, but the situation is likely to change.
-SDN is transforming to the RAN, so new ways of controlling the
-RAN—resulting in applications that do fit neatly into the RRM vs SON
+SDN is transforming the RAN, so new ways of controlling the
+RAN—resulting in applications that do not fit neatly into the RRM vs SON
 dichotomy—can be expected to emerge over time.
 
 
