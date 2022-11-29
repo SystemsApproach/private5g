@@ -431,27 +431,7 @@ UPF has additional responsibility.
 
 The following is helpful in connecting-the-dots on the above
 
-\begin{table}
-  \centering
-  \footnotesize
-  \begin{tabular}{ |p{0.278\columnwidth}|p{0.25\columnwidth}|p{0.33\columnwidth}| }
-        \hline
-        \multicolumn{1}{|c|}{\textbf{Rule}} & \multicolumn{1}{c|}{\textbf{Rule Key(s)}} & \multicolumn{1}{c|}{\textbf{Rule Parameters}} \\
-        \hline
-        Packet Detection Rule & IP Address, 5-Tuple, Tunnel Headers, \textit{Endpoint DNS Name Regex} & FAR-ID, QER-ID, URR-ID, Decapsulation Flag\\
-        \hline
-         Forwarding Action Rule & FAR-ID & (Forward, Buffer, Notify) Flags, Tunnel Headers (optional), BAR-ID (optional)\\
-        \hline
-        Buffering Action Rule & BAR-ID & \textit{Buffer Depth, Buffer Duration} \\
-        \hline
-        Usage Reporting Rule & URR-ID & Counter Index, \textit{Reporting Frequency or Threshold} \\
-        \hline
-        QoS Enforcement Rule & QER-ID & \textit{QoS Flow ID (QFI), Guaranteed BitRate, Maximum BitRate} \\
-        \hline
-        \end{tabular}
-  \caption{The rules a 5G control plane uses to configure a UPF, the match keys used to look up a rule, and the parameters loaded into a packet's metadata by said rule. Italicized fields are either scaffolded or not present in the model UPF.\vspace{-2\baselineskip}}
-  \label{tab:pfcp-rules}
-\end{table}
+
 
 5.4.1 Microservice Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
