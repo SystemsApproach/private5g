@@ -316,7 +316,7 @@ and 5G Control Planes.
 
 Second, :numref:`Figure %s <fig-sd-core>` illustrates 3GPP's
 *Standalone (SA)* deployment option, in which 4G and 5G networks
-co-exist and run indepently. They share a UPF implementation, but the
+co-exist and run independently. They share a UPF implementation, but the
 UPFs are instantiated separately for each RAN/Core pair, with support
 for both the 4G and 5G interfaces, denoted *S1-U* and *N3*,
 respectively.  Although not obvious from the SA example, 3GPP defines
@@ -355,82 +355,75 @@ situation in the next section.
 5.4 User Plane
 --------------------
 
-Relate to regular router... Match/Action, but with extra stuff to do
-Talk about the Classifier... PDR --> {FAR, BAR, URR, QER}
-Discuss each of the actions... roughly the current list
-Note could be implemented in a microservice
-Relate to P4 (but at a conceptual level); what's easy / what's hard...
-   (a) Match rules (see 4.1)
-   (b) Buffering (see 4.2)
-   (c) Control API (Synthesizing the API)
+The User Plane of the Mobile Core—corresponding to the UPF component
+in :numref:`Figure %s <fig-5g-core>`\—connects the RAN to the
+Internet. Much like any router, the UPF forwards IP packets from one
+network to the other, but because UEs often sleep to save power and
+sometimes move from one base station to another, it has additional
+responsibilities. Also like other routers, a straightforward way to
+understand the UPF is to think of it as implementing a collection of
+Match/Action rules, where the UPF first classifies each packet against
+a set of match rules, and then executes the associated action.
 
+Using 3GPP terminology, packet classification is defined by a set of
+*Packet Detection Rules (PDRs)*, where a given PDR might simply match
+the device's IP address, but may also take the domain name of the far
+end-point into consideration. Each attached UE has at least two PDRs,
+one for uplink traffic and one for downlink traffic, plus possibly
+additional PDRs to support multiple traffic classes (e.g., for
+different QoS levels, pricing plans, and so on.). The Control Plane
+installs, changes, and removes PDRs as UEs attach, move, and detach.
 
-The User Plane Function (UPF) connects the RAN's base stations to the
-Internet. This includes forwarding IP packets between UEs and the
-Internet (much like any access router), but because UEs often sleep to
-save power, and sometimes move from one base station to another, the
-UPF has additional responsibility.
+Each PDR then identifies one or more actions to execute, which in 3GPP
+terminology are also called "rules", of which there are four types:
 
-* **Packet Classification:** Classifies packets based on a set of
-  *Packet Detection Rules (PDRs)*, thereby associating each packet with
-  a UE and a traffic class (or more specifically, with the set of
-  "Rules" described below). A PDR may simply match the device's IP
-  address, but may also take the domain name of the other end-point
-  into consideration. Each attached UE has at least two PDRs, one for
-  uplink traffic and one for downlink traffic, plus possibly
-  additional PDRs to support multiple traffic classes (e.g., for
-  different QoS levels, pricing plans, etc.). The CP installs,
-  changes, and removes PDRs as UEs attach, move to another base
-  station, and detach.
-
-* **Packet Forwarding:** Forwards downlink packets to the right base
-  station based on a *Forwarding Action Rule (FAR)* associated with
-  the matching PDR. A FAR specifies a set of actions (using flags) to
-  apply to the packet, including tunneling, forwarding, buffering, and
-  notifying the control plane. For example, a FAR for uplink traffic
-  typically contains a `forward` flag to signify that the packet may
-  be forwarded to the Internet. In contrast, the `notify` flag causes
-  the UPF to send an alert to the CP to wake an idle UE.  FARs are
+* **Forwarding Action Rules (FARs):** Instructs the UPF to forward
+  downlink packets to a particular base station and uplink traffic to
+  a next-hop router. Each FAR specifies a set of parameters needed to
+  forward the packet (e.g., how to tunnel downlink packets to the
+  appropriate base station), plus one of the following processing
+  flags: a `forward` flag indicates that the packet should be
+  forwarded; a `buffer` flag indicates that the packet should be
+  buffered until the UE becomes active; and a `notify` flag indicates
+  that the CP should be notified to awaken an idle UE. FARs are
   installed and removed when a device attaches or detaches,
-  respectively, and the downlink FAR changes when the device moves,
-  goes idle, or awakes.
+  respectively, and the downlink FAR changes the processing flag when
+  the device moves, goes idle, or awakes.
 
-* **Packet Buffering:** Buffers downlink traffic for idle UEs, while
-  also sending a `Downlink Data Notification` to the Control Plane,
-  which in turn causes the CP to instruct the base station to awake
-  the UE. Once the UE becomes active, the UPF releases the buffered
-  traffic and resumes normal forwarding. The buffering and
-  notification functions are activated by modifying a FAR to include
-  `buffer` and `notify` flags.  An additional set of *Buffering Action
-  Rules (BARs)* decide various buffer parameters, such as the maximum
-  number of packets (and the maximum duration) to buffer.
+* **Buffering Action Rules (BARs):** Instructs the UPF to buffer
+  downlink traffic for idle UEs, while also sending a `Downlink Data
+  Notification` to the Control Plane. This notification, in turn,
+  causes the CP to instruct the base station to awake the UE. Once the
+  UE becomes active, the UPF releases the buffered traffic and resumes
+  normal forwarding. The buffering and notification functions are
+  activated by modifying a FAR to include `buffer` and `notify` flags,
+  as just described. An additional set of parameters are used to
+  configure the buffer, for example setting its maximum size (number
+  of bytes) and duration (amount of time).
 
-* **Traffic Accounting:** Periodically sends usage reports for each UE
-  to the CP. These reports include counts of the packets sent/received
-  for uplink/downlink traffic for each UE and traffic class.  These
-  reports are used to both limit and bill subscribers. The CP installs
-  and removes *Usage Reporting Rules (URRs)* when the device attaches
-  and detaches, respectively. Each URR includes parameters specifying
-  whether usage reports should be sent periodically or when a quota is
+* **Usage Reporting Rules (URRs):** Instructs the UPF to periodically
+  send usage reports for each UE to the CP. These reports include
+  counts of the packets sent/received for uplink/downlink traffic for
+  each UE and traffic class.  These reports are used to both limit and
+  bill subscribers. The CP installs and removes URRs when the device
+  attaches and detaches, respectively, and each URR specifies whether
+  usage reports should be sent periodically or when a quota is
   exceeded. A UE typically has two URRs (for uplink/downlink usage),
   but if a subscriber's plan includes special treatment for certain
-  types of traffic, an additional URR is created for each traffic class.
+  types of traffic, an additional URR is created for each such traffic
+  class.
 
-* **Quality-of-Service Policing:** Guarantees a minimum amount of
-  available bandwidth and enforces a bandwidth cap for each UE, in
-  both directions,, for each traffic class. These parameters are
-  specified by per-UE *Quality Enforcement Rules (QERs)*. The CP
-  installs and removes QERs when a device attaches and detaches,
-  respectively, and are modified according to operator-defined events
-  such as when the network becomes more or less congested, the UE
-  exceeds a quota, or the network policy changes (e.g., the user signs
-  up for a new pricing plan).  The UPF then perform traffic policing
-  to enforce the bandwidth cap, as well as packet scheduling to ensure
-  a minimum bandwidth in conjunction with admission control in the
-  control plane.
-
-The following is helpful in connecting-the-dots on the above
-
+* **Quality Enforcement Rules (QERs):** Instructs the UPF to guarantee
+  a minimum amount of bandwidth and to enforce a bandwidth cap. These
+  parameters are specified by per-UE / per-direction / per-class
+  basis.  The CP installs and removes QERs when a device attaches and
+  detaches, respectively, and modifies them according to
+  operator-defined events, such as when the network becomes more or
+  less congested, the UE exceeds a quota, or the network policy
+  changes (e.g., the user signs up for a new pricing plan).  The UPF
+  then performs traffic policing to enforce the bandwidth cap, along
+  with packet scheduling to ensure a minimum bandwidth in conjunction
+  with admission control in the control plane.
 
 
 5.4.1 Microservice Implementation
