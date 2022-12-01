@@ -406,16 +406,17 @@ dichotomy—can be expected to emerge over time.
 Drilling down to the next level of detail, :numref:`Figure %s
 <fig-ric>` shows an exemplar implementation of a RIC based on a
 retargeting of the Open Network OS (ONOS) for the SD-RAN use
-case. ONOS was originally designed to support traditional wireline
-network switches using a combination of OpenFlow, P4Runtime, gNMI, and
-gNOI interfaces. For the SD-RAN use case, the ONOS-based RIC instead
-supports a set of RAN-specific north- and south-facing interfaces, but
-internally takes advantage of the same collection of subsystems
-(microservices) as in the wireline case.\ [#]_
+case. ONOS (described in our SDN book) was originally designed to
+support traditional wireline network switches using standard
+interfaces (OpenFlow, P4Runtime, etc.). For the SD-RAN use case, the
+ONOS-based RIC instead supports a set of RAN-specific north- and
+south-facing interfaces, but internally takes advantage of the same
+collection of subsystems (microservices) as in the wireline case.\
+[#]_
 
 .. [#] Technically, the O-RAN definition of the RIC refers to the
        combination of xApps and the underlying platform (in our case
-       ONOS), but we emphasize the distinction between two, in keeping
+       ONOS), but we emphasize the distinction between the two, in keeping
        with the SDN model of distinguishing between the Network OS
        and the suite of Control Apps that run on it.
 
@@ -434,9 +435,9 @@ state. All three of these services are implemented as Kubernetes-based
 microservices, and take advantage of a scalable Key/Value Store.
 
 Of the three interfaces called out in :numref:`Figure %s <fig-ric>`,
-the **A1** and **E2** interface are based on pre-existing 3GPP
+the **A1** and **E2** interfaces are based on pre-existing 3GPP
 standards. The third, **xApp SDK**, is specific to the ONOS-based
-implementation. The O-RAN is using it to inform a convergence on a
+implementation. The O-RAN Alliance is using it to drive towards a
 unified API (and corresponding SDK) for building RIC-agnostic xApps.
 
 The A1 interface provides a means for the mobile operator's management
@@ -446,9 +447,10 @@ briefly introduced the OSS/BSS in Section 2.5, but all you need to
 know about it for our purposes is that such a component sits at the
 top of all Telco software stacks. It is the source of all
 configuration settings and business logic needed to operate a
-network. As a consequence, you can think of A1 as the RAN's
-counterpart to gNMI/gNOI, a pair of configuration APIs commonly used
-to configure commodity cloud hardware.
+network. You can think of A1 as the RAN's counterpart to gNMI/gNOI
+(gRPC Network Management Interface/gRPC Network Operations Interface),
+a pair of configuration APIs commonly used to configure commodity
+cloud hardware.
 
 The Near-RT RIC uses the E2 interface to control the underlying RAN
 elements, including the CU, DUs, and RUs. A requirement of the E2
@@ -495,11 +497,23 @@ between the set of microservices. The south-bound E2 interface in
 :numref:`Figure %s <fig-ric>` translates between the two formats. The
 SDK currently makes the gRPC-based API available to xApps.
 
+
+.. _reading_onos:
+.. admonition:: Further Reading
+
+   
+   To learn more about the details of ONOS and its interfaces, we
+   recommend the chapter in our SDN book that covers it in
+   depth. `Software-Defined Networks: A Systems Approach. Chapter 6:
+   Network OS <https://sdn.systemsapproach.org/onos.html>`__.  
+
+
+
 4.5 Control Loops
 -----------------
 
 We conclude this description of RAN internals by re-visiting the
-sequence of steps involved in disaggregation, which as the previous
+sequence of steps involved in disaggregation, which, as the previous
 three sections reveal, is being pursued in multiple tiers. In doing
 so, we tie up several loose ends, and focus attention on the resulting
 three control loops.
