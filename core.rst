@@ -307,7 +307,8 @@ rough correspondence between 4G and 5G is: MME-to-AMF, SPGW_C-to-SMF,
 HSS-to-UDM, and PCRF-to-PCF.) Although not shown in the schematic,
 there is also a scalable Key/Value Store microservice based on MongoDB.
 It is used to make all Core-related state persistent for both the 4G
-and 5G Control Planes.
+and 5G Control Planes, so for example, UDM/UDR (5G) and HSS (4G)
+write subscriber state to MongoDB.
 
 .. [#] SD-Core's 4G Core is a fork of the OMEC project and its 5G Core
        is a fork of the Free5GC project.
@@ -316,9 +317,9 @@ and 5G Control Planes.
 
 Second, :numref:`Figure %s <fig-sd-core>` illustrates 3GPP's
 *Standalone (SA)* deployment option, in which 4G and 5G networks
-co-exist and run independently. They share a UPF implementation, but the
-UPFs are instantiated separately for each RAN/Core pair, with support
-for both the 4G and 5G interfaces, denoted *S1-U* and *N3*,
+co-exist and run independently. They share a UPF implementation, but
+UPF instances are instantiated separately for each RAN/Core pair, with
+support for both the 4G and 5G interfaces, denoted *S1-U* and *N3*,
 respectively.  Although not obvious from the SA example, 3GPP defines
 an alternative transition plan, called *NSA (Non-Standalone)*, in
 which separate 4G and 5G RANs were paired with either a 4G Core or a
@@ -335,19 +336,27 @@ design. More information on this topic can be found in a GSMA Report.
     <https://www.gsma.com/futurenetworks/wp-content/uploads/2018/04/Road-to-5G-Introduction-and-Migration_FINAL.pdf>`__.
     GSMA Report, April 2018.
 
-Third, :numref:`Figure %s <fig-sd-core>` should make it clear that the
-3GPP has been busy specifying inter-component interfaces. These
-include over-the-air interfaces between base stations and UEs (e.g.,
-*NR Uu*), control interfaces between the Core and both UEs and base
-stations (e.g., *N1* and *N2*, respectfully), a user plane interface
-between the Core and base stations (e.g., *N3*), microservice
-interfaces between the components that implement the Core (e.g.,
-*Nudm*), and a data plane interface between the Core and the backbone
-network (e.g., *N6*). Some of these interfaces are necessary for
-interoperability (e.g., *N1* and *N Uu* make it possible to connect
-your phone to any MNO's network), but others could be seen as being
-unnecessarily prescriptive. We'll see how Magma addresses this
-situation in the next section.
+Third, :numref:`Figure %s <fig-sd-core>` shows many of the
+3GPP-defined inter-component interfaces. These include over-the-air
+interfaces between base stations and UEs (e.g., *NR Uu*), control
+interfaces between the Core and both UEs and base stations (e.g., *N1*
+and *N2*, respectfully), a user plane interface between the Core and
+base stations (e.g., *N3*), and a data plane interface between the
+Core and the backbone network (e.g., *N6*).
+
+The schematic also shows interfaces between the individual
+microservices that make up the Core's Control Plane; for example,
+*Nudm* is the interface the UDM microservice. These latter interfaces
+are RESTful, meaning clients access microservice data by issuing GET,
+PUT, POST, PATCH, and DELETE operations over HTTP, where the important
+specification is the schema that defines the available resources that
+can be accessed. (The 4G counterparts, such as *S1-U* and *S1-MME* are
+not RESTful, but rather, conventional over-the-wire protocols.) Note
+that some of these interfaces are necessary for interoperability
+(e.g., *N1* and *N Uu* make it possible to connect your phone to any
+MNO's network), but others could be seen as internal implementation
+details. We'll see how Magma takes advantage of this distinction in
+the next section.
 
 5.3.2 Magma
 ~~~~~~~~~~~

@@ -19,6 +19,7 @@ ECaaS
 EPC
 Fi
 Fronthaul
+HSS
 GBR
 Gbps
 IPv
@@ -55,6 +56,7 @@ Telcos
 Terraform
 Tofino
 UE
+UDM
 Virtualized
 Whitepaper
 Wi
@@ -142,6 +144,7 @@ serverless
 spacings
 subbands
 subcarrier
+subcarriers
 subcomponents
 toolchain
 toolset
