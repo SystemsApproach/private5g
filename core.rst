@@ -19,9 +19,9 @@ UEs as they connect, tracks them as they move from one base station to
 another, ensures that this connectivity fulfills the promised QoS
 requirements, and meters usage for billing.
 
-Historically, all of these functions were provided by a proprietary
-network appliance. But like the rest of the 5G mobile network, this
-appliance is being disaggregated and implemented as a cloud service,
+Historically, all of these functions were provided by one or more proprietary
+network appliances. But like the rest of the 5G mobile network, these
+appliances are being disaggregated and implemented as a set of cloud services,
 with the goal of improving feature velocity for new classes of
 applications. It is also the case that as the range of use cases grows
 more diverse, a one-size-fits-all approach will become
@@ -160,18 +160,19 @@ a set of microservices is a reasonable working model (for now).
 	    
     5G Mobile Core (NG-Core), represented as a collection of
     microservices, where 3GPP defines the interfaces connecting the
-    Mobile Core CP ane UP to the RAN (denoted N2 and N3, respectively).
+    Mobile Core CP and UP to the RAN (denoted N2 and N3, respectively).
 
 Starting with the User Plane (UP), the *UPF (User Plane Function)*
-forwards traffic between RAN and the Internet. In addition to IP
+forwards traffic between the RAN and the Internet. In addition to IP
 packet forwarding, the UPF is responsible for policy enforcement,
-lawful intercept, traffic usage reporting, and QoS policing. These are
-all common functions in access routers, even if they go beyond what
-you usually find in enterprise or backbone routers. The other detail
-of note is that because the RAN is an overlay network, the RAN side of
-the UPF (corresponding to the N3 interface) is responsible for
-encapsulating and decapsulating packets transmitted to base stations
-(as depicted in :numref:`Figure %s <fig-tunnels>` of Section 2.3).
+lawful intercept, traffic usage measurement, and QoS policing. These
+are all common functions in access routers, even if they go beyond
+what you usually find in enterprise or backbone routers. The other
+detail of note is that, because the RAN is an overlay network, the UPF
+is responsible for tunneling (i.e., encapsulating and decapsulating)
+packets as they are transmitted to and from base stations over the N3
+interface (as depicted in :numref:`Figure
+%s <fig-tunnels>` of Section 2.3).
 
 The rest of the functional elements in :numref:`Figure %s
 <fig-5g-core>` implement the Control Plane (CP). Of these, two
