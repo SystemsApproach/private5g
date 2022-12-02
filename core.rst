@@ -338,24 +338,24 @@ design. More information on this topic can be found in a GSMA Report.
     GSMA Report, April 2018.
 
 Third, :numref:`Figure %s <fig-sd-core>` shows many of the
-3GPP-defined inter-component interfaces. These include over-the-air
-interfaces between base stations and UEs (e.g., *NR Uu*), control
-interfaces between the Core and both UEs and base stations (e.g., *N1*
-and *N2*, respectfully), a user plane interface between the Core and
-base stations (e.g., *N3*), and a data plane interface between the
-Core and the backbone network (e.g., *N6*).
+3GPP-defined inter-component interfaces. These include an over-the-air
+interface between base stations and UEs (*NR Uu*), control interfaces
+between the Core and both UEs and base stations (*N1* and *N2*,
+respectfully), a user plane interface between the Core and base
+stations (*N3*), and a data plane interface between the Core and the
+backbone network (*N6*).
 
 The schematic also shows interfaces between the individual
 microservices that make up the Core's Control Plane; for example,
 *Nudm* is the interface the UDM microservice. These latter interfaces
-are RESTful, meaning clients access microservice data by issuing GET,
-PUT, POST, PATCH, and DELETE operations over HTTP, where the important
-specification is the schema that defines the available resources that
-can be accessed. (The 4G counterparts, such as *S1-U* and *S1-MME* are
-not RESTful, but rather, conventional over-the-wire protocols.) Note
-that some of these interfaces are necessary for interoperability
-(e.g., *N1* and *N Uu* make it possible to connect your phone to any
-MNO's network), but others could be seen as internal implementation
+are RESTful, meaning clients access each microservice by issuing GET,
+PUT, POST, PATCH, and DELETE operations over HTTP, where a
+service-specific schema defines the available resources that can be
+accessed. (The 4G counterparts, such as *S1-U* and *S1-MME* are not
+RESTful, but rather, conventional over-the-wire protocols.) Note that
+some of these interfaces are necessary for interoperability (e.g.,
+*N1* and *N Uu* make it possible to connect your phone to any MNO's
+network), but others could be seen as internal implementation
 details. We'll see how Magma takes advantage of this distinction in
 the next section.
 
@@ -435,9 +435,42 @@ terminology are also called "rules", of which there are four types:
   with packet scheduling to ensure a minimum bandwidth in conjunction
   with admission control in the control plane.
 
+The rest of this section describes two complementary strategies for
+implementing a UPF: one server-based and one switch-based.
 
 5.4.1 Microservice Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A seemingly straightforward approach to supporting the set of
+Match/Action rules just described is to implement the UPF in software
+on a commodity server. Like any software-based router, the process
+would read a packet from an input port, classify the packet by
+matching it against a table of installed PDRs, execute the associated
+action(s), and then write the packet to an output port. Such a process
+could then be packaged as a Docker container, with one or more
+instances spun up on a Kubernetes cluster as workload dictates. This
+is mostly consistent with a microservice-based approach, with one
+important catch: the actions required to process each packet are
+stateful.
+
+What we mean by this is that the UPF has two pieces of state that
+needs to be maintained on a per-UE / per-direction / per-class basis:
+(1) a finite state machine that transitions between `foward`,
+`buffer`, and `notify`; and (2) a corresponding packet buffer when in
+the `buffer` state. This means that as the UPF scales up to handle
+more and more traffic—by adding a second, third, and fourth
+instance—packets still need to be directed to the original instance
+that knows the state for that particular flow. This breaks a
+fundamental assumption of a truly horizontally scalable service, in
+which traffic can be randomly directed to any instance in a way that
+balances the load. It also forces you to do packet classification
+before selecting which instance is the right one, although it is
+possible to offload the classification stage to a SmartNIC.
+
+.. Could talk about other ways to accomplish that -- e.g., assigning
+   IP addresses to instances in a way that causes the upstream router
+   to forward to the correct instance -- but I'm not sure how much
+   space to give this topic.
 
 5.4.2 P4 Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
