@@ -43,6 +43,7 @@ PRB
 Parulkar
 PaaS
 Ph
+PCF
 QinQ
 QoS
 Repo
@@ -56,6 +57,7 @@ Telcos
 Terraform
 Tofino
 UE
+UPF
 UDM
 Virtualized
 Whitepaper
@@ -112,6 +114,7 @@ kbps
 kilobits
 latencies
 lifecycle
+lookups
 mMTC
 microservice
 middleware
@@ -152,6 +155,7 @@ transformative
 tunnelled
 uber
 unicast
+unsetting
 uplink
 virtualenv
 virtualized
