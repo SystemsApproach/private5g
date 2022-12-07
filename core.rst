@@ -483,7 +483,7 @@ also be implemented—at least in part—as a P4 program running on a
 programmable switch. Robert MacDavid and colleagues describe how that
 is done in SD-Core, which builds on the base packet forwarding
 machinery described in our companion SDN book. For the purposes of
-this discussion, we focus on the four main challenges that are unique
+this section, we focus on the four main challenges that are unique
 to implementing the UPF in P4.
 
 .. _reading_p4-upf:
@@ -493,9 +493,9 @@ to implementing the UPF in P4.
     <https://www.cs.princeton.edu/~jrex/papers/up4-sosr21.pdf>`__.
     Symposium on SDN Research, September 2021.
 
-   `Software-Defined Networks: A Systems Approach 
-   <https://sdn.systemsapproach.org>`__.  November 2021.
-
+    `Software-Defined Networks: A Systems Approach
+    <https://sdn.systemsapproach.org>`__.  November 2021.
+    
 First, P4-programmable forwarding pipelines include an explicit
 "matching" mechanism built on *Ternary Content-Addressable Memory
 (TCAM)*. This memory supports fast table lookups for patterns that
@@ -508,24 +508,24 @@ packet inspection.
 
 Because TCAM capacity is limited, and the number of unique PDRs that
 need to be matched in both directions is potentially in the tens of
-thousands, it's necessary to use it judiciously. The SD-Core
+thousands, it's necessary to use the TCAM judiciously. The SD-Core
 implementation sets up two parallel PDR tables: one using the
-relatively plentiful switch SRAM (instead of TCAM) for common-case
-uplink rules that exactly matches on tunnel identifiers (which can be
-treated as table indices); and one using TCAM for common-case
-downlink rules that do exact matches on the IP destination address.
+relatively plentiful switch SRAM for common-case uplink rules that
+exactly matches on tunnel identifiers (which can be treated as table
+indices); and one using TCAM for common-case downlink rules that do
+exact matches on the IP destination address.
 
 .. Get this acroym into the discussion somewhere: GTP, includes a
    header field called the Tunnel Endpoint Identifier (TEID).
 
-Second, when a packet arrive from the Internet destined for an idle
+Second, when a packet arrives from the Internet destined for an idle
 UE, the UPF buffers the packet and sends an alert to the 5G control
 plane, asking that the UE be awaken. Today's P4-capable switches do
 not have large buffers or the ability to hold packets indefinitely,
-and so SD-Core uses a buffering microservice to address this
-situation. The microservice indefinitely holds any packets that it
-receives, and releases them back to the switch when instructed to do
-so.
+and so SD-Core uses a buffering microservice running on a server to
+address this limitation. The microservice indefinitely holds any
+packets that it receives, and releases them back to the switch when
+instructed to do so.
 
 When the Mobile Core detects that a UE has gone idle (or is in the
 middle of a handover), it installs a FAR with the `buffer` flag set,
@@ -550,10 +550,10 @@ station.
 Third, QERs cannot be fully implemented in the switch because P4 does
 not include support for programming the packet scheduler. However,
 today's P4 hardware does include fixed-function schedulers with
-configurable weights and priorities, using a runtime interface
+configurable weights and priorities using a runtime interface
 unrelated to P4. The SD-Core approach is to approximately enforce
-bitrate guarantees and limits by mapping QoS class specified by QERs
-onto the available queues with the appropriate weights. This
+bitrate guarantees and limits by mapping the QoS class specified in a
+QER onto the available queues with the appropriate weights. This
 approach is similar to using DiffServ with admission control.
 
 .. Maybe a citation. Or maybe need to say more about QoS.
@@ -563,8 +563,10 @@ approach is similar to using DiffServ with admission control.
     :width: 600px
     :align: center
 	    
-    SD-Core implementation of the Mobile Core Control Plane, including
-    support for Standalone (SA) deployment of both 4G and 5G.
+    A model P4-based implementation of the UPF is used to generate the
+    interface that is then used by the PCF running in the Mobile Core
+    control plane to control the physical implementation of the UPF
+    running on a combination of hardware switches and servers.
 
 Finally, while the above description implies the Mobile Core's CP
 talks directly to the P4 program on the switch, the implementation is
@@ -573,11 +575,13 @@ responsible for sending/receiving control information to/from the UPF,
 but the P4 program implementing the UPF is controlled through an
 interface (known as P4Runtime or P4RT) that is auto-generated from the
 P4 program being controlled. MacDavid's paper describes how this is
-done in more detail, but in summary, it is necessary to first write a
-"Model UPF" in P4, use that to program to generate the UPF-specific
-P4RT interface, and then write a translator that connects PCF to P4RT
-and P4RT to the underlying physical switches and servers. A high-level
-schematic of this is shown in :numref:`Figure %s <fig-p4-upf>`.
+done in more detail (and presumes a deep understanding of the P4
+toolchain), but in summary, it is necessary to first write a "Model
+UPF" in P4, use that to program to generate the UPF-specific P4RT
+interface, and then write a translator that connects PCF to P4RT and
+P4RT to the underlying physical switches and servers. A high-level
+schematic of this software stack is shown in :numref:`Figure %s
+<fig-p4-upf>`.
 
 Note that usage counters for generating URRs are implemented in the
 hardware switches identically to how they appear in the model UPF,
