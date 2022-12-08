@@ -393,13 +393,14 @@ terminology are also called "rules", of which there are four types:
   a next-hop router. Each FAR specifies a set of parameters needed to
   forward the packet (e.g., how to tunnel downlink packets to the
   appropriate base station), plus one of the following processing
-  flags: a `forward` flag indicates that the packet should be
-  forwarded; a `buffer` flag indicates that the packet should be
-  buffered until the UE becomes active; and a `notify` flag indicates
-  that the CP should be notified to awaken an idle UE. FARs are
-  installed and removed when a device attaches or detaches,
-  respectively, and the downlink FAR changes the processing flag when
-  the device moves, goes idle, or awakes.
+  flags: a `forward` flag indicates the packet should be forwarded up
+  to the Internet; a `tunnel` flag indicates the packet should be
+  tunneled down to a base station; a `buffer` flag indicates the
+  packet should be buffered until the UE becomes active; and a
+  `notify` flag indicates that the CP should be notified to awaken an
+  idle UE. FARs are installed and removed when a device attaches or
+  detaches, respectively, and the downlink FAR changes the processing
+  flag when the device moves, goes idle, or awakes.
 
 * **Buffering Action Rules (BARs):** Instructs the UPF to buffer
   downlink traffic for idle UEs, while also sending a `Downlink Data
@@ -437,7 +438,7 @@ terminology are also called "rules", of which there are four types:
   with admission control in the control plane.
 
 The rest of this section describes two complementary strategies for
-implementing a UPF: one server-based and one switch-based.
+implementing a UPF, one server-based and one switch-based.
 
 5.4.1 Microservice Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -457,18 +458,17 @@ stateful.
 What we mean by this is that the UPF has two pieces of state that
 needs to be maintained on a per-UE / per-direction / per-class basis:
 (1) a finite state machine that transitions between `foward`,
-`buffer`, and `notify`; and (2) a corresponding packet buffer when in
-the `buffer` state. This means that as the UPF scales up to handle
-more and more traffic—by adding a second, third, and fourth
-instance—packets still need to be directed to the original instance
-that knows the state for that particular flow. This breaks a
+`tunnel`, `buffer`, and `notify`; and (2) a corresponding packet
+buffer when in the `buffer` state. This means that as the UPF scales
+up to handle more and more traffic—by adding a second, third, and
+fourth instance—packets still need to be directed to the original
+instance that knows the state for that particular flow. This breaks a
 fundamental assumption of a truly horizontally scalable service, in
 which traffic can be randomly directed to any instance in a way that
 balances the load. It also forces you to do packet classification
 before selecting which instance is the right one, which can
 potentially become a performance bottleneck. Note that it is possible
-to offload the classification stage to a SmartNIC, a strategy that
-SD-Core's UPF adopts.
+to offload the classification stage to a SmartNIC.
 
 .. Could talk about other ways to accomplish that -- e.g., assigning
    IP addresses to instances in a way that causes the upstream router
@@ -478,12 +478,17 @@ SD-Core's UPF adopts.
 5.4.2 P4 Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. The following approach is based on an implemenataion in Aether,
+   available as part of SD-Core, but it is more prototype than
+   production, so I've framed the details as "a possible approach"
+   rather than say "SD-Core does X".  Perhaps we should revisit.
+
 Since the UPF is fundamentally an IP packet forwarding engine, it can
 also be implemented—at least in part—as a P4 program running on a
 programmable switch. Robert MacDavid and colleagues describe how that
 is done in SD-Core, which builds on the base packet forwarding
 machinery described in our companion SDN book. For the purposes of
-this section, we focus on the four main challenges that are unique
+this section, the focus is on the four main challenges that are unique
 to implementing the UPF in P4.
 
 .. _reading_p4-upf:
@@ -508,12 +513,12 @@ packet inspection.
 
 Because TCAM capacity is limited, and the number of unique PDRs that
 need to be matched in both directions is potentially in the tens of
-thousands, it's necessary to use the TCAM judiciously. The SD-Core
-implementation sets up two parallel PDR tables: one using the
-relatively plentiful switch SRAM for common-case uplink rules that
-exactly matches on tunnel identifiers (which can be treated as table
-indices); and one using TCAM for common-case downlink rules that do
-exact matches on the IP destination address.
+thousands, it's necessary to use the TCAM judiciously. One
+implementation strategy is to set up two parallel PDR tables: one
+using the relatively plentiful switch SRAM for common-case uplink
+rules that exactly matches on tunnel identifiers (which can be treated
+as table indices); and one using TCAM for common-case downlink rules
+that match on the IP destination address.
 
 .. Get this acroym into the discussion somewhere: GTP, includes a
    header field called the Tunnel Endpoint Identifier (TEID).
@@ -522,10 +527,10 @@ Second, when a packet arrives from the Internet destined for an idle
 UE, the UPF buffers the packet and sends an alert to the 5G control
 plane, asking that the UE be awaken. Today's P4-capable switches do
 not have large buffers or the ability to hold packets indefinitely,
-and so SD-Core uses a buffering microservice running on a server to
+but a buffering microservice running on a server can be used to
 address this limitation. The microservice indefinitely holds any
 packets that it receives, and releases them back to the switch when
-instructed to do so.
+instructed to do so. The following elaborates on how this would work.
 
 When the Mobile Core detects that a UE has gone idle (or is in the
 middle of a handover), it installs a FAR with the `buffer` flag set,
@@ -541,52 +546,61 @@ modifies the corresponding FAR by unsetting the `buffer` flag and
 setting the `tunnel` flag, and (3) instructs the buffering
 microservice to release all packets for back to the switch. Packets
 arriving at the switch from the buffering microservice skip the
-portion of the UPF module they encountered before buffering, to give
-the illusion that they are being buffered in the middle of the
-switch. That is, their processing resumes at the tunneling stage,
-where they are encapsulated and routed to the appropriate base
-station.
+portion of the UPF module they encountered before buffering, giving
+the illusion they are being buffered in the middle of the switch. That
+is, their processing resumes at the tunneling stage, where they are
+encapsulated and routed to the appropriate base station.
 
 Third, QERs cannot be fully implemented in the switch because P4 does
 not include support for programming the packet scheduler. However,
 today's P4 hardware does include fixed-function schedulers with
-configurable weights and priorities using a runtime interface
-unrelated to P4. The SD-Core approach is to approximately enforce
-bitrate guarantees and limits by mapping the QoS class specified in a
-QER onto the available queues with the appropriate weights. This
-approach is similar to using DiffServ with admission control.
+configurable weights and priorities; these parameters are set using a
+runtime interface unrelated to P4. A viable approach, similar to the
+one MacDavid, Chen, and Rexford describe in their INFOCOM paper, is to
+map each QoS class specified in a QER onto one of the available
+queues, and assign an appropriate weight to that queue. As long as
+each class/queue is not over subscribed, individual UEs in the class
+will receive approximately the bit rate they have been promised. (As
+an aside, 3GPP under-specifies QoS guarantees, leaving the details to
+the implementation.)
 
-.. Maybe a citation. Or maybe need to say more about QoS.
-   
-.. _fig-p4-upf:
-.. figure:: figures/Slide26.png 
-    :width: 600px
-    :align: center
-	    
-    A model P4-based implementation of the UPF is used to generate the
-    interface that is then used by the PCF running in the Mobile Core
-    control plane to control the physical implementation of the UPF
-    running on a combination of hardware switches and servers.
+.. _reading_p4-qos:
+.. admonition:: Further Reading
+
+    R. MacDavid, X. Chen, J. Rexford. `Scalable Real-time Bandwidth
+    Fairness in Switches <https://www.cs.princeton.edu/~jrex/papers/infocom23.pdf>`__.
+    IEEE INFOCOM, May 2023.
 
 Finally, while the above description implies the Mobile Core's CP
 talks directly to the P4 program on the switch, the implementation is
-not that straightforward. From the Core's perspective, the PCF is
+not that straightforward. From the Core's perspective, the SMF is
 responsible for sending/receiving control information to/from the UPF,
 but the P4 program implementing the UPF is controlled through an
 interface (known as P4Runtime or P4RT) that is auto-generated from the
 P4 program being controlled. MacDavid's paper describes how this is
 done in more detail (and presumes a deep understanding of the P4
-toolchain), but in summary, it is necessary to first write a "Model
-UPF" in P4, use that to program to generate the UPF-specific P4RT
-interface, and then write a translator that connects PCF to P4RT and
-P4RT to the underlying physical switches and servers. A high-level
-schematic of this software stack is shown in :numref:`Figure %s
-<fig-p4-upf>`.
-
-Note that usage counters for generating URRs are implemented in the
-hardware switches identically to how they appear in the model UPF,
-with counter arrays in the switches’ ingress and egress. When the
-PCF-to-P4 translation microservice requests counter values from the
-Model UPF, the backend translator simply polls the hardware switch
-counters and relays the response.
+toolchain), but it can be summarized as follows. It is necessary to
+first write a "Model UPF" in P4, use that to program to generate the
+UPF-specific P4RT interface, and then write translators that connect
+SMF to P4RT and P4RT to the underlying physical switches and
+servers. A high-level schematic of this software stack is shown in
+:numref:`Figure %s <fig-p4-upf>`.
+	
+.. _fig-p4-upf:
+.. figure:: figures/Slide26.png 
+    :width: 500px
+    :align: center
+	    
+    A model P4-based implementation of the UPF is used to generate the
+    interface that is then used by the SMF running in the Mobile Core
+    control plane to control the physical implementation of the UPF
+    running on a combination of hardware switches and servers.
+    
+Note that while this summary focuses on how the CP controls the UPF,
+the usage counters needed to generate URRs that flow up to the CP are
+easy to support because the counters implemented in the switching
+hardware are identical to the counters in the Model UPF. When the
+Mobile Core requests counter values from the Model UPF, the backend
+translator polls the corresponding hardware switch counters and relays
+the response.
 

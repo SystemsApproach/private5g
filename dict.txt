@@ -48,6 +48,7 @@ QinQ
 QoS
 Repo
 Repos
+Rexford
 RIC
 RRC
 Sunay
