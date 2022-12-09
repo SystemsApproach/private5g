@@ -106,6 +106,7 @@ gNOI
 gRPC
 hyperscalers
 hyperscaler
+indeterminant 
 instantiation
 instantiations
 interoperate

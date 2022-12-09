@@ -368,13 +368,13 @@ the next section.
 The User Plane of the Mobile Core—corresponding to the UPF component
 in :numref:`Figure %s <fig-5g-core>`\—connects the RAN to the
 Internet. Much like the data plane for any router, the UPF forwards IP
-packets from one network to the other, but because UEs often sleep to
-save power and may be in the process of being handed off from one base
-station to another, it sometimes has to temporarily buffer the
-packet. Also like other routers, a straightforward way to understand
-the UPF is to think of it as implementing a collection of Match/Action
+packets, but because UEs often sleep to save power and may be in the
+process of being handed off from one base station to another, it
+sometimes has to buffer the packet for an indeterminant amount of
+time. Also like other routers, a straightforward way to understand the
+UPF is to think of it as implementing a collection of Match/Action
 rules, where the UPF first classifies each packet against a set of
-match rules, and then executes the associated action.
+matching rules, and then executes the associated action.
 
 Using 3GPP terminology, packet classification is defined by a set of
 *Packet Detection Rules (PDRs)*, where a given PDR might simply match
@@ -427,7 +427,7 @@ terminology are also called "rules", of which there are four types:
 
 * **Quality Enforcement Rules (QERs):** Instructs the UPF to guarantee
   a minimum amount of bandwidth and to enforce a bandwidth cap. These
-  parameters are specified by per-UE / per-direction / per-class
+  parameters are specified on a per-UE / per-direction / per-class
   basis.  The CP installs and removes QERs when a device attaches and
   detaches, respectively, and modifies them according to
   operator-defined events, such as when the network becomes more or
@@ -481,7 +481,7 @@ to offload the classification stage to a SmartNIC.
 .. The following approach is based on an implemenataion in Aether,
    available as part of SD-Core, but it is more prototype than
    production, so I've framed the details as "a possible approach"
-   rather than say "SD-Core does X".  Perhaps we should revisit.
+   rather than claim "SD-Core does X".  Perhaps we should revisit.
 
 Since the UPF is fundamentally an IP packet forwarding engine, it can
 also be implemented—at least in part—as a P4 program running on a
@@ -510,6 +510,9 @@ matches of IP addresses (for downlink traffic to each UE) and GTP
 tunnel identifiers (for uplink traffic from each UE). More complex
 PDRs might include regular expressions for DNS names or require deep
 packet inspection.
+
+.. Should say something about how you need a general-purpose processor
+   to do DNS-based (and other forms of) classification.
 
 Because TCAM capacity is limited, and the number of unique PDRs that
 need to be matched in both directions is potentially in the tens of
@@ -544,7 +547,7 @@ When the first packet of a flow arrives at the buffering microservice,
 it sends an alert to the CP, which then (1) wakes up the UE, (2)
 modifies the corresponding FAR by unsetting the `buffer` flag and
 setting the `tunnel` flag, and (3) instructs the buffering
-microservice to release all packets for back to the switch. Packets
+microservice to release all packets for the UE back to the switch. Packets
 arriving at the switch from the buffering microservice skip the
 portion of the UPF module they encountered before buffering, giving
 the illusion they are being buffered in the middle of the switch. That
@@ -558,7 +561,8 @@ configurable weights and priorities; these parameters are set using a
 runtime interface unrelated to P4. A viable approach, similar to the
 one MacDavid, Chen, and Rexford describe in their INFOCOM paper, is to
 map each QoS class specified in a QER onto one of the available
-queues, and assign an appropriate weight to that queue. As long as
+queues, and assign a weight to that queue proportional to the fraction
+of the available bandwidth the class is to receive. As long as
 each class/queue is not over subscribed, individual UEs in the class
 will receive approximately the bit rate they have been promised. (As
 an aside, 3GPP under-specifies QoS guarantees, leaving the details to
