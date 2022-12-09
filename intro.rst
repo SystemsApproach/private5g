@@ -145,13 +145,6 @@ was on a multi-release evolutionary path referred to as *Long-Term
 Evolution (LTE)*. 5G is on a similar evolutionary path, with several
 expected releases over its lifetime.
 
-While 5G is an ambitious advance beyond 4G, it is also the case that
-understanding 4G is the first step to understanding 5G, as several
-aspects of the latter can be explained as bringing a new
-degree of freedom to the former. In the chapters that follow, we often
-introduce some architectural feature of 4G as a way of laying the
-foundation for the corresponding 5G component.
-
 Like Wi-Fi, cellular networks transmit data at certain bandwidths in the
 radio spectrum. Unlike Wi-Fi, which permits anyone to use a channel at
 either 2.4 or 5 GHz (these are unlicensed bands), governments have
@@ -202,14 +195,14 @@ is used *efficiently* is a critical design goal.
 The mobile cellular network is part of the access network that
 implements the Internet’s so-called *last mile*. (Another common
 access technology is *Passive Optical Networks (PON)*, colloquially
-known as Fiber-to-the-Home.) These mobile access networks are provided
-by both big and small *Mobile Network Operators (MNOs)*. Global MNOs
-like AT&T run access networks at thousands of aggregation
-points of presence across a country like the US, along with a national
-backbone that interconnects those sites. Small regional and municipal
-MNOs might run an access network with one or two points of presence,
-and then connect to the rest of the Internet through some large
-operator’s backbone.
+known as Fiber-to-the-Home.) These mobile access networks have
+historically been provided by both big and small *Mobile Network
+Operators (MNOs)*. Global MNOs like AT&T run access networks at
+thousands of aggregation points of presence across a country like the
+US, along with a national backbone that interconnects those
+sites. Small regional and municipal MNOs might run an access network
+with one or two points of presence, and then connect to the rest of
+the Internet through some large operator’s backbone.
 
 .. _fig-global:
 .. figure:: figures/Slide1.png 
@@ -228,14 +221,14 @@ practice, the physical deployment of these “edge” locations vary from
 operator to operator, but one possible scenario is to anchor both the
 cellular and wireline access networks in Telco *Central Offices*.
 
-Historically, the Central Office—officially known as the *PSTN
-(Public Switched Telephone Network) Central Office*—anchored wired
-access (both telephony and broadband), while the cellular network
-evolved independently by deploying a parallel set of *Mobile Telephone
+Historically, the Central Office—officially known as the *PSTN (Public
+Switched Telephone Network) Central Office*—anchored wired access
+(both telephony and broadband), while the cellular network evolved
+independently by deploying a parallel set of *Mobile Telephone
 Switching Offices (MTSO)*. Each MTSO serves as a *mobile aggregation*
 point for the set of cell towers in a given geographic area. For our
-purposes, the important idea is that such aggregation points exist, and
-it is reasonable to think of them as defining the edge of the
+purposes, the important idea is that such aggregation points exist,
+and it is reasonable to think of them as defining the edge of an
 operator-managed access network. For simplicity, we sometimes use the
 term “Central Office” as a synonym for both types of edge sites.
 
@@ -268,7 +261,7 @@ platforms that can host yet-to-be-invented applications, the mobile
 cellular network is starting to blur the line between the access
 network and the cloud.
 
-.. sidebar:: 5G, Wi-Fi, and the role of spectrum
+.. sidebar:: 5G, Wi-Fi, and the Role of Spectrum
 
   WiFi networks use unlicensed radio spectrum that do not require WiFi
   network operators to get advance regulatory approval.  At the same
@@ -314,14 +307,6 @@ models. In particular, this book focuses on how enterprises can be
 their own MNOs, or alternatively, acquire 5G connectivity as a managed
 cloud service from non-traditional MNOs.
 
-.. _fig-enterprise:
-.. figure:: figures/ops/Slide1.png 
-    :width: 600px
-    :align: center
-    
-    Enterprise-based deployment of 5G connectivity, running as a
-    managed cloud service.
-
 To this end, :numref:`Figure %s <fig-enterprise>` depicts a simplified
 5G deployment that the rest of this book works toward. At a
 high level, the figure shows a wide range of enterprise use cases that
@@ -339,6 +324,14 @@ commonly referred to as a *hybrid cloud*.
        generic sense in this description. As we'll see in Chapter 2,
        the 5G architecture has a more complex structure and uses
        different terminology.
+
+.. _fig-enterprise:
+.. figure:: figures/ops/Slide1.png 
+    :width: 600px
+    :align: center
+    
+    Enterprise-based deployment of 5G connectivity, running as a
+    managed cloud service.       
    
 Hosting a 5G connectivity service on an edge cloud is perfectly
 aligned with one of the most pronounce trends in cloud computing:

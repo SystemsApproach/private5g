@@ -34,15 +34,14 @@ reservation-based strategy, whereas Wi-Fi is contention-based. This
 difference is rooted in each system’s fundamental assumption about
 utilization: Wi-Fi assumes a lightly loaded network (and hence
 optimistically transmits when the wireless link is idle and backs off
-if contention is detected), while 4G and 5G networks assume (and
-strive for) high utilization (and hence explicitly assign different
-users to different “shares” of the available radio spectrum).
+if contention is detected), while 5G assumes (and strives for) high
+utilization (and hence explicitly assign different users to different
+“shares” of the available radio spectrum).
 
-The fact that 4G and 5G networks control spectrum allocation carefully
-is central to their ability to deliver guarantees of bandwidth and
-latency more predictably than Wi-Fi. This in turn is why there
-is so much interest in using 5G in particular for mission-critical
-applications.  
+The fact that 5G controls spectrum allocation carefully is central to
+its ability to deliver guarantees of bandwidth and latency more
+predictably than Wi-Fi. This in turn is why there is so much interest
+in using 5G for mission-critical applications.
 
 We start by giving a short primer on radio transmission as a way of
 laying a foundation for understanding the rest of the 5G architecture.
@@ -187,20 +186,23 @@ multiplexing and scheduling work in 4G and 5G.
 3.2.1 Multiplexing in 4G
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-The 4G approach to multiplexing downstream transmissions is called
-*Orthogonal Frequency-Division Multiple Access (OFDMA)*, a specific
-application of OFDM that multiplexes data over a set of 12 orthogonal (non-interfering)
-subcarrier frequencies, each of which is modulated independently.\ [#]_ The
-“Multiple Access” in OFDMA implies that data can simultaneously be
-sent on behalf of multiple users, each on a different subcarrier
-frequency and for a different duration of time. The subbands are
-narrow (e.g., 15 kHz), and the coding of user data into OFDMA symbols
-is designed to minimize the risk of data loss due to interference.
+We start with 4G because it provides a foundational understanding that
+makes 5G easier to explain, where both 4G and 5G use an approach to
+multiplexing called *Orthogonal Frequency-Division Multiple Access
+(OFDMA)*. You can think of OFDMA as a specific application of OFDM,
+that in the 4G case, multiplexes data over a set of 12 orthogonal
+(non-interfering) subcarrier frequencies, each of which is modulated
+independently.\ [#]_ The “Multiple Access” in OFDMA implies that data
+can simultaneously be sent on behalf of multiple users, each on a
+different subcarrier frequency and for a different duration of
+time. The 4G-defined subbands are narrow (e.g., 15 kHz), and the
+coding of user data into OFDMA symbols is designed to minimize the
+risk of data loss due to interference.
 
-
-.. [#] 4G uses a different multiplexing strategy for upstream
-       transmissions (from user devices to base stations), but we do
-       not describe it because the approach is not applicable to 5G.
+.. [#] 4G uses OFDMA for downstream traffic, and a different
+       multiplexing strategy for upstream transmissions (from user
+       devices to base stations), but we do not describe it because
+       the approach is not applicable to 5G.
 
 The use of OFDMA naturally leads to conceptualizing the radio spectrum
 as a 2-D resource, as shown in :numref:`Figure %s <fig-sched-grid>`,

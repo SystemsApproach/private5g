@@ -102,8 +102,8 @@ get to enterprises running their own 5G networks, they still need to
 manage the usage of spectrum to obtain the benefits of 5G over Wi-Fi,
 such as more predictable control over latency and bandwidth. 
 
-Note that Mobile Core is another example of a generic term. In 4G this
-is called the *Evolved Packet Core (EPC)* and in 5G it is called the
+Note that Mobile Core is another example of a generic term. In 4G it
+was called the *Evolved Packet Core (EPC)* and in 5G it is called the
 *Next Generation Core (NG-Core)*. Moreover, even though the word
 “Core” is in its name, the Mobile Core runs near the edge of the
 network, effectively providing a bridge between the RAN in some
@@ -112,8 +112,9 @@ significant flexibility in how the Mobile Core is geographically
 deployed, ranging from minimal deployments (the RAN and the mobile
 core can be co-located) to areas that are hundreds of kilometers
 wide. A common model is that an instantiation of the Mobile Core
-serves a metropolitan area. The corresponding RAN would then span several
-dozens (or even hundreds) of cell towers in that geographic area.
+serves a metropolitan area. The corresponding RAN would then span
+several dozens (or even hundreds) of cell towers in that geographic
+area.
 
 Taking a closer look at :numref:`Figure %s <fig-cellular>`, we see
 that a *Backhaul Network* interconnects the base stations that
@@ -123,9 +124,10 @@ is often constructed from commodity components found elsewhere in the
 Internet. For example, the *Passive Optical Network (PON)* that
 implements Fiber-to-the-Home is a prime candidate for implementing the
 RAN backhaul, with the RAN effectively running as an *overlay* on top
-of whatever technology is used. The backhaul network is obviously a
-necessary part of the RAN, but it is an implementation choice and not
-prescribed by the 3GPP standard. 
+of whatever technology is used. Switched ethernet, such as you might
+find in an enterprise, is another suitable choice. The backhaul
+network is obviously a necessary part of the RAN, but it is an
+implementation choice and not prescribed by the 3GPP standard.
 
 Although 3GPP specifies all the elements that implement the RAN and
 Mobile Core in an open standard—including sub-layers we have not yet
@@ -133,12 +135,12 @@ introduced—network operators have historically bought proprietary
 implementations of each subsystem from a single vendor. This lack of
 an open source implementation contributes to the perceived
 “opaqueness” of the mobile cellular network in general, and the RAN in
-particular. And while it is true that an eNodeB implementation does
-contain sophisticated algorithms for scheduling transmission on the
-radio spectrum—algorithms that are considered valuable intellectual
-property of the equipment vendors—there is significant opportunity to
-open and disaggregate both the RAN and the Mobile Core. This book
-is primarily a recipe for how to do that.
+particular. And while it is true that base stations contain
+sophisticated algorithms for scheduling transmission on the radio
+spectrum—algorithms that are considered valuable intellectual property
+of the equipment vendors—there is significant opportunity to open and
+disaggregate both the RAN and the Mobile Core. This book is primarily
+a recipe for how to do that.
 
 Before getting to those details, we have three more architectural
 concepts to introduce. First, :numref:`Figure %s <fig-cups>` redraws
@@ -640,16 +642,17 @@ way to map high-level *Intents* onto low-level *Actions*.
    network deployment.
 
 This overview, as illustrated in :numref:`Figure %s <fig-intent>`, is
-very abstract. To make the discussion more concrete, we use an open
-source implementation, called Aether, as an example.  Aether is a
-Kubernetes-based edge cloud, augmented with a 5G-based connectivity
-service. Aether is targeted at enterprises that want to take advantage
-of 5G connectivity in support of edge applications that require
-predictable, low-latency connectivity. In short, “Kubernetes-based”
-means Aether is able to host container-based services, with Kubernetes
-being the platform used to orchestrate the services, and “5G-based
-connectivity” means Aether is able to connect those services to mobile
-devices throughout the enterprise's physical environment.
+obviously quite abstract. To make the discussion more concrete, we use
+an open source implementation, called Aether, as an example.  Aether
+is a Kubernetes-based edge cloud, augmented with a 5G-based
+connectivity service. Aether is targeted at enterprises that want to
+take advantage of 5G connectivity in support of edge applications that
+require predictable, low-latency connectivity. In short,
+“Kubernetes-based” means Aether is able to host container-based
+services, with Kubernetes being the platform used to orchestrate the
+services, and “5G-based connectivity” means Aether is able to connect
+those services to mobile devices throughout the enterprise's physical
+environment.
 
 Aether supports this combination by implementing both the RAN and the
 user plane of the Mobile Core on-prem, as cloud-native workloads
@@ -657,10 +660,11 @@ co-located on the Aether cluster. This is often referred to as *local
 breakout* because it enables direct communication between mobile
 devices and edge applications without data traffic leaving the
 enterprise, in contrast to what would happen with standard,
-operator-provided 5G service. This scenario is depicted in :numref:`Figure %s
-<fig-hybrid>`, which shows generic edge applications running
-on-prem. Those edge applications might include the local processing of
-sensor data or control applications for the IoT devices, for example.
+operator-provided 5G service. This scenario is depicted in
+:numref:`Figure %s <fig-hybrid>`, which shows unnamed edge
+applications running on-prem. Those edge applications might include
+the local processing of sensor data or control applications for the
+IoT devices, for example.
 
 .. _fig-hybrid:
 .. figure:: figures/ops/Slide3.png
