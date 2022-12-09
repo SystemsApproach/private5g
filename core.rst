@@ -207,8 +207,8 @@ problematic for TCP.
 
 Before continuing with our inventory of control-related elements in
 :numref:`Figure %s <fig-5g-core>`, it is important to note we show
-only a fraction of the full set that 3GPP defines. The full set is
-includes a wide-range of possible features, many of which are either
+only a fraction of the full set that 3GPP defines. The full set
+includes a wide range of possible features, many of which are either
 speculative (i.e., identify potential functionality) or overly
 prescriptive (i.e., identify well-known cloud native microservices).
 We limit our discussion to functional elements that provide value in
@@ -245,7 +245,7 @@ Authorization Service*, but an option like OAuth2 could not be used in
 their place because (a) UMD and UMR are assumed to be part of the
 global identity mapping service discussed in Section 5.1, and (b) 3GPP
 specifies the interface by which the various components request
-service from each other (e.g., AMF connects to the RAN via the N2
+service from each other (e.g., AMF connects to the RAN via the N2 interface
 depicted in the figure). We will see how to cope with such
 issues in Section 5.3, where we talk about implementation details in
 more detail.
@@ -280,7 +280,7 @@ readily available for download and experimentation.
 Our first example, called SD-Core, is a nearly one-for-one translation
 of the functional blocks shown in :numref:`Figure %s <fig-5g-core>`
 into a cloud native implementation. A high-level schematic is shown in
-:numref:`Figure %s <fig-sd-core>`, where each element corresponds to
+:numref:`Figure %s <fig-sd-core>`, where each element corresponds to a
 scalable set of Kubernetes-hosted containers. We include this
 schematic even though it looks quite similar to :numref:`Figure %s
 <fig-5g-core>` because it highlights three implementation details.
