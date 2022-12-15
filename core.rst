@@ -221,8 +221,8 @@ application:
 -  *UDM (Unified Data Management):* Manages user identity, including 
    the generation of authentication credentials.
 
--  *UDR (Unified Data Registry):* Manages user static subscriber
-   related information.
+-  *UDR (Unified Data Repository):* Manages user static
+   subscriber-related information.
 
 -  *UDSF (Unstructured Data Storage Network Function):* Used to store
    unstructured data, and so is similar to a *Key/Value Store*.
@@ -247,7 +247,7 @@ global identity mapping service discussed in Section 5.1, and (b) 3GPP
 specifies the interface by which the various components request
 service from each other (e.g., AMF connects to the RAN via the N2 interface
 depicted in the figure). We will see how to cope with such
-issues in Section 5.3, where we talk about implementation details in
+issues in Section 5.3, where we talk about implementation issues in
 more detail.
 
 Finally, :numref:`Figure %s <fig-5g-core>` shows two other functional
@@ -299,17 +299,17 @@ schematic even though it looks quite similar to :numref:`Figure %s
     support for Standalone (SA) deployment of both 4G and 5G.
 
 First, SD-Core supports both the 5G and 4G versions of the Mobile
-Core,\ [#]_  which share a common User Plane (UPF). We have not discussed
-details of the 4G Core, but the obvious takeaway is that it is much
-less disaggregated.  In particular, the components in the 5G Core are
-stateless and so can be horizontally scaled out as load dictates,
-whereas that is not the case for the 4G Core. (For completeness, the
-rough correspondence between 4G and 5G is: MME-to-AMF, SPGW_C-to-SMF,
+Core,\ [#]_ which share a common User Plane (UPF). We have not
+discussed details of the 4G Core, but observe that it
+is less disaggregated.  In particular, the components in the 5G
+Core are specified so that they can be stateless, simplifying the task
+of horizontally scaling them out as load dictates. (The rough
+correspondence between 4G and 5G is: MME-to-AMF, SPGW_C-to-SMF,
 HSS-to-UDM, and PCRF-to-PCF.) Although not shown in the schematic,
-there is also a scalable Key/Value Store microservice based on MongoDB.
-It is used to make all Core-related state persistent for both the 4G
-and 5G Control Planes, so for example, UDM/UDR (5G) and HSS (4G)
-write subscriber state to MongoDB.
+there is also a scalable Key/Value Store microservice based on
+MongoDB.  It is used to make Core-related state persistent for the
+Control Planes; for example, UDM/UDR (5G) and HSS (4G) write
+subscriber state to MongoDB.
 
 .. [#] SD-Core's 4G Core is a fork of the OMEC project and its 5G Core
        is a fork of the Free5GC project.
@@ -341,13 +341,13 @@ Third, :numref:`Figure %s <fig-sd-core>` shows many of the
 3GPP-defined inter-component interfaces. These include an over-the-air
 interface between base stations and UEs (*NR Uu*), control interfaces
 between the Core and both UEs and base stations (*N1* and *N2*,
-respectfully), a user plane interface between the Core and base
+respectively), a user plane interface between the Core and base
 stations (*N3*), and a data plane interface between the Core and the
 backbone network (*N6*).
 
 The schematic also shows interfaces between the individual
 microservices that make up the Core's Control Plane; for example,
-*Nudm* is the interface the UDM microservice. These latter interfaces
+*Nudm* is the interface to the UDM microservice. These latter interfaces
 are RESTful, meaning clients access each microservice by issuing GET,
 PUT, POST, PATCH, and DELETE operations over HTTP, where a
 service-specific schema defines the available resources that can be
