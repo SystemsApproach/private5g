@@ -362,6 +362,70 @@ the next section.
 5.3.2 Magma
 ~~~~~~~~~~~
 
+Magma is an open source mobile core implementation that takes a
+different, and slighlty non-standard approach to the problem. Designed
+to be particularly suitable for remote and rural environments with
+poor connectivity, Magma refactors the mobile core into centralized
+and distributed components as shown in :numref:`Figure  %s
+<fig-magma-arch>`.
+
+.. _fig-magma-arch:
+.. figure:: figures/MagmaSlide.png 
+    :width: 600px
+    :align: center
+
+    Overall architecture of the Magma mobile core, including
+    support for 4G and 5G, and Wi-Fi. There is one central
+    Orchestrator and typically many Access Gateways.
+
+Magma differs from the standard 3GPP approach in one key architectural
+respect: Magma terminates 3GPP protocols logically close to the
+"edge". Edge in this context means either the radio interface (the
+connection to the eNodeB or gNB) or the *federation interface*, which
+is where Magma can connect to another mobile network. The single
+architectural decision has a broad impact as discussed below.
+
+As a consequence of this approach, Magma can interoperate
+with other implementations *only* at the edges. Thus, it is possible
+to connect a Magma mobile core to any standards-compliant eNodeB or
+gNB and expect it to work. Similarly, a Magma core can be federated
+with an existing MNO’s 4G or 5G network. However, since Magma does not
+implement all the 3GPP interfaces that are internal to a mobile packet
+core, it is not possible to arbitrarily mix and match components
+within the core. Whereas a traditional 3GPP implementation would
+permit (say) an AMF from one vendor to interoperate with the SMF
+of another vendor, it is not possible to connect parts of a mobile
+core from another vendor (or another open source project) with parts
+of Magma aside from via the interfaces described above.
+
+Magma, unlike other mobile cores, takes a common approach across
+multiple wireless technologies, including 4G, 5G and WiFi. There is a
+core set of functions that the AGW must implement for any radio
+technology (e.g., finding the appropriate policy for a given
+subscriber); Magma provides them in an access-technology-independent
+way. These functions form the heart of an AGW, as illustrated on the
+right side of :numref:`Figure %s <fig-magma-arch>`.  Control
+protocols, which are specific to a given radio technology, are
+terminated in technology-specific modules close to the
+radio. These modules, on the left of the figure, communicate with the
+generic functions (e.g., subscriber management, access control and
+management) on the right using gRPC messages that are RAN-agnostic.
+Functions such as looking up a subscriber in a database and
+authenticating a UE are done in ways that are common to all RAN
+technologies, with RAN-specific conversions handled on the left of the
+figure.
+
+
+
+    
+
+.. _reading_magma:
+.. admonition:: Further Reading
+                
+    `Building Flexible, Low-Cost Wireless Access Networks With Magma
+    <https://arxiv.org/abs/2209.10001>`__.
+    NSDI, April 2023.
+
 5.4 User Plane
 --------------------
 
