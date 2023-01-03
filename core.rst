@@ -370,7 +370,7 @@ in :numref:`Figure %s <fig-5g-core>`\—connects the RAN to the
 Internet. Much like the data plane for any router, the UPF forwards IP
 packets, but because UEs often sleep to save power and may be in the
 process of being handed off from one base station to another, it
-sometimes has to buffer the packet for an indeterminant amount of
+sometimes has to buffer packets for an indeterminant amount of
 time. Also like other routers, a straightforward way to understand the
 UPF is to think of it as implementing a collection of Match/Action
 rules, where the UPF first classifies each packet against a set of
@@ -467,7 +467,7 @@ fundamental assumption of a truly horizontally scalable service, in
 which traffic can be randomly directed to any instance in a way that
 balances the load. It also forces you to do packet classification
 before selecting which instance is the right one, which can
-potentially become a performance bottleneck. Note that it is possible
+potentially become a performance bottleneck, although it is possible
 to offload the classification stage to a SmartNIC.
 
 .. Could talk about other ways to accomplish that -- e.g., assigning
@@ -532,8 +532,9 @@ plane, asking that the UE be awaken. Today's P4-capable switches do
 not have large buffers or the ability to hold packets indefinitely,
 but a buffering microservice running on a server can be used to
 address this limitation. The microservice indefinitely holds any
-packets that it receives, and releases them back to the switch when
-instructed to do so. The following elaborates on how this would work.
+packets that it receives, and later releases them back to the switch
+when instructed to do so. The following elaborates on how this would
+work.
 
 When the Mobile Core detects that a UE has gone idle (or is in the
 middle of a handover), it installs a FAR with the `buffer` flag set,
@@ -546,13 +547,14 @@ treat the buffering microservice just like another base station.
 When the first packet of a flow arrives at the buffering microservice,
 it sends an alert to the CP, which then (1) wakes up the UE, (2)
 modifies the corresponding FAR by unsetting the `buffer` flag and
-setting the `tunnel` flag, and (3) instructs the buffering
-microservice to release all packets for the UE back to the switch. Packets
-arriving at the switch from the buffering microservice skip the
-portion of the UPF module they encountered before buffering, giving
-the illusion they are being buffered in the middle of the switch. That
-is, their processing resumes at the tunneling stage, where they are
-encapsulated and routed to the appropriate base station.
+setting the `tunnel` flag, and once the UE is active, (3) instructs
+the buffering microservice to release all packets back to the
+switch. Packets arriving at the switch from the buffering microservice
+skip the portion of the UPF module they encountered before buffering,
+giving the illusion they are being buffered in the middle of the
+switch. That is, their processing resumes at the tunneling stage,
+where they are encapsulated and routed to the appropriate base
+station.
 
 Third, QERs cannot be fully implemented in the switch because P4 does
 not include support for programming the packet scheduler. However,
@@ -562,11 +564,11 @@ runtime interface unrelated to P4. A viable approach, similar to the
 one MacDavid, Chen, and Rexford describe in their INFOCOM paper, is to
 map each QoS class specified in a QER onto one of the available
 queues, and assign a weight to that queue proportional to the fraction
-of the available bandwidth the class is to receive. As long as
-each class/queue is not over subscribed, individual UEs in the class
-will receive approximately the bit rate they have been promised. (As
-an aside, 3GPP under-specifies QoS guarantees, leaving the details to
-the implementation.)
+of the available bandwidth the class is to receive. As long as each
+class/queue is not over subscribed, individual UEs in the class will
+receive approximately the bit rate they have been promised. As an
+aside, since 3GPP under-specifies QoS guarantees (leaving the details
+to the implementation), such an approach is 3GPP-compliant.
 
 .. _reading_p4-qos:
 .. admonition:: Further Reading
@@ -585,10 +587,10 @@ P4 program being controlled. MacDavid's paper describes how this is
 done in more detail (and presumes a deep understanding of the P4
 toolchain), but it can be summarized as follows. It is necessary to
 first write a "Model UPF" in P4, use that to program to generate the
-UPF-specific P4RT interface, and then write translators that connect
-SMF to P4RT and P4RT to the underlying physical switches and
-servers. A high-level schematic of this software stack is shown in
-:numref:`Figure %s <fig-p4-upf>`.
+UPF-specific P4RT interface, and then write translators that (1)
+connect SMF to P4RT, and (2) connect P4RT to the underlying physical
+switches and servers. A high-level schematic of this software stack is
+shown in :numref:`Figure %s <fig-p4-upf>`.
 	
 .. _fig-p4-upf:
 .. figure:: figures/Slide26.png 
@@ -600,11 +602,12 @@ servers. A high-level schematic of this software stack is shown in
     control plane to control the physical implementation of the UPF
     running on a combination of hardware switches and servers.
     
-Note that while this summary focuses on how the CP controls the UPF,
-the usage counters needed to generate URRs that flow up to the CP are
-easy to support because the counters implemented in the switching
-hardware are identical to the counters in the Model UPF. When the
-Mobile Core requests counter values from the Model UPF, the backend
-translator polls the corresponding hardware switch counters and relays
-the response.
+Note that while this summary focuses on how the CP controls the UPF
+(the downward part of the schematic shown in :numref:`Figure %s
+<fig-p4-upf>`), the usage counters needed to generate URRs that flow
+upward to the CP are easy to support because the counters implemented
+in the switching hardware are identical to the counters in the Model
+UPF. When the Mobile Core requests counter values from the Model UPF,
+the backend translator polls the corresponding hardware switch
+counters and relays the response.
 
