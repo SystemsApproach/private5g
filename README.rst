@@ -1,7 +1,7 @@
 About The Book
 ===============
 
-Source for *5G Connectivity Service: A Systems Approach* is available
+Source for *Private 5G: A Systems Approach* is available
 on GitHub under
 terms of the `Creative Commons (CC BY-NC-ND 4.0)
 <https://creativecommons.org/licenses/by-nc-nd/4.0>`__ license. The
@@ -14,9 +14,9 @@ parties. Please reach out to discuss@systemsapproach.org.
 If you make use of this work, the attribution should include the
 following information:
 
-| *Title: 5G Connectivity Service: A Systems Approach* 
+| *Title: Private 5G: A Systems Approach* 
 | *Authors: Larry Peterson, Oguz Sunay, and Bruce Davie* 
-| *Source:* https://github.com/SystemsApproach/5G 
+| *Source:* https://github.com/SystemsApproach/private5g 
 | *License:* \ `CC BY-NC-ND 4.0 <https://creativecommons.org/licenses/by-nc-nd/4.0>`__
 
 Read the Book
@@ -29,7 +29,7 @@ This book is part of the `Systems Approach Series
 To track progress and receive notices about new versions, you can follow
 the project on
 `Facebook <https://www.facebook.com/Computer-Networks-A-Systems-Approach-110933578952503/>`__
-and `Twitter <https://twitter.com/SystemsAppr>`__. To read a running
+and `Mastodon <https://discuss.systems/@SystemsAppr>`__. To read a running
 commentary on how the Internet is evolving, follow the `Systems Approach
 on Substack <https://systemsapproach.substack.com>`__.
 
@@ -68,5 +68,5 @@ addressed, and issuing *Pull Requests* to merge your improvements back
 into GitHub.
 
 If you’d like to contribute and are looking for something that needs
-attention, see the `wiki <https://github.com/SystemsApproach/NG5G/wiki>`__
+attention, see the `wiki <https://github.com/SystemsApproach/private5g/wiki>`__
 for the current TODO list.
