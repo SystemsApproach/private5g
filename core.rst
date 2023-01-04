@@ -438,7 +438,7 @@ Like many cloud-native systems, Magma adopts a "desired state" model
 for runtime and configuration state. By this we mean that to
 communicate a required state change (e.g., the addition of a new
 session in the data plane), the desired end state is set via an
-API. This contrasts with a ``CRUD (Create, Read, Update, Delete)''
+API. This contrasts with a "CRUD (Create, Read, Update, Delete)"
 interface, which is common in 3GPP specifications. Magma replaces the
 CRUD model with the desired state model to simplify reasoning about
 changes across elements of the system in the case of partial
@@ -450,9 +450,9 @@ Consider an example where we are establishing data-plane state for a set
 of active sessions. Initially, there are two active sessions, X
 and Y. Then a third UE becomes active and a session Z needs to be
 established. In the CRUD model, the control plane would instruct the
-data plane ``add session Z''. The desired state model, by contrast,
-communicates the entire new state: ``the set of sessions is now X, Y,
-Z''. The CRUD model is brittle in the face of failures. If a message
+data plane "add session Z". The desired state model, by contrast,
+communicates the entire new state: "the set of sessions is now X, Y,
+Z". The CRUD model is brittle in the face of failures. If a message
 is lost, or a component is temporarily unable to receive updates, the
 receiver falls out of sync with the sender. So it is possible that the
 control plane believes that sessions X, Y and Z have been established,
