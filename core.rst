@@ -3,7 +3,7 @@ Chapter 5:  Mobile Core
 
 .. Mostly written from scratch, with the following hold-over
    content that might find a home here (including this old
-   intro paragarph).
+   intro paragraph).
 
    Includes new Magma content, mostly in terms of going into much more
    detail about the cloud native implementation than we currently have.
@@ -363,9 +363,9 @@ the next section.
 ~~~~~~~~~~~
 
 Magma is an open source mobile core implementation that takes a
-different, and slighlty non-standard approach to the problem. Designed
+different and slightly non-standard approach to the problem. Designed
 to be particularly suitable for remote and rural environments with
-poor connectivity, Magma refactors the mobile core into centralized
+poor backhaul connectivity, Magma refactors the mobile core into centralized
 and distributed components as shown in :numref:`Figure  %s
 <fig-magma-arch>`.
 
@@ -400,21 +400,72 @@ of Magma aside from via the interfaces described above.
 
 Magma, unlike other mobile cores, takes a common approach across
 multiple wireless technologies, including 4G, 5G and WiFi. There is a
-core set of functions that the AGW must implement for any radio
-technology (e.g., finding the appropriate policy for a given
-subscriber); Magma provides them in an access-technology-independent
-way. These functions form the heart of an AGW, as illustrated on the
-right side of :numref:`Figure %s <fig-magma-arch>`.  Control
-protocols, which are specific to a given radio technology, are
-terminated in technology-specific modules close to the
-radio. These modules, on the left of the figure, communicate with the
-generic functions (e.g., subscriber management, access control and
-management) on the right using gRPC messages that are RAN-agnostic.
-Functions such as looking up a subscriber in a database and
-authenticating a UE are done in ways that are common to all RAN
-technologies, with RAN-specific conversions handled on the left of the
-figure.
+set of functions that the core must implement for any radio technology
+(e.g., finding the appropriate policy for a given subscriber by
+querying a database); Magma provides them in an
+access-technology-independent way. These functions form the heart of
+an Access Gateway (AGW), as illustrated on the right side of :numref:`Figure %s
+<fig-magma-arch>`.  Control protocols, which are specific to a given
+radio technology, are terminated in technology-specific modules close
+to the radio. These modules, on the left of the figure, communicate
+with the generic functions (e.g., subscriber management, access
+control and management) on the right using gRPC messages that are
+RAN-agnostic.
 
+Magma's design is particularly well suited for environments where
+backhaul links are unreliable, e.g., when satellite is used for
+backhaul. This is because the 3GPP protocols that have to traverse the
+backhaul from core to eNodeB/gNB are quite sensitive to loss and
+latency. Loss or latency can cause connections to be dropped, which in
+turn forces UEs to repeat the process of attaching to the core. In
+practice, not all UEs handle this elegantly, sometimes ending up in a
+“stuck” state.
+
+Magma addresses the challenge of unreliable backhaul in two ways.
+First, Magma frequently avoids sending messages over the backhaul
+entirely by running more functionality in the AGW. Functions that
+would be centralized in a standard 3GPP implementation are distributed
+out to the access gateways in Magma. Thus, for example, the operations
+required to authenticate and attach a UE to the core can typically be
+completed using information cached locally in the AGW, without any
+traffic crossing the backhaul. Secondly, when Magma does need to pass
+information over a backhaul link (e.g. to obtain configuration state
+from the orchestrator), it does so using gRPC, which is designed to
+operate reliably in the face of unreliable or low latency links.
+
+
+Like many cloud-native systems, Magma adopts a "desired state" model
+for runtime and configuration state. By this we mean that to
+communicate a required state change (e.g., the addition of a new
+session in the data plane), the desired end state is set via an
+API. This contrasts with a ``CRUD (Create, Read, Update, Delete)''
+interface, which is common in 3GPP specifications. Magma replaces the
+CRUD model with the desired state model to simplify reasoning about
+changes across elements of the system in the case of partial
+failures. This is a common case in challenged environments, where
+portions of the end-to-end system (e.g., backhaul) are far less
+reliable than others (e.g., the link between the UE and the RAN).
+
+Consider an example where we are establishing data-plane state for a set
+of active sessions. Initially, there are two active sessions, X
+and Y. Then a third UE becomes active and a session Z needs to be
+established. In the CRUD model, the control plane would instruct the
+data plane ``add session Z''. The desired state model, by contrast,
+communicates the entire new state: ``the set of sessions is now X, Y,
+Z''. The CRUD model is brittle in the face of failures. If a message
+is lost, or a component is temporarily unable to receive updates, the
+receiver falls out of sync with the sender. So it is possible that the
+control plane believes that sessions X, Y and Z have been established,
+while the data plane only has state for X and Y. By sending the entire
+desired state, Magma ensures that the receiver comes back into sync with
+the sender once it is able to receive messages again.
+
+This approach is hardly novel but differs from typical 3GPP
+systems. It allows Magma to tolerate occasional communication failures
+(caused by poor quality backhaul, for example) or component outages
+due to software restarts, hardware failures, etc. Limiting the scope
+of 3GPP protocols to the very edge of the network is what enables
+Magma to rethink the state synchronization model.
 
 
     
@@ -521,7 +572,7 @@ stateful.
 
 What we mean by this is that the UPF has two pieces of state that
 needs to be maintained on a per-UE / per-direction / per-class basis:
-(1) a finite state machine that transitions between `foward`,
+(1) a finite state machine that transitions between `forward`,
 `tunnel`, `buffer`, and `notify`; and (2) a corresponding packet
 buffer when in the `buffer` state. This means that as the UPF scales
 up to handle more and more traffic—by adding a second, third, and
@@ -542,7 +593,7 @@ to offload the classification stage to a SmartNIC.
 5.4.2 P4 Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. The following approach is based on an implemenataion in Aether,
+.. The following approach is based on an implementation in Aether,
    available as part of SD-Core, but it is more prototype than
    production, so I've framed the details as "a possible approach"
    rather than claim "SD-Core does X".  Perhaps we should revisit.
@@ -587,7 +638,7 @@ rules that exactly matches on tunnel identifiers (which can be treated
 as table indices); and one using TCAM for common-case downlink rules
 that match on the IP destination address.
 
-.. Get this acroym into the discussion somewhere: GTP, includes a
+.. Get this acronym into the discussion somewhere: GTP, includes a
    header field called the Tunnel Endpoint Identifier (TEID).
 
 Second, when a packet arrives from the Internet destined for an idle
