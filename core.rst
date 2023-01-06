@@ -378,12 +378,46 @@ and distributed components as shown in :numref:`Figure  %s
     support for 4G and 5G, and Wi-Fi. There is one central
     Orchestrator and typically many Access Gateways.
 
+
+The central part of Magma is the single box in the figure marked
+"Central Control & Management (Orchestrator)". This is roughly analogous to the
+central controller found in typical SDN systems, and provides a
+northbound API by which an operator or other software systems (such as
+OSS/BSS or monitoring systems) can interact with the Magma core. The
+orchestrator communicates with Access Gateways (AGWs) which are the
+distributed components of Magma. A single AGW typically handles a
+small number of eNodeBs/gNBs. As an example, see :numref:`Figure  %s
+<fig-magma-peru>`.
+
+The AGW is designed to have a small footprint, so that small
+deployments don't require a datacenter worth of equipment. They also
+contain both data plane and control plane elements. This is a little
+different from the classic approach to SDN systems in which only the
+data plane is distributed. Magma has been described as a hierarchical
+SDN approach, as the control plane itself is divided into a
+centralized part (running in the Orchestrator) and a distributed part
+(running in the AGW). :numref:`Figure  %s <fig-magma-arch>` shows the
+distributed control plane components and data plane in detail.
+
+.. _fig-magma-peru:
+.. figure:: figures/peru_deploy_labelled.jpg
+    :width: 300px
+    :align: center
+
+    A sample Magma deployment in rural Peru, showing (a)
+    point-to-point wireless backhaul, (b) LTE radio and antenna, (c)
+    ruggedized embedded PC serving as AGW, and (d) solar power and
+    battery backup for site. 
+
+
+ 
 Magma differs from the standard 3GPP approach in one key architectural
 respect: Magma terminates 3GPP protocols logically close to the
 "edge". Edge in this context means either the radio interface (the
-connection to the eNodeB or gNB) or the *federation interface*, which
-is where Magma can connect to another mobile network. The single
-architectural decision has a broad impact as discussed below.
+connection to the eNodeB or gNB) or the *federation interface* (not
+shown in the figure), which is where Magma can connect to another
+mobile network. The single architectural decision has a broad impact
+as discussed below.
 
 As a consequence of this approach, Magma can interoperate
 with other implementations *only* at the edges. Thus, it is possible
@@ -414,7 +448,7 @@ RAN-agnostic.
 
 Magma's design is particularly well suited for environments where
 backhaul links are unreliable, e.g., when satellite is used for
-backhaul. This is because the 3GPP protocols that have to traverse the
+backhaul. This is because the 3GPP protocols that traditionally have to traverse the
 backhaul from core to eNodeB/gNB are quite sensitive to loss and
 latency. Loss or latency can cause connections to be dropped, which in
 turn forces UEs to repeat the process of attaching to the core. In
@@ -423,7 +457,8 @@ practice, not all UEs handle this elegantly, sometimes ending up in a
 
 Magma addresses the challenge of unreliable backhaul in two ways.
 First, Magma frequently avoids sending messages over the backhaul
-entirely by running more functionality in the AGW. Functions that
+entirely by running more functionality in the AGW, which are located
+close to the radio as seen above. Functions that
 would be centralized in a standard 3GPP implementation are distributed
 out to the access gateways in Magma. Thus, for example, the operations
 required to authenticate and attach a UE to the core can typically be
@@ -432,6 +467,13 @@ traffic crossing the backhaul. Secondly, when Magma does need to pass
 information over a backhaul link (e.g. to obtain configuration state
 from the orchestrator), it does so using gRPC, which is designed to
 operate reliably in the face of unreliable or low latency links.
+
+Even though Magma has distributed much of the control plane out to the
+AGWs, it still supports centralized management via the
+Orchestrator. For example, adding a new subscriber to the network is
+done centrally, and the relevant AGW will obtain the necessary state
+to authenticate that subscriber when their UE tries to attach to the
+network. 
 
 
 Like many cloud-native systems, Magma adopts a "desired state" model
