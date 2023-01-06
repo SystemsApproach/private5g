@@ -40,8 +40,10 @@ Acknowledgements
 ----------------
 
 The software described in this book is due to the hard work of the ONF
-engineering team and the open source community that works with
-them.
+engineering team, the Magma engineering team, and the open source
+communities that work with them.
+
+The picture of a Magma deployment in Chapter 5 was provided by Shaddi Hasan.
 
 | Larry Peterson, Oguz Sunay, and Bruce Davie
 | January 2023
