@@ -353,22 +353,27 @@ Magma is an open source Mobile Core implementation that takes a
 different and slightly non-standard approach. Magma is similar to
 SD-Core in that it is implemented as a set of microservices, but it
 differs in that it is designed to be particularly suitable for remote
-and rural environments with poor backhaul connectivity.\ [#]_ This
+and rural environments with poor backhaul connectivity. This
 emphasis, in turn, leads Magma to (1) adopt an SDN-inspired approach
 to how it separates functionality into centralized and distributed
 components, and (2) factor the distributed functionality into
-microservices without strict aherence to standard 3GPP interface
+microservices without strict adherence to all the standard 3GPP interface
 specifications. This refactoring is also a consequence of Magma being
 designed to unify 4G, 5G, and WiFi under a single architecture.
 
-.. [#] Our use of the term "backhaul" in this context, indicating the
-     link that connects a remote deployment to the rest of the
-     Internet, is not consistent with the conventional 3GPP usage,
-     where "backhaul" refers to the link between the base station and
-     the Mobile Core (or between the CU and the Mobile Core in the
-     case of a split RAN). Given Magma's design philosophy of moving
-     as much of the Core as possible to the edge, near the radio, this
-     non-traditional usage seems more intuitively clear.
+One of the first things to note about Magma is that it takes a
+different view of "backhaul" from the approaches we have seen to
+date. Whereas the backhaul networks shown previously connect the
+eNBs/gNBs and radio towers back to the mobile core (:numref:`Figure %s
+<fig-cellular>`), Magma actually puts much of the mobile core
+functionality right next to the radio as seen in :numref:`Figure %s
+<fig-magma-peru>`.  It is able to do this because of the way it splits
+the core into centralized and distributed parts. So Magma views
+"backhaul" as the link that connects a remote deployment to the rest
+of the Internet (including the central components), contrasting with
+conventional 3GPP usage. As explored further below, this can overcome
+many of the challenges that unreliable backhaul links introduce in
+conventional approaches.
 
 .. _fig-magma-arch:
 .. figure:: figures/sdn/Slide11.png 
@@ -385,16 +390,18 @@ figure marked *Central Control & Management (Orchestrator)*. This is
 roughly analogous to the central controller found in typical SDN
 systems, and provides a northbound API by which an operator or other
 software systems (such as a traditional OSS/BSS) can interact with the
-Magma core. The orchestrator communicates with Access Gateways (AGWs),
-which are the distributed components of Magma. A single AGW typically
-handles a small number of eNBs/gNBs. As an example, see
-:numref:`Figure %s <fig-magma-peru>`.
+Magma core. The orchestrator communicates over backhaul links with
+Access Gateways (AGWs), which are the distributed components of
+Magma. A single AGW typically handles a small number of eNBs/gNBs. As
+an example, see :numref:`Figure %s <fig-magma-peru>` which includes a
+single eNB and AGW located on a radio tower. In this example, a
+point-to-point wireless link is used for backhaul.
 
 The AGW is designed to have a small footprint, so that small
 deployments do not require a datacenter's worth of equipment. Each AGW
 also contains both data plane and control plane elements. This is a
 little different from the classic approach to SDN systems in which
-only the data plane is distributed. Magma has been described as a
+only the data plane is distributed. Magma can be described as a
 hierarchical SDN approach, as the control plane itself is divided into
 a centralized part (running in the Orchestrator) and a distributed
 part (running in the AGW). :numref:`Figure %s <fig-magma-arch>` shows
@@ -418,7 +425,7 @@ connecting Magma to an eNB or gNB (implemented by set of modules on
 the left side of the AGW in the figure) or the federation interface
 connecting Magma to another mobile network (implemented by the
 *Federation Gateway* module in the figure). Everything "between" those
-two external interfaces is free deviate from the 3GPP specification,
+two external interfaces is free to deviate from the 3GPP specification,
 which has broad impact as discussed below.
 
 One consequence of this approach is that Magma can interoperate with
@@ -458,9 +465,9 @@ the backhaul from core to eNB/gNB are quite sensitive to loss and
 latency. Loss or latency can cause connections to be dropped, which in
 turn forces UEs to repeat the process of attaching to the core. In
 practice, not all UEs handle this elegantly, sometimes ending up in a
-“stuck” state.
+"stuck" state.
 
-Magma addresses the challenge of unreliable backhaul in two ways.
+Magma addresses the challenge of unreliable backhaul in several ways.
 First, Magma frequently avoids sending messages over the backhaul
 entirely by running more functionality in the AGW, which are located
 close to the radio as seen above. Functions that would be centralized
@@ -482,14 +489,17 @@ that subscriber when their UE tries to attach to the network.
 Finally, like many cloud-native systems, Magma adopts a "desired
 state" model for runtime and configuration state. By this we mean that
 to communicate a required state change (e.g., the addition of a new
-session in the data plane), the desired end state is set via an API.
-This contrasts with a "CRUD (Create, Read, Update, Delete)" interface,
-which is common in 3GPP specifications. Magma replaces the CRUD model
-with the desired state model to simplify reasoning about changes
-across elements of the system in the case of partial failures. This is
-a common case in challenged environments, where portions of the
-end-to-end system (e.g., backhaul) are far less reliable than others
-(e.g., the link between the UE and the RAN).
+session in the data plane), the desired end state is set via an
+API. The desired state model contrasts with a "CRUD (Create, Read,
+Update, Delete)" interface, which is common in 3GPP specifications,
+and which communicates *updates* to state rather than a desired end
+state.  When the desired end state is communicated, the loss of a
+message or failure of a component has less serious consequences.
+Reasoning about changes across elements of the system is more robust
+in the case of partial failures. Partial failures are common in
+challenged environments, where portions of the end-to-end system
+(e.g., backhaul) are far less reliable than others (e.g., the link
+between the UE and the RAN).
 
 Consider an example where we are establishing data-plane state for a set
 of active sessions. Initially, there are two active sessions, X
@@ -505,14 +515,26 @@ while the data plane only has state for X and Y. By sending the entire
 desired state, Magma ensures that the receiver comes back into sync with
 the sender once it is able to receive messages again.
 
-This approach is hardly novel but differs from typical 3GPP systems.
-It allows Magma to tolerate occasional communication failures
-(caused by poor quality backhaul, for example) or component outages
-due to software restarts, hardware failures, and so on. Limiting the
-scope of 3GPP protocols to the very edge of the network is what
-enables Magma to rethink the state synchronization model. The team
-that worked on Magma describe their approach in more detail in their
-NSDI paper.
+As described, this approach might appear inefficient because it
+implies sending complete state information rather than incremental
+updates. However, at the scale of an AGW, which handles on the order
+of hundreds to thousands of subscribers, it is possible to encode the
+state efficiently enough to overcome this drawback. With the benefit
+of experience, mechanisms have been added to Magma to avoid overloading the
+orchestrator, which has state related to all subscribers in the
+network.
+
+.. This is a hand wave because the only documentation I can find for
+   this is either out of date or in the code itself.
+
+
+The desired state approach is hardly novel but differs from typical
+3GPP systems.  It allows Magma to tolerate occasional communication
+failures or component outages due to software restarts, hardware
+failures, and so on. Limiting the scope of 3GPP protocols to the very
+edge of the network is what enables Magma to rethink the state
+synchronization model. The team that worked on Magma describe their
+approach in more detail in their NSDI paper.
 
 .. _reading_magma:
 .. admonition:: Further Reading
@@ -520,6 +542,17 @@ NSDI paper.
     `Building Flexible, Low-Cost Wireless Access Networks With Magma
     <https://arxiv.org/abs/2209.10001>`__.
     NSDI, April 2023.
+
+
+Finally, we should note that while we have focused on the Control
+Plane of Magma here, it also implements the Data Plane (or User Plane)
+of the Mobile Core. Its user plane is actually fairly simple, being
+based on Open vSwitch (OVS). The programmability of the user plane is
+important to support the range of access technologies, and OVS meets
+the performance needs of AGWs. However, this choice of user plane is
+not fundamental to Magma—other implementations have been
+considered. We take a closer look at the User Plane in the next
+section.
 
 5.4 User Plane
 --------------------
