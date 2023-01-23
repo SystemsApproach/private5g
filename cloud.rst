@@ -15,8 +15,9 @@ Chapter 6:  Managed Cloud Service
 This chapter describes how to assemble all the pieces described in the
 previous chapters to provide 5G connectivity as a managed cloud
 service. Such a service might be deployed in enterprises, for example,
-in support of collection of operational data, video, etc.—a set of
-use cases sometimes referred to as Industry 4.0.
+in support of collection of operational data, video, robots, IoT
+devices, and so on—a set of use cases sometimes referred to as
+Industry 4.0.
 
 The first step is to implement all the components using cloud native
 building blocks. We start by introducing those building blocks in
@@ -219,11 +220,13 @@ host a collection of cloud-native edge applications (not shown in
 :numref:`Figure %s <fig-ace>`). What’s unique to our example
 configuration is its ability to connect such applications to mobile
 devices throughout the enterprise using the 5G Connectivity Service
-implemented by SD-RAN and SD-Core. This service is offered as a
-managed service, with enterprise system administrators able to use a
-programmatic API (and associated GUI portal) to control that service;
-that is, authorize devices, restrict access, set QoS profiles for
-different devices and applications, and so on.
+implemented by SD-RAN and SD-Core, without the resulting network
+traffic ever leaving the enterprise; a scenario known as *local
+breakout*.  Moreover, this service is offered as a managed service,
+with enterprise system administrators able to use a programmatic API
+(and associated GUI portal) to control that service; that is,
+authorize devices, restrict access, set QoS profiles for different
+devices and applications, and so on.
 
 6.2.2 Hybrid Cloud
 ~~~~~~~~~~~~~~~~~~
@@ -243,7 +246,7 @@ isolation the enterprise sites require. AMP is Aether's realization of
 a Cloud Management Platform; it is responsible for managing all the
 centralized and edge subsystems (as introduced in the next section).
 
-.. Discussion variable number of Cores, vs one-per-metro as suggested
+.. Discuss variable number of Cores, vs one-per-metro as suggested
    earlier. This is for isolation purposes (and potentially, customization).
    
 
@@ -348,6 +351,23 @@ alternative would be for edge service providers to share operational
 responsibility for the edge cloud with the cloud operator, which is
 possible if the infrastructure running at the edge is either
 multi-tenant or a multi-cloud.
+
+6.2.4 Alternative Configurations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The deployment just described is Aether in its full glory. Simpler
+configurations are also possible, which makes sense in less demanding
+scenarios. For example, small edge clusters can be built with only a
+single switch (or two switches for resiliency), with or without
+SDN-based control. And in the limit, an Aether edge can run on a
+single server, all of which makes the SD-Fabric application optional.
+Similarly, Aether can be deployed without SD-RAN, instead using
+conventional small cell base stations.
+
+Finally, Aether can be run entirely at the edge, without depending on
+a central cloud. This implies hosting both the SD-Core CP, Cloud
+Management Platform described in the next section, on the edge
+cluster. Of course doing so likely precludes a multi-site deployment.
 
 6.3 Cloud Management Platform 
 ------------------------------
@@ -572,7 +592,7 @@ devices and set QoS parameters on an end-to-end basis.
 
    Example use case that requires ongoing runtime control.
 
-In other words,the Service Orchestrator defines an abstraction layer
+In other words, the Service Orchestrator defines an abstraction layer
 on top of a collection of backend components, effectively turning them
 into an externally visible (and controllable) cloud service. In some
 situations a single backend component might implement the entirety of
@@ -697,7 +717,7 @@ open source tool used for tracing.
 The visible aspect of a 5G service is the programmatic interface it
 provides to users, giving them the ability to control and customized
 the underlying connectivity service. This API is implemented by the
-The Service Orchestrator outlined in the previous section, but what we
+Service Orchestrator outlined in the previous section, but what we
 really care about is the interface itself. Using Aether as a concrete
 example, this section describes such an API.
 

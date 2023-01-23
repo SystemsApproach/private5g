@@ -3,6 +3,7 @@ GPP
 Acknowledgements
 Aether
 AMF
+Anthos
 Analytics
 Argela
 Azure
@@ -14,17 +15,21 @@ Cloudification
 Config
 Davie
 Disaggregating
+Dockerfile
 Dryjanski
 ECaaS
+ECS
 EPC
 Fi
 Fronthaul
-HSS
 GBR
 Gbps
 IPv
+HSS 
+Hasan
 IaaS
 IoT
+Jaeger
 Kahn
 Kobayashi
 Lifecycle
@@ -34,6 +39,7 @@ Marcin
 Mbps
 Midhaul
 Multipath
+Multiprotocol
 NFV
 NG
 Oguz
@@ -51,6 +57,7 @@ Repos
 Rexford
 RIC
 RRC
+Shaddi
 Sunay
 Tbps
 Telco
@@ -61,6 +68,8 @@ UE
 UPF
 UDM
 Virtualized
+vSwitch
+VMware
 Whitepaper
 Wi
 Wi-Fi
@@ -78,6 +87,7 @@ bitrate
 centric
 config
 connectionless
+decadal
 decapsulating
 decidely
 decrypt
@@ -101,6 +111,7 @@ ffice
 frontend
 fronthaul
 gNB
+gNBs
 gNMI
 gNOI
 gRPC
@@ -116,6 +127,7 @@ kbps
 kilobits
 latencies
 lifecycle
+liveness
 lookups
 mMTC
 microservice
@@ -126,6 +138,7 @@ mmWaves
 monetization
 multicast
 multipath
+natively
 operationalizing
 operationalizes
 operationalize
@@ -134,6 +147,7 @@ operationalization
 orchestrator
 pre
 prem
+programmability
 pseudowires
 reachability
 rearchitecting
