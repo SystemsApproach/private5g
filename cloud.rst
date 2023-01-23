@@ -15,7 +15,8 @@ Chapter 6:  Managed Cloud Service
 This chapter describes how to assemble all the pieces described in the
 previous chapters to provide 5G connectivity as a managed cloud
 service. Such a service might be deployed in enterprises, for example,
-in support of Industry 4.0.
+in support of collection of operational data, video, etc.—a set of
+use cases sometimes referred to as Industry 4.0.
 
 The first step is to implement all the components using cloud native
 building blocks. We start by introducing those building blocks in
@@ -25,17 +26,17 @@ Section 6.1. The second step is to introduce yet another component—a
 management system using open source tools.
 
 Before getting into the details, it is important to remember that
-mobile cell service (both voice and broadband) has been offered as a
+mobile cellular service (both voice and broadband) has been offered as a
 Telco service for 40 years. Treating it as a managed cloud service is
 a significant departure from that history, most notably in how the
 connectivity it provides is operated and managed. As a consequence,
 the Cloud Management Platform described in this chapter is
-significantly different than the legacy OSS/BSS mechanisms that have
+significantly different from the legacy OSS/BSS mechanisms that have
 traditionally been the centerpiece of the Telco management
 machinery. The terminology is also different, but that only matters if
 you are trying to map Telco terminology onto cloud terminology (which
 we are not). We take up the "terminology mapping problem" in a
-companion book, and focus instead on a from-scratch cloud-based
+companion book, and here focus instead on a from-scratch cloud-based
 design.
 
 .. _reading_ops:
@@ -54,10 +55,10 @@ design.
 -------------------
 
 The implementation strategy starts with commodity hardware and open
-source software. These building blocks will be familiar to anyone that
+source software. These building blocks will be familiar to anyone who
 has built a cloud native application, but they deserve to be
 explicitly named in a discussion of mobile cellular networks, which
-have historically been built using closed proprietary hardware
+have historically been built using closed, proprietary hardware
 devices.
 
 The hardware building blocks include bare-metal servers and switches,
@@ -142,17 +143,17 @@ Helm Charts.
    `Helm Tutorial
    <https://helm.sh/docs/intro/quickstart/>`__.
 
-Terraform is an infrastructure manager that provisions one or more
-Kubernetes clusters, preparing them to host a collection of
-Helm-specified applications. It does this using an approach known as
-*Infrastructure-as-Code*, which documents exactly how the
-infrastructure is to be configured in a declarative format that can
-be (a) checked into a repo, and (b) executed just like any piece of
-software.  Terraform assumes an underlying provisioning API, with
-Microsoft's Azure Kubernetes Service (AKS), AWS's Amazon Elastic
-Kubernetes Service (EKS), Google's Google Kubernetes Engine (GKE) and
-Rancher's Rancher Kubernetes Engine (RKE) being widely available
-examples.
+Terraform is an infrastructure manager that, in our scenario,
+provisions one or more Kubernetes clusters, preparing them to host a
+collection of Helm-specified applications. It does this using an
+approach known as *Infrastructure-as-Code*, which documents exactly
+how the infrastructure is to be configured in a declarative format
+that can be (a) checked into a repo, (b) version-controlled, and (c)
+executed just like any piece of software.  Terraform assumes an
+underlying provisioning API, with Microsoft's Azure Kubernetes Service
+(AKS), AWS's Amazon Elastic Kubernetes Service (EKS), Google's Google
+Kubernetes Engine (GKE) and Rancher's Rancher Kubernetes Engine (RKE)
+being widely available examples.
 
 .. _reading_terraform:
 .. admonition:: Further Reading
@@ -288,7 +289,7 @@ their laptop.
    *In contrast, the deployment described in this Chapter has
    everything except the Mobile Core Control Plane (CP) running
    on-prem. Moreover, because there is no traditional MNO involved,
-   there is no near-edge to speak of, with the Core CP instead runing
+   there is no near-edge to speak of, with the Core CP instead running
    in a central cloud. For example, this section describes a
    deployment with SD-Core (CP) running in the Google Cloud. It is the
    case, however, that the SD-Core (CP) can optionally run on-prem if
@@ -814,8 +815,8 @@ applications. The `Device-Group` model contains the following fields:
   fields:
 
    * `name`: Name of the range. Used as a key.
-   * `imsi-range-from`: First IMIS in the range.
-   * `imsi-range-to`: Last IMIS in the range. Can be omitted if
+   * `imsi-range-from`: First IMSI in the range.
+   * `imsi-range-to`: Last IMSI in the range. Can be omitted if
      the range only contains one IMSI.
 * `ip-domain`: Reference to an `IP-Domain` object that describes the
   IP and DNS settings for UEs within this group.
@@ -839,7 +840,7 @@ specifies the endpoints for the program devices talk to. The
    * `protocol`:  Protocol (`TCP|UDP`) for the endpoint.
    * `mbr.uplink`, `mbr.downlink`: Maximum bitrate for devices communicating with this
      application.
-   * `traffice-class`: Traffic class for devices communicating with this application.
+   * `traffic-class`: Traffic class for devices communicating with this application.
 
 * `enterprise`: Link to an `Enterprise` object that owns this
   application. May be left empty to indicate a global application that
