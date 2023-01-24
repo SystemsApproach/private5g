@@ -1,28 +1,6 @@
 Chapter 1:  Introduction
 ===========================
 
-.. Similar to current Chapter 1, but with more emphasis on the
-   relevance beyond traditional Mobile Operators. For example, our end
-   goal is showing how this technology can be integrated into edge
-   clouds running in enterprises (and used as part of their Industry
-   Transformation 4.0). In other words, in addition to describing the
-   technology, this book is also about (a) democratizing the access
-   network, and (b) applying the technology to new use cases.
-   
-   Also talk about two enabling technologies: SDN and Cloud
-   Native. These can easily be positioned as two aspects of the
-   general concept of cloudifying the mobile access network, which at
-   the end of the day, is the big message of this book. (Doing this
-   sets up the next point.)
-   
-   The edge cloud subsection currently starts from the operator
-   perspective. We’ll want to instead start from first principles
-   (there is value at the edge) and then ask about the options as to
-   where the edge is… Central Office is one choice, but on-prem is
-   another (this is how the SIGCOMM Tutorial was organized). This
-   means we conclude the Intro chapter with a high-level overview of
-   Aether (or its generic counterpart).
-
 Mobile networks, which have a 40-year history that parallels the
 Internet’s, have undergone significant change. The first two
 generations supported voice and then text, with 3G defining the
@@ -77,10 +55,10 @@ to support innovation. Whereas prior access networks were generally
 optimized for known services (such as voice calls and SMS), the
 Internet has been hugely successful in large part because it supported
 a wide range of applications that were not even thought of when it was
-first designed. The 5G network is very much being designed with this
-same goal of enabling all sorts of future applications beyond those we
-fully recognize today. For an example of the grand vision for 5G, see
-the whitepaper from one of the industry leaders.
+first designed. The 5G network is designed with this same goal:
+enabling future applications beyond those we fully recognize today.
+For an example of the grand vision for 5G, see the whitepaper
+from one of the industry leaders.
 
 .. _reading_vision:
 .. admonition:: Further Reading
@@ -93,7 +71,7 @@ The 5G mobile network, because it is on an evolutionary path and not a
 point solution, includes standardized specifications, a range of
 implementation choices, and a long list of aspirational goals. Because
 this leaves so much room for interpretation, our approach to
-describing 5G is grounded in two mutually supportive principles. The
+describing 5G is grounded in three mutually supportive principles. The
 first is to apply a *systems lens*, which is to say, we explain the
 sequence of design decisions that lead to a solution rather than fall
 back on enumerating the overwhelming number of acronyms or individual
@@ -102,8 +80,11 @@ disaggregate the system.  Building a disaggregated, virtualized, and
 software-defined 5G access network is the direction the industry is
 already headed (for good technical and business reasons), but breaking
 the 5G network down into its elemental components is also the best way
-to explain how 5G works.  It also helps to illustrate how 5G might
-evolve in the future to provide even more value.
+to explain how 5G works.  The third is to illustrate how 5G can be
+realized in practice by drawing on specific engineering decisions made
+in an open source implementation. This implementation leverages best
+practices in building cloud services, which is an essential aspect of
+5G evolving into a platform for new services.
 
 .. sidebar:: Evolutionary Path
 
@@ -134,19 +115,17 @@ helps the reader navigate this rich and rapidly evolving system.
 1.1 Standardization Landscape
 -----------------------------
 
-As of 3G, the generational designation corresponds to a standard defined
-by the *3rd Generation Partnership Project (3GPP)*. Even though its name
-has “3G” in it, the 3GPP continues to define the standards for 4G, 5G,
-and so on,
-each of which corresponds to a sequence of releases of the standard.
-Release 15 is considered the demarcation point between 4G and 5G, with
-Release 17 having been completed in 2022. Complicating the terminology, 4G
-was on a multi-release evolutionary path referred to as *Long-Term
-Evolution (LTE)*. 5G is on a similar evolutionary path, with several
-expected releases over its lifetime.
+As of 3G, the generational designation corresponds to a standard
+defined by the *3rd Generation Partnership Project (3GPP)*. Even
+though its name has “3G” in it, the 3GPP continues to define the
+standards for 4G, 5G, and so on, each of which corresponds to a
+sequence of releases of the standard.  Release 15 is considered the
+demarcation point between 4G and 5G, with Release 17 having been
+completed in 2022.
 
-Like Wi-Fi, cellular networks transmit data at certain bandwidths in the
-radio spectrum. Unlike Wi-Fi, which permits anyone to use a channel at
+In addition to 3GPP-defined standards, national governments establish
+how the radio spectrum is used locally. Unlike Wi-Fi, for which there
+is international agreement that permits anyone to use a channel at
 either 2.4 or 5 GHz (these are unlicensed bands), governments have
 auctioned off and licensed exclusive use of various frequency bands to
 service providers, who in turn sell mobile access service to their
@@ -155,21 +134,22 @@ as greater control over the quality of service delivered, while also
 imposing costs both in terms of paying for licenses and in the
 complexity of the systems needed to manage access to the spectrum. We
 will explore how these costs and benefits play out in subsequent
-chapters. 
+chapters.
 
 There is also a shared-license band at 3.5 GHz, called *Citizens
 Broadband Radio Service (CBRS)*, set aside in North America for
-cellular use. Similar spectrum is being set aside in other
-countries. The CBRS band allows 3 tiers of users to share the
-spectrum: first right of use goes to the original owners of this
-spectrum (naval radars and satellite ground stations); followed by
-priority users who receive this right over 10MHz bands for three years
-via regional auctions; and finally the rest of the population, who can
-access and utilize a portion of this band as long as they first check
-with a central database of registered users.  CBRS, along with
+cellular use. Similar spectrum is being set aside in other countries.
+The CBRS band allows 3 tiers of users to share the spectrum: first
+right of use goes to the original owners of this spectrum (naval
+radars and satellite ground stations); followed by priority users who
+receive this right over 10MHz bands for three years via regional
+auctions; and finally the rest of the population, who can access and
+utilize a portion of this band as long as they first check with a
+central database of registered users.  CBRS, along with
 standardization efforts to extend mobile cellular networks to operate
 in the unlicensed bands, opens the door for private cellular networks
-similar to Wi-Fi. This is proving attractive to enterprises.
+similar to Wi-Fi. This is proving especially attractive to enterprises
+looking to establish a *Private 5G* service.
 
 The specific frequency bands that are licensed for cellular networks
 vary around the world, and are complicated by the fact that network
@@ -186,6 +166,16 @@ physical-layer components, which in turn has indirect ramifications on
 the overall 5G system. We identify and explain these ramifications in
 later chapters, keeping in mind that ensuring the allocated spectrum
 is used *efficiently* is a critical design goal.
+
+Finally, in addition to the long-established 3GPP standards body and
+the set of national regulatory agencies around the world, a new
+organization—called the Open-RAN Alliance (O-RAN)—has recently been
+established to focus on "opening up the Radio Access Network". We'll
+see specifically what this means and how the O-RAN and differs from
+the 3GPP in Chapter 4, but for now, its existence highlights an
+important dynamic in the industry: 3GPP has become a vendor-dominated
+organization, with network operators (AT&T and China Mobile were the
+founding members) creating O-RAN to break vendor lock-in.
 
 1.2 Access Networks
 -------------------
@@ -305,10 +295,11 @@ MNOs, but whether they will fully embrace them is yet to be seen, so
 we do not limit ourselves to existing stakeholders or business
 models. In particular, this book focuses on how enterprises can be
 their own MNOs, or alternatively, acquire 5G connectivity as a managed
-cloud service from non-traditional MNOs.
+cloud service from non-traditional MNOs. The result is often referred
+to as *Private 5G*.
 
 To this end, :numref:`Figure %s <fig-enterprise>` depicts a simplified
-5G deployment that the rest of this book works toward. At a
+Private 5G deployment that the rest of this book works toward. At a
 high level, the figure shows a wide range of enterprise use cases that
 might take advantage of 5G connectivity, with the data plane of the 5G
 service running on-prem (on an edge cloud running within the
@@ -441,3 +432,48 @@ information about the related CORD initiative is also available.)
     A.D. Little Report. `Who Dares Wins!  How Access Transformation Can
     Fast-Track Evolution of Operator Production Platforms
     <https://www.adlittle.com/en/who-dares-wins>`__.  September 2019.
+
+1.4 Beyond 5G
+------------------
+
+From the moment MNOs started rolling out 5G in 2019, people started
+talking about what comes next. The obvious answer is 6G, but it's not
+at all clear that the decadal generations of the past 40 years will
+continue into the future. Today, you often hear alternatives like
+“NextG” and “Beyond 5G” more often than 6G, which could be a sign that
+the industry is undergoing a fundamental shift. And there is an
+argument that we're in the midst of a sea change that will render the
+generational distinction largely meaningless. There are two
+complementary reasons for this, both at the heart of what's important
+about Private 5G.
+
+The first factor is that by adopting cloud technologies, the mobile
+cellular network is hoping to cash in on the promise of feature
+velocity.  This "agility" story was always included in the early 5G
+promotional material, as part of the case for why a 5G upgrade would
+be a worthwhile investment, but the consequence of those technologies
+now finding their way into the mainstream is that new features can be
+introduced rapidly and deployed continuously. At some point, the
+frequency of continual improvements render generational distinctions
+irrelevant.
+
+The second factor is that agility isn’t only about cadence; it’s also
+about customization. That is, these changes can be introduced
+bottom-up—for example by enterprises and their edge cloud partners in
+the case of Private 5G—without necessarily depending on (or waiting
+for) a global standardization effort.  If an enterprise finds a new
+use case that requires a specialized deployment, only its Private 5G
+deployment needs to adopt the necessary changes. Reaching agreement
+with all the incumbent stakeholders will no longer be a requirement.
+
+It's anyone's guess where this will take us, but it will be
+interesting to see how this dynamic impacts the role of
+standardization: what aspects of the mobile network require global
+agreement and what aspects do not because they can evolve on a
+case-by-case basis.  While standards often spur innovation (TCP and
+HTTP are two great examples from the Internet experience), sometimes
+standards serve as a barrier to competition, and hence, innovation.
+Now that software is eating the mobile cellular network—with Private
+5G deployed in enterprises likely setting the pace—we will learn which
+standards are which. This is a topic we will return to throughout the
+course of the book.

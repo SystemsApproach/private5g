@@ -42,6 +42,7 @@ Multipath
 Multiprotocol
 NFV
 NG
+NextG
 Oguz
 OAuth
 PHY
