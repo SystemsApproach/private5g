@@ -80,32 +80,36 @@ disaggregate the system.  Building a disaggregated, virtualized, and
 software-defined 5G access network is the direction the industry is
 already headed (for good technical and business reasons), but breaking
 the 5G network down into its elemental components is also the best way
-to explain how 5G works.  The third is to illustrate how 5G can be
-realized in practice by drawing on specific engineering decisions made
-in an open source implementation. This implementation leverages best
-practices in building cloud services, which is an essential aspect of
-5G evolving into a platform for new services.
+to explain how 5G works.
 
-.. sidebar:: Evolutionary Path
+The third principle is to illustrate how 5G can be realized in
+practice by drawing on specific engineering decisions made in an open
+source implementation. This implementation leverages best practices in
+building cloud apps, which is an essential aspect of 5G evolving into
+a platform for new services. This implementation also targets
+enterprises that are increasingly deploying 5G locally, and using it
+to help automate their manufacturing, retail, and business practices—a
+trend that is sometimes called *Industry 4.0*. Such enterprise-level
+deployments are known as *Private 5G*, but there is nothing technical
+about the technical approach that couldn't be adopted throughout the
+more traditional "public mobile network" that comes to mind when you
+think about your cell service today. The only difference is that
+private deployments are more aggressively embracing the cloud
+practices that will ultimately distinguish 5G from earlier
+generations.
 
-	That 5G is on an evolutionary path is the central theme of
-	this book.  We call attention to its importance here, and
-	revisit the topic throughout the book.
+.. _reading_industry4.0:
+.. admonition:: Further Reading
 
-	We are writing this book for *system generalists*, with the
-	goal of helping bring a community that understands a broad
-	range of systems issues (but knows little or nothing about the
-	cellular network) up to speed so they can play a role in its
-	evolution. This is a community that understands both feature
-	velocity and best practices in building robust scalable
-	systems, and so has an important role to play in bringing all
-	of 5G's potential to fruition.
+	K. Schwab. `The Fourth Industrial Revolution
+	<https://www.weforum.org/about/the-fourth-industrial-revolution-by-klaus-schwab>`__. 
+	World Economic Forum.
 
-What this all means is that there is no single, comprehensive definition
-of 5G, any more than there is for the Internet. It is a complex and
-evolving system, constrained by a set of standards that purposely give
-all the stakeholders many degrees of freedom. In the chapters that
-follow, it should be clear from the context whether we are talking about
+What this all means is that there is no simple definition of 5G, any
+more than there is for the Internet. It is a complex and evolving
+system, constrained by a set of standards that purposely give all the
+stakeholders many degrees of freedom. In the chapters that follow, it
+should be clear from the context whether we are talking about
 *standards* (what everyone must do to interoperate), *trends* (where
 the industry seems to be headed), or *implementation choices*
 (examples to make the discussion more concrete). By adopting a systems
@@ -240,9 +244,6 @@ addresses is a topic we will explore in later chapters.
 
 .. This section pivots to the new cloud perspective
 
-.. Need to talk about licensing spectrum, which is a big factor (and
-   about CBRS).   
-
 The previous section gives a decidedly Telco-centric view of the mobile
 cellular network, which makes sense because Telcos have been the
 dominant MNOs for the past 40+ years. But with 5G's focus on
@@ -282,7 +283,6 @@ network and the cloud.
   lightly licensed spectrum is leading to a blurring of the lines
   between the two approaches.
 
-
 The rest of this book explains what that means in detail. As an
 overview, thinking of 5G connectivity as a cloud service means that
 instead of using purpose-built devices and telephony-based operational
@@ -295,8 +295,7 @@ MNOs, but whether they will fully embrace them is yet to be seen, so
 we do not limit ourselves to existing stakeholders or business
 models. In particular, this book focuses on how enterprises can be
 their own MNOs, or alternatively, acquire 5G connectivity as a managed
-cloud service from non-traditional MNOs. The result is often referred
-to as *Private 5G*.
+cloud service from non-traditional MNOs.
 
 To this end, :numref:`Figure %s <fig-enterprise>` depicts a simplified
 Private 5G deployment that the rest of this book works toward. At a
@@ -344,15 +343,15 @@ applications benefit from moving at least part of their functionality
 out of the datacenter and towards the edge of the network, closer to
 end users.
 
-This trend is sometimes called *Industry 4.0*. The idea is to first
-collect operational data on assets and infrastructure, from sensors,
-video feeds and telemetry from machinery. It then applies ML to this
-data to gain insights, identify patterns and predict outcomes (e.g.,
-when a device is likely to fail). The final step is to automate
-industrial processes so as to minimize human intervention and enable
-remote operations (e.g., power optimization, idling quiescent
-machinery). The overall goal is to create an IT foundation for
-continually improving industrial operations through software.
+The idea of such deployments is to first collect operational data on
+assets and infrastructure, from sensors, video feeds and telemetry
+from machinery. It then applies ML to this data to gain insights,
+identify patterns and predict outcomes (e.g., when a device is likely
+to fail). The final step is to automate industrial processes so as to
+minimize human intervention and enable remote operations (e.g., power
+optimization, idling quiescent machinery). The overall goal is to
+create an IT foundation for continually improving industrial
+operations through software.
 
 But precisely where this edge is *physically* located depends on who
 you ask. If you ask a network operator that already owns and operates
@@ -363,33 +362,34 @@ tens of thousands of cell towers spread across the globe. Our approach
 is to be location agnostic, but to make the discussion concrete, we
 use enterprises as our exemplar deployment.
 
-.. sidebar:: CORD: Central Office Re-architected as a Datacenter
+At the same time cloud providers started pursing edge deployments,
+network operators began to re-architect their access network to use
+the same commodity hardware and best practices in building scalable
+software as the cloud providers. Such a design, which is sometimes
+referred to as CORD *(Central Office Re-architected as a Datacenter)*,
+supports both the access network and edge services co-located on a
+shared cloud platform. This platform is then replicated across
+hundreds or thousands of operator sites, including Central Offices.
 
-  Concurrent with cloud providers pursing edge deployments, network
-  operators began to re-architect their access network to use the same
-  commodity hardware and best practices in building scalable software
-  as the cloud providers. Such a design, which is sometimes referred
-  to as CORD *(Central Office Re-architected as a Datacenter)*,
-  supports both the access network and edge services co-located on a
-  shared cloud platform. This platform is then replicated across
-  hundreds or thousands of operator sites, including Central Offices.
+Traditional network operators did this because they wanted to take
+advantage of the same economies of scale and feature velocity as cloud
+providers. CORD gave them a general architecture to work towards, but
+also an open source Kubernetes-based reference implementation to model
+their solutions on. That original implementation of CORD is the direct
+predecessor to the Aether platform we use as a reference
+implementation in this book.
 
-  Traditional network operators did this because they wanted to take
-  advantage of the same economies of scale and feature velocity as
-  cloud providers. CORD gave them a general architecture to work
-  towards, but also an open source Kubernetes-based reference
-  implementation to model their solutions on. That original
-  implementation of CORD is the direct predecessor to the Aether
-  platform we use as a reference implementation in this book.
+.. _reading_cord:
+.. admonition:: Further Reading
 
-  At the same time network operators began to investigate a CORD-based
-  approach, they also encouraged their vendors to shift from selling
-  hardware appliances to *Virtualized Network Functions (VNFs)*, as
-  part of an initiative that is widely known as the *Network Function
-  Virtualization (NFV)*. Unfortunately, the commercially available
-  VNFs tended to be packaged as VMs that required a one-off
-  configurations, leaving operators with a set of management silos,
-  and far short of the operational uniformity of cloud native systems.
+    L. Peterson, *et al*. `Central Office Re-architected as a
+    Datacenter, IEEE Communications.
+    <https://wiki.opencord.org/download/attachments/1278027/PETERSON_CORD.pdf>`__.
+    IEEE Communications, October 2016.
+
+    A.D. Little Report. `Who Dares Wins!  How Access Transformation Can
+    Fast-Track Evolution of Operator Production Platforms
+    <https://www.adlittle.com/en/who-dares-wins>`__.  September 2019.
 
 An important takeaway from this discussion is that to understand how 5G
 is being implemented, it is helpful to have a working understanding of
@@ -412,26 +412,6 @@ technologies.
    `Edge Cloud Operations: A Systems Approach 
    <https://ops.systemsapproach.org/>`__. June 2022.
 
-In summary, a major goal of 5G is to take advantage of cloud
-technologies, with traditional MNOs announcing plans to build
-so-called *Telco Clouds*.  What is actually happening instead, is that
-that access technology is being subsumed into the cloud, running as
-yet another cloud native workload. It would be more accurate to refer
-to the resulting system now emerging as the *Cloud-based Telco*. One
-reading of this book is as a roadmap to such an outcome. (More
-information about the related CORD initiative is also available.)
-
-.. _reading_cord:
-.. admonition:: Further Reading
-
-    L. Peterson, *et al*. `Central Office Re-architected as a
-    Datacenter, IEEE Communications.
-    <https://wiki.opencord.org/download/attachments/1278027/PETERSON_CORD.pdf>`__.
-    IEEE Communications, October 2016.
-
-    A.D. Little Report. `Who Dares Wins!  How Access Transformation Can
-    Fast-Track Evolution of Operator Production Platforms
-    <https://www.adlittle.com/en/who-dares-wins>`__.  September 2019.
 
 1.4 Beyond 5G
 ------------------
@@ -475,5 +455,15 @@ HTTP are two great examples from the Internet experience), sometimes
 standards serve as a barrier to competition, and hence, innovation.
 Now that software is eating the mobile cellular network—with Private
 5G deployed in enterprises likely setting the pace—we will learn which
-standards are which. This is a topic we will return to throughout the
-course of the book.
+standards are which.
+
+In summary, that 5G is on an evolutionary path is the central theme of
+this book.  We call attention to its importance here, and revisit the
+topic throughout the book. We are writing this book for *system
+generalists*, with the goal of helping bring a community that
+understands a broad range of systems issues (but knows little or
+nothing about the cellular network) up to speed so they can play a
+role in its evolution. This is a community that understands both
+feature velocity and best practices in building robust scalable
+systems, and so has an important role to play in bringing all of 5G's
+potential to fruition.

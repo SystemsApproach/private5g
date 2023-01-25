@@ -24,13 +24,12 @@ Note that the deconstruction of the RAN presented in this chapter
 represents a combination of standardized specifications and
 implementation strategies. The former continues to be under the
 purview of the 3GPP, but the latter are primarily influenced by a
-second organization: the *Open-RAN Alliance (O-RAN)*. The O-RAN is led
-by network operators (AT&T and China Mobile are the founding members),
-with the goal of developing a software-based implementation of the RAN
-that breaks the vendor lock-in that dominates today’s marketplace.
-Such business forces are certainly a factor in where 5G mobile
-networks are headed, but our goal in this chapter is to identify the
-technical design decisions involved in that evolution.
+second organization: the *Open-RAN Alliance (O-RAN)* introduced in
+Chapter 1. The O-RAN is led by network operators with the goal of
+developing a software-based implementation of the RAN that breaks the
+vendor lock-in.  Such business forces are certainly a factor in where
+5G mobile networks are headed, but our goal in this chapter is to
+identify the technical design decisions involved in that evolution.
 
 
 4.1 Packet Processing Pipeline

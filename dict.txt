@@ -60,6 +60,7 @@ RIC
 RRC
 Shaddi
 Sunay
+Schwab
 Tbps
 Telco
 Telcos
