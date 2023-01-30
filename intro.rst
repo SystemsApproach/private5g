@@ -89,14 +89,13 @@ building cloud apps, which is an essential aspect of 5G evolving into
 a platform for new services. This implementation also targets
 enterprises that are increasingly deploying 5G locally, and using it
 to help automate their manufacturing, retail, and business practices—a
-trend that is sometimes called *Industry 4.0*. Such enterprise-level
-deployments are known as *Private 5G*, but there is nothing technical
-about the technical approach that couldn't be adopted throughout the
-more traditional "public mobile network" that comes to mind when you
-think about your cell service today. The only difference is that
-private deployments are more aggressively embracing the cloud
-practices that will ultimately distinguish 5G from earlier
-generations.
+trend that has been dubbed *Industry 4.0*. Such enterprise-level
+deployments are known as *Private 5G*, but there is nothing about the
+technical approach that couldn't be adopted throughout the more
+traditional "public mobile network" that comes to mind when you think
+about your cell service today. The only difference is that private
+deployments are more aggressively embracing the cloud practices that
+will ultimately distinguish 5G from earlier generations.
 
 .. _reading_industry4.0:
 .. admonition:: Further Reading
@@ -173,11 +172,11 @@ is used *efficiently* is a critical design goal.
 
 Finally, in addition to the long-established 3GPP standards body and
 the set of national regulatory agencies around the world, a new
-organization—called the Open-RAN Alliance (O-RAN)—has recently been
+organization—called the *Open-RAN Alliance (O-RAN)* —has recently been
 established to focus on "opening up the Radio Access Network". We'll
-see specifically what this means and how the O-RAN and differs from
-the 3GPP in Chapter 4, but for now, its existence highlights an
-important dynamic in the industry: 3GPP has become a vendor-dominated
+see specifically what this means and how the O-RAN differs from the
+3GPP in Chapter 4, but for now, its existence highlights an important
+dynamic in the industry: 3GPP has become a vendor-dominated
 organization, with network operators (AT&T and China Mobile were the
 founding members) creating O-RAN to break vendor lock-in.
 
@@ -294,8 +293,8 @@ operational uniformity.  These advantages are available to legacy
 MNOs, but whether they will fully embrace them is yet to be seen, so
 we do not limit ourselves to existing stakeholders or business
 models. In particular, this book focuses on how enterprises can be
-their own MNOs, or alternatively, acquire 5G connectivity as a managed
-cloud service from non-traditional MNOs.
+their own MNOs, or alternatively, acquire private 5G connectivity as a
+managed cloud service from non-traditional MNOs.
 
 To this end, :numref:`Figure %s <fig-enterprise>` depicts a simplified
 Private 5G deployment that the rest of this book works toward. At a
@@ -452,10 +451,10 @@ standardization: what aspects of the mobile network require global
 agreement and what aspects do not because they can evolve on a
 case-by-case basis.  While standards often spur innovation (TCP and
 HTTP are two great examples from the Internet experience), sometimes
-standards serve as a barrier to competition, and hence, innovation.
-Now that software is eating the mobile cellular network—with Private
-5G deployed in enterprises likely setting the pace—we will learn which
-standards are which.
+standards actually serve as a barrier to competition, and hence,
+innovation.  Now that software is eating the mobile cellular
+network—with Private 5G deployed in enterprises likely setting the
+pace—we will learn which standards are which.
 
 In summary, that 5G is on an evolutionary path is the central theme of
 this book.  We call attention to its importance here, and revisit the
