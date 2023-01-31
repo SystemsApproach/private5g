@@ -271,7 +271,7 @@ AMP. Aether’s centralized components are able to run in Google Cloud
 Platform, Microsoft Azure, and Amazon’s AWS. They also run as an
 emulated cluster implemented by a system like KIND (Kubernetes in
 Docker), making it possible for developers to run these components on
-their laptop.
+their laptops.
 
 .. sidebar:: Near-Edge vs Far-Edge
 
@@ -328,7 +328,7 @@ operators* who manage the hybrid cloud as a whole, and (2) the
 advantage of the local cloud resources (e.g., what edge applications
 to run and how to slice connectivity resources among those apps).  We
 sometimes call the latter "enterprise admins" to distinguish them from
-"end-users" that might want to manage their own personal devices.
+"end-users" who might want to manage their own personal devices.
 
 Aether is multi-tenant in the sense that it authenticates and isolates
 these stakeholders, allowing each to access only those objects they
@@ -360,14 +360,14 @@ configurations are also possible, which makes sense in less demanding
 scenarios. For example, small edge clusters can be built with only a
 single switch (or two switches for resiliency), with or without
 SDN-based control. And in the limit, an Aether edge can run on a
-single server, all of which makes the SD-Fabric application optional.
+single server, which makes the SD-Fabric application optional.
 Similarly, Aether can be deployed without SD-RAN, instead using
-conventional small cell base stations.
+conventional small-cell base stations.
 
 Finally, Aether can be run entirely at the edge, without depending on
-a central cloud. This implies hosting both the SD-Core CP, Cloud
-Management Platform described in the next section, on the edge
-cluster. Of course doing so likely precludes a multi-site deployment.
+a central cloud. This implies hosting both the SD-Core CP and the Cloud
+Management Platform described in the next section on the edge
+cluster. Note that doing so likely precludes a multi-site deployment.
 
 6.3 Cloud Management Platform 
 ------------------------------
@@ -381,7 +381,7 @@ distributed set of ACE clusters and one or more SD-Core CP clusters
 running in the central cloud.
 
 The following uses AMP to illustrate how to deliver 5G-as-a-Service,
-but the approach generalizes because AMP is based on widely used open
+but the approach generalizes because AMP is based on widely-used open
 source tools. For more details about all the subsystems involved in
 operationalizing an edge cloud, we refer you to the companion book
 mentioned in the introduction to this chapter.
@@ -421,7 +421,7 @@ At a high level, AMP is organized around the four subsystems shown in
   security audits, and understand when it is necessary to provision
   additional capacity.
     
-For simplicity, we can collapse the four subsystems into a the two
+For simplicity, we can collapse the four subsystems into the two
 dimensional schematic shown in :numref:`Figure %s <fig-2D>`.
 Lifecycle Management (coupled with Resource Provisioning) runs
 off-line, sitting adjacent to the hybrid cloud. Operators and
@@ -456,8 +456,8 @@ Because we want to automate the sequence of calls needed to activate
 virtual infrastructure, we adopt an approach known as
 *Infrastructure-as-Code*. This is where Terraform comes into play.
 The general idea is to document, in a declarative format that can be
-"executed", exactly what our infrastructure is to look like; how it is
-to be configured.
+"executed", exactly what our infrastructure is to look like. The code
+defines how the infrastructure is to be configured.
 
 When a cloud is built from a combination of virtual and physical
 resources, as is the case for a hybrid cloud like Aether, we need a
@@ -576,13 +576,13 @@ the pipeline.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Service Orchestration is responsible for managing the Kubernetes
-workloads once they are up-and-running, which in our case means
+workloads once they are up and running, which in our case means
 providing a programmatic API that can be used by various stakeholders
 to manage the 5G connectivity service.  As shown in :numref:`Figure %s
 <fig-control>`, the Service Orchestrator hides the implementation
 details of 5G connectivity, which spans four different components and
 multiple clouds. It does this by providing a coherent service
-interface that for users that care about being able to authorize
+interface for users, enabling them to authorize
 devices and set QoS parameters on an end-to-end basis.
 
 .. _fig-control:
@@ -633,7 +633,7 @@ build upon.
    <https://datatracker.ietf.org/doc/html/rfc6020>`__. RFC 6020. October 2010.
 
 Finally, changes to the model-defined parameters must be propagated to
-the backend components, and while in practice there is no established
+the backend components, and in practice there is no established
 API for doing this. Aether assumes gNMI as its southbound interface to
 communicate configuration changes to the software services, where an
 Adapter (not shown in the figure) has to be written for any services
@@ -678,7 +678,7 @@ detected. Various system components—all the way from the low-level OS
 kernel to high-level cloud services—write messages that adhere to a
 well-defined format to the log. These messages include a timestamp,
 which makes it possible for the logging stack to parse and correlate
-messages from different components. ElasticSearch is a widely used
+messages from different components. ElasticSearch is a widely-used
 tool for storing and analyzing log messages.
 
 .. _reading_logging:
@@ -691,7 +691,7 @@ Traces are a record of causal relationships (e.g., Service A calls
 Service B) resulting from user-initiated transactions or jobs. They
 are related to logs, but provide more specialized information about
 the context in which different events happen. Tracing is
-well-understood in a single program, where an execution trace is
+well understood in a single program, where an execution trace is
 commonly recorded as an in-memory call stack, but traces are
 inherently distributed across a graph of network-connected
 microservices in a cloud setting. This makes the problem challenging,
@@ -715,7 +715,7 @@ open source tool used for tracing.
    Section 6.5.
 
 The visible aspect of a 5G service is the programmatic interface it
-provides to users, giving them the ability to control and customized
+provides to users, giving them the ability to control and customize
 the underlying connectivity service. This API is implemented by the
 Service Orchestrator outlined in the previous section, but what we
 really care about is the interface itself. Using Aether as a concrete
@@ -756,7 +756,7 @@ within a model (e.g., `enterprise`).
 6.4.1 Enterprises
 ~~~~~~~~~~~~~~~~~
 
-Aether is deployed in enterprises, and so needs to define
+Aether is deployed in enterprises, and so needs to define a
 representative set of organizational abstractions. These include
 `Enterprise`, which forms the root of a customer-specific
 hierarchy. The `Enterprise` model is referenced by many other objects,
@@ -770,7 +770,7 @@ contains the following fields:
 
 `Enterprises` are further divided into `Sites`. A site is a
 point-of-presence for an `Enterprise` and may be either physical or
-logical (i.e. a single geographic location could contain several
+logical (i.e., a single geographic location could contain several
 logical sites). The`Site` model, in turn, contains the following
 fields:
 
@@ -878,10 +878,12 @@ RAN, Core, and Fabric.
 6.4.3 QoS Profiles
 ~~~~~~~~~~~~~~~~~~
 
+
+
 Associated with each Slice is a QoS-related profile that governs how
-traffic that slice carries is to be treated. This starts with a
+traffic carried by that slice is to be treated. This starts with a
 `Template` model, which defines the valid (accepted) connectivity
-settings. Aether Operations is responsible for defining these (the
+settings. The Aether Operations team is responsible for defining these (the
 features they offer must be supported by the backend subsystems), with
 enterprises selecting the template they want applied to any instances
 of the connectivity service they create (e.g., via a drop-down
@@ -894,7 +896,7 @@ menu). That is, templates are used to initialize `Slice` objects. The
 * `traffic-class`: Link to a `Traffic-Class` object that describes the
   type of traffic.
 
-You will see that the `Device-Group` an `Application` models include
+You will see that the `Device-Group` and `Application` models include
 similar fields. The idea is that QoS parameters are established for
 the slice as a whole (based on the selected `Template`) and then
 individual devices and applications connected to that slice can define
@@ -913,7 +915,7 @@ and includes the following fields:
 ~~~~~~~~~~~~~~~~~~
 
 The above description references other models, which we do not fully
-described here. They include `AP-List`, which specifies a list of
+describe here. They include `AP-List`, which specifies a list of
 access points (radios); `IP-Domain`, which specifies IP and DNS
 settings; and `UPF`, which specifies the User Plane Function (the data
 plane element of the SD-Core) that is to forward packets on behalf of
