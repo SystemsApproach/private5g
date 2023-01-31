@@ -298,17 +298,6 @@ their laptops.
    case, however, that the SD-Core (CP) can optionally run on-prem if
    a fully local configuration is preferred. Where each component runs
    is a configuration option.*
-   
-Note that variations on this deployment configuration are possible.
-For example, both AMP and the SD-Core CP can be co-located on the edge
-cluster, making it possible for a complete Aether deployment to be
-self-contained in a single site. As another example, while we describe
-each ACE cluster as starting with bare-metal (with AMP responsible for
-booting the hardware into a state that is ready to host Kubernetes
-workloads), an alternative is to start with an edge deployment that is
-managed by one of the hyperscalers as an extension of their
-datacenters. Google’s Anthos, Microsoft’s Azure Arc, and Amazon’s
-ECS-Anywhere are examples of such edge cloud products.
 
 6.2.3 Stakeholders
 ~~~~~~~~~~~~~~~~~~
@@ -360,14 +349,23 @@ configurations are also possible, which makes sense in less demanding
 scenarios. For example, small edge clusters can be built with only a
 single switch (or two switches for resiliency), with or without
 SDN-based control. And in the limit, an Aether edge can run on a
-single server, which makes the SD-Fabric application optional.
-Similarly, Aether can be deployed without SD-RAN, instead using
-conventional small-cell base stations.
+single server, which makes the SD-Fabric application unnecessary.
 
-Finally, Aether can be run entirely at the edge, without depending on
-a central cloud. This implies hosting both the SD-Core CP and the Cloud
-Management Platform described in the next section on the edge
-cluster. Note that doing so likely precludes a multi-site deployment.
+Another possible simplification is to co-locate both AMP and the
+SD-Core CP on the edge cluster, making it possible for a complete
+Aether deployment to be self-contained in a single site. Note that
+doing so likely precludes a multi-site deployment.
+
+As a final example, while we describe each ACE cluster as starting
+with bare-metal (with AMP responsible for booting the hardware into a
+state that is ready to host Kubernetes workloads), an alternative is
+to start with an edge deployment that is managed by one of the
+hyperscalers as an extension of their datacenters. Google’s Anthos,
+Microsoft’s Azure Arc, and Amazon’s ECS-Anywhere are examples of such
+edge cloud products. In this scenario, AMP still manages the SD-Core
+and SD-RAN applications, but not the underlying platform (which may
+include an alternative SD-Fabric).
+
 
 6.3 Cloud Management Platform 
 ------------------------------
