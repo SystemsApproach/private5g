@@ -419,8 +419,10 @@ At a high level, AMP is organized around the four subsystems shown in
   security audits, and understand when it is necessary to provision
   additional capacity.
     
-For simplicity, we can collapse the four subsystems into the two
-dimensional schematic shown in :numref:`Figure %s <fig-2D>`.
+While AMP implements all four subsystems, there is an alternative
+perspective worth highlighting, one in which the management platform
+is characterized as having *on-line* and *off-line* components. Such a
+two dimensional schematic shown in :numref:`Figure %s <fig-2D>`.
 Lifecycle Management (coupled with Resource Provisioning) runs
 off-line, sitting adjacent to the hybrid cloud. Operators and
 Developers provision and change the system by checking code (including
@@ -429,14 +431,16 @@ the running system. Service Orchestration (coupled with Monitoring and
 Telemetry) runs on-line, layered on top of the hybrid cloud being
 managed. It defines an API that can be used to read and write
 parameters of the running system, which serves as a foundation for
-building closed-loop control.
+building closed-loop control. Although not shown in the schematic, the
+off-line component is also used to lifecycle-manage the on-line
+components.
 
 .. _fig-2D:
 .. figure:: figures/ops/Slide11.png 
    :width: 500px 
    :align: center 
 
-   Simplified representation of the management platform, highlighting
+   Alternative representation of the management platform, highlighting
    the off-line and on-line aspects of cloud management.
 
 6.3.1 Resource Provisioning
