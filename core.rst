@@ -516,7 +516,7 @@ receive messages again.
 As described, this approach might appear inefficient because it
 implies sending complete state information rather than incremental
 updates. However, at the scale of an AGW, which handles on the order
-of hundreds to a few thousands subscribers, it is possible to encode the
+of hundreds to a few thousands of subscribers, it is possible to encode the
 state efficiently enough to overcome this drawback. With the benefit
 of experience, mechanisms have been added to Magma to avoid overloading the
 orchestrator, which has state related to all subscribers in the
