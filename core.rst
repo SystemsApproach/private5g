@@ -486,39 +486,37 @@ For example, adding a new subscriber to the network is done centrally,
 and the relevant AGW then obtains the necessary state to authenticate
 that subscriber when their UE tries to attach to the network.
 
-Finally, like many cloud-native systems, Magma adopts a "desired
-state" model for runtime and configuration state. By this we mean that
-to communicate a required state change (e.g., the addition of a new
-session in the data plane), the desired end state is set via an
-API. The desired state model contrasts with a "CRUD (Create, Read,
-Update, Delete)" interface, which is common in 3GPP specifications,
-and which communicates *updates* to state rather than a desired end
-state.  When the desired end state is communicated, the loss of a
-message or failure of a component has less serious consequences.
-Reasoning about changes across elements of the system is more robust
-in the case of partial failures. Partial failures are common in
-challenged environments, where portions of the end-to-end system
-(e.g., backhaul) are far less reliable than others (e.g., the link
-between the UE and the RAN).
+Finally, Magma adopts a *desired state* model for managing runtime and
+configuration state. By this we mean that it communicates a state
+change (e.g., the addition of a new session in the user plane) by
+specifying the desired end state via an API call. This is in contrast
+with the *incremental update* model that is common in the 3GPP
+specification.  When the desired end state is communicated, the
+loss of a message or failure of a component has less serious
+consequences. This makes reasoning about changes across elements
+of the system more robust in the case of partial failures, which are
+common in challenged environments like the ones Magma is designed to
+serve.
 
-Consider an example where we are establishing data-plane state for a set
+Consider an example where we are establishing user plane state for a set
 of active sessions. Initially, there are two active sessions, X
 and Y. Then a third UE becomes active and a session Z needs to be
-established. In the CRUD model, the control plane would instruct the
-data plane "add session Z". The desired state model, by contrast,
-communicates the entire new state: "the set of sessions is now X, Y,
-Z". The CRUD model is brittle in the face of failures. If a message
-is lost, or a component is temporarily unable to receive updates, the
-receiver falls out of sync with the sender. So it is possible that the
-control plane believes that sessions X, Y and Z have been established,
-while the data plane only has state for X and Y. By sending the entire
-desired state, Magma ensures that the receiver comes back into sync with
-the sender once it is able to receive messages again.
+established. In the incremental update model, the control plane would
+instruct the user plane to "add session Z". The desired state model,
+by contrast, communicates the entire new state: "the set of sessions
+is now X, Y, Z". The incremental model is brittle in the face of
+failures. If a message is lost, or a component is temporarily unable
+to receive updates, the receiver falls out of sync with the sender. So
+it is possible that the control plane believes that sessions X, Y and
+Z have been established, while the user plane has state for only X
+and Y. By sending the entire desired end state, Magma ensures that the
+receiver comes back into sync with the sender once it is able to
+receive messages again.
 
 As described, this approach might appear inefficient because it
 implies sending complete state information rather than incremental
 updates. However, at the scale of an AGW, which handles on the order
-of hundreds to thousands of subscribers, it is possible to encode the
+of hundreds to a few thousands subscribers, it is possible to encode the
 state efficiently enough to overcome this drawback. With the benefit
 of experience, mechanisms have been added to Magma to avoid overloading the
 orchestrator, which has state related to all subscribers in the
