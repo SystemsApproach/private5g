@@ -26,12 +26,12 @@ This book is part of the `Systems Approach Series
 <https://www.systemsapproach.org>`__, with an online version published at
 `https://5G.systemsapproach.org <https://5g.systemsapproach.org>`__.
 
-For those users looking for our earlier 5G book, *Mobile 5G Networks:
+For those users looking for our earlier 5G book, *5G Mobile Networks:
 A Systems Approach*, published as this URL, you can still find source
 for it archived on `GitHub <https://github.com/SystemsApproach/5g>`__.
-This new book subsumes the material covered in the old one, plus goes
-into signficicant detail about how Private 5G is being implemented and
-deployed as a managed cloud service.
+This new book incorporates the background material covered in the old
+one, plus goes into signficicant detail about how Private 5G is
+implemented and deployed as a managed cloud service.
 
 To track progress and receive notices about new versions, you can follow
 the project on
