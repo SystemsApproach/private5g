@@ -349,7 +349,9 @@ configurations are also possible, which makes sense in less demanding
 scenarios. For example, small edge clusters can be built with only a
 single switch (or two switches for resiliency), with or without
 SDN-based control. And in the limit, an Aether edge can run on a
-single server, which makes the SD-Fabric application unnecessary.
+single server, which makes the SD-Fabric application unnecessary.  It
+is also possible to substitute legacy small cells for an SD-RAN based
+solution.
 
 Another possible simplification is to co-locate both AMP and the
 SD-Core CP on the edge cluster, making it possible for a complete
@@ -357,14 +359,14 @@ Aether deployment to be self-contained in a single site. Note that
 doing so likely precludes a multi-site deployment.
 
 As a final example, while we describe each ACE cluster as starting
-with bare-metal (with AMP responsible for booting the hardware into a
-state that is ready to host Kubernetes workloads), an alternative is
-to start with an edge deployment that is managed by one of the
-hyperscalers as an extension of their datacenters. Google’s Anthos,
-Microsoft’s Azure Arc, and Amazon’s ECS-Anywhere are examples of such
-edge cloud products. In this scenario, AMP still manages the SD-Core
-and SD-RAN applications, but not the underlying platform (which may
-include an alternative SD-Fabric).
+with bare-metal (with AMP responsible for provisioning the hardware so
+it is ready to host Kubernetes workloads), an alternative is to start
+with an edge deployment that is managed by one of the hyperscalers as
+an extension of their datacenters. Google’s Anthos, Microsoft’s Azure
+Arc, and Amazon’s ECS-Anywhere are examples of such edge cloud
+products. In this scenario, AMP still manages the SD-Core and SD-RAN
+applications, but not the underlying platform (which may or may not
+support and SDN-based switching fabric).
 
 
 6.3 Cloud Management Platform 

@@ -537,20 +537,18 @@ approach in more detail in their NSDI paper.
 .. _reading_magma:
 .. admonition:: Further Reading
                 
-    `Building Flexible, Low-Cost Wireless Access Networks With Magma
-    <https://arxiv.org/abs/2209.10001>`__.
+    S. Hasan, *et al.* `Building Flexible, Low-Cost Wireless Access
+    Networks With Magma <https://arxiv.org/abs/2209.10001>`__. 
     NSDI, April 2023.
 
-
-Finally, we should note that while we have focused on the Control
-Plane of Magma here, it also implements the Data Plane (or User Plane)
-of the Mobile Core. Its user plane is actually fairly simple, being
-based on Open vSwitch (OVS). The programmability of the user plane is
-important to support the range of access technologies, and OVS meets
-the performance needs of AGWs. However, this choice of user plane is
-not fundamental to Magma—other implementations have been
-considered. We take a closer look at the User Plane in the next
-section.
+Finally, while we have focused on its Control Plane, Magma also
+includes a User Plane component. The implementation is fairly simple,
+and is based on Open vSwitch (OVS). Having a programmable user plane
+is important, as it needs to support range of access technologies, and
+at the same time, OVS meets the performance needs of AGWs. However,
+this choice of user plane is not fundamental to Magma, and other
+implementations have been considered. We take a closer look at the
+User Plane in the next section.
 
 5.4 User Plane
 --------------------

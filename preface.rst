@@ -15,8 +15,8 @@ design principles behind the myriad of acronyms that dominate mobile
 cellular networking.
 
 But once you start down that path, cloud-fueled feature velocity kicks
-into high gear. Several cloud providers are starting to offer private
-5G solutions for enterprises, and there is a complete open source
+into high gear. Several cloud providers are now offering private 5G
+solutions for enterprises, and there is a complete open source
 implementation of a 5G-enabled edge cloud that the Internet community
 can learn from and build upon. The flood gates have opened, and this
 book is written to help navigate it.

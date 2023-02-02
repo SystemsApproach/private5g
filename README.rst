@@ -30,7 +30,7 @@ For those users looking for our earlier 5G book, *5G Mobile Networks:
 A Systems Approach*, published as this URL, you can still find source
 for it archived on `GitHub <https://github.com/SystemsApproach/5g>`__.
 This new book incorporates the background material covered in the old
-one, plus goes into signficicant detail about how Private 5G is
+one, plus goes into significant detail about how Private 5G is
 implemented and deployed as a managed cloud service.
 
 To track progress and receive notices about new versions, you can follow
