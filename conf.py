@@ -252,8 +252,7 @@ GA_INVOKE_JS = """
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
-  gtag('config', 'G-K101Q1MWLM');
+  gtag('config', 'G-C4RNJ35K6B');
 """
 
 def setup(app):
@@ -261,5 +260,5 @@ def setup(app):
     app.add_css_file('css/rtd_theme_mods.css')
 
 
-    app.add_js_file('https://www.googletagmanager.com/gtag/js?id=G-K101Q1MWLM')
+    app.add_js_file('https://www.googletagmanager.com/gtag/js?id=G-C4RNJ35K6B')
     app.add_js_file(None, body=GA_INVOKE_JS)
