@@ -531,8 +531,8 @@ The desired state approach is hardly novel but differs from typical
 failures or component outages due to software restarts, hardware
 failures, and so on. Limiting the scope of 3GPP protocols to the very
 edge of the network is what enables Magma to rethink the state
-synchronization model. The team that worked on Magma describe their
-approach in more detail in their NSDI paper.
+synchronization model. The team that worked on Magma describes their
+approach in more detail in an NSDI paper.
 
 .. _reading_magma:
 .. admonition:: Further Reading
