@@ -145,7 +145,7 @@ transmitter must receive feedback from every receiver to judge how to
 best utilize the wireless medium on their behalf. 3GPP specifies a
 *Channel Quality Indicator (CQI)* for this purpose. In practice,
 the receiver sends a CQI status report to the base station periodically
-(e.g., every millisecond in LTE). These CQI messages report the observed
+(e.g., every millisecond). These CQI messages report the observed
 signal-to-noise ratio, which impacts the receiver’s ability to recover
 the data bits. The base station then uses this information to adapt how
 it allocates the available radio spectrum to the subscribers it is

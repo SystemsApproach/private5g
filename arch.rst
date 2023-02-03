@@ -83,8 +83,8 @@ as one or more devices) that serves several purposes.
 -  Tracks user mobility to ensure uninterrupted service.
 -  Tracks subscriber usage for billing and charging.
 
-For readers familiar with Internet architecture and Wi-Fi as a common
-access technology, some of these functions might look a bit
+For readers familiar with the Internet architecture and Wi-Fi as a
+common access technology, some of these functions might look a bit
 surprising. For example, Wi-Fi, like most of the Internet, normally
 provides a best-effort service, whereas cellular networks often aim to
 deliver some sort of QoS guarantee. Tracking subscribers for both
@@ -94,13 +94,14 @@ cellular networks. The reasons for these differences are numerous,
 including the typically large costs of acquiring cellular spectrum and
 maintaining the infrastructure to use it such as radio towers. With
 that large investment, there is a desire to recoup costs by charging
-subscribers, and thus to make some sort of service guarantees to those
-subscribers. There is also a need to maximize the efficiency of
-spectrum usage. Much of the complexity of the mobile core follows from
-these requirements being imposed by service providers. Even when we
-get to enterprises running their own 5G networks, they still need to
-manage the usage of spectrum to obtain the benefits of 5G over Wi-Fi,
-such as more predictable control over latency and bandwidth. 
+subscribers, which in turn leads to making some sort of service
+guarantees to those subscribers to justify the cost. There is also a
+need to maximize the efficiency of spectrum usage. Much of the
+complexity of the mobile core follows from these requirements being
+imposed by service providers. Even when we get to enterprises running
+their own 5G networks, they still need to manage the usage of spectrum
+to obtain the benefits of 5G over Wi-Fi, such as more predictable
+control over latency and bandwidth.
 
 Note that Mobile Core is another example of a generic term. In 4G it
 was called the *Evolved Packet Core (EPC)* and in 5G it is called the
@@ -139,8 +140,8 @@ particular. And while it is true that base stations contain
 sophisticated algorithms for scheduling transmission on the radio
 spectrum—algorithms that are considered valuable intellectual property
 of the equipment vendors—there is significant opportunity to open and
-disaggregate both the RAN and the Mobile Core. This book is primarily
-a recipe for how to do that.
+disaggregate both the RAN and the Mobile Core. This book gives a
+recipe for how to do exactly that.
 
 Before getting to those details, we have three more architectural
 concepts to introduce. First, :numref:`Figure %s <fig-cups>` redraws
@@ -172,7 +173,7 @@ data plane resources to be scaled independently of each other.
 
 Finally, one of the key aspirational goals of 5G is the ability to
 segregate traffic for different usage domains into isolated *network
-slices*, each of which delivers a different levels of service to a
+slices*, each of which delivers a different level of service to a
 collection of devices and applications. Thinking of a network slice as
 a wireless version of a virtual network is a fair approximation,
 although as we'll see in later chapters, the implementation details

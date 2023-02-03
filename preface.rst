@@ -25,7 +25,7 @@ This book still includes the necessary background information about
 the mobile cellular network, much of which is rooted in its origin
 story as a Telco voice network, but the overarching theme is to
 describe the network through the lens of private deployments of 5G
-connectivity as managed cloud service. This includes adopting best
+connectivity as a managed cloud service. This includes adopting best
 practices in horizontally scalable microservices, Software-Defined
 Networking (SDN), and DevOps.
 
