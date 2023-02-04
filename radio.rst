@@ -208,7 +208,7 @@ The use of OFDMA naturally leads to conceptualizing the radio spectrum
 as a 2-D resource, as shown in :numref:`Figure %s <fig-sched-grid>`,
 with the subcarriers represented in the vertical dimension and the time to
 transmit symbols on each subcarrier represented in the horizontal dimension.  The
-minimal schedulable unit, called a *Resource Element (RE)*,
+basic unit of transmission, called a *Resource Element (RE)*,
 corresponds to a 15-kHz band around one subcarrier frequency and the
 time it takes to transmit one OFDMA symbol. The number of bits that
 can be encoded in each symbol depends on the modulation scheme in use.
