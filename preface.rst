@@ -40,6 +40,9 @@ to complement the low-level engineering documents that are
 available online (and to which we provide links) with an
 architectural roadmap for anyone trying to understand all the moving
 parts, how they fit together, and how they can be operationalized.
+This architecture is technically viable for traditional operators,
+cloud providers, and enterprises alike, but it's new use cases in
+private deployments that are most likely to benefit in the near term.
 
 Acknowledgements
 ----------------
