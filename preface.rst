@@ -2,7 +2,7 @@ Preface
 =======
 
 When we wrote our introductory 5G book three years ago, our goal was
-to help people with experience building Internet and Cloud services
+to help people with experience building Internet and cloud services to
 understand the opportunity to bring best practices from those systems
 to the mobile cellular network. On paper (and in the press) 5G had set
 an ambitious goal of transformative changes, adopting a cloud-inspired
@@ -14,25 +14,30 @@ basics, and set out to explain the fundamental networking concepts and
 design principles behind the myriad of acronyms that dominate mobile
 cellular networking.
 
-But once you start down that path, cloud-fueled feature velocity kicks
-into high gear. Several cloud providers are now offering private 5G
-solutions for enterprises, and there is a complete open source
-implementation of a 5G-enabled edge cloud that the Internet community
-can learn from and build upon. The flood gates have opened, and this
-book is written to help navigate it.
+Because 5G adopts many of the principles of cloud native systems, it
+promises to bring the feature velocity of cloud to telco
+environments. That promise is being delivered most successfully in
+private 5G environments that are less constrained by existing
+telco organizations and legacy infrastructure. Several cloud
+providers are now offering private 5G solutions for enterprises, and
+there is a complete open source implementation of a 5G-enabled edge
+cloud that the Internet community can learn from and build upon. Our
+experience with the Aether project has demonstrated the capabilities of
+open source for private 5G and forms the basis for much of this book.
 
-This book still includes the necessary background information about
+This information in this book is not limited to private
+deployments. It includes the necessary background information about
 the mobile cellular network, much of which is rooted in its origin
 story as a Telco voice network, but the overarching theme is to
 describe the network through the lens of private deployments of 5G
 connectivity as a managed cloud service. This includes adopting best
 practices in horizontally scalable microservices, Software-Defined
-Networking (SDN), and DevOps.
+Networking (SDN), and cloud operational practices such as DevOps.
 
-The book also makes extensive use of open source software to
+The book makes extensive use of open source software to
 illustrate how Private 5G can be realized in practice. The result is
-not a substitute for the low-level engineering documents that are
-available online (which the book links), but rather, serves as an
+to complement the low-level engineering documents that are
+available online (and to which we provide links) with an
 architectural roadmap for anyone trying to understand all the moving
 parts, how they fit together, and how they can be operationalized.
 
