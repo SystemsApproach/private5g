@@ -24,5 +24,6 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    ran.rst 
    core.rst
    cloud.rst
+   software.rst
    README.rst
    authors.rst
