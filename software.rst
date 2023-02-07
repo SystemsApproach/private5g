@@ -62,19 +62,9 @@ complex configurations. The goal of OnRamp is to prescribe a (mostly)
 linear sequence of steps a new user can follow to bring up an
 operational system that runs 24/7 and support live 5G workloads.
 Aether OnRamp is still a work-in-progress, but anyone interested in
-participating in that effort is encouraged to join the
-`ONF Community Workspace <https://onf-community.slack.com/>`__
-on Slack.
-
-.. sidebar:: Running Aether OnRamp in a VM
-
-   While this appendix focuses on deploying Aether OnRamp on a
-   physical server, Stage 1 can also run in a VM. Options include an
-   AWS VM (Ubuntu 18.04 image on `t2.xlarge` instance); a VirtualBox
-   VM running `bento/ubuntu-18.04` `Vagrant
-   <https://www.vagrantup.com>`_ box on Intel Mac; or a VM created
-   using `Multipass <https://multipass.run>`_ on Linux, Mac, or
-   Windows.
+participating in that effort is encouraged to join the discussion on
+Slack in the `ONF Community Workspace
+<https://onf-community.slack.com/>`__.
 
 In the meantime, Stage 1 of Aether OnRamp exists today, and provides a
 good way to get started. The following assumes a low-end physical
@@ -83,12 +73,37 @@ server, which should meet the following requirements:
 * Haswell CPU (or newer), with at least 4 CPUs and 12GB RAM.
 * Clean install of Ubuntu 18.04, 20.04, or 22.04, with 4.15 (or later) kernel.
 
-You must be able able to run `sudo` without a password, and there
-should be no firewall running on the server, which you can verify as
-follows:
+While this appendix focuses on deploying Aether OnRamp on a physical
+server, Stage 1 can also run in a VM. Options include an AWS VM
+(Ubuntu 18.04 image on `t2.xlarge` instance); a VirtualBox VM running
+`bento/ubuntu-18.04` `Vagrant <https://www.vagrantup.com>`_ box on
+Intel Mac; or a VM created using `Multipass <https://multipass.run>`_
+on Linux, Mac, or Windows.
+
+Prep Environment
+---------------------
+
+To install Aether OnRamp, you must be able able to run `sudo` without
+a password, and there should be no firewall running on the server,
+which you can verify as follows:
 
 * `sudo ufw status` should show inactive;
 * `sudo iptables -L` and `sudo nft list` should show a blank configuration.
+
+In addition, because the install process fetches artifacts from the
+Internet, if you are behind a proxy you will need to set the standard
+Linux environment variables: `http_proxy`, `https_proxy`, `no_proxy`,
+`HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY` with the appropriate
+values. You also need to export `PROXY_ENABLED=true` by typing the
+following:
+
+.. literalinclude:: code/proxy.sh 
+
+This variable can also be set in your `.bashrc` file to make it
+permanent.
+
+Download Aether OnRamp
+-------------------------------
 
 Once ready, clone the Aether OnRamp repo on this target deployment machine:
 
