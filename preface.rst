@@ -15,25 +15,26 @@ design principles behind the myriad of acronyms that dominate mobile
 cellular networking.
 
 Because 5G adopts many of the principles of cloud native systems, it
-promises to bring the feature velocity of the cloud to telco
+promises to bring the feature velocity of the cloud to Telco
 environments. That promise is being delivered most successfully in
-private 5G deployments that are less constrained by existing
-telco organizations and legacy infrastructure. Several cloud
-providers are now offering private 5G solutions for enterprises, and
+private 5G deployments that are less constrained by existing Telco
+organizations and legacy infrastructure. What started out as sketches
+on a whiteboard three years ago is now becoming a reality: Several
+cloud providers are offering private 5G solutions for enterprises, and
 there is a complete open source implementation of a 5G-enabled edge
 cloud that the Internet community can learn from and build upon.
 
 The architecture described in this book is not limited to private
 deployments. It includes the necessary background information about
 the mobile cellular network, much of which is rooted in its origin
-story as a telco voice network, but the overarching theme is to
+story as a Telco voice network, but the overarching theme is to
 describe the network through the lens of private deployments of 5G
 connectivity as a managed cloud service. This includes adopting best
 practices in horizontally scalable microservices, Software-Defined
 Networking (SDN), and cloud operational practices such as DevOps.
-These practices are equally appropriate for traditional operators,
-cloud providers, and enterprises alike, but it is new use cases in
-private deployments that are benefiting the most right now.
+These practices are appropriate for traditional operators, cloud
+providers, and enterprises alike, but it is emerging use cases in
+private deployments that will benefit first.
 
 The book makes extensive use of open source software—specifically, the
 Aether and Magma projects—to illustrate how Private 5G can be realized
