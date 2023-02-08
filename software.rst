@@ -13,8 +13,8 @@ A multi-site deployment of Aether has been running since 2020 in
 support of the *Pronto Research Project*, but that deployment depends
 on a ops team with significant insider knowledge about the engineering
 details. It is difficult for individuals to reproduce that know-how
-and bring up their own Aether clusters.  As an alternative, Aether has
-been packaged as two self-contained software packages that are
+and bring up their own Aether clusters.  As an alternative, Aether is
+also available as two self-contained software packages that are
 reasonably straightforward to install and run, even in a VM on your
 laptop. These packages were originally designed to support developers
 working on Aether components, but they also serve as a way to learn
@@ -31,8 +31,8 @@ more about Aether. The two packages are:
   <https://docs.sd-ran.org/master/sdran-in-a-box/README.html>`__:
   Includes the ONOS-based nRT-RIC, the O-RAN defined E2SM-KPI and
   E2SM-RC Service Models, and example xApps. RiaB can be configured to
-  work with different RAN emulators, including OAI's open source
-  implementation of the split RAN.
+  work with either an emulated RAN or with OAI's open source RAN stack
+  running on USRP devices.
   
 .. _reading_pronto:
 .. admonition:: Further Reading
@@ -68,7 +68,7 @@ Slack in the `ONF Community Workspace
 
 In the meantime, Stage 1 of Aether OnRamp exists today, and provides a
 good way to get started. The following assumes a low-end physical
-server, which should meet the following requirements:
+server that meets the following requirements:
 
 * Haswell CPU (or newer), with at least 4 CPUs and 12GB RAM.
 * Clean install of Ubuntu 18.04, 20.04, or 22.04, with 4.15 (or later) kernel.
@@ -105,14 +105,15 @@ permanent.
 Download Aether OnRamp
 -------------------------------
 
-Once ready, clone the Aether OnRamp repo on this target deployment machine:
+Once ready, clone the Aether OnRamp repo on this target deployment
+machine:
 
 .. literalinclude:: code/clone.sh 
 
 You will then execute the sequence of Makefiles targets described in
 the rest of this appendix. After each of these steps, run the
 following command to verify that the specified set of Kubernetes
-namespaces are operational.
+namespaces are operational:
 
 .. literalinclude:: code/kubectl.sh 
 
@@ -123,8 +124,8 @@ recommend that you start with `Kubernetes Tutorial
 Install Kubernetes
 -------------------
 
-The first step is to bring up an RKE2.0 Kubernetes cluster on your target server.
-Do this by typing:
+The first step is to bring up an RKE2.0 Kubernetes cluster on your
+target server. Do this by typing:
 
 .. literalinclude:: code/infra.sh 
 
@@ -142,8 +143,8 @@ included. Type:
 
 .. literalinclude:: code/net.sh 
 
-This target configures Linux (via `systemctl`), but also starts a Quagga
-router running inside the cluster.
+This target configures Linux (via `systemctl`), but also starts a
+Quagga router running inside the cluster.
 
 Bring Up Aether Management Platform
 --------------------------------------
@@ -172,7 +173,9 @@ More information about the Control and Monitoring dashboards is given
 in their respective sections of the Aether Guide. Note that the
 programmatic API underlying the Control Dashboard, which was
 introduced in Section 6.4, can be accessed at
-`http://<server_ip>:31194/aether-roc-api/`.
+`http://<server_ip>:31194/aether-roc-api/`. Also note that what the
+implementation calls *ROC (Runtime Operational Control)*, we refer to
+generically as a *Service Orchestration* in Chapter 6.
 
 .. _reading_dashboards:
 .. admonition:: Further Reading
@@ -209,8 +212,9 @@ at Aether. It is not part of Aether, per se.)
 Clean Up
 -----------------
 
-Working in reverse order, the following Make targets tear down the three applications
-you just installed, restoring the base Kubernetes cluster (plus Quagga router):
+Working in reverse order, the following Make targets tear down the
+three applications you just installed, restoring the base Kubernetes
+cluster (plus Quagga router):
 
 .. literalinclude:: code/clean-apps.sh
 
