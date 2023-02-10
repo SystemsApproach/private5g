@@ -346,28 +346,46 @@ multi-tenant or a multi-cloud.
 
 The deployment just described is Aether in its full glory. Simpler
 configurations are also possible, which makes sense in less demanding
-scenarios. For example, small edge clusters can be built with only a
-single switch (or two switches for resiliency), with or without
-SDN-based control. And in the limit, an Aether edge can run on a
-single server, which makes the SD-Fabric application unnecessary.  It
-is also possible to substitute legacy small cells for an SD-RAN based
-solution.
+scenarios. Examples include:
 
-Another possible simplification is to co-locate both AMP and the
-SD-Core CP on the edge cluster, making it possible for a complete
-Aether deployment to be self-contained in a single site. Note that
-doing so likely precludes a multi-site deployment.
+* Small edge clusters can be built with only a single switch (or two
+  switches for resiliency), with or without SDN-based control. In the
+  limit, an Aether edge can run on a single server.
 
-As a final example, while we describe each ACE cluster as starting
-with bare-metal (with AMP responsible for provisioning the hardware so
-it is ready to host Kubernetes workloads), an alternative is to start
-with an edge deployment that is managed by one of the hyperscalers as
-an extension of their datacenters. Google’s Anthos, Microsoft’s Azure
-Arc, and Amazon’s ECS-Anywhere are examples of such edge cloud
-products. In this scenario, AMP still manages the SD-Core and SD-RAN
-applications, but not the underlying platform (which may or may not
-support and SDN-based switching fabric).
+* It is possible to substitute legacy small cells for an SD-RAN
+  solution that includes a near RT-RIC and associated xApps.
 
+* It is possible co-locate both AMP and the SD-Core CP on the edge
+  cluster, resulting in a complete Aether deployment that is
+  self-contained in a single site.
+
+These are all straightforward configuration options. A very different
+approach is to start with an edge cluster that is managed by one of
+the hyperscalers, rather than have Aether provision Kubernetes on
+bare-metal.  Google’s Anthos, Microsoft’s Azure Arc, and Amazon’s
+ECS-Anywhere are examples of such edge cloud products.  In such a
+scenario, AMP still manages the SD-Core and SD-RAN applications
+running on top of Kubernetes, but not the underlying platform (which
+may or may not include an SDN-based switching fabric).
+
+Another variable in how 5G can be deployed at the edge is related to
+who owns the underlying cloud infrastructure. Instead of a cloud
+provider, an enterprise, or a traditional MNO owning the hardware,
+there are situations where a third-party, often called a *neutral
+host*, owns an operates the hardware (along with the real estate it
+sits in), and then rents access to these resources to multiple 5G
+providers. Each mobile service provider is then a tenant of of that
+shared infrastructure.
+
+This kind of arrangement has existed for years, albeit with
+conventional RAN devices, but shifting to a cloud-based design makes
+it possible for neutral hosts to lease access to *virtualized* edge
+resources to their tenants. In principle, the only difference between
+this scenario and today's multi-tenant clouds is that such providers
+would offer edge resources—located in cell towers, apartment
+buildings, and dense urban centers—instead of datacenter resources.
+The business arrangements would also have to be different from Private
+5G, but the technical design outlined in this book still applies.
 
 6.3 Cloud Management Platform 
 ------------------------------
