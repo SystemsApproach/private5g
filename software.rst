@@ -10,8 +10,8 @@ Docker Images, Helm Charts, Fleet Bundles, Terraform Templates) can be
 used to bring up a running instance of Aether on local hardware.
 
 A multi-site deployment of Aether has been running since 2020 in
-support of the *Pronto Research Project*, but that deployment depends
-on a ops team with significant insider knowledge about the engineering
+support of the *Pronto Project*, but that deployment depends on a ops
+team with significant insider knowledge about Aether's engineering
 details. It is difficult for individuals to reproduce that know-how
 and bring up their own Aether clusters.  As an alternative, Aether is
 also available as two self-contained software packages that are
@@ -46,7 +46,7 @@ more about Aether. The two packages are:
 
 Both packages make it possible to gain hands-on experience with the
 components described in this book, but a significant gap remains
-between these limited versions of Aether and a realistic operational
+between these limited versions of Aether and an operational
 deployoment of a 5G-enabled edge cloud.  To address that gap, there is
 an ongoing effort to re-package Aether in a way that provides an
 incremental path for users to:
@@ -64,11 +64,13 @@ operational system that runs 24/7 and support live 5G workloads.
 Aether OnRamp is still a work-in-progress, but anyone interested in
 participating in that effort is encouraged to join the discussion on
 Slack in the `ONF Community Workspace
-<https://onf-community.slack.com/>`__.
+<https://onf-community.slack.com/>`__. A TODO list can be found
+in the `Aether OnRamp Wiki
+<https://github.com/llpeterson/aether-onramp/wiki>`__.
 
 In the meantime, Stage 1 of Aether OnRamp exists today, and provides a
-good way to get started. The following assumes a low-end physical
-server that meets the following requirements:
+good way to get started. The following assumes a low-end server that
+meets the following requirements:
 
 * Haswell CPU (or newer), with at least 4 CPUs and 12GB RAM.
 * Clean install of Ubuntu 18.04, 20.04, or 22.04, with 4.15 (or later) kernel.
@@ -87,15 +89,16 @@ To install Aether OnRamp, you must be able able to run `sudo` without
 a password, and there should be no firewall running on the server,
 which you can verify as follows:
 
-* `sudo ufw status` should show inactive;
-* `sudo iptables -L` and `sudo nft list` should show a blank configuration.
+.. literalinclude:: code/firewall.sh 
 
-In addition, because the install process fetches artifacts from the
-Internet, if you are behind a proxy you will need to set the standard
-Linux environment variables: `http_proxy`, `https_proxy`, `no_proxy`,
-`HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY` with the appropriate
-values. You also need to export `PROXY_ENABLED=true` by typing the
-following:
+The first command should report inactive, and the second two commands
+should return a blank configuration.
+
+Because the install process fetches artifacts from the Internet, if you
+are behind a proxy you will need to set the standard Linux environment
+variables: `http_proxy`, `https_proxy`, `no_proxy`, `HTTP_PROXY`,
+`HTTPS_PROXY` and `NO_PROXY` with the appropriate values. You also
+need to export `PROXY_ENABLED=true` by typing the following:
 
 .. literalinclude:: code/proxy.sh 
 
@@ -160,10 +163,9 @@ Aether API. The second command brings up the Monitoring Service
 (Grafana running on top of Prometheus) and loads it with a set of
 dashboards.
 
-`kubectl` will show the `aether-roc` and
-`cattle-monitoring-system` namespaces now running in support of these
-two services, respectively  (plus new `atomic-runtime` pods in the
-`kube-system` name space).
+`kubectl` will show the `aether-roc` and `cattle-monitoring-system`
+namespaces now running in support of these two services, respectively,
+plus new `atomic-runtime` pods in the `kube-system` name space.
 
 You can access the dashboards for the two subsystems, respectively, at
 
