@@ -7,7 +7,9 @@ connectivity service.  Source code for all the individual components
 (e.g., AMP, SD-Core, SD-RAN, SD-Fabric) can be downloaded and
 inspected, and deployment artifacts built from that source code (e.g.,
 Docker Images, Helm Charts, Fleet Bundles, Terraform Templates) can be
-used to bring up a running instance of Aether on local hardware.
+used to bring up a running instance of Aether on local hardware. (See
+the *Source Directory* at the end of this appendix for information
+about where to find the relevant code repositories.)
 
 A multi-site deployment of Aether has been running since 2020 in
 support of the *Pronto Project*, but that deployment depends on a ops
@@ -33,6 +35,13 @@ more about Aether. The two packages are:
   E2SM-RC Service Models, and example xApps. RiaB can be configured to
   work with either an emulated RAN or with OAI's open source RAN stack
   running on USRP devices.
+
+Note that these two packages do not include SD-Fabric, which depends
+on programmable switching hardware. Readers interested in learning
+more about that capability (including a P4-based UPF) should see the
+`Hands-on Programming
+<https://sdn.systemsapproach.org/exercises.html>`__ appendix of our
+companion SDN book.
   
 .. _reading_pronto:
 .. admonition:: Further Reading
@@ -44,10 +53,10 @@ more about Aether. The two packages are:
     in Control <https://dl.acm.org/doi/10.1145/3431832.3431842>`__.
     ACM SIGCOMM Computer Communications Review, October 2020.
 
-Both packages make it possible to gain hands-on experience with the
-components described in this book, but a significant gap remains
+Both AiaB and RiaB make it possible to gain hands-on experience with
+the components described in this book, but a significant gap remains
 between these limited versions of Aether and an operational
-deployoment of a 5G-enabled edge cloud.  To address that gap, there is
+deployment of a 5G-enabled edge cloud.  To address that gap, there is
 an ongoing effort to re-package Aether in a way that provides an
 incremental path for users to:
 
@@ -60,12 +69,12 @@ The new packaging, called `Aether OnRamp
 AiaB, refactored to help users step through a sequence of increasingly
 complex configurations. The goal of OnRamp is to prescribe a (mostly)
 linear sequence of steps a new user can follow to bring up an
-operational system that runs 24/7 and support live 5G workloads.
+operational system that runs 24/7 and supports live 5G workloads.
 Aether OnRamp is still a work in progress, but anyone interested in
 participating in that effort is encouraged to join the discussion on
 Slack in the `ONF Community Workspace
-<https://onf-community.slack.com/>`__. A TODO list can be found
-in the `Aether OnRamp Wiki
+<https://onf-community.slack.com/>`__. A TODO list can be found in the
+`Aether OnRamp Wiki
 <https://github.com/llpeterson/aether-onramp/wiki>`__.
 
 In the meantime, Stage 1 of Aether OnRamp exists today, and provides a
@@ -92,7 +101,7 @@ which you can verify as follows:
 .. literalinclude:: code/firewall.sh 
 
 The first command should report inactive, and the second two commands
-should return a blank configuration.
+should return blank configurations.
 
 Because the install process fetches artifacts from the Internet, if you
 are behind a proxy you will need to set the standard Linux environment
@@ -166,6 +175,7 @@ dashboards.
 `kubectl` will show the `aether-roc` and `cattle-monitoring-system`
 namespaces now running in support of these two services, respectively,
 plus new `atomic-runtime` pods in the `kube-system` name space.
+Atomix is the scalable Key/Value Store that underlies ROC.
 
 You can access the dashboards for the two subsystems, respectively, at
 
@@ -224,4 +234,58 @@ If you want to also tear down Kubernetes for a fresh install, type:
 
 .. literalinclude:: code/clean-infra.sh
 
+Source Directory
+--------------------------
 
+Source code for Aether (and its subsystems) is distributed across
+multiple repositories:
+
+* Gerrit repository for the CORD Project
+  (https://gerrit.opencord.org): AMP-related components, including
+  source for the jobs that implement the CI/CD pipeline.
+
+* GitHub repository for the ONOS Project
+  (https://github.com/onosproject): Microservices for most of
+  SD-Fabric and SD-RAN, along with YANG models used to generate the
+  ROC API.
+
+* GitHub repository for the Stratum Project
+  (https://github.com/stratum): On-switch components of SD-Fabric.
+  
+* GitHub repository for the OMEC Project
+  (https://github.com/omec-project): Microservices for SD-Core.
+
+For Gerrit, you can either browse Gerrit (select the `master` branch)
+or clone the corresponding *<repo-name>* by typing:
+
+.. literalinclude:: code/gerrit.sh
+
+Deployment artifacts are pulled from the following repositories:
+
+Helm Charts
+ | https://charts.aetherproject.org
+ | https://charts.onosproject.org
+ | https://charts.opencord.org
+ | https://charts.atomix.io
+ | https://sdrancharts.onosproject.org                 
+ | https://charts.rancher.io/
+
+Docker Images
+ | https://hub.docker.com/u/aetherproject
+
+The Aether CI/CD pipeline, which keeps the above artifact repos in
+sync with the source repos, can be found here:
+
+ | ROC: https://gerrit.opencord.org/plugins/gitiles/roc-helm-charts
+ | SD-RAN: https://github.com/onosproject/sdran-helm-charts
+ | SD-Core: https://gerrit.opencord.org/plugins/gitiles/sdcore-helm-charts
+ | SD-Fabric (Servers): https://github.com/onosproject/onos-helm-charts  
+ | SD-Fabric (Switches): https://github.com/stratum/stratum-helm-charts
+
+The Jenkins Jobs that implement the CI/CD pipeline are checked into:
+
+ | https://gerrit.opencord.org/plugins/gitiles/aether-ci-management 
+
+These jobs, in turn, depend on QA tests that are checked into:
+
+ | https://gerrit.opencord.org/plugins/gitiles/aether-system-tests 
