@@ -22,7 +22,7 @@ more about Aether. The two packages are:
 
 * `Aether-in-a-Box (Aiab)
   <https://docs.aetherproject.org/master/developer/aiab.html>`__:
-  Includes SD-Core and the on-line aspects of AMP (Service
+  Includes SD-Core and the online aspects of AMP (Service
   Orchestrator and the Monitoring Subsystem). AiaB can be configured
   to work with either an emulated RAN or physical small cell radios
   (both 4G and 5G).
@@ -61,7 +61,7 @@ AiaB, refactored to help users step through a sequence of increasingly
 complex configurations. The goal of OnRamp is to prescribe a (mostly)
 linear sequence of steps a new user can follow to bring up an
 operational system that runs 24/7 and support live 5G workloads.
-Aether OnRamp is still a work-in-progress, but anyone interested in
+Aether OnRamp is still a work in progress, but anyone interested in
 participating in that effort is encouraged to join the discussion on
 Slack in the `ONF Community Workspace
 <https://onf-community.slack.com/>`__. A TODO list can be found
@@ -113,7 +113,7 @@ machine:
 
 .. literalinclude:: code/clone.sh 
 
-You will then execute the sequence of Makefiles targets described in
+You will then execute the sequence of Makefile targets described in
 the rest of this appendix. After each of these steps, run the
 following command to verify that the specified set of Kubernetes
 namespaces are operational:
