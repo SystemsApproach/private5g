@@ -441,14 +441,14 @@ At a high level, AMP is organized around the four subsystems shown in
     
 While AMP implements all four subsystems, there is an alternative
 perspective worth highlighting, one in which the management platform
-is characterized as having *on-line* and *off-line* components. Such a
+is characterized as having *online* and *offline* components. Such a
 two dimensional schematic is shown in :numref:`Figure %s <fig-2D>`.
 Lifecycle Management (coupled with Resource Provisioning) runs
-off-line, sitting adjacent to the hybrid cloud. Operators and
+offline, sitting adjacent to the hybrid cloud. Operators and
 Developers provision and change the system by checking code (including
 configuration specs) into a repo, which in turn triggers an upgrade of
 the running system. Service Orchestration (coupled with Monitoring and
-Telemetry) runs on-line, layered on top of the hybrid cloud being
+Telemetry) runs online, layered on top of the hybrid cloud being
 managed. It defines an API that can be used to read and write
 parameters of the running system, which serves as a foundation for
 building closed-loop control. 
@@ -459,11 +459,11 @@ building closed-loop control.
    :align: center 
 
    Alternative representation of the management platform, highlighting
-   the off-line and on-line aspects of cloud management.
+   the offline and online aspects of cloud management.
 
-Finally, the off-line and on-line aspects of cloud management are
-related in the sense that the off-line component also
-lifecycle-manages the on-line component. This is because the latter
+Finally, the offline and online aspects of cloud management are
+related in the sense that the offline component also
+lifecycle-manages the online component. This is because the latter
 are deployed as Kubernetes applications, just like SD-Core and
 SD-RAN. Version management is a key aspect of this relationship since
 the runtime API to the 5G connectivity service has to stay in sync
