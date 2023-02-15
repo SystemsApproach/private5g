@@ -1,4 +1,4 @@
 $ mkdir ~/systemsapproach
 $ cd ~/systemsapproach
-$ git clone https://github.com/llpeterson/aether-onramp 
+$ git clone https://github.com/systemsapproach/aether-onramp 
 $ cd aether-onramp 

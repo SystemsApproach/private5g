@@ -73,8 +73,8 @@ operational system that runs 24/7 and supports live 5G workloads.
 Aether OnRamp is still a work in progress, but anyone interested in
 participating in that effort is encouraged to join the discussion on
 Slack in the `ONF Community Workspace
-<https://onf-community.slack.com/>`__. A TODO list can be found in the
-`Aether OnRamp Wiki
+<https://onf-community.slack.com/>`__. A roadmap for the work that
+needs to be done can be found in the `Aether OnRamp Wiki
 <https://github.com/llpeterson/aether-onramp/wiki>`__.
 
 In the meantime, Stage 1 of Aether OnRamp exists today, and provides a
@@ -86,8 +86,8 @@ meets the following requirements:
 
 While this appendix focuses on deploying Aether OnRamp on a physical
 server, Stage 1 can also run in a VM. Options include an AWS VM
-(Ubuntu 18.04 image on `t2.xlarge` instance); a VirtualBox VM running
-`bento/ubuntu-18.04` `Vagrant <https://www.vagrantup.com>`_ box on
+(Ubuntu 20.04 image on `t2.xlarge` instance); a VirtualBox VM running
+`bento/ubuntu-20.04` `Vagrant <https://www.vagrantup.com>`_ box on
 Intel Mac; or a VM created using `Multipass <https://multipass.run>`_
 on Linux, Mac, or Windows.
 
@@ -150,8 +150,8 @@ Connect Kubernetes to the Network
 Since Aether ultimately provides a connectivity service, how the
 cluster you just installed connects to the network is an important
 detail. As a first pass, Aether OnRamp borrows a configuration from
-AiaB; eventually, support for optimizations like SR-IOV will also be
-included. Type:
+AiaB; support for other options, including SR-IOV, will be added over
+time.  Type:
 
 .. literalinclude:: code/net.sh 
 
@@ -162,8 +162,11 @@ Bring Up Aether Management Platform
 --------------------------------------
 
 The runtime management of Aether is implemented by two Kubernetes
-applications: Runtime Control (ROC) and a Monitoring Service. They can
-be deployed on the same cluster with the following two Make targets:
+applications: *Runtime Control (ROC)* and a *Monitoring
+Service*. (Note that what the implementation calls ROC, Chapter 6
+refers to generically as *Service Orchestration*.) The two management
+servics can be deployed on the same cluster with the following two
+Make targets:
 
 .. literalinclude:: code/amp.sh 
 
@@ -185,9 +188,7 @@ More information about the Control and Monitoring dashboards is given
 in their respective sections of the Aether Guide. Note that the
 programmatic API underlying the Control Dashboard, which was
 introduced in Section 6.4, can be accessed at
-`http://<server_ip>:31194/aether-roc-api/`. Also note that what the
-implementation calls *ROC (Runtime Operational Control)*, we refer to
-generically as a *Service Orchestration* in Chapter 6.
+`http://<server_ip>:31194/aether-roc-api/`.
 
 .. _reading_dashboards:
 .. admonition:: Further Reading
@@ -215,7 +216,8 @@ We can now test SD-Core with emulated traffic by typing:
 
 The monitoring dashboard shows two emulated gNBs come online, with
 five emulated UEs connecting to them. (Click on the "5G Dashboard"
-once you connect to the main page of the monitoring dashboard.)
+once you connect to the main page of the monitoring dashboard to see
+their progress.)
 
 This make target can be executed multiple times without restarting the
 SD-Core.  (Note that `5g-test` runs an emulator that directs traffic
@@ -244,6 +246,9 @@ multiple repositories:
   (https://gerrit.opencord.org): AMP-related components, including
   source for the jobs that implement the CI/CD pipeline.
 
+* GitHub repository for the OMEC Project 
+  (https://github.com/omec-project): Microservices for SD-Core. 
+
 * GitHub repository for the ONOS Project
   (https://github.com/onosproject): Microservices for most of
   SD-Fabric and SD-RAN, along with YANG models used to generate the
@@ -252,9 +257,6 @@ multiple repositories:
 * GitHub repository for the Stratum Project
   (https://github.com/stratum): On-switch components of SD-Fabric.
   
-* GitHub repository for the OMEC Project
-  (https://github.com/omec-project): Microservices for SD-Core.
-
 For Gerrit, you can either browse Gerrit (select the `master` branch)
 or clone the corresponding *<repo-name>* by typing:
 
@@ -263,6 +265,7 @@ or clone the corresponding *<repo-name>* by typing:
 Deployment artifacts are pulled from the following repositories:
 
 Helm Charts
+
  | https://charts.aetherproject.org
  | https://charts.onosproject.org
  | https://charts.opencord.org
@@ -271,6 +274,7 @@ Helm Charts
  | https://charts.rancher.io/
 
 Docker Images
+
  | https://hub.docker.com/u/aetherproject
 
 The Aether CI/CD pipeline, which keeps the above artifact repos in
@@ -289,3 +293,14 @@ The Jenkins Jobs that implement the CI/CD pipeline are checked into:
 These jobs, in turn, depend on QA tests that are checked into:
 
  | https://gerrit.opencord.org/plugins/gitiles/aether-system-tests 
+
+For more information about Aether's CI/CD pipeline, including its QA
+and version control strategies, we recommend the Lifecycle Management
+chapter of our companion Edge Cloud Operations book.
+
+.. _reading_cicd:
+.. admonition:: Further Reading
+
+    L. Peterson, A. Bavier, S. Baker, Z. Williams, and B. Davie. `Edge
+    Cloud Operations: A Systems Approach
+    <https://ops.systemsapproach.org/lifecycle.html>`__. June 2022.
