@@ -163,18 +163,19 @@ We are now ready to bring up the 5G version of the SD-Core:
 reasons, the Core is called `omec` instead of `sd-core`).
 
 In addition, the monitoring dashboard will show an active (green) UPF,
-but no base stations or attached devices at this point.  Not that you
-will need to click on the "5G Dashboard" once you connect to the main
-monitoring page.
+but no base stations or attached devices at this point.  Note that you
+will need to click on the "5G Dashboard" sub-page once you connect to
+the main monitoring page.
 
 You can also peruse the Control dashboard by starting with the
 dropdown menu in the upper right corner. For example, selecting
 `Devices` will show the set of UEs registered with Aether, and
 selecting `Device-Groups` will show how those UEs are grouped into
-aggregates. In a live environment, these values would be entered into
-the ROC through either the GUI or the underlying API. For the
-emulation described in the next subsection, they are loaded from
-a combination of `aether-latest/roc-5g-models.json` and
+aggregates. In an operational environment, these values would be
+entered into the ROC through either the GUI or the underlying API. For
+the emulated environment we're limiting ourselves to in Stage 1, these
+values are loaded from a combination of
+`aether-latest/roc-5g-models.json` and
 `aether-latest/sd-core-5g-values.yaml`.
 
 Run Emulated RAN Test
@@ -188,7 +189,7 @@ We can now test SD-Core with emulated traffic by typing:
 
 As the emulation progresses, the monitoring dashboard will show two
 emulated gNBs and five emulated UEs come online, with the performance
-graph showing upstream and downstream transfer rates. All of these
+graph plotting upstream and downstream transfer rates. All of these
 indicators go "silent" once the emulation completes, but you can
 execute the `5g-test` target multiple times without restarting the
 SD-Core to see additional activity.
