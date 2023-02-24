@@ -1,0 +1,68 @@
+Source Directory
+--------------------------
+
+Source code for Aether (and its subsystems) is distributed across
+multiple repositories:
+
+* Gerrit repository for the CORD Project
+  (https://gerrit.opencord.org): AMP-related components, including
+  source for the jobs that implement the CI/CD pipeline.
+
+* GitHub repository for the OMEC Project 
+  (https://github.com/omec-project): Microservices for SD-Core. 
+
+* GitHub repository for the ONOS Project
+  (https://github.com/onosproject): Microservices for most of
+  SD-Fabric and SD-RAN, along with YANG models used to generate the
+  ROC API.
+
+* GitHub repository for the Stratum Project
+  (https://github.com/stratum): On-switch components of SD-Fabric.
+  
+For Gerrit, you can either browse Gerrit (select the `master` branch)
+or clone the corresponding *<repo-name>* by typing:
+
+.. literalinclude:: code/gerrit.sh
+
+Deployment artifacts are pulled from the following repositories:
+
+Helm Charts
+
+ | https://charts.aetherproject.org
+ | https://charts.onosproject.org
+ | https://charts.opencord.org
+ | https://charts.atomix.io
+ | https://sdrancharts.onosproject.org                 
+ | https://charts.rancher.io/
+
+Docker Images
+
+ | https://hub.docker.com/u/aetherproject
+
+The Aether CI/CD pipeline, which keeps the above artifact repos in
+sync with the source repos, can be found here:
+
+ | ROC: https://gerrit.opencord.org/plugins/gitiles/roc-helm-charts
+ | SD-RAN: https://github.com/onosproject/sdran-helm-charts
+ | SD-Core: https://gerrit.opencord.org/plugins/gitiles/sdcore-helm-charts
+ | SD-Fabric (Servers): https://github.com/onosproject/onos-helm-charts  
+ | SD-Fabric (Switches): https://github.com/stratum/stratum-helm-charts
+
+The Jenkins Jobs that implement the CI/CD pipeline are checked into:
+
+ | https://gerrit.opencord.org/plugins/gitiles/aether-ci-management 
+
+These jobs, in turn, depend on QA tests that are checked into:
+
+ | https://gerrit.opencord.org/plugins/gitiles/aether-system-tests 
+
+For more information about Aether's CI/CD pipeline, including its QA
+and version control strategies, we recommend the Lifecycle Management
+chapter of our companion Edge Cloud Operations book.
+
+.. _reading_cicd:
+.. admonition:: Further Reading
+
+    L. Peterson, A. Bavier, S. Baker, Z. Williams, and B. Davie. `Edge
+    Cloud Operations: A Systems Approach
+    <https://ops.systemsapproach.org/lifecycle.html>`__. June 2022.

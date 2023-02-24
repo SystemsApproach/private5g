@@ -43,8 +43,10 @@ design.
 .. _reading_ops:
 .. admonition:: Further Reading 
    
-   `Edge Cloud Operations: A Systems Approach 
-   <https://ops.systemsapproach.org>`__.  June 2022.
+    L. Peterson, A. Bavier, S. Baker, Z. Williams, and B. Davie. `Edge
+    Cloud Operations: A Systems Approach
+    <https://ops.systemsapproach.org/lifecycle.html>`__. June 2022.
+
 
 .. Should note (here or in Ch4 & 5) that you'll see "Mgmt/Orchestrator"
    in Core-specific and RAN-specific architecture diagrams. We're
@@ -187,6 +189,7 @@ SD-Fabric, we refer you to a companion book.
 .. _reading_sdn:
 .. admonition:: Further Reading 
    
+   L. Peterson, C. Cascone, B. O'Connor, T. Vachuska, and B. Davie.
    `Software-Defined Networks: A Systems Approach 
    <https://sdn.systemsapproach.org>`__.  November 2021.
 
