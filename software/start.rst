@@ -25,7 +25,11 @@ To install Aether OnRamp, you must be able able to run `sudo` without
 a password, and there should be no firewall running on the server,
 which you can verify as follows:
 
-.. literalinclude:: code/firewall.sh 
+.. code-block::
+
+   $ sudo ufw status
+   $ sudo iptables -L
+   $ sudo nft list
 
 The first command should report inactive, and the second two commands
 should return blank configurations.
@@ -36,7 +40,9 @@ variables: `http_proxy`, `https_proxy`, `no_proxy`, `HTTP_PROXY`,
 `HTTPS_PROXY` and `NO_PROXY` with the appropriate values. You also
 need to export `PROXY_ENABLED=true` by typing the following:
 
-.. literalinclude:: code/proxy.sh 
+.. code-block::
+
+   $ export PROXY_ENABLED=true
 
 This variable can also be set in your `.bashrc` file to make it
 permanent.
@@ -47,14 +53,21 @@ Download Aether OnRamp
 Once ready, clone the Aether OnRamp repo on this target deployment
 machine:
 
-.. literalinclude:: code/clone.sh 
+.. code-block::
+
+   $ mkdir ~/systemsapproach
+   $ cd ~/systemsapproach
+   $ git clone https://github.com/systemsapproach/aether-onramp 
+   $ cd aether-onramp
 
 You will then execute the sequence of Makefile targets described in
 the rest of this appendix. After each of these steps, run the
 following command to verify that the specified set of Kubernetes
 namespaces are operational:
 
-.. literalinclude:: code/kubectl.sh 
+.. code-block::
+
+   $ kubectl get pods --all-namespaces
 
 If you are not familiar with `kubectl` (the CLI for Kubernetes), we
 recommend that you start with `Kubernetes Tutorial
@@ -66,7 +79,9 @@ Install Kubernetes
 The first step is to bring up an RKE2.0 Kubernetes cluster on your
 target server. Do this by typing:
 
-.. literalinclude:: code/infra.sh 
+.. code-block::
+
+   $ make node-prep
 
 `kubectl` will show the `kube-system` and `calico-system` namespaces
 running.
@@ -80,7 +95,9 @@ detail. As a first pass, Aether OnRamp borrows a configuration from
 AiaB; support for other options, including SR-IOV, will be added over
 time.  Type:
 
-.. literalinclude:: code/net.sh 
+.. code-block::
+
+   $ make router-pod
 
 This target configures Linux (via `systemctl`), but also starts a
 Quagga router running inside the cluster.
@@ -95,7 +112,10 @@ refers to generically as *Service Orchestration*.) The two management
 services can be deployed on the same cluster with the following two
 Make targets:
 
-.. literalinclude:: code/amp.sh 
+.. code-block::
+
+   $ make 5g-roc
+   $ make 5g-monitoring
 
 The first command brings up ROC and loads it with a data model for the
 Aether API. The second command brings up the Monitoring Service
@@ -109,7 +129,10 @@ Atomix is the scalable Key/Value Store that underlies ROC.
 
 You can access the dashboards for the two subsystems, respectively, at
 
-.. literalinclude:: code/dashboards
+.. code-block::
+
+   http://<server_ip>:31194 
+   http://<server_ip>:30950 
 
 More information about the Control and Monitoring dashboards is given
 in their respective sections of the Aether Guide. Note that the
@@ -129,7 +152,9 @@ Bring Up SD-Core
 
 We are now ready to bring up the 5G version of the SD-Core:
 
-.. literalinclude:: code/core.sh 
+.. code-block::
+
+   $ make 5g-core
 
 `kubectl` will show the `omec` namespace running. (For historical
 reasons, the Core is called `omec` instead of `sd-core`).
@@ -139,7 +164,9 @@ Run Emulated RAN Test
 
 We can now test SD-Core with emulated traffic by typing:
 
-.. literalinclude:: code/test.sh 
+.. code-block::
+
+   $ make 5g-test
 
 The monitoring dashboard shows two emulated gNBs come online, with
 five emulated UEs connecting to them. (Click on the "5G Dashboard"
@@ -157,8 +184,15 @@ Working in reverse order, the following Make targets tear down the
 three applications you just installed, restoring the base Kubernetes
 cluster (plus Quagga router):
 
-.. literalinclude:: code/clean-apps.sh
+.. code-block::
+
+   $ make core-clean
+   $ make monitoring-clean
+   $ make roc-clean
 
 If you want to also tear down Kubernetes for a fresh install, type:
 
-.. literalinclude:: code/clean-infra.sh
+.. code-block::
+
+   $ make router-clean
+   $ make clean

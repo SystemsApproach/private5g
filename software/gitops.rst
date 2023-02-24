@@ -4,12 +4,12 @@ Stage 2: Add GitOps Tooling
 The Makefile targets used in Stage 1 invoke Helm to install the
 applications, using application-specific *values files* found the
 cloned directory (e.g.,
-`~/systemsapproach/aether-onramp/roc-values.yaml`) to override the
-values for the correspond Helm charts. In an operational setting, all
-the information needed to deploy a set of Kubernetes applications is
-checked into a Git repo, with a tool like Fleet automatically updating
-the deployment whenever it detects changes to the configuration
-checked into the repo.
+`~/systemsapproach/aether-onramp/aether-latest/roc-values.yaml`) to
+override the values for the correspond Helm charts. In an operational
+setting, all the information needed to deploy a set of Kubernetes
+applications is checked into a Git repo, with a tool like Fleet
+automatically updating the deployment whenever it detects changes to
+the configuration checked into the repo.
 
 ..
   Note: There is an intermediate step that could be included. First
@@ -19,7 +19,18 @@ checked into the repo.
 To see how this works, look at the `resources/deploy.yaml` file
 included in the cloned directory:
 
-.. literalinclude:: code/deploy.yaml
+.. code-block::
+
+   apiVersion: fleet.cattle.io/v1alpha1
+   kind: GitRepo
+   metadata:
+       name: aiab
+       namespace: fleet-local
+   spec:
+       repo: "https://github.com/systemsapproach/aether-apps"  # Replace with your fork
+       branch: main
+   paths:
+       - aether-2.1        # Specify one of "aether-2.0" or "aether-2.1"
 
 This particular version uses
 `https://github.com/systemsapproach/aether-apps` as its *source repo*.
@@ -46,15 +57,19 @@ installing applications (which Fleet refers to as *bundles*):
 
 Once complete, you can rerun the same emulated 5G test against Aether:
 
-.. literalinclude:: code/test.sh 
+.. code-block::
+
+   $ make 5g-test
 
 Once you configure your cluster to use Fleet to deploy the Kubernetes
 applications, the "clean" targets in the Makefile will no longer work
 correctly: *Fleet will persist in reinstalling any namespaces that have
 been deleted.* You have to first uninstall Fleet by typing:
 
-.. literalinclude:: code/clean-fleet.sh 
+.. code-block::
 
+   $ make fleet-clean
+   
 before executing the other "clean" targets. Alternatively, leave Fleet
 running and instead modify your forked copy of the `aether-apps` repo
 to no longer include applications you do not want Fleet to
