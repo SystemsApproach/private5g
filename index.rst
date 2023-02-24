@@ -16,6 +16,7 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
 .. toctree::
    :maxdepth: 2 
    :caption: Table of Contents 
+   :glob:
 
    preface.rst	     
    intro.rst
@@ -24,6 +25,16 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    ran.rst 
    core.rst
    cloud.rst
-   software.rst
    README.rst
    authors.rst
+
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:	      
+   :caption: About the Software
+
+   overview.rst
+   directory.rst
+   start.rst
+   gitops.rst

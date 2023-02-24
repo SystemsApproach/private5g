@@ -43,8 +43,10 @@ design.
 .. _reading_ops:
 .. admonition:: Further Reading 
    
-   `Edge Cloud Operations: A Systems Approach 
-   <https://ops.systemsapproach.org>`__.  June 2022.
+    L. Peterson, A. Bavier, S. Baker, Z. Williams, and B. Davie. `Edge
+    Cloud Operations: A Systems Approach
+    <https://ops.systemsapproach.org/lifecycle.html>`__. June 2022.
+
 
 .. Should note (here or in Ch4 & 5) that you'll see "Mgmt/Orchestrator"
    in Core-specific and RAN-specific architecture diagrams. We're
@@ -187,6 +189,7 @@ SD-Fabric, we refer you to a companion book.
 .. _reading_sdn:
 .. admonition:: Further Reading 
    
+   L. Peterson, C. Cascone, B. O'Connor, T. Vachuska, and B. Davie.
    `Software-Defined Networks: A Systems Approach 
    <https://sdn.systemsapproach.org>`__.  November 2021.
 
@@ -346,28 +349,46 @@ multi-tenant or a multi-cloud.
 
 The deployment just described is Aether in its full glory. Simpler
 configurations are also possible, which makes sense in less demanding
-scenarios. For example, small edge clusters can be built with only a
-single switch (or two switches for resiliency), with or without
-SDN-based control. And in the limit, an Aether edge can run on a
-single server, which makes the SD-Fabric application unnecessary.  It
-is also possible to substitute legacy small cells for an SD-RAN based
-solution.
+scenarios. Examples include:
 
-Another possible simplification is to co-locate both AMP and the
-SD-Core CP on the edge cluster, making it possible for a complete
-Aether deployment to be self-contained in a single site. Note that
-doing so likely precludes a multi-site deployment.
+* Small edge clusters can be built with only a single switch (or two
+  switches for resiliency), with or without SDN-based control. In the
+  limit, an Aether edge can run on a single server.
 
-As a final example, while we describe each ACE cluster as starting
-with bare-metal (with AMP responsible for provisioning the hardware so
-it is ready to host Kubernetes workloads), an alternative is to start
-with an edge deployment that is managed by one of the hyperscalers as
-an extension of their datacenters. Google’s Anthos, Microsoft’s Azure
-Arc, and Amazon’s ECS-Anywhere are examples of such edge cloud
-products. In this scenario, AMP still manages the SD-Core and SD-RAN
-applications, but not the underlying platform (which may or may not
-support and SDN-based switching fabric).
+* It is possible to substitute legacy small cells for an SD-RAN
+  solution that includes a near RT-RIC and associated xApps.
 
+* It is possible co-locate both AMP and the SD-Core CP on the edge
+  cluster, resulting in a complete Aether deployment that is
+  self-contained in a single site.
+
+These are all straightforward configuration options. A very different
+approach is to start with an edge cluster that is managed by one of
+the hyperscalers, rather than have Aether provision Kubernetes on
+bare-metal.  Google’s Anthos, Microsoft’s Azure Arc, and Amazon’s
+ECS-Anywhere are examples of such edge cloud products.  In such a
+scenario, AMP still manages the SD-Core and SD-RAN applications
+running on top of Kubernetes, but not the underlying platform (which
+may or may not include an SDN-based switching fabric).
+
+Another variable in how 5G can be deployed at the edge is related to
+who owns the underlying cloud infrastructure. Instead of a cloud
+provider, an enterprise, or a traditional MNO owning the hardware,
+there are situations where a third-party, often called a *neutral
+host*, owns an operates the hardware (along with the real estate it
+sits in), and then rents access to these resources to multiple 5G
+providers. Each mobile service provider is then a tenant of of that
+shared infrastructure.
+
+This kind of arrangement has existed for years, albeit with
+conventional RAN devices, but shifting to a cloud-based design makes
+it possible for neutral hosts to lease access to *virtualized* edge
+resources to their tenants. In principle, the only difference between
+this scenario and today's multi-tenant clouds is that such providers
+would offer edge resources—located in cell towers, apartment
+buildings, and dense urban centers—instead of datacenter resources.
+The business arrangements would also have to be different from Private
+5G, but the technical design outlined in this book still applies.
 
 6.3 Cloud Management Platform 
 ------------------------------
@@ -423,14 +444,14 @@ At a high level, AMP is organized around the four subsystems shown in
     
 While AMP implements all four subsystems, there is an alternative
 perspective worth highlighting, one in which the management platform
-is characterized as having *on-line* and *off-line* components. Such a
+is characterized as having *online* and *offline* components. Such a
 two dimensional schematic is shown in :numref:`Figure %s <fig-2D>`.
 Lifecycle Management (coupled with Resource Provisioning) runs
-off-line, sitting adjacent to the hybrid cloud. Operators and
+offline, sitting adjacent to the hybrid cloud. Operators and
 Developers provision and change the system by checking code (including
 configuration specs) into a repo, which in turn triggers an upgrade of
 the running system. Service Orchestration (coupled with Monitoring and
-Telemetry) runs on-line, layered on top of the hybrid cloud being
+Telemetry) runs online, layered on top of the hybrid cloud being
 managed. It defines an API that can be used to read and write
 parameters of the running system, which serves as a foundation for
 building closed-loop control. 
@@ -441,11 +462,11 @@ building closed-loop control.
    :align: center 
 
    Alternative representation of the management platform, highlighting
-   the off-line and on-line aspects of cloud management.
+   the offline and online aspects of cloud management.
 
-Finally, the off-line and on-line aspects of cloud management are
-related in the sense that the off-line component also
-lifecycle-manages the on-line component. This is because the latter
+Finally, the offline and online aspects of cloud management are
+related in the sense that the offline component also
+lifecycle-manages the online component. This is because the latter
 are deployed as Kubernetes applications, just like SD-Core and
 SD-RAN. Version management is a key aspect of this relationship since
 the runtime API to the 5G connectivity service has to stay in sync
