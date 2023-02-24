@@ -27,13 +27,13 @@ included in the cloned directory:
        name: aiab
        namespace: fleet-local
    spec:
-       repo: "https://github.com/systemsapproach/aether-apps"  # Replace with your fork
+       repo: "https://github.com/SystemsApproach/aether-apps"  # Replace with your fork
        branch: main
    paths:
        - aether-2.1        # Specify one of "aether-2.0" or "aether-2.1"
 
 This particular version uses
-`https://github.com/systemsapproach/aether-apps` as its *source repo*.
+`https://github.com/SystemsApproach/aether-apps` as its *source repo*.
 Fork that repo and then edit your local `deploy.yaml` to point to your
 new repo. Then install Fleet on your Kubernetes cluster by typing:
 

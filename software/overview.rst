@@ -8,8 +8,8 @@ connectivity service.  Source code for all the individual components
 inspected, and deployment artifacts built from that source code (e.g.,
 Docker Images, Helm Charts, Fleet Bundles, Terraform Templates) can be
 used to bring up a running instance of Aether on local hardware. (See
-the *Source Directory* at the end of this appendix for information
-about where to find the relevant code repositories.)
+the *Source Directory* section of this appendix for information about
+where to find the relevant code repositories.)
 
 A multi-site deployment of Aether has been running since 2020 in
 support of the *Pronto Project*, but that deployment depends on a ops
@@ -65,7 +65,7 @@ incremental path for users to:
 * And finally deploy and operate Aether.
 
 The new packaging, called `Aether OnRamp
-<https://github.com/llpeterson/aether-onramp>`__, is derived from
+<https://github.com/SystemsApproach/aether-onramp>`__, is derived from
 AiaB, refactored to help users step through a sequence of increasingly
 complex configurations. The goal of OnRamp is to prescribe a (mostly)
 linear sequence of steps a new user can follow to bring up an
@@ -75,5 +75,5 @@ participating in that effort is encouraged to join the discussion on
 Slack in the `ONF Community Workspace
 <https://onf-community.slack.com/>`__. A roadmap for the work that
 needs to be done can be found in the `Aether OnRamp Wiki
-<https://github.com/llpeterson/aether-onramp/wiki>`__.
+<https://github.com/SystemsApproach/aether-onramp/wiki>`__.
 

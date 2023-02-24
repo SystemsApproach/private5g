@@ -12,9 +12,8 @@ multiple repositories:
   (https://github.com/omec-project): Microservices for SD-Core. 
 
 * GitHub repository for the ONOS Project
-  (https://github.com/onosproject): Microservices for most of
-  SD-Fabric and SD-RAN, along with YANG models used to generate the
-  ROC API.
+  (https://github.com/onosproject): Microservices for SD-Fabric
+  and SD-RAN, plus the YANG models used to generate the ROC API.
 
 * GitHub repository for the Stratum Project
   (https://github.com/stratum): On-switch components of SD-Fabric.

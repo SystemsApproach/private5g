@@ -1,6 +1,6 @@
 
-Stage 1: Getting Started
----------------------------
+Stage 1: Get Started
+--------------------
 
 The first stage of Aether OnRamp provides a good way to get
 started. The following assumes a low-end server that meets the
@@ -86,8 +86,8 @@ target server. Do this by typing:
 `kubectl` will show the `kube-system` and `calico-system` namespaces
 running.
 
-Connect Kubernetes to the Network
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Configrue the Network
+~~~~~~~~~~~~~~~~~~~~~
 
 Since Aether ultimately provides a connectivity service, how the
 cluster you just installed connects to the network is an important
@@ -100,7 +100,9 @@ time.  Type:
    $ make router-pod
 
 This target configures Linux (via `systemctl`), but also starts a
-Quagga router running inside the cluster.
+Quagga router running inside the cluster. To see how routing is set up
+for Aether OnRamp (which you will need to understand in later stages),
+you may want to inspect `resources/router.yaml`.
 
 Bring Up Aether Management Platform
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,15 +119,16 @@ Make targets:
    $ make 5g-roc
    $ make 5g-monitoring
 
-The first command brings up ROC and loads it with a data model for the
-Aether API. The second command brings up the Monitoring Service
-(Grafana running on top of Prometheus) and loads it with a set of
-dashboards.
+The first command brings up ROC and loads it database with bootstrap
+information (e.g., defining a default Aether site). The second command
+brings up the Monitoring Service (Grafana running on top of
+Prometheus) and loads it with a set of dashboards.
 
 `kubectl` will show the `aether-roc` and `cattle-monitoring-system`
 namespaces now running in support of these two services, respectively,
-plus new `atomic-runtime` pods in the `kube-system` name space.
-Atomix is the scalable Key/Value Store that underlies ROC.
+plus new `atomix-runtime` pods in the `kube-system` name space.
+Atomix is the scalable Key/Value Store that keeps the ROC data model
+persistent.
 
 You can access the dashboards for the two subsystems, respectively, at
 
@@ -159,6 +162,21 @@ We are now ready to bring up the 5G version of the SD-Core:
 `kubectl` will show the `omec` namespace running. (For historical
 reasons, the Core is called `omec` instead of `sd-core`).
 
+In addition, the monitoring dashboard will show an active (green) UPF,
+but no base stations or attached devices at this point.  Not that you
+will need to click on the "5G Dashboard" once you connect to the main
+monitoring page.
+
+You can also peruse the Control dashboard by starting with the
+dropdown menu in the upper right corner. For example, selecting
+`Devices` will show the set of UEs registered with Aether, and
+selecting `Device-Groups` will show how those UEs are grouped into
+aggregates. In a live environment, these values would be entered into
+the ROC through either the GUI or the underlying API. For the
+emulation described in the next subsection, they are loaded from
+a combination of `aether-latest/roc-5g-models.json` and
+`aether-latest/sd-core-5g-values.yaml`.
+
 Run Emulated RAN Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -168,14 +186,12 @@ We can now test SD-Core with emulated traffic by typing:
 
    $ make 5g-test
 
-The monitoring dashboard shows two emulated gNBs come online, with
-five emulated UEs connecting to them. (Click on the "5G Dashboard"
-once you connect to the main page of the monitoring dashboard to see
-their progress.)
-
-This make target can be executed multiple times without restarting the
-SD-Core.  (Note that `5g-test` runs an emulator that directs traffic
-at Aether. It is not part of Aether, per se.)
+As the emulation progresses, the monitoring dashboard will show two
+emulated gNBs and five emulated UEs come online, with the performance
+graph showing upstream and downstream transfer rates. All of these
+indicators go "silent" once the emulation completes, but you can
+execute the `5g-test` target multiple times without restarting the
+SD-Core to see additional activity.
 
 Clean Up
 ~~~~~~~~~~~~~~~~~
