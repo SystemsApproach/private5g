@@ -176,7 +176,8 @@ entered into the ROC through either the GUI or the underlying API. For
 the emulated environment we're limiting ourselves to in Stage 1, these
 values are loaded from a combination of
 `aether-latest/roc-5g-models.json` and
-`aether-latest/sd-core-5g-values.yaml`.
+`aether-latest/sd-core-5g-values.yaml` as the respective applications
+are deployed.
 
 Run Emulated RAN Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
