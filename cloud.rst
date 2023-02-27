@@ -92,7 +92,10 @@ components:
 3. Helm specifies how collections of related containers are
    interconnected to build microservice-based applications.
 
-4. Terraform provisions a set of one or more Kubernetes clusters,
+4. Fleet specifies how a set of Kubernetes applications are to be
+   deployed on the available infrastructure.
+
+5. Terraform provisions a set of one or more Kubernetes clusters,
    configuring them to host microservice applications.
 
 Docker is a container runtime that leverages OS isolation APIs to
@@ -132,8 +135,8 @@ that implements X running at all times.
    <https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.
 
 Helm is a configuration manager that runs on top of Kubernetes. It
-issues calls against the Kubernetes API according to an
-operator-provided specification, known as a *Helm Chart*. It is now
+issues calls against the Kubernetes API according to a
+developer-provided specification, known as a *Helm Chart*. It is now
 common practice for cloud applications built from a set of
 microservices to publish a Helm chart that defines how the application
 is to be deployed on a Kubernetes cluster. See
@@ -145,6 +148,23 @@ Helm Charts.
 
    `Helm Tutorial
    <https://helm.sh/docs/intro/quickstart/>`__.
+
+Fleet an application deployment manager that is responsible for
+installing a *Bundle* of Helm Charts on one or more target
+clusters. If we were trying to deploy a single Chart on just one
+Kubernetes cluster, then Helm would be sufficient. The value of Fleet
+is that it scales up that process, helping us manage the deployment of
+multiple charts across multiple clusters. Moreover, Fleet does this
+using an approach known as *Configuration-as-Code*, where the desired
+configuration is checked into a repo, just like any other
+software. Checking a new or updated updated Bundle into a repo
+triggers the deployment of the corresponding applications.
+
+.. _reading_fleet:
+.. admonition:: Further Reading
+
+   `Fleet: GitOps at Scale
+   <https://fleet.rancher.io/>`__.
 
 Terraform is an infrastructure manager that, in our scenario,
 provisions one or more Kubernetes clusters, preparing them to host a
@@ -163,6 +183,22 @@ being widely available examples.
 
    `Terraform Tutorials
    <https://learn.hashicorp.com/terraform>`__.
+
+The inter-related roles of Helm, Fleet, and Terraform can be
+confusing, in part because there is overlap in what each tries to do.
+One distinction is that Helm Charts are typically specified by
+*developers* as a way of specifying how an application is constructed
+from a set of microservices, whereas Fleet and Terraform give
+*operators* an opportunity to specify details of their particular
+deployment scenarios. A second distinction is that Helm and Fleet help
+manage the *applications running on* one or more Kubernetes clusters,
+whereas Terraform is used to set up and configure the *underlying
+Kubernetes clusters* in the first place. Again, there is overlap in
+the capabilities of these respective tools, but these two distinctions
+characterize how they are used in Aether. The more general takeaway is
+that cloud management has to accommodate both developers and
+operators, and to clearly delineate between applications and
+platforms.
 
 6.2 Example Deployment
 ----------------------
@@ -427,8 +463,9 @@ At a high level, AMP is organized around the four subsystems shown in
 * **Lifecycle Management** is responsible for continuous integration
   and deployment of the software components that collectively
   implement 5G-as-a-Service. It adopts the GitOps practice of
-  *Configuration-as-Code*, using Helm Charts and Terraform Templates
-  to specify how functionality is to be deployed and configured.
+  *Configuration-as-Code*, using Helm Charts, Terraform Templates, and
+  Fleet Bundles to specify how functionality is to be deployed and
+  configured.
 
 * **Service Orchestration** provides a means to manage services once
   they are operational. It defines an API that hides the
@@ -442,19 +479,18 @@ At a high level, AMP is organized around the four subsystems shown in
   security audits, and understand when it is necessary to provision
   additional capacity.
     
-While AMP implements all four subsystems, there is an alternative
-perspective worth highlighting, one in which the management platform
-is characterized as having *online* and *offline* components. Such a
-two dimensional schematic is shown in :numref:`Figure %s <fig-2D>`.
-Lifecycle Management (coupled with Resource Provisioning) runs
-offline, sitting adjacent to the hybrid cloud. Operators and
-Developers provision and change the system by checking code (including
-configuration specs) into a repo, which in turn triggers an upgrade of
-the running system. Service Orchestration (coupled with Monitoring and
-Telemetry) runs online, layered on top of the hybrid cloud being
-managed. It defines an API that can be used to read and write
-parameters of the running system, which serves as a foundation for
-building closed-loop control. 
+AMP implements all four subsystems, but an alternative perspective
+that characterizes the management platform as having *online* and
+*offline* components is also instructive. Such a two dimensional
+schematic is shown in :numref:`Figure %s <fig-2D>`.  Lifecycle
+Management (coupled with Resource Provisioning) runs offline, sitting
+adjacent to the hybrid cloud. Operators and Developers provision and
+change the system by checking code (including configuration specs)
+into a repo, which in turn triggers an upgrade of the running system.
+Service Orchestration (coupled with Monitoring and Telemetry) runs
+online, layered on top of the hybrid cloud being managed. It defines
+an API that can be used to read and write parameters of the running
+system, which serves as a foundation for building closed-loop control.
 
 .. _fig-2D:
 .. figure:: figures/ops/Slide11.png 
@@ -464,15 +500,15 @@ building closed-loop control.
    Alternative representation of the management platform, highlighting
    the offline and online aspects of cloud management.
 
-Finally, the offline and online aspects of cloud management are
-related in the sense that the offline component also
-lifecycle-manages the online component. This is because the latter
-are deployed as Kubernetes applications, just like SD-Core and
-SD-RAN. Version management is a key aspect of this relationship since
-the runtime API to the 5G connectivity service has to stay in sync
-with the underlying implementation of the constituent subsystems. How
-Aether realizes version control is described in more detail in the
-companion Edge Cloud Operations book.
+The offline and online aspects of cloud management are related in the
+sense that the offline component is also responsible for
+lifecycle-managing the online component. This is because the latter is
+deployed as a collection of Kubernetes applications, just like SD-Core
+and SD-RAN. Version management is a key aspect of this relationship
+since the runtime API to the 5G connectivity service has to stay in
+sync with the underlying implementation of the constituent
+subsystems. How Aether realizes version control is described in more
+detail in the companion Edge Cloud Operations book.
 
 
 6.3.1 Resource Provisioning
@@ -535,12 +571,12 @@ them from the respective Repositories.
    Overview of the CI/CD pipeline.
 
 The Config Repo also contains declarative specifications of the
-infrastructure artifacts, specifically, the Terraform templates. These
-files are input to Lifecycle Management, which implies that Terraform
-gets invoked as part of CI/CD whenever these files change. In other
-words, CI/CD keeps both the software-related components in the
-underlying cloud platform and the microservice workloads that run on
-top of that platform up to date.
+infrastructure artifacts (specifically, Terraform templates and Fleet
+Bundles). These files are input to Lifecycle Management, which implies
+that Terraform and Fleet gets invoked as part of CI/CD whenever these
+files change. In other words, CI/CD keeps both the software-related
+components in the underlying cloud platform and the microservice
+workloads that run on top of that platform up to date.
 
 .. sidebar:: Continuous Delivery vs Deployment
 

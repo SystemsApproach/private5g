@@ -1,19 +1,20 @@
 Source Directory
 --------------------------
 
-Source code for Aether (and its subsystems) is distributed across
+Source code for Aether and all of its subsystems is distributed across
 multiple repositories:
 
 * Gerrit repository for the CORD Project
-  (https://gerrit.opencord.org): AMP-related components, including
-  source for the jobs that implement the CI/CD pipeline.
+  (https://gerrit.opencord.org): Microservices for AMP, plus source
+  for the jobs that implement the CI/CD pipeline.
 
-* GitHub repository for the OMEC Project 
-  (https://github.com/omec-project): Microservices for SD-Core. 
+* GitHub repository for the OMEC Project
+  (https://github.com/omec-project): Microservices for SD-Core, plus
+  the emulator that subjects SD-Core to RAN workloads.
 
 * GitHub repository for the ONOS Project
-  (https://github.com/onosproject): Microservices for SD-Fabric
-  and SD-RAN, plus the YANG models used to generate the ROC API.
+  (https://github.com/onosproject): Microservices for SD-Fabric and
+  SD-RAN, plus the YANG models used to generate the Aether API.
 
 * GitHub repository for the Stratum Project
   (https://github.com/stratum): On-switch components of SD-Fabric.

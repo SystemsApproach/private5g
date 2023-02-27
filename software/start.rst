@@ -86,7 +86,7 @@ target server. Do this by typing:
 `kubectl` will show the `kube-system` and `calico-system` namespaces
 running.
 
-Configrue the Network
+Configure the Network
 ~~~~~~~~~~~~~~~~~~~~~
 
 Since Aether ultimately provides a connectivity service, how the
