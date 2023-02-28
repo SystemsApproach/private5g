@@ -5,7 +5,7 @@ The Makefile targets used in Stage 1 invoke Helm to install the
 applications, using application-specific *values files* found the
 cloned directory (e.g.,
 `~/systemsapproach/aether-onramp/aether-latest/roc-values.yaml`) to
-override the values for the correspond Helm charts. In an operational
+override the values for the correspond Helm Charts. In an operational
 setting, all the information needed to deploy a set of Kubernetes
 applications is checked into a Git repo, with a tool like Fleet
 automatically updating the deployment whenever it detects changes to
@@ -34,7 +34,7 @@ included in the cloned directory:
 
 This particular version uses
 `https://github.com/SystemsApproach/aether-apps` as its *source repo*.
-Fork that repo and then edit your local `deploy.yaml` to point to your
+Fork that repo and then edit your local `deploy.yaml` to point to this
 new repo. Then install Fleet on your Kubernetes cluster by typing:
 
 .. code-block::
@@ -42,7 +42,37 @@ new repo. Then install Fleet on your Kubernetes cluster by typing:
    $ make fleet-ready
 
 Once complete, `kubectl` will show the `cattle-fleet-system` namespace
-running. All that's left is to type the following command to activate Fleet:
+running. All that's left is to activate Fleet on your cluster, but
+before doing that, you first need to edit the Fleet specifications in
+your forked `aether-apps` repo to reflect the details of your
+particular deployment. This is a manual process, but one worth doing
+because it is how an operator ultimately manages a deployment.
+
+One approach is to compare the Fleet-specific files in `aether-apps`
+with various configuration files in `aether-onramp`.  Using the
+SD-Core app in the 2.1 release of Aether as an example, you will see
+that the respective `sd-core-5g-values.yaml` files in `aether-apps`
+and `aether-onramp` are nearly identical. One difference is that the
+latter contains variables that the Makefile has to resolve (e.g.,
+`${NODE_IP}`, `${DATA_IFACE}`, and `${ENABLE_GNBSIM}`) before calling
+Helm, whereas the former has default values already filled in.  These
+values may not match your target deployment, so you need to fix
+them. If you look at `mk/core.mk` in your copy of `aether-onramp` you
+will see an `envsubst` command that automates these edits during the
+Make process. You need to replicate these edits manually on the
+corresponding `aether-apps` file.
+
+Note that `aether-apps` also has a set of `fleet.yaml` files, each of
+which contains information that can be found in
+`aether-onramp/configs/release-2.1` (e.g., the Helm Chart version
+number and the name of the values override file).  The main difference
+is that `aether-apps` uses Fleet-specific syntax for this information,
+whereas `aether-onramp` is ad hoc. This information does not need to
+be edited, unless you want to substitute a different values file or
+chart version. Similarly, you are free to edit other sections of the
+values files to affect different configuration parameters.
+
+You are now ready to activate Fleet, which can be done by typing:
 
 .. code-block::
    
@@ -74,28 +104,4 @@ before executing the other "clean" targets. Alternatively, leave Fleet
 running and instead modify your forked copy of the `aether-apps` repo
 to no longer include applications you do not want Fleet to
 automatically instantiate. This mimics how an operator would change a
-deployment by checking in *Configuration-as-Code*, a practice that
-proves useful when supporting live 5G workloads.
-
-..
-  Note: The set of bundles included in the *aether-apps* repo is not
-  complete. Adding the missing pieces (e.g., the monitoring subsystem)
-  is still work-in-progress.
-
-To convince yourself that Fleet deploys the same artifacts as the
-Makefile, note the correspondence between the Fleet-specific files in
-`aether-apps` and the various configuration files in `aether-onramp`.
-Using the SD-Core app in the 2.1 release of Aether as an example, you
-will see that the `sd-core-5g-values.yaml` files in both `aether-apps`
-and `aether-onramp` are nearly identical. Both override the default
-value file supplied by the correponding Helm Chart with
-deployment-specific details. The only difference is that the latter
-still contains variables that the Makefile must resolve (e.g.,
-`${NODE_IP}` and `${DATA_IFACE}`) before calling Helm, whereas with
-the latter, you (as the operator) are responsible for specifying all
-deployment-specific details.  Similarly, note that `fleet.yaml` in
-`aether-apps` specifies the same information as in
-`aether-onramp/configs/release-2.1` (e.g., the version of the Helm
-Chart and the name of the values override file to use).  The main
-difference is that `aether-apps` uses Fleet-specific syntax for the
-information, whereas `aether-onramp` is ad hoc.
+deployment by checking in different collections of bundles.

@@ -2,12 +2,16 @@
 GPP
 Acknowledgements
 Aether
+AiaB
 AMF
 Anthos
 Analytics
 Argela
+Atomix
 Azure
 Backhaul
+Bavier
+Cascone
 CLI
 CP
 Changhoon
@@ -24,11 +28,14 @@ Fi
 Fronthaul
 GBR
 Gbps
-IPv
+Gerrit
+Grafana
+Haswell
 HSS 
 Hasan
 IaaS
 IoT
+IPv 
 Jaeger
 Kahn
 Kobayashi
@@ -43,6 +50,7 @@ Multiprotocol
 NFV
 NG
 NextG
+nRT
 Oguz
 OAuth
 PHY
@@ -53,9 +61,11 @@ Ph
 PCF
 QinQ
 QoS
+Quagga
 Repo
 Repos
 Rexford
+RiaB
 RIC
 RRC
 Shaddi
@@ -69,6 +79,7 @@ Tofino
 UE
 UPF
 UDM
+Vachuska
 Virtualized
 vSwitch
 VMware
@@ -100,6 +111,7 @@ disaggregated
 disaggregates
 disaggregating
 downlink
+dropdown
 electromagetic
 encapsulating
 eNB
@@ -117,6 +129,7 @@ gNBs
 gNMI
 gNOI
 gRPC
+hoc
 hyperscalers
 hyperscaler
 indeterminant 
@@ -140,6 +153,8 @@ mmWaves
 monetization
 multicast
 multipath
+namespace
+namespaces
 natively
 operationalizing
 operationalizes
@@ -154,6 +169,7 @@ pseudowires
 reachability
 rearchitecting
 repo
+repos
 retargeting
 retransmissions
 retransmit 
