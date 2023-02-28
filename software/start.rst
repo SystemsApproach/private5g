@@ -73,6 +73,22 @@ If you are not familiar with `kubectl` (the CLI for Kubernetes), we
 recommend that you start with `Kubernetes Tutorial
 <https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.
 
+Helm also has a command-line interface that can be helpful in tracking
+progress. For example,
+
+.. code-block::
+
+   $ helm repo list
+
+shows the known set of repos you are pulling charts from, and
+
+.. code-block::
+
+   $ helm list --namespace kube-system
+
+shows the version numbers of the charts currently deployed in the
+`kube-system` namespace.
+
 Install Kubernetes
 ~~~~~~~~~~~~~~~~~~~
 
