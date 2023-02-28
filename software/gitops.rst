@@ -81,3 +81,21 @@ proves useful when supporting live 5G workloads.
   Note: The set of bundles included in the *aether-apps* repo is not
   complete. Adding the missing pieces (e.g., the monitoring subsystem)
   is still work-in-progress.
+
+To convince yourself that Fleet deploys the same artifacts as the
+Makefile, note the correspondence between the Fleet-specific files in
+`aether-apps` and the various configuration files in `aether-onramp`.
+Using the SD-Core app in the 2.1 release of Aether as an example, you
+will see that the `sd-core-5g-values.yaml` files in both `aether-apps`
+and `aether-onramp` are nearly identical. Both override the default
+value file supplied by the correponding Helm Chart with
+deployment-specific details. The only difference is that the latter
+still contains variables that the Makefile must resolve (e.g.,
+`${NODE_IP}` and `${DATA_IFACE}`) before calling Helm, whereas with
+the latter, you (as the operator) are responsible for specifying all
+deployment-specific details.  Similarly, note that `fleet.yaml` in
+`aether-apps` specifies the same information as in
+`aether-onramp/configs/release-2.1` (e.g., the version of the Helm
+Chart and the name of the values override file to use).  The main
+difference is that `aether-apps` uses Fleet-specific syntax for the
+information, whereas `aether-onramp` is ad hoc.
