@@ -783,8 +783,8 @@ telemetry data is collected from online processes embedded in a
 running system, and such data can be coupled with online control
 operations to realize closed-loop control, but it is also the case
 that some telemetry data is evaluated offline. This is true for logs
-and tracres used to diagnose problems, and for performance data used
-to make provisioning decisions, both of which can lead to code changes
+and traces used to diagnose problems, and for performance data used to
+make provisioning decisions, both of which can lead to code changes
 that feed back into the next iteration of lifecycle management.
 
 
