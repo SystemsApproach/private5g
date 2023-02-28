@@ -76,7 +76,7 @@ You are now ready to activate Fleet, which can be done by typing:
 
 .. code-block::
    
-   $ kubectl apply -f deploy.yaml
+   $ kubectl apply -f resources/deploy.yaml
 
 The following command will let you track Fleet as it makes progress
 installing applications (which Fleet refers to as *bundles*):
