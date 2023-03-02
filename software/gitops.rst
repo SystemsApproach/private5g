@@ -5,11 +5,10 @@ The Makefile targets used in Stage 1 invoke Helm to install the
 applications, using application-specific *values files* found the
 cloned directory (e.g.,
 `~/systemsapproach/aether-onramp/aether-latest/roc-values.yaml`) to
-override the values for the correspond Helm Charts. In an operational
-setting, all the information needed to deploy a set of Kubernetes
-applications is checked into a Git repo, with a tool like Fleet
-automatically updating the deployment whenever it detects changes to
-the configuration checked into the repo.
+override the default values for the corresponding Helm Charts. In an
+operational setting, all such information is checked into a Git repo,
+with a tool like Fleet automatically updating the deployment whenever
+it detects changes to the configuration checked into the repo.
 
 ..
   Note: There is an intermediate step that could be included. First
@@ -24,7 +23,7 @@ included in the cloned directory:
    apiVersion: fleet.cattle.io/v1alpha1
    kind: GitRepo
    metadata:
-       name: aiab
+       name: aether
        namespace: fleet-local
    spec:
        repo: "https://github.com/SystemsApproach/aether-apps"  # Replace with your fork
@@ -45,32 +44,31 @@ Once complete, `kubectl` will show the `cattle-fleet-system` namespace
 running. All that's left is to activate Fleet on your cluster, but
 before doing that, you first need to edit the Fleet specifications in
 your forked `aether-apps` repo to reflect the details of your
-particular deployment. This is a manual process, but one worth doing
-because it is how an operator ultimately manages a deployment.
+particular deployment. This is a manual process, but one worth
+understanding because it is how will eventually manage an
+operational deployment.
 
-One approach is to compare the Fleet-specific files in `aether-apps`
-with various configuration files in `aether-onramp`.  Using the
-SD-Core app in the 2.1 release of Aether as an example, you will see
-that the respective `sd-core-5g-values.yaml` files in `aether-apps`
-and `aether-onramp` are nearly identical. One difference is that the
-latter contains variables that the Makefile has to resolve (e.g.,
-`${NODE_IP}`, `${DATA_IFACE}`, and `${ENABLE_GNBSIM}`) before calling
-Helm, whereas the former has default values already filled in.  These
-values may not match your target deployment, so you need to fix
-them. If you look at `mk/core.mk` in your copy of `aether-onramp` you
-will see an `envsubst` command that automates these edits during the
-Make process. You need to replicate these edits manually on the
-corresponding `aether-apps` file.
+A good starting point is to compare the Fleet-specific files in
+`aether-apps` with various configuration files in `aether-onramp`.
+Using the SD-Core app in the 2.1 release of Aether as an example, you
+will see that the respective `sd-core-5g-values.yaml` files in
+`aether-apps` and `aether-onramp` are nearly identical. One difference
+is that the latter contains variables that the Makefile has to resolve
+(e.g., `${NODE_IP}`, `${DATA_IFACE}`, and `${ENABLE_GNBSIM}`) before
+calling Helm, whereas the former has default values already filled in.
+These default values are sufficient for getting started (e.g., it
+enables the GNBSIM emulator), but they will need to change as your
+deployment environment becomes more complex, or you want to
+reconfigure the respective Kubernetes applications.
 
 Note that `aether-apps` also has a set of `fleet.yaml` files, each of
-which contains information that can be found in
+which contains information that can also be found in
 `aether-onramp/configs/release-2.1` (e.g., the Helm Chart version
 number and the name of the values override file).  The main difference
 is that `aether-apps` uses Fleet-specific syntax for this information,
 whereas `aether-onramp` is ad hoc. This information does not need to
-be edited, unless you want to substitute a different values file or
-chart version. Similarly, you are free to edit other sections of the
-values files to affect different configuration parameters.
+be edited until you are ready to substitute a different values file or
+chart version.
 
 You are now ready to activate Fleet, which can be done by typing:
 
@@ -103,5 +101,8 @@ been deleted.* You have to first uninstall Fleet by typing:
 before executing the other "clean" targets. Alternatively, leave Fleet
 running and instead modify your forked copy of the `aether-apps` repo
 to no longer include applications you do not want Fleet to
-automatically instantiate. This mimics how an operator would change a
-deployment by checking in different collections of bundles.
+automatically instantiate. This mimics how an operator would update a
+deployment or support multiple distinct deployments (e.g.,
+"production" and "development"), but it is cumbersome as long as you
+are in exploratory mode, so you may want to disable Fleet until you
+are ready for that level of operational overhead.

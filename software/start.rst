@@ -3,7 +3,9 @@ Stage 1: Get Started
 --------------------
 
 The first stage of Aether OnRamp provides a good way to get
-started. The following assumes a low-end server that meets the
+started. It brings up a one-node Kubernetes cluster, deploys all of
+the Aether subsystems on that cluster, and runs an emulated workload
+against those subsystems. It assumes a low-end server that meets the
 following requirements:
 
 * Haswell CPU (or newer), with at least 4 CPUs and 12GB RAM.
@@ -47,6 +49,11 @@ need to export `PROXY_ENABLED=true` by typing the following:
 This variable can also be set in your `.bashrc` file to make it
 permanent.
 
+Proxy or no-proxy, Stage 1 involves downloading many Docker images and
+Helm Charts. If any of the steps described below fail, it may be due
+to network delays, in which case re-executing the step is usually all
+it takes to make progress.
+
 Download Aether OnRamp
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -87,7 +94,9 @@ shows the known set of repos you are pulling charts from, and
    $ helm list --namespace kube-system
 
 shows the version numbers of the charts currently deployed in the
-`kube-system` namespace.
+`kube-system` namespace. Many of the Make targets you will execute in
+this section are implemented by a combination of `kubectl` and `helm`
+calls, so it is helpful to have a general understanding of how they work.
 
 Install Kubernetes
 ~~~~~~~~~~~~~~~~~~~
