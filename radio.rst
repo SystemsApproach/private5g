@@ -14,7 +14,7 @@ best-effort service, such as Wi-Fi, the cellular network presents a
 notable contrast. This is mostly because cellular networks carefully
 allocate available radio spectrum among many users (or more precisely,
 UEs), aiming to deliver a certain quality to all active users in a
-coverage area, all the while allowing those users to remain connected
+coverage area, while also allowing those users to remain connected
 while moving. They also aim to maximize the efficiency of spectrum
 usage, as it is a finite and often costly resource. This has resulted
 in a highly dynamic and adaptive approach, in which coding, modulation
@@ -189,8 +189,8 @@ multiplexing and scheduling work in 4G and 5G.
 We start with 4G because it provides a foundational understanding that
 makes 5G easier to explain, where both 4G and 5G use an approach to
 multiplexing called *Orthogonal Frequency-Division Multiple Access
-(OFDMA)*. You can think of OFDMA as a specific application of OFDM,
-that in the 4G case, multiplexes data over a set of 12 orthogonal
+(OFDMA)*. You can think of OFDMA as a specific application of OFDM. In
+the 4G case, OFDMA multiplexes data over a set of 12 orthogonal
 (non-interfering) subcarrier frequencies, each of which is modulated
 independently.\ [#]_ The “Multiple Access” in OFDMA implies that data
 can simultaneously be sent on behalf of multiple users, each on a
