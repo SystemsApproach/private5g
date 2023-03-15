@@ -249,7 +249,7 @@ parameters to the turbo code algorithm.
 
 The 1-ms TTI corresponds to the time frame in which the scheduler
 receives feedback from users about the quality of the signal they are
-experiencing. This is the CQI mentioned earlier, where once every
+experiencing. This is the role of CQI: once every
 millisecond, each user sends a set of metrics, which the scheduler uses
 to make its decision as to how to allocate PRBs during the subsequent
 TTI.
@@ -259,7 +259,7 @@ Another input to the scheduling decision is the *QoS Class Identifier
 to receive. In 4G, the QCI value assigned to each class (there are nine
 such classes, in total) indicates whether the traffic has a *Guaranteed
 Bit Rate (GBR)* or not *(non-GBR)*, plus the class’s relative priority
-within those two categories.
+within those two categories. 
 
 Finally, keep in mind that :numref:`Figure %s <fig-sched-grid>` focuses on
 scheduling transmissions from a single antenna, but the MIMO technology
@@ -341,8 +341,10 @@ during each time interval.
 from this more abstract perspective. Just as with 4G, CQI
 feedback from the receivers and the QCI quality-of-service class
 selected by the subscriber are the two key pieces of input to the
-scheduler. Note that the set of QCI values changes between 4G and 5G,
-reflecting the increasing differentiation being supported. For 5G,
+scheduler. Note that the set of QCI values available in 5G is
+considerably greater than in 4G,
+reflecting the increasing differentiation among classes that 5G aims
+to support. For 5G,
 each class includes the following attributes:
 
 -  Resource Type: Guaranteed Bit Rate (GBR), Delay-Critical GBR, Non-GBR
@@ -421,10 +423,10 @@ translation.
 Having decoupled the Virtual RBs from Physical RBs, it is now possible
 to define multiple Virtual RB sets (of varying sizes), each with its own
 scheduler. :numref:`Figure %s <fig-multi-sched>` gives an example with two
-equal-sized RB sets, where the important consequence is that having made
+equal-sized RB sets. The important consequence is this: having made
 the macro-decision that the Physical RBs are divided into two equal
 partitions, the scheduler associated with each partition is free to
-allocate Virtual RBs completely independent from each other. For
+allocate Virtual RBs independently from the other. For
 example, one scheduler might be designed to deal with high-bandwidth
 video traffic and another scheduler might be optimized for low-latency
 IoT traffic. Alternatively, a certain fraction of the available capacity
