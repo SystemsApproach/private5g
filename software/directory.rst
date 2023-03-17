@@ -22,7 +22,9 @@ multiple repositories:
 For Gerrit, you can either browse Gerrit (select the `master` branch)
 or clone the corresponding *<repo-name>* by typing:
 
-.. literalinclude:: code/gerrit.sh
+.. code-block::
+
+   $ git clone ssh://gerrit.opencord.org:29418/<repo-name>
 
 Deployment artifacts are pulled from the following repositories:
 
