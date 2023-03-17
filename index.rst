@@ -34,7 +34,8 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    :hidden:	      
    :caption: About the Software
 
-   overview.rst
-   directory.rst
-   start.rst
-   gitops.rst
+   software/overview.rst
+   software/directory.rst
+   software/start.rst
+   software/gitops.rst
+   software/smallcell.rst
