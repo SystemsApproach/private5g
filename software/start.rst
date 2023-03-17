@@ -97,7 +97,7 @@ time.  Type:
 
 .. code-block::
 
-   $ make router-pod
+   $ make net-prep
    
 This target configures Linux (via `systemctl`), but also starts a
 Quagga router running inside the cluster.
@@ -194,5 +194,5 @@ If you want to also tear down Kubernetes for a fresh install, type:
 
 .. code-block::
 
-   $ make router-clean
+   $ make net-clean
    $ make clean
