@@ -52,6 +52,10 @@ The software described in this book is due to the hard work of the ONF
 engineering team, the Magma engineering team, and the open source
 communities that work with them.
 
+Thanks to the members of the community who contributed text or corrections to the book, including:
+
+- Mugahed Izzeldin
+
 The picture of a Magma deployment in Chapter 5 was provided by Shaddi Hasan.
 
 | Larry Peterson, Oguz Sunay, and Bruce Davie
