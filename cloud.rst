@@ -157,7 +157,7 @@ is that it scales up that process, helping us manage the deployment of
 multiple charts across multiple clusters. Moreover, Fleet does this
 using an approach known as *Configuration-as-Code*, where the desired
 configuration is checked into a repo, just like any other
-software. Checking a new or updated updated Bundle into a repo
+software. Checking a new or updated Bundle into a repo
 triggers the deployment of the corresponding applications.
 
 .. _reading_fleet:
