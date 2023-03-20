@@ -1,7 +1,7 @@
 Chapter 4:  Radio Access Network
 ================================
 
-.. This chapter would benefit from one or to "case studies" of xApps:
+.. This chapter would benefit from one or two "case studies" of xApps:
    detail the info they collect, decisions they make, and settings
    they push. Perhaps using this to contrast different "decision
    points" would help explain the value of the three control loops
@@ -25,8 +25,8 @@ represents a combination of standardized specifications and
 implementation strategies. The former continues to be under the
 purview of the 3GPP, but the latter are primarily influenced by a
 second organization: the *Open-RAN Alliance (O-RAN)* introduced in
-Chapter 1. The O-RAN is led by network operators with the goal of
-developing a software-based implementation of the RAN that breaks the
+Chapter 1. O-RAN is led by network operators with the goal of
+developing a software-based implementation of the RAN that eliminates
 vendor lock-in.  Such business forces are certainly a factor in where
 5G mobile networks are headed, but our goal in this chapter is to
 identify the technical design decisions involved in that evolution.
@@ -56,8 +56,8 @@ strategy would be a microservice per box.
 The key stages are as follows.
 
 -  RRC (Radio Resource Control) → Responsible for configuring the
-   coarse-grain and policy-related aspects of the pipeline. The RRC runs
-   in the RAN’s control plane; it does not process packets on the user
+   coarse-grained and policy-related aspects of the pipeline. The RRC runs
+   in the RAN’s control plane; it does not process packets in the user
    plane.
 
 -  PDCP (Packet Data Convergence Protocol) → Responsible for compressing
@@ -157,7 +157,7 @@ co-locate a DU and an RU in a cell tower. But when an RU corresponds
 to a small cell, many of which might be spread across a modestly-sized
 geographic area (e.g., a mall, campus, or factory), then a single DU
 would likely service multiple RUs. The use of mmWave in 5G is likely
-to make this later configuration all the more common.
+to make this latter configuration all the more common.
 
 Also note that the Split RAN changes the nature of the Backhaul
 Network, which originally connected the base stations back to the

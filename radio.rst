@@ -240,8 +240,8 @@ available along the other axis, so the scheduler is essentially
 preparing and transmitting a sequence of PRBs.
 
 Note that OFDMA is not a coding/modulation algorithm, but instead
-provides a framework for selecting a specific coding and modulator for
-each subcarrier frequency. QAM is one common example modulator. It is
+provides a framework for selecting a specific coding and modulation for
+each subcarrier frequency. QAM is one common example modulation. It is
 the scheduler’s responsibility to select the modulation to use for each
 PRB, based on the CQI feedback it has received. The scheduler also
 selects the coding on a per-PRB basis, for example, by how it sets the
@@ -297,10 +297,9 @@ mission-critical applications. Carrier frequencies above 24 GHz
 (mmWaves) are designed to provide super-wide bandwidths over short,
 line-of-sight coverage.
 
-.. [#] A waveform is the frequency, amplitude, and phase-shift
+.. [#] A waveform is defined by the frequency, amplitude, and phase-shift
    independent property (shape) of a signal. A sine wave is a simple
-   example of a
-   waveform.
+   example of a waveform.
 
 These different waveforms affect the scheduling and subcarrier intervals
 (i.e., the “size” of the resource elements described in the previous
