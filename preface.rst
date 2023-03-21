@@ -55,6 +55,7 @@ communities that work with them.
 Thanks to the members of the community who contributed text or corrections to the book, including:
 
 - Mugahed Izzeldin
+- Edmar Candeia Gurjão  
 
 The picture of a Magma deployment in Chapter 5 was provided by Shaddi Hasan.
 
