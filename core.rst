@@ -28,12 +28,12 @@ Core (e.g., serving a metro area) acts as a router that connects a
 physical RAN (one of many possible access network technologies, not
 unlike WiFi) to the global Internet. In this view, IP addresses serve
 as the unique global identifier that makes it possible for any
-RAN-connected device to communication with any Internet addressable
+RAN-connected device to communication with any Internet-addressable
 device or service. The 3GPP-centric view is that a distributed set of
 Mobile Cores (interconnected by one or more backbone technologies, of
 which the Internet is just one example) cooperate to turn a set of
 physical RANs into one logically global RAN. In this perspective, the
-IMSI burned into device SIM card serves as the global identifier that
+IMSI burned into a device's SIM card serves as the global identifier that
 makes it possible for any two mobile devices to communicate with each
 other.
 
@@ -220,10 +220,9 @@ application:
 - *NRF (NF Repository Function):* Used to discover available services
   (network functions), and so is similar to a *Discovery Service*.
 
-Note that while the above list includes well-known microservices that
-are similar to some of 3GPP-specified control functions, we do this
-primarily to help explain the general role each component plays.  In
-some cases, substituting an existing cloud native component is a
+The above list includes 3GPP-specified control functions that are, in
+some cases, similar to well-known microservices.  In
+such cases, substituting an existing cloud native component is a
 viable implementation option. For example, MongoDB can be used to
 implement a UDSF. In other cases, however, such a one-for-one swap is
 not possible due to assumptions 3GPP makes. For example, AUSF, UMD,
