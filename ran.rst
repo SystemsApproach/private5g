@@ -280,8 +280,8 @@ the MAC scheduler running in the DU.
     component (a proxy) and a Near-Real-Time Controller.
 
 Although not shown in :numref:`Figure %s <fig-rrc-split>`, keep in
-mind (from :numref:`Figure %s <fig-split-ran>`) that the RRC and the PDCP,
-form the CU. Reconciling these two figures is a little bit messy, but
+mind (from :numref:`Figure %s <fig-split-ran>`) that the RRC and the
+PDCP form the CU. Reconciling these two figures is a little bit messy, but
 to a first approximation, the PDCP corresponds to the CU-U and
 RRC-Proxy corresponds to the CU-C, with the RIC "lifted out" and
 responsible for overseeing both.  We postpone a diagram depicting this
@@ -353,8 +353,8 @@ local visibility, but they have global consequences. The SDN approach
 is to collect the available input data centrally, make a globally
 optimal decision, and then push the respective control parameters back
 to the base stations for execution. Evidence using an analogous
-approach to optimize wide-area networks over many years (see for
-example B4) is compelling.
+approach to optimize wide-area networks over many years (see, for
+example, B4) is compelling.
 
 .. _reading_b4:
 .. admonition:: Further Reading
@@ -366,12 +366,12 @@ example B4) is compelling.
    SIGCOMM, August 2013.
 
 One way to characterize xApps is based on the current practice of
-controlling the mobile link at two different levels. At a fine-grain
-level, per-node and per-link control is conducted using the RRM
+controlling the mobile link at two different levels. At a fine-grained
+level, per-node and per-link control are conducted using the RRM
 functions that are distributed across the individual base stations.\ [#]_
 RRM functions include scheduling, handover control, link and
 carrier aggregation control, bearer control, and access control.  At a
-coarse-grain level, regional mobile network optimization and
+coarse-grained level, regional mobile network optimization and
 configuration is conducted using *Self-Organizing Network (SON)*
 functions. These functions oversee neighbor lists, manage load
 balancing, optimize coverage and capacity, aim for network-wide
@@ -511,7 +511,7 @@ SDK currently makes the gRPC-based API available to xApps.
 4.5 Control Loops
 -----------------
 
-We conclude this description of RAN internals by re-visiting the
+We conclude this description of RAN internals by revisiting the
 sequence of steps involved in disaggregation, which, as the previous
 three sections reveal, is being pursued in multiple tiers. In doing
 so, we tie up several loose ends, and focus attention on the resulting
@@ -553,12 +553,12 @@ logically centralizing them as applications running on an SDN
 Controller, which corresponds to the Near-RT RIC shown previously in
 :numref:`Figures %s <fig-rrc-split>` and :numref:`%s
 <fig-ran-controller>`. This SDN-based disaggregation is repeated in
-:numref:`Figure %s <fig-ctl_loops>`, which also shows the O-RAN
-prescribed interfaces A1 and E2 introduced in the previous section.
-(Note that all the edges in :numref:`Figures %s <fig-disagg1>` and
-:numref:`%s <fig-disagg2>` correspond to 3GPP-defined interfaces, as
-identified in Section 4.2, but their details are outside the scope of
-this discussion.)
+:numref:`Figure %s <fig-ctl_loops>`, which also shows the
+O-RAN-prescribed interfaces A1 and E2 introduced in the previous
+section.  (Note that all the edges in :numref:`Figures %s
+<fig-disagg1>` and :numref:`%s <fig-disagg2>` correspond to
+3GPP-defined interfaces, as identified in Section 4.2, but their
+details are outside the scope of this discussion.)
     
 .. _fig-ctl_loops:
 .. figure:: figures/sdn/Slide9.png 
@@ -574,7 +574,7 @@ has the Near-RT RIC as its control point. The third (innermost)
 control loop—shown in :numref:`Figure %s <fig-ctl_loops>` running
 inside the DU—includes the real-time Scheduler embedded in the MAC
 stage of the RAN pipeline. The two outer control loops have rough time
-bounds of >>1sec and >10ms, respectively, and as we saw in Chapter 2,
+bounds of >>1sec and >10ms, respectively. As we saw in Chapter 2,
 the real-time control loop is assumed to be <1ms.
  
 This raises the question of how specific functionality is distributed
