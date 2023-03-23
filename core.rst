@@ -6,14 +6,14 @@ UEs as they connect, tracks them as they move from one base station to
 another, ensures that this connectivity fulfills the promised QoS
 requirements, and meters usage for billing.
 
-Historically, all of these functions were provided by one or more proprietary
-network appliances. But like the rest of the 5G mobile network, these
-appliances are being disaggregated and implemented as a set of cloud services,
-with the goal of improving feature velocity for new classes of
-applications. It is also the case that as the range of use cases grows
-more diverse, a one-size-fits-all approach will become
+Historically, all of these functions were provided by one or more
+proprietary network appliances. But like the rest of the 5G mobile
+network, these appliances are being disaggregated and implemented as a
+set of cloud services, with the goal of improving feature velocity for
+new classes of applications. It is also the case that as the range of
+use cases grows more diverse, a one-size-fits-all approach will become
 problematic. The expectation is that it should be possible to
-customize and specialize the Mobile Core on an per-application basis.
+customize and specialize the Mobile Core on a per-application basis.
 
 This chapter introduces the functional elements of the Mobile Core,
 and describes different strategies for implementing that
