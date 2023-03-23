@@ -228,16 +228,9 @@ epub_exclude_files = ['search.html']
 
 # -- options for Intersphinx extension ---------------------------------------
 
-intersphinx_mapping = {
-    'sphinx': ('https://www.sphinx-doc.org/en/master', None),
-    'aether': ('https://docs.aetherproject.org/master', None),
-    'sdcore': ('https://docs.sd-core.opennetworking.org/master', None),
-    'sdran': ('https://docs.sd-ran.org/master', None),
-    'sdran': ('https://docs.sd-fabric.org/master', None),
-    'sysapproach5g': ('https://5g.systemsapproach.org/', None),
-    'sysapproachnet': ('https://book.systemsapproach.org/', None),
-    'sysapproachsdn': ('https://sdn.systemsapproach.org/', None),
-    }
+# intersphinx_mapping = {
+#    'sphinx': ('https://www.sphinx-doc.org/en/master', None)
+#    }
 
 # -- Options for todo extension ----------------------------------------------
 # If true, `todo` and `todoList` produce output, else they produce nothing.
