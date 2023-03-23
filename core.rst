@@ -468,16 +468,16 @@ practice, not all UEs handle this elegantly, sometimes ending up in a
 
 Magma addresses the challenge of unreliable backhaul in several ways.
 First, Magma frequently avoids sending messages over the backhaul
-entirely by running more functionality in the AGW, which are located
+entirely by running more functionality in the AGW, which is located
 close to the radio as seen above. Functions that would be centralized
 in a conventional 3GPP implementation are distributed out to the access
 gateways in Magma. Thus, for example, the operations required to
 authenticate and attach a UE to the core can typically be completed
 using information cached locally in the AGW, without any traffic
 crossing the backhaul. Secondly, when Magma does need to pass
-information over a backhaul link (e.g. to obtain configuration state
+information over a backhaul link (e.g., to obtain configuration state
 from the orchestrator), it does so using gRPC, which is designed to
-operate reliably in the face of unreliable or low latency links.
+operate reliably in the face of unreliable or high-latency links.
 
 Note that while Magma has distributed much of the control plane out to
 the AGWs, it still supports centralized management via the Orchestrator.
@@ -543,7 +543,7 @@ approach in more detail in an NSDI paper.
 Finally, while we have focused on its Control Plane, Magma also
 includes a User Plane component. The implementation is fairly simple,
 and is based on Open vSwitch (OVS). Having a programmable user plane
-is important, as it needs to support range of access technologies, and
+is important, as it needs to support a range of access technologies, and
 at the same time, OVS meets the performance needs of AGWs. However,
 this choice of user plane is not fundamental to Magma, and other
 implementations have been considered. We take a closer look at the
@@ -715,7 +715,7 @@ that match on the IP destination address.
 
 Second, when a packet arrives from the Internet destined for an idle
 UE, the UPF buffers the packet and sends an alert to the 5G control
-plane, asking that the UE be awaken. Today's P4-capable switches do
+plane, asking that the UE be awakened. Today's P4-capable switches do
 not have large buffers or the ability to hold packets indefinitely,
 but a buffering microservice running on a server can be used to
 address this limitation. The microservice indefinitely holds any
