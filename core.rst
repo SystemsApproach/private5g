@@ -28,7 +28,7 @@ Core (e.g., serving a metro area) acts as a router that connects a
 physical RAN (one of many possible access network technologies, not
 unlike WiFi) to the global Internet. In this view, IP addresses serve
 as the unique global identifier that makes it possible for any
-RAN-connected device to communication with any Internet-addressable
+RAN-connected device to communicate with any Internet-addressable
 device or service. The 3GPP-centric view is that a distributed set of
 Mobile Cores (interconnected by one or more backbone technologies, of
 which the Internet is just one example) cooperate to turn a set of
@@ -728,7 +728,7 @@ middle of a handover), it installs a FAR with the `buffer` flag set,
 causing the on-switch P4 program to redirect packets to the buffering
 microservice. Packets are redirected without modifying their IP
 headers by placing them in a tunnel, using the same tunneling protocol
-as is used to send data to base stations.  This allows the switch to
+that is used to send data to base stations.  This allows the switch to
 treat the buffering microservice just like another base station.
 
 When the first packet of a flow arrives at the buffering microservice,
