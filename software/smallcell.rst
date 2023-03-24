@@ -431,7 +431,7 @@ server also be configured to forward IP packets on to the Internet.
 
 
 Connecting Devices
-------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Documenting how to configure different types of devices to work
 with Aether is work-in-progress, but here are some basic guidelines.
