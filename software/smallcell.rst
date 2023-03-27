@@ -11,14 +11,36 @@ explicitly noted.
 
 In addition to the physcial server used in previous stages, we now
 assume that server and the external radio are connected to the same L2
-network and share an IP subnet. This simplifies communication between
-the external radio and the UPF running within Kubernetes on the
-server.  This is not a hard requirement for all deployments, but
-allows us to configure the network by copying files into
-`/etc/systemd/network`. Take note of the network interface on your
-server that provides L3 connectivity to the external radio; we refer
-to this interface using the ``DATA_IFACE`` variable throughout this
-section.
+network and share an IP subnet.  This is not a hard requirement for
+all deployments, but it does simplify communication between the
+external radio and the UPF running within Kubernetes on the server.
+Take note of the network interface on your server that provides L3
+connectivity to the external radio, for example by typing:
+
+.. code-block::
+
+   $ ifconfig
+   enp193s0f0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+           inet 10.76.28.113  netmask 255.255.255.0  broadcast 10.76.28.255
+           inet6 fe80::2ef0:5dff:fef2:d821  prefixlen 64  scopeid 0x20<link>
+           ether 2c:f0:5d:f2:d8:21  txqueuelen 1000  (Ethernet)
+           RX packets 72409278  bytes 97551531344 (97.5 GB)
+           RX errors 0  dropped 156  overruns 0  frame 5
+           TX packets 31165137  bytes 2399311268 (2.3 GB)
+           TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+   lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+           inet 127.0.0.1  netmask 255.0.0.0
+           inet6 ::1  prefixlen 128  scopeid 0x10<host>
+           loop  txqueuelen 1000  (Local Loopback)
+           RX packets 2000815905  bytes 614846017824 (614.8 GB)
+           RX errors 0  dropped 0  overruns 0  frame 0
+           TX packets 2000815905  bytes 614846017824 (614.8 GB)
+           TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+In this example, the interface is ``enp193s0f0``, although we refer to
+it using the ``DATA_IFACE`` variable throughout this section.
+	   
 
 Local Configuration Changes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -31,14 +53,14 @@ OnRamp establishes a simple convention to help manage the process.
 
 Specifically, the ``configs`` directory includes four files:
 ``latest``, ``local``, ``release-2.0``, and ``release-2.1``.  These
-config files are the ultimate source of information for four different
+files are the ultimate source of information for four different
 deployment scenarios—each specifies (a) a set of Helm Charts, and (b)
 a set of override values for those charts.  Up to this point we have
-been using ``latest``; it is the default value for variable ``CHARTS``
-in the ``Makefile``. For the purpose of this stage, we will be using
-``local``, which is identical to ``local``, except it points to
-alternative override value files for the SD-Core, and alternative
-model files for the ROC (as explained below).
+been using ``latest``; it is the default value for Makefile variable
+``CHARTS``. For the purpose of this stage, we will be using ``local``,
+which is identical to ``latest``, except it points to alternative
+override value files for the SD-Core, and alternative model files for
+the ROC (as explained below).
 
 .. code-block::
 
@@ -58,25 +80,39 @@ model files for the ROC (as explained below).
 As your deployment deviates more and more from the release—either to
 account for differences in your target environment or changes you make
 to the software being deployed—you can record these changes in
-``configs/local`` (or other variants as circumstances dictate). For
-the purpose of this stage, you will need to edit ``MakefileVar.mk`` to
-set ``CHARTS ?= local``, and in the subsections that follow, you will
-edit the ``yaml`` and ``json`` files in ``aether-local`` to reflect
-your particular environment. For now, we recommend familiarizing
+``configs/local`` and ``aether-local`` (or other similar variants as
+circumstances dictate).  Since we will be editing the ``yaml`` and
+``json`` files in ``aether-local`` to reflect your particular
+environment in the sections that follow, we recommend familiarizing
 yourself with ``aether-local/sd-core-5g-alt-values.yaml`` and
 ``aether-local/roc-5g-models.json`` (or their 4G counterparts).
 
+Finally, we suggest you modify the default settings for three
+variables in ``MakefileVar.mk``, substituting your local interface for
+``enp193s0f0``:
 
+.. code-block::
+
+   CHARTS ?= local
+   ENABLE_RANSIM ?= false
+   DATA_IFACE ?= enp193s0f0
+
+We assume these edits in the sections that follow, although you can
+instead override the current defaults on a case-by-case basis.
+   
 Prepare UEs 
 ~~~~~~~~~~~~
 
 5G-connected devices must have a SIM card, which you are responsible
 for creating and inserting.  You will need a SIM card writer (which
-are readily available for purchase on Amazon) and a legitimate MCC/MNC
-pair. For our purposes, we set MCC=315 (US) and MNC=010 (CBRS), but
-you should use whatever values are appropriate for your local
-environment. You then assign an IMSI and two secret keys to each SIM
-card. Throughout this section, we use the following values:
+are readily available for purchase on Amazon) and a *Public Land
+Mobile Nodework (PLMN)* identifier constucted from a valid MCC/MNC
+pair. For our purposes, we use two different PLMN ids: ``315010``
+conctructed from MCC=315 (US) and MNC=010 (CBRS), and ``001010``
+constructed from MCC=001 (TEST) and MNC=010 (CBRS). You should use
+whtever values are appropriate for your local environment.  You then
+assign an IMSI and two secret keys to each SIM card. Throughout this
+section, we use the following values:
 
 * IMSI: each one is unique, matching pattern ``315010*********`` (15 digits)
 * OPc: ``69d5c2eb2e2e624750541d3bbc692ba5``
@@ -115,25 +151,23 @@ Bring Up Aether
 You are now ready to bring Aether on-line, but it is safest to start
 with a fresh install of Kubernetes, so first type ``make clean`` if
 you still have a cluster running from an earlier stage. Then execute
-the following two Make targets, but this time you will disable the RAN
-emulator and identify the network interface with the corresponding
-variable substitutions:
+the following two Make targets, but this time having specified the
+local configuration (``CHARTS=aether-local``), disabled the RAN
+emulator (``ENABLE_RANSIM=false``), and identified the network
+interface (``DATA_IFACE=enp193s0f0``) with the edits to the respective
+variables in ``MakefileVar.mk``:
 
 .. code-block::
 
    $ make node-prep
-   $ ENABLE_RANSIM=false DATA_IFACE=<iface> make net-prep
-
-If you plan to work exclusively with physical small cell radios going
-forward, feel free to edit the defaults for these variables in
-``MakefileVar.mk``
+   $ make net-prep
 
 Once Kubernetes is running and the network properly configured, you
 are then ready to bring up the SD-Core as before:
 
 .. code-block::
 
-   $ ENABLE_RANSIM=false DATA_IFACE=<iface> make 5g-core
+   $ make 5g-core
 
 You can verify the installation by running ``kubectl`` just as you did
 in Stage 1. You should see all pods with status ``Running``, keeping
@@ -289,48 +323,53 @@ Note that If you are not finding ``access`` and ``core`` interfaces on
 outside the UPF, the following commands can be used to create these
 two interfaces manually:
 
-.. code-block:::
+.. code-block::
 
     $ ip link add core link <DATA_IFACE> type macvlan mode bridge 192.168.250.3
     $ ip link add access link <DATA_IFACE> type macvlan mode bridge 192.168.252.3
+
 
 Runtime Control
 ~~~~~~~~~~~~~~~
 
 Aether defines an API (and associated GUI) for managing connectivity
 at runtime. Even though some connectivity parameters are passed
-directly to the SD-Core at startup time using Helm Chart overrides,
-(e.g., the IMSI-related edits of
-``aether-local/sd-core-5g-values.yaml`` described above), others
-correspond to abstractions that ROC layers on top of SD-Core, where
-file ``aether-local/roc-5g-models.json`` "bootstraps" the ROC database
-with an initial set of data (saving you from a laborious GUI session).
+directly to the SD-Core at startup using Helm Chart overrides, (e.g.,
+the IMSI-related edits of ``aether-local/sd-core-5g-values.yaml``
+described above), others correspond to abstractions that ROC layers on
+top of SD-Core, where file ``aether-local/roc-5g-models.json``
+"bootstraps" the ROC database with an initial set of data (saving you
+from a laborious GUI session).
 
 To bring up the ROC, you first need to edit
 ``aether-local/roc-5g-models.json`` to record the same IMSI
-information as before, adding or removing ``sim-card`` entries as
-necessary:
+information as before, editing, adding or removing ``sim-card``
+entries as necessary. Note that only the IMSIs need to match the
+earlier data; the ``sim-id`` and ``display-name`` values are arbitrary
+and need only be consistently *within*
+``aether-local/roc-5g-models.json``.
 
-.. code-block:::
+.. code-block::
 
    "imsi-definition": {
-         "mcc": "208",
-          "mnc": "93",
+         "mcc": "315",
+          "mnc": "010",
           "enterprise": 1,
-          "format": "CCCNNEESSSSSSSS"
+          "format": "CCCNNNEESSSSSSS"
    },
    ...
+   
    "sim-card": [
           {
               "sim-id": "aiab-sim-1",
               "display-name": "SIM 1",
-              "imsi": "208930100007487"
+              "imsi": "315010999912301"
           },
    ...
 
 Then type
 
-.. code-block:::
+.. code-block::
 
    $ make 5g-roc
    $ make 5g monitoring
@@ -360,15 +399,12 @@ and click the ``Commit`` button.
 As currently configured, the Device-Group information is duplicated
 between ``aether-loca/sd-core-5g-values.yaml`` and
 ``aether-local/roc-5g-models.json``. This makes it possible to bring
-up the SD-Core without the ROC, for example as we just to verifty the
-configuration, but it can lead to problems of keeping the two in sync.
-As an exercise, you can delete the subscriber-related blocks in the
+up the SD-Core without the ROC, for example as we just did to verifty
+the configuration, but it can lead to problems of keeping the two in
+sync.  As an exercise, you can delete the *Device-Group* blocks in the
 former, restart the SD-Core, and see that the latter brings the Aether
 up in the correct state. Once running, changes should be made via the
 ROC (either the GUI or the API).
-
-.. Altnatively, we should try to remove Device Group info from the
-   values file.
 
 
 gNodeB Setup
@@ -376,10 +412,9 @@ gNodeB Setup
 
 Once the SD-Core is up and running, we are ready to bring up the
 external gNodeB. The details of how to do this depend on the small
-cell radio you are using, but we summarize the main issues you need to
-address. For examples commonly used with Aeither, we suggest the
-following 4G and 5G small cells from the ONF MarketPlace,
-respectively:
+cell radio you are using, but we identify the main issues you need to
+address. For examples of small cells commonly used with Aether, we
+recommend the following SERCOMM devices from the ONF MarketPlace:
 
 .. _reading_sercomm:
 .. admonition:: Further Reading
@@ -387,47 +422,72 @@ respectively:
    `SERCOMM – SCE4255W-BCS-A5
    <https://opennetworking.org/products/sercomm-sce4255w-bcs-a5/>`__.
 
-    `SERCOMM – SCE5164-B78 INDOOR SMALL CELL
-    <https://opennetworking.org/products/sercomm-sce5164-b78/>`__.
+   `SERCOMM – SCE5164-B78 INDOOR SMALL CELL
+   <https://opennetworking.org/products/sercomm-sce5164-b78/>`__.
 
-The latter (5G gNB) includes a Users Guide. The former (4G eNB) is
-documented in the `Aether Guide
+The first of these (4G eNB) is documented in the `Aether Guide
 <https://docs.aetherproject.org/master/edge_deployment/enb_installation.html>`__.
+The second of these (5G gNB) includes a `Users Guide
+<https://opennetworking.org/wp-content/uploads/2022/10/AiabSercomm-gNB-User-Guide_v1.2-20220922-Carl-Zhu.pdf>`__.
 We use details from the SERCOMM gNB in the following to make the
-discussion concrete.
+discussion concrete, where the gNB is assigned IP address
+``10.76.28.187`` and the server hosting Aether is assigned IP address
+``10.76.28.113``. (Recall that we assume these are both on the same
+subnet.)
 
-Start by connecting a laptop directly to the LAN port on the small
-cell, pointing your laptop's web browser at the device's management
-dashboard (``https://10.10.10.189``), and logging in with the provided
-credentials (``login=sc_femto``, ``password=scHt3pp``).  From the
-dashboard, configure how the small cell connects to the Internet via
-its WAN port, either dynamically using DHCP or staically by setting
-the device's IP address (``10.76.28.187``) and default gateway
-(``10.76.28.1``). Once on the Internet, it should be possible to reach
-the management dashboard without being diectly connected to the LAN
-port (``https://10.76.28.187``).
+1. **Connect to Management Interface.** Start by connecting a laptop
+   directly to the LAN port on the small cell, pointing your laptop's web
+   browser at the device's management page (``https://10.10.10.189``).
+   You will need to assign your laptop an IP address on the same subnet
+   (e.g., ``10.10.10.100``).  Once connected, log in with the provided
+   credentials (``login=sc_femto``, ``password=scHt3pp``).
 
-Apart from setting various radio parameters (for which we recommend
-starting with the defaults), the remaining configuration tasks involve
-(1) setting the PLMN on the small cell (``00101``) to match the
-MCC/MNC values (``001`` / ``010`` ) specified in the Core; (2)
-connecting the small cell to Aether's Control Plane (AMF); and (3)
-connecting the small cell to Aether's User Plane (UPF). The AMF should
-already be accessible at well-known port ``38412`` on the physical
-server, so setting the AMF address to that server's address
-(``10.76.28.113``) should be sufficient (assuming the small cell and
-physical server on are on the same subnet).
+2. **Configure WAN.** From the dashboard, configure how the small cell
+   connects to the Internet via its WAN port, either dynamically using
+   DHCP or staically by setting the device's IP address
+   (``10.76.28.187``) and default gateway (``10.76.28.1``).
 
-Connecting the small cell to the UPF running at ``192.168.252.3`` is a
-bit more site-dependent, but comes down to establishing a route from
-the small cell to the ``192.168.253.0/24`` subnet hosted on the Aether
-server (``10.76.28.113``). If the small cell provides a means to
-install static routes, then a route to destination
-``192.168.252.0/24`` via gateway ``10.76.28.113`` will work (this is
-the case for the SERCOMM eNB). If the small cell does not allow static
-routes (as is the case for the SERCOMM gNB), then ``10.76.28.113`` can
-be installed as the default gateway, but doing so requires that the
-server also be configured to forward IP packets on to the Internet.
+3. **Access Remote Management.** Once on the Internet, it should be
+   possible to reach the management dashboard without being diectly
+   connected to the LAN port (``https://10.76.28.187``).
+
+4. **Connect GPS.** Connect the small cell's GPS antenna to the GPS port,
+   and place the antenna so it has line-of-site to the sky (i.e.,
+   place it in a window).
+
+5. **Configure Radio Parameters.** There are several parameters that
+   control the radio (e.g., see the ``Settings > NR Cell
+   Configuration`` page on the SERCOMM gNB), but it is usually
+   sufficient to use the default settings when getting started.
+
+6. **Configure the PLMN.** Set the PLMN identifier on the small cell
+   (``001010``) to match the MCC/MNC values (``001`` / ``010`` )
+   specified in the Core.
+
+7. **Connect to Aether Control Plane.** Configure the AMF (5G) or MME (4G)
+   setting on the small cell with the IP address of your Aether
+   server (e.g., ``10.76.28.113``). Aether's SD-Core is configured to
+   expose the corresponding AMF/MME via a well-known port, so the
+   server's IP address is sufficient to establish connectivity. The
+   management dashboard on the small cell should confirm that
+   control interface is established.
+
+8. **Connect to Aether User Plane.** As described in an earlier section,
+   the Aether User Plane (UPF) is running at IP address
+   ``192.168.252.3``. Connecting to that address requires installing
+   a route to subnet ``192.168.252.0/24``. How you install this route
+   is site-dependentl. If the small cell provides a means to install
+   static routes, then a route to destination ``192.168.252.0/24``
+   via gateway ``10.76.28.113`` (the server hosting Aether) will work.
+   (This is the case for the SERCOMM eNB). If the small cell does not
+   allow static routes (as is the case for the SERCOMM gNB), then
+   ``10.76.28.113`` can be installed as the default gateway, but
+   doing so requires that your server also be configured to forward
+   IP packets on to the Internet.
+
+9. **Run Diagnostics.** The small cell likely includes some level of
+   diagnostic support, for example, allowing you to run ``ping`` or
+   ``traceroute``. This can be used to verify connectivity.
 
 
 Connecting Devices
