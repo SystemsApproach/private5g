@@ -5,7 +5,7 @@ The Makefile targets used in Stage 1 invoke Helm to install the
 applications, using application-specific *values files* found the
 cloned directory (e.g.,
 `~/systemsapproach/aether-onramp/roc-values.yaml`) to override the
-values for the correspond Helm charts. In an operational setting, all
+values for the corresponding Helm charts. In an operational setting, all
 the information needed to deploy a set of Kubernetes applications is
 checked into a Git repo, with a tool like Fleet automatically updating
 the deployment whenever it detects changes to the configuration

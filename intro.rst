@@ -361,7 +361,7 @@ tens of thousands of cell towers spread across the globe. Our approach
 is to be location agnostic, but to make the discussion concrete, we
 use enterprises as our exemplar deployment.
 
-At the same time cloud providers started pursing edge deployments,
+At the same time cloud providers started pursuing edge deployments,
 network operators began to re-architect their access network to use
 the same commodity hardware and best practices in building scalable
 software as the cloud providers. Such a design, which is sometimes

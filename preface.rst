@@ -44,6 +44,9 @@ system. The result complements the low-level engineering documents
 that are available online (and to which we provide links) with an
 architectural roadmap for anyone trying to understand all the moving
 parts, how they fit together, and how they can be operationalized.
+And once you're done reading the book, we encourage you to jump into
+the hands-on appendix that walks you through the step-by-step process
+of deploying that software in your own local computing environment.
 
 Acknowledgements
 ----------------
@@ -52,7 +55,8 @@ The software described in this book is due to the hard work of the ONF
 engineering team, the Magma engineering team, and the open source
 communities that work with them.
 
-Thanks to the members of the community who contributed text or corrections to the book, including:
+Thanks to the members of the community who contributed text or
+corrections to the book, including:
 
 - Ajay Thakur 
 - Andy Bavier

@@ -411,7 +411,7 @@ Another variable in how 5G can be deployed at the edge is related to
 who owns the underlying cloud infrastructure. Instead of a cloud
 provider, an enterprise, or a traditional MNO owning the hardware,
 there are situations where a third-party, often called a *neutral
-host*, owns an operates the hardware (along with the real estate it
+host*, owns and operates the hardware (along with the real estate it
 sits in), and then rents access to these resources to multiple 5G
 providers. Each mobile service provider is then a tenant of of that
 shared infrastructure.

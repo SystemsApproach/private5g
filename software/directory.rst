@@ -78,7 +78,7 @@ that can be deployed on local hardware. OnRamp is available on GitHub:
 As described in the following sections, OnRamp prescribes a
 step-by-step process for growing an Aether deployment from a single VM
 to multi-site hybrid cloud carrying live traffic. An important aspect
-of OnRamp's approach is to describe the inter-working of the
+of OnRamp's approach is to describe the interworking of the
 deployment machinery in enough detail so anyone can deploy and operate
 Aether, with each stage highlighting the key touchpoints for customizing
 the configuration.

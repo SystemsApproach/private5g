@@ -375,7 +375,7 @@ coarse-grained level, regional mobile network optimization and
 configuration is conducted using *Self-Organizing Network (SON)*
 functions. These functions oversee neighbor lists, manage load
 balancing, optimize coverage and capacity, aim for network-wide
-interference mitigation, centrally configure parameters, and so on. As
+interference mitigation, centrally configured parameters, and so on. As
 a consequence of these two levels of control, it is not uncommon to
 see reference to *RRM Applications* and *SON Applications*,
 respectively, in O-RAN documents for SD-RAN. For example, the

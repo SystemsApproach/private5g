@@ -87,11 +87,11 @@ station served by that Core, currently connects the device to the
 global RAN).
 
 This mapping service has a name, or rather, several names that keep
-changing from from generation to generation. In 2G and 3G it was
-called HLR (Home Location Registry). In 4G the HLR maintains only
-static information and a separate HSS (Home Subscriber Server)
-maintains the more dynamic information. In 5G the HLR is renamed the
-UDR (Unified Data Registry) and the HSS is renamed UDM (Unified Data
+changing from generation to generation. In 2G and 3G it was called HLR
+(Home Location Registry). In 4G the HLR maintains only static
+information and a separate HSS (Home Subscriber Server) maintains the
+more dynamic information. In 5G the HLR is renamed the UDR (Unified
+Data Registry) and the HSS is renamed UDM (Unified Data
 Management). We will see the UDM in Section 5.2 because of the role it
 plays *within* a single instance of the Mobile Core.
 
@@ -425,7 +425,7 @@ the left side of the AGW in the figure) or the federation interface
 connecting Magma to another mobile network (implemented by the
 *Federation Gateway* module in the figure). Everything "between" those
 two external interfaces is free to deviate from the 3GPP specification,
-which has broad impact as discussed below.
+which has a broad impact as discussed below.
 
 One consequence of this approach is that Magma can interoperate with
 other implementations *only* at the edges. Thus, it is possible to
@@ -458,7 +458,7 @@ access control and management) on the right using gRPC messages that
 are technology-agnostic.
 
 Magma's design is particularly well suited for environments where
-backhaul links are unreliable, for example, when satellite is used.
+backhaul links are unreliable, for example, when a satellite is used.
 This is because the 3GPP protocols that traditionally have to traverse
 the backhaul from core to eNB/gNB are quite sensitive to loss and
 latency. Loss or latency can cause connections to be dropped, which in
@@ -557,7 +557,7 @@ in :numref:`Figure %s <fig-5g-core>`\—connects the RAN to the
 Internet. Much like the data plane for any router, the UPF forwards IP
 packets, but because UEs often sleep to save power and may be in the
 process of being handed off from one base station to another, it
-sometimes has to buffer packets for an indeterminant amount of
+sometimes has to buffer packets for an indeterminate amount of
 time. Also like other routers, a straightforward way to understand the
 UPF is to think of it as implementing a collection of Match/Action
 rules, where the UPF first classifies each packet against a set of
@@ -592,7 +592,7 @@ terminology are also called "rules", of which there are four types:
 * **Buffering Action Rules (BARs):** Instructs the UPF to buffer
   downlink traffic for idle UEs, while also sending a `Downlink Data
   Notification` to the Control Plane. This notification, in turn,
-  causes the CP to instruct the base station to awake the UE. Once the
+  causes the CP to instruct the base station to awaken the UE. Once the
   UE becomes active, the UPF releases the buffered traffic and resumes
   normal forwarding. The buffering and notification functions are
   activated by modifying a FAR to include `buffer` and `notify` flags,
@@ -708,7 +708,7 @@ implementation strategy is to set up two parallel PDR tables: one
 using the relatively plentiful switch SRAM for common-case uplink
 rules that exactly matches on tunnel identifiers (which can be treated
 as table indices); and one using TCAM for common-case downlink rules
-that match on the IP destination address.
+that match the IP destination address.
 
 .. Get this acronym into the discussion somewhere: GTP, includes a
    header field called the Tunnel Endpoint Identifier (TEID).

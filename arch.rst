@@ -352,7 +352,7 @@ slicing mechanism.
     the Mobile Core’s User Plane.
 
 Fourth, the base station forwards both control and user plane packets
-between the Mobile Core and the UE. These packets are tunnelled over
+between the Mobile Core and the UE. These packets are tunneled over
 SCTP/IP and GTP/UDP/IP, respectively. SCTP (Stream Control Transport
 Protocol) is an alternative reliable transport to TCP, tailored to carry
 signaling (control) information for telephony services. GTP (a nested
