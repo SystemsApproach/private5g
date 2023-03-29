@@ -80,9 +80,9 @@ the ROC (as explained below).
 As your deployment deviates more and more from the release—either to
 account for differences in your target environment or changes you make
 to the software being deployed—you can record these changes in
-``configs/local`` and ``aether-local`` (or other similar variants as
+``configs/local`` and ``aether-local/`` (or other variants as
 circumstances dictate).  Since we will be editing the ``yaml`` and
-``json`` files in ``aether-local`` to reflect your particular
+``json`` files in ``aether-local/`` to reflect your particular
 environment in the sections that follow, we recommend familiarizing
 yourself with ``aether-local/sd-core-5g-alt-values.yaml`` and
 ``aether-local/roc-5g-models.json`` (or their 4G counterparts).
@@ -108,8 +108,8 @@ for creating and inserting.  You will need a SIM card writer (which
 are readily available for purchase on Amazon) and a *Public Land
 Mobile Nodework (PLMN)* identifier constucted from a valid MCC/MNC
 pair. For our purposes, we use two different PLMN ids: ``315010``
-conctructed from MCC=315 (US) and MNC=010 (CBRS), and ``001010``
-constructed from MCC=001 (TEST) and MNC=010 (CBRS). You should use
+conctructed from MCC=315 (US) and MNC=010 (CBRS), and ``00101``
+constructed from MCC=001 (TEST) and MNC=01 (TEST). You should use
 whtever values are appropriate for your local environment.  You then
 assign an IMSI and two secret keys to each SIM card. Throughout this
 section, we use the following values:
@@ -133,7 +133,7 @@ Key values configured onto your SIM cards. The block also defines a
 sequence number that is intended to thwart replay attacks. (As a
 reminder, these values go in ``aether-local/sd-core-4g-values.yaml``
 if you are using a 4G small cell.) For example, the following code
-block adds IMSIs between 315010999912301 and 315010999912303:
+block adds IMSIs between ``315010999912301`` and ``315010999912303``:
 
 .. code-block::
 
@@ -182,13 +182,13 @@ SD-Core is running correctly.
 Validating Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Regardless of which core you run, the UPF pod implements the Core's
-User Plane. To verify that the UPF is propertly connected to the
-network (which is important because the UPF has to connect to the
-radio), you can check to see that the Macvlan networks ``core`` and
-``access`` are properly configured on your server. This can be done
-using ``ifconfig``, and you should see results similar to the
-following:
+Regardless of which version of the Control Plane you run, 4G or 5G,
+the UPF pod implements the Core's User Plane. To verify that the UPF
+is propertly connected to the network (which is important because the
+UPF has to connect to the radio), you can check to see that the
+Macvlan networks ``core`` and ``access`` are properly configured on
+your server. This can be done using ``ifconfig``, and you should see
+results similar to the following:
 
 .. code-block::
    
@@ -282,8 +282,8 @@ something like this:
    $ kubectl -n omec exec -ti upf-0 -c bessd -- ip route
    default via 169.254.1.1 dev eth0
    default via 192.168.250.1 dev core metric 110
-   128.105.144.0/22 via 192.168.252.1 dev access
-   128.105.145.141 via 169.254.1.1 dev eth0
+   10.76.28.0/24 via 192.168.252.1 dev access
+   10.76.28.113 via 169.254.1.1 dev eth0
    169.254.1.1 dev eth0 scope link
    192.168.250.0/24 dev core proto kernel scope link src 192.168.250.3
    192.168.252.0/24 dev access proto kernel scope link src 192.168.252.3
@@ -303,21 +303,24 @@ the ``core`` interface by these rules on the server:
    172.250.0.0     192.168.250.3   255.255.0.0     UG    0      0        0 core
    192.168.250.0   0.0.0.0         255.255.255.0   U     0      0        0 core
 
-The first rule above matches packets to the UEs (on 172.250.0.0/16
-subnet).  The next hop for these packets is the ``core`` IP address
-inside the UPF.  The second rule says that next hop address is
-reachable on the ``core`` interface outside the UPF.  As a result, the
-downstream packets arrive in the UPF where they are GTP-encapsulated
-with the IP address of the gNB.  Inside the UPF these packets will
-match a route like this one (see above; ``128.105.144.0/22`` in this case
-is the ``DATA_IFACE`` subnet)::
+The first rule above matches packets to the UEs, which you will see
+from the SD-Core value files, are allocated from the
+``172.250.0.0/16`` subnet.  The next hop for these packets is the
+``core`` IP address inside the UPF.  The second rule says that next
+hop address is reachable on the ``core`` interface outside the UPF.
+As a result, the downstream packets arrive in the UPF where they are
+GTP-encapsulated with the IP address of the gNB.  Inside the UPF these
+packets will match a route like the one output above
+(``10.76.28.0/24`` in this case is the subnet of the ``DATA_IFACE``):
 
-     128.105.144.0/22 via 192.168.252.1 dev access
+.. code-block::
+   
+    10.76.28.0/24 via 192.168.252.1 dev access
 
 These packets are forwarded to the ``access`` interface outside the
 UPF and out ``DATA_IFACE`` to the gNB.  Recall that we assume that the
 gNB is on the same subnet as ``DATA_IFACE``, so in this case it also
-has an IP address in the ``128.105.144.0/22`` range.
+has an IP address in the ``10.76.28.0/24`` range.
 
 Note that If you are not finding ``access`` and ``core`` interfaces on
 outside the UPF, the following commands can be used to create these
@@ -461,7 +464,7 @@ subnet.)
    sufficient to use the default settings when getting started.
 
 6. **Configure the PLMN.** Set the PLMN identifier on the small cell
-   (``001010``) to match the MCC/MNC values (``001`` / ``010`` )
+   (``00101``) to match the MCC/MNC values (``001`` / ``01`` )
    specified in the Core.
 
 7. **Connect to Aether Control Plane.** Configure the AMF (5G) or MME (4G)
@@ -476,7 +479,7 @@ subnet.)
    the Aether User Plane (UPF) is running at IP address
    ``192.168.252.3``. Connecting to that address requires installing
    a route to subnet ``192.168.252.0/24``. How you install this route
-   is site-dependentl. If the small cell provides a means to install
+   is site-dependent. If the small cell provides a means to install
    static routes, then a route to destination ``192.168.252.0/24``
    via gateway ``10.76.28.113`` (the server hosting Aether) will work.
    (This is the case for the SERCOMM eNB). If the small cell does not
@@ -488,11 +491,4 @@ subnet.)
 9. **Run Diagnostics.** The small cell likely includes some level of
    diagnostic support, for example, allowing you to run ``ping`` or
    ``traceroute``. This can be used to verify connectivity.
-
-
-Connecting Devices
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Documenting how to configure different types of devices to work
-with Aether is work-in-progress, but here are some basic guidelines.
 
