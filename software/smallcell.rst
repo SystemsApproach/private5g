@@ -3,13 +3,13 @@ Stage 3: External Radio
 
 We are now ready to replace the emulated RAN with a physical small
 cell and real UEs. Unlike earlier stages of Aether OnRamp that worked
-exlusively with 5G, this stage allows either 4G or 5G small cells (but
+exclusively with 5G, this stage allows either 4G or 5G small cells (but
 not both simultaneously). The following instructions are written for
 the 5G scenario, but as a general rule, you can substitute "4G" for
 "5G" in every command or file name.  Exceptions to that rule are
 explicitly noted.
 
-In addition to the physcial server used in previous stages, we now
+In addition to the physical server used in previous stages, we now
 assume that server and the external radio are connected to the same L2
 network and share an IP subnet.  This is not a hard requirement for
 all deployments, but it does simplify communication between the
@@ -109,10 +109,10 @@ Prepare UEs
 5G-connected devices must have a SIM card, which you are responsible
 for creating and inserting.  You will need a SIM card writer (which
 are readily available for purchase on Amazon) and a PLMN identifier
-constucted from a valid MCC/MNC pair. For our purposes, we use two
-different PLMN ids: ``315010`` conctructed from MCC=315 (US) and
+constructed from a valid MCC/MNC pair. For our purposes, we use two
+different PLMN ids: ``315010`` constructed from MCC=315 (US) and
 MNC=010 (CBRS), and ``00101`` constructed from MCC=001 (TEST) and
-MNC=01 (TEST). You should use whtever values are appropriate for your
+MNC=01 (TEST). You should use whatever values are appropriate for your
 local environment.  You then assign an IMSI and two secret keys to
 each SIM card. Throughout this section, we use the following values:
 
@@ -186,7 +186,7 @@ Validating Configuration
 
 Regardless of whether you bring up a 4G or 5G version of the Control
 Plane, the UPF pod implements SD-Core's User Plane. To verify that the
-UPF is propertly connected to the network (which is important because
+UPF is properly connected to the network (which is important because
 the UPF has to connect to the radio), you can check to see that the
 Macvlan networks ``core`` and ``access`` are properly configured on
 your server. This can be done using ``ifconfig``, and you should see
@@ -382,7 +382,7 @@ Then type
 To see these initial configuration values using the GUI, open the
 dashboard available at `http://<server-ip>:31194`. If you select
 ``Configuration > Site`` from the drop-down menu at top right, and
-click the ``Edit`` icon assoicated with the ``Aether Site`` you can
+click the ``Edit`` icon associated with the ``Aether Site`` you can
 see (and potentially change) the following values:
 
 * MCC: 315
@@ -404,7 +404,7 @@ and click the ``Commit`` button.
 As currently configured, the Device-Group information is duplicated
 between ``aether-loca/sd-core-5g-values.yaml`` and
 ``aether-local/roc-5g-models.json``. This makes it possible to bring
-up the SD-Core without the ROC, for example as we just did to verifty
+up the SD-Core without the ROC, for example as we just did to verify
 the configuration, but it can lead to problems of keeping the two in
 sync.  As an exercise, you can delete the *Device-Group* blocks in the
 former, restart the SD-Core, and see that the latter brings the Aether
@@ -449,11 +449,11 @@ subnet.)
 
 2. **Configure WAN.** From the dashboard, configure how the small cell
    connects to the Internet via its WAN port, either dynamically using
-   DHCP or staically by setting the device's IP address
+   DHCP or statically by setting the device's IP address
    (``10.76.28.187``) and default gateway (``10.76.28.1``).
 
 3. **Access Remote Management.** Once on the Internet, it should be
-   possible to reach the management dashboard without being diectly
+   possible to reach the management dashboard without being directly
    connected to the LAN port (``https://10.76.28.187``).
 
 4. **Connect GPS.** Connect the small cell's GPS antenna to the GPS port,

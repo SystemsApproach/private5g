@@ -3,6 +3,8 @@ GPP
 Acknowledgements
 Aether
 AiaB
+Ajay
+Thakur
 AMF
 Anthos
 Analytics
@@ -21,6 +23,9 @@ Davie
 Disaggregating
 Dockerfile
 Dryjanski
+Edmar
+Candeia
+Gurjão
 ECaaS
 ECS
 EPC
@@ -29,11 +34,14 @@ Fronthaul
 GBR
 Gbps
 Gerrit
+gNB
 Grafana
+GTP
 Haswell
 HSS 
 Hasan
 IaaS
+iPhones
 IoT
 IPv 
 Jaeger
@@ -41,6 +49,7 @@ Kahn
 Kobayashi
 Lifecycle
 LTE
+Macvlan
 Makefile
 Marcin
 Mbps
@@ -53,6 +62,7 @@ NextG
 nRT
 Oguz
 OAuth
+OPc
 PHY
 PRB
 Parulkar
@@ -100,6 +110,7 @@ bitrate
 centric
 config
 connectionless
+customizations
 decadal
 decapsulating
 decidely
@@ -126,6 +137,7 @@ frontend
 fronthaul
 gNB
 gNBs
+gNodeB
 gNMI
 gNOI
 gRPC
@@ -183,9 +195,12 @@ subbands
 subcarrier
 subcarriers
 subcomponents
+subnet
+subnets
 toolchain
 toolset
 transformative
+touchpoints
 tunnelled
 uber
 unicast
