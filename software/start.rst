@@ -75,7 +75,7 @@ namespaces are operational:
 .. code-block::
 
    $ kubectl get pods --all-namespaces
-
+   
 If you are not familiar with `kubectl` (the CLI for Kubernetes), we
 recommend that you start with `Kubernetes Tutorial
 <https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.
@@ -107,7 +107,7 @@ target server. Do this by typing:
 .. code-block::
 
    $ make node-prep
-
+  
 `kubectl` will show the `kube-system` and `calico-system` namespaces
 running.
 
@@ -122,8 +122,8 @@ time.  Type:
 
 .. code-block::
 
-   $ make router-pod
-
+   $ make net-prep
+   
 This target configures Linux (via `systemctl`), but also starts a
 Quagga router running inside the cluster. To see how routing is set up
 for Aether OnRamp (which you will need to understand in later stages),
@@ -161,7 +161,7 @@ You can access the dashboards for the two subsystems, respectively, at
 
    http://<server_ip>:31194 
    http://<server_ip>:30950 
-
+   
 More information about the Control and Monitoring dashboards is given
 in their respective sections of the Aether Guide. Note that the
 programmatic API underlying the Control Dashboard, which was
@@ -237,5 +237,5 @@ If you want to also tear down Kubernetes for a fresh install, type:
 
 .. code-block::
 
-   $ make router-clean
+   $ make net-clean
    $ make clean

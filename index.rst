@@ -38,3 +38,5 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    software/directory.rst
    software/start.rst
    software/gitops.rst
+   software/smallcell.rst
+
