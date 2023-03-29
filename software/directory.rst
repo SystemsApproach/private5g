@@ -68,3 +68,15 @@ chapter of our companion Edge Cloud Operations book.
     L. Peterson, A. Bavier, S. Baker, Z. Williams, and B. Davie. `Edge
     Cloud Operations: A Systems Approach
     <https://ops.systemsapproach.org/lifecycle.html>`__. June 2022.
+
+Finally, Aether OnRamp—the focus of this appendix—defines one possible
+way to integrate all of the above artifacts into an end-to-end system
+that can be deployed on local hardware. OnRamp is available on GitHub:
+
+ | :https://github.com/SystemsApproach/aether-onramp
+
+and as described in the following sections, prescribes a step-by-step
+process for growing an Aether deployment from a single VM to
+multi-site hybrid cloud carrying live traffic. A key aspect of
+OnRamp's approach is to describe the inter-working of the deployment
+machinery in enough detail so anyone can deploy and operate Aether.

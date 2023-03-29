@@ -1,5 +1,5 @@
-Stage 2: Add GitOps Tooling
--------------------------------------
+Stage 2: GitOps Tooling
+--------------------------
 
 The Makefile targets used in Stage 1 invoke Helm to install the
 applications, using application-specific *values files* found the

@@ -1,6 +1,6 @@
 
-Stage 1: Get Started
---------------------
+Stage 1: Emulated RAN
+-----------------------
 
 The first stage of Aether OnRamp provides a good way to get
 started. It brings up a one-node Kubernetes cluster, deploys all of
@@ -111,6 +111,33 @@ target server. Do this by typing:
 `kubectl` will show the `kube-system` and `calico-system` namespaces
 running.
 
+Bringing up Kubernetes involves generating a ``config.yaml`` file that
+specifies several configuration parameters for the cluster. After the
+``node-prep`` target completes, you can find this file in
+``/etc/rancher/rke2/``, and it should look something like this:
+
+.. code-block::
+
+   $ cat /etc/rancher/rke2/config.yaml
+   cni: multus,calico
+   cluster-cidr: 192.168.84.0/24
+   service-cidr: 192.168.85.0/24
+   kubelet-arg:
+   - --allowed-unsafe-sysctls=net.*
+   - --node-ip=10.76.28.113
+   pause-image: k8s.gcr.io/pause:3.3
+   kube-proxy-arg:
+   - --metrics-bind-address=0.0.0.0:10249
+   - --proxy-mode=ipvs
+   kube-apiserver-arg:
+   - --service-node-port-range=2000-36767
+
+Of particular note, this example cluster runs on a server at IP
+address ``10.76.28.113`` and we have instructed Kubernetes to allow
+service ports ranging from ``2000`` to ``36767``. We will see both of
+these settings come into play as we ramp up the configuration.
+
+     
 Configure the Network
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -166,12 +193,12 @@ More information about the Control and Monitoring dashboards is given
 in their respective sections of the Aether Guide. Note that the
 programmatic API underlying the Control Dashboard, which was
 introduced in Section 6.4, can be accessed at
-`http://<server_ip>:31194/aether-roc-api/`.
+`http://10.76.28.113:31194/aether-roc-api/` in our example deployment.
 
 .. _reading_dashboards:
 .. admonition:: Further Reading
 
-   `Aether Control Dashboard <https://docs.aetherproject.org/master/operations/gui.htmll>`__.
+   `Aether Control Dashboard <https://docs.aetherproject.org/master/operations/gui.html>`__.
 
    `Aether Monitoring Dashboard <https://docs.aetherproject.org/master/developer/aiabhw5g.html#enable-monitoring>`__.
  
@@ -199,10 +226,8 @@ selecting `Device-Groups` will show how those UEs are grouped into
 aggregates. In an operational environment, these values would be
 entered into the ROC through either the GUI or the underlying API. For
 the emulated environment we're limiting ourselves to in Stage 1, these
-values are loaded from a combination of
-`aether-latest/roc-5g-models.json` and
-`aether-latest/sd-core-5g-values.yaml` as the respective applications
-are deployed.
+values are loaded from `aether-latest/roc-5g-models.json` and match
+the settings in `aether-latest/sd-core-5g-values.yaml`.
 
 Run Emulated RAN Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

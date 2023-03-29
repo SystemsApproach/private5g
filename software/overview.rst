@@ -19,8 +19,7 @@ and bring up their own Aether clusters.  As an alternative, Aether is
 also available as two self-contained software packages that are
 reasonably straightforward to install and run, even in a VM on your
 laptop. These packages were originally designed to support developers
-working on Aether components, but they also serve as a way to learn
-more about Aether. The two packages are:
+working on Aether components:
 
 * `Aether-in-a-Box (Aiab)
   <https://docs.aetherproject.org/master/developer/aiab.html>`__:
@@ -51,16 +50,16 @@ Hands-on Programming appendix of our companion SDN book.
    Systems Approach
    <https://sdn.systemsapproach.org/exercises.html>`__. November 2021.
 
-Both AiaB and RiaB make it possible to gain hands-on experience with
-the components described in this book, but a significant gap remains
-between these limited versions of Aether and an operational
-deployment of a 5G-enabled edge cloud.  To address that gap, there is
-an ongoing effort to re-package Aether in a way that provides an
-incremental path for users to:
+Both AiaB and RiaB provide a way to get started with the components
+described in this book, but a significant gap remains between these
+self-contained versions of Aether and an operational deployment of a
+5G-enabled edge cloud.  To address that gap, there is an ongoing
+effort to re-package Aether in a way that provides an incremental path
+for users to:
 
-* First learn about and play with Aether;
-* Then develop for and contribute to Aether; 
-* And finally deploy and operate Aether.
+* Learn about all the moving parts in Aether.
+* Contribute local customizations to Aether.
+* Deploy and operate Aether.
 
 The new packaging, called `Aether OnRamp
 <https://github.com/SystemsApproach/aether-onramp>`__, is derived from
