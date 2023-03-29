@@ -14,7 +14,7 @@ assume that server and the external radio are connected to the same L2
 network and share an IP subnet.  This is not a hard requirement for
 all deployments, but it does simplify communication between the
 external radio and the UPF running within Kubernetes on the server.
-Take note of the network interface on your server that provides L3
+Take note of the network interface on your server that provides
 connectivity to the external radio, for example by typing:
 
 .. code-block::
@@ -87,9 +87,12 @@ environment in the sections that follow, we recommend familiarizing
 yourself with ``aether-local/sd-core-5g-alt-values.yaml`` and
 ``aether-local/roc-5g-models.json`` (or their 4G counterparts).
 
-Finally, we suggest you modify the default settings for three
+Finally, we recommend you modify the default settings for three
 variables in ``MakefileVar.mk``, substituting your local interface for
-``enp193s0f0``:
+``enp193s0f0``. The ``CHARTS`` variable specifies which configuration
+to use, and as its name suggests, ``ENABLE_RANSIM`` specifies whether
+the system you deploy emulates the RAN or supports external small
+cells.
 
 .. code-block::
 
@@ -105,14 +108,13 @@ Prepare UEs
 
 5G-connected devices must have a SIM card, which you are responsible
 for creating and inserting.  You will need a SIM card writer (which
-are readily available for purchase on Amazon) and a *Public Land
-Mobile Nodework (PLMN)* identifier constucted from a valid MCC/MNC
-pair. For our purposes, we use two different PLMN ids: ``315010``
-conctructed from MCC=315 (US) and MNC=010 (CBRS), and ``00101``
-constructed from MCC=001 (TEST) and MNC=01 (TEST). You should use
-whtever values are appropriate for your local environment.  You then
-assign an IMSI and two secret keys to each SIM card. Throughout this
-section, we use the following values:
+are readily available for purchase on Amazon) and a PLMN identifier
+constucted from a valid MCC/MNC pair. For our purposes, we use two
+different PLMN ids: ``315010`` conctructed from MCC=315 (US) and
+MNC=010 (CBRS), and ``00101`` constructed from MCC=001 (TEST) and
+MNC=01 (TEST). You should use whtever values are appropriate for your
+local environment.  You then assign an IMSI and two secret keys to
+each SIM card. Throughout this section, we use the following values:
 
 * IMSI: each one is unique, matching pattern ``315010*********`` (15 digits)
 * OPc: ``69d5c2eb2e2e624750541d3bbc692ba5``
@@ -182,10 +184,10 @@ SD-Core is running correctly.
 Validating Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Regardless of which version of the Control Plane you run, 4G or 5G,
-the UPF pod implements the Core's User Plane. To verify that the UPF
-is propertly connected to the network (which is important because the
-UPF has to connect to the radio), you can check to see that the
+Regardless of whether you bring up a 4G or 5G version of the Control
+Plane, the UPF pod implements SD-Core's User Plane. To verify that the
+UPF is propertly connected to the network (which is important because
+the UPF has to connect to the radio), you can check to see that the
 Macvlan networks ``core`` and ``access`` are properly configured on
 your server. This can be done using ``ifconfig``, and you should see
 results similar to the following:

@@ -39,19 +39,17 @@ more about Aether. The two packages are:
 Note that these two packages do not include SD-Fabric, which depends
 on programmable switching hardware. Readers interested in learning
 more about that capability (including a P4-based UPF) should see the
-`Hands-on Programming
-<https://sdn.systemsapproach.org/exercises.html>`__ appendix of our
-companion SDN book.
+Hands-on Programming appendix of our companion SDN book.
   
 .. _reading_pronto:
 .. admonition:: Further Reading
 
-    `Pronto Project: Building Secure Networks Through Verifiable
-    Closed-Loop Control <https://prontoproject.org/>`__.
+   `Pronto Project: Building Secure Networks Through Verifiable
+   Closed-Loop Control <https://prontoproject.org/>`__.
 
-    N. Foster, *et al*. `Using Deep Programmability to put Network Owners
-    in Control <https://dl.acm.org/doi/10.1145/3431832.3431842>`__.
-    ACM SIGCOMM Computer Communications Review, October 2020.
+   `Hands-on Programming (Appendix). Software-Defined Networks: A
+   Systems Approach
+   <https://sdn.systemsapproach.org/exercises.html>`__. November 2021.
 
 Both AiaB and RiaB make it possible to gain hands-on experience with
 the components described in this book, but a significant gap remains
