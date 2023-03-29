@@ -458,39 +458,53 @@ subnet.)
 
 4. **Connect GPS.** Connect the small cell's GPS antenna to the GPS port,
    and place the antenna so it has line-of-site to the sky (i.e.,
-   place it in a window).
+   place it in a window). The management dashboard should report its
+   latitude, longitude, and fix time.
 
-5. **Configure Radio Parameters.** There are several parameters that
-   control the radio (e.g., see the ``Settings > NR Cell
-   Configuration`` page on the SERCOMM gNB), but it is usually
+5. **Spectrum Access System.** The reason each radio needs GPS is so
+   it can report its location to a Spectrum Access System (SAS), a
+   requirement in the US to coordinate access to the CBRS Spectrum in
+   the 3.5 GHz band. For example, the production deployment of Aether
+   uses the `Google SAS portal
+   <https://wirelessconnectivity.google.com/sas/welcome>`__, which the
+   small cell can be configured to query periodically (e.g., see the
+   ``Settings > SAS`` configuration page on the SERCOMM gNB). Acquiring
+   the credentials needed to access the SAS requires you go through a
+   certification process, but as a practical matter, that need not be
+   completed before you bring up the small cell for testing.
+
+6. **Configure Radio Parameters.** There are several parameters that
+   control the radio (e.g., see the ``Settings > NR Cell``
+   configuration page on the SERCOMM gNB), but it is usually
    sufficient to use the default settings when getting started.
 
-6. **Configure the PLMN.** Set the PLMN identifier on the small cell
+7. **Configure the PLMN.** Set the PLMN identifier on the small cell
    (``00101``) to match the MCC/MNC values (``001`` / ``01`` )
    specified in the Core.
 
-7. **Connect to Aether Control Plane.** Configure the AMF (5G) or MME (4G)
-   setting on the small cell with the IP address of your Aether
+8. **Connect to Aether Control Plane.** Configure the AMF (5G) or MME
+   (4G) setting on the small cell with the IP address of your Aether
    server (e.g., ``10.76.28.113``). Aether's SD-Core is configured to
    expose the corresponding AMF/MME via a well-known port, so the
    server's IP address is sufficient to establish connectivity. The
-   management dashboard on the small cell should confirm that
-   control interface is established.
+   management dashboard on the small cell should confirm that control
+   interface is established.
 
-8. **Connect to Aether User Plane.** As described in an earlier section,
-   the Aether User Plane (UPF) is running at IP address
-   ``192.168.252.3``. Connecting to that address requires installing
-   a route to subnet ``192.168.252.0/24``. How you install this route
-   is site-dependent. If the small cell provides a means to install
-   static routes, then a route to destination ``192.168.252.0/24``
-   via gateway ``10.76.28.113`` (the server hosting Aether) will work.
-   (This is the case for the SERCOMM eNB). If the small cell does not
-   allow static routes (as is the case for the SERCOMM gNB), then
-   ``10.76.28.113`` can be installed as the default gateway, but
-   doing so requires that your server also be configured to forward
-   IP packets on to the Internet.
+9. **Connect to Aether User Plane.** As described in an earlier
+   section, the Aether User Plane (UPF) is running at IP address
+   ``192.168.252.3``. Connecting to that address requires installing a
+   route to subnet ``192.168.252.0/24``. How you install this route is
+   device and site-dependent. If the small cell provides a means to
+   install static routes, then a route to destination
+   ``192.168.252.0/24`` via gateway ``10.76.28.113`` (the server
+   hosting Aether) will work.  (This is the case for the SERCOMM
+   eNB). If the small cell does not allow static routes (as is the
+   case for the SERCOMM gNB), then ``10.76.28.113`` can be installed
+   as the default gateway, but doing so requires that your server also
+   be configured to forward IP packets on to the Internet.
 
-9. **Run Diagnostics.** The small cell likely includes some level of
-   diagnostic support, for example, allowing you to run ``ping`` or
-   ``traceroute``. This can be used to verify connectivity.
+10. **Run Diagnostics.** The small cell likely includes some level of
+    diagnostic support, for example, allowing you to run ``ping`` or
+    ``traceroute``. This can be used to verify connectivity, first to
+    the UPF, and then to the Internet the UPF routes to.
 
