@@ -433,7 +433,7 @@ promotional material, as part of the case for why a 5G upgrade would
 be a worthwhile investment, but the consequence of those technologies
 now finding their way into the mainstream is that new features can be
 introduced rapidly and deployed continuously. At some point, the
-frequency of continual improvements render generational distinctions
+frequency of continual improvements renders generational distinctions
 irrelevant.
 
 The second factor is that agility isn’t only about cadence; it’s also
