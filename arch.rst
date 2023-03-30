@@ -157,7 +157,7 @@ the overall architecture.
     :width: 400px
     :align: center
     
-    Mobile Core divided into a Control Plan and a User Plane, an
+    Mobile Core divided into a Control Plane and a User Plane, an
     architectural feature known as CUPS: Control and User Plane
     Separation.
 
