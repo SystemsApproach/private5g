@@ -50,7 +50,7 @@ in 5G.
 The mobile cellular network provides wireless connectivity to devices
 that are (potentially) on the move. These devices, which are known as *User
 Equipment (UE)*, have traditionally corresponded to mobile phones and
-tablets, but increasingly including cars, drones, industrial and
+tablets, but increasingly include cars, drones, industrial and
 agricultural machines, robots, home appliances, medical devices, and
 so on. In some cases, the UEs may be devices that do not move, e.g.,
 router interfaces using cellular connectivity to provide broadband
