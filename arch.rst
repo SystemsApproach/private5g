@@ -61,7 +61,7 @@ access to remote dwellings.
     :width: 600px
     :align: center
 	    
-    Mobile cellular networks consists of a Radio Access Network (RAN)
+    Mobile cellular networks consist of a Radio Access Network (RAN)
     and a Mobile Core.
 
 As shown in :numref:`Figure %s <fig-cellular>`, the mobile cellular
