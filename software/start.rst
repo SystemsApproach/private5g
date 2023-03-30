@@ -1,4 +1,3 @@
-
 Stage 1: Emulated RAN
 -----------------------
 
@@ -135,7 +134,7 @@ specifies several configuration parameters for the cluster. After the
 Of particular note, this example cluster runs on a server at IP
 address ``10.76.28.113`` and we have instructed Kubernetes to allow
 service ports ranging from ``2000`` to ``36767``. We will see both of
-these settings come into play as we ramp up the configuration.
+these settings come into play as we move to more complex blueprints.
 
      
 Configure the Network

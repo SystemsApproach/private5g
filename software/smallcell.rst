@@ -417,7 +417,7 @@ gNodeB Setup
 
 Once the SD-Core is up and running, we are ready to bring up the
 external gNodeB. The details of how to do this depend on the small
-cell radio you are using, but we identify the main issues you need to
+cell you are using, but we identify the main issues you need to
 address. For examples of small cells commonly used with Aether, we
 recommend the following SERCOMM devices from the ONF MarketPlace:
 
@@ -438,7 +438,19 @@ We use details from the SERCOMM gNB in the following to make the
 discussion concrete, where the gNB is assigned IP address
 ``10.76.28.187`` and the server hosting Aether is assigned IP address
 ``10.76.28.113``. (Recall that we assume these are both on the same
-subnet.)
+subnet.)  See :numref:`Figure %s <fig-sercomm>` for a screenshot of
+the SERCOMM gNB management dashboard, which we reference in the
+instructions that follow.
+
+.. _fig-sercomm:
+.. figure:: ../figures/Sercomm.png 
+    :width: 500px
+    :align: center
+    
+    Management dashboard on the Sercomm gNB, showing the dropdown
+    ``Settings`` menu overlayed on the ``NR Cell Configuration`` page
+    (which shows default radio settings).
+
 
 1. **Connect to Management Interface.** Start by connecting a laptop
    directly to the LAN port on the small cell, pointing your laptop's web
@@ -447,64 +459,66 @@ subnet.)
    (e.g., ``10.10.10.100``).  Once connected, log in with the provided
    credentials (``login=sc_femto``, ``password=scHt3pp``).
 
-2. **Configure WAN.** From the dashboard, configure how the small cell
-   connects to the Internet via its WAN port, either dynamically using
-   DHCP or statically by setting the device's IP address
-   (``10.76.28.187``) and default gateway (``10.76.28.1``).
+2. **Configure WAN.** Visit the ``Settings > WAN`` page to configure
+   how the small cell connects to the Internet via its WAN port,
+   either dynamically using DHCP or statically by setting the device's
+   IP address (``10.76.28.187``) and default gateway (``10.76.28.1``).
 
 3. **Access Remote Management.** Once on the Internet, it should be
    possible to reach the management dashboard without being directly
    connected to the LAN port (``https://10.76.28.187``).
 
-4. **Connect GPS.** Connect the small cell's GPS antenna to the GPS port,
-   and place the antenna so it has line-of-site to the sky (i.e.,
-   place it in a window). The management dashboard should report its
-   latitude, longitude, and fix time.
+4. **Connect GPS.** Connect the small cell's GPS antenna to the GPS
+   port, and place the antenna so it has line-of-site to the sky
+   (i.e., place it in a window). The ``Status`` page of the management
+   dashboard should report its latitude, longitude, and fix time.
 
 5. **Spectrum Access System.** The reason each radio needs GPS is so
    it can report its location to a Spectrum Access System (SAS), a
    requirement in the US to coordinate access to the CBRS Spectrum in
    the 3.5 GHz band. For example, the production deployment of Aether
    uses the `Google SAS portal
-   <https://wirelessconnectivity.google.com/sas/welcome>`__, which the
-   small cell can be configured to query periodically (e.g., see the
-   ``Settings > SAS`` configuration page on the SERCOMM gNB). Acquiring
-   the credentials needed to access the SAS requires you go through a
-   certification process, but as a practical matter, that need not be
-   completed before you bring up the small cell for testing.
+   <https://cloud.google.com/spectrum-access-system/docs/overview>`__,
+   which the small cell can be configured to query periodically. To do
+   so, visit the ``Settings > SAS``.  Acquiring the credentials needed
+   to access the SAS requires you go through a certification process,
+   but as a practical matter, it may not be necessary to complete that
+   process before testing an isolated/low-power femto cell indoors.
 
-6. **Configure Radio Parameters.** There are several parameters that
-   control the radio (e.g., see the ``Settings > NR Cell``
-   configuration page on the SERCOMM gNB), but it is usually
-   sufficient to use the default settings when getting started.
+6. **Configure Radio Parameters.** Visit the ``Settings > NR Cell
+   Configuration`` page (shown in the figure) to set parameters that
+   control the radio. It is usually sufficient to use the default
+   settings when getting started.
 
-7. **Configure the PLMN.** Set the PLMN identifier on the small cell
-   (``00101``) to match the MCC/MNC values (``001`` / ``01`` )
-   specified in the Core.
+7. **Configure the PLMN.** Visit the ``Settings > 5GC`` page to set
+   the PLMN identifier on the small cell (``00101``) to match the
+   MCC/MNC values (``001`` / ``01`` ) specified in the Core.
 
-8. **Connect to Aether Control Plane.** Configure the AMF (5G) or MME
-   (4G) setting on the small cell with the IP address of your Aether
+8. **Connect to Aether Control Plane.** Also on the ``Settings > 5GC``
+   page, define the AMF Address to be the IP address of your Aether
    server (e.g., ``10.76.28.113``). Aether's SD-Core is configured to
-   expose the corresponding AMF/MME via a well-known port, so the
-   server's IP address is sufficient to establish connectivity. The
-   management dashboard on the small cell should confirm that control
-   interface is established.
+   expose the corresponding AMF via a well-known port, so the server's
+   IP address is sufficient to establish connectivity. (The same is
+   true for the MME on a 4G small cell.) The ``Status`` page of the
+   management dashboard should confirm that control interface is
+   established.
 
 9. **Connect to Aether User Plane.** As described in an earlier
    section, the Aether User Plane (UPF) is running at IP address
-   ``192.168.252.3``. Connecting to that address requires installing a
-   route to subnet ``192.168.252.0/24``. How you install this route is
-   device and site-dependent. If the small cell provides a means to
-   install static routes, then a route to destination
-   ``192.168.252.0/24`` via gateway ``10.76.28.113`` (the server
-   hosting Aether) will work.  (This is the case for the SERCOMM
-   eNB). If the small cell does not allow static routes (as is the
-   case for the SERCOMM gNB), then ``10.76.28.113`` can be installed
-   as the default gateway, but doing so requires that your server also
-   be configured to forward IP packets on to the Internet.
+   ``192.168.252.3`` in both the 4G and 5G cases. Connecting to that
+   address requires installing a route to subnet
+   ``192.168.252.0/24``. How you install this route is device and
+   site-dependent. If the small cell provides a means to install
+   static routes, then a route to destination ``192.168.252.0/24`` via
+   gateway ``10.76.28.113`` (the server hosting Aether) will work.
+   (This is the case for the SERCOMM eNB). If the small cell does not
+   allow static routes (as is the case for the SERCOMM gNB), then
+   ``10.76.28.113`` can be installed as the default gateway, but doing
+   so requires that your server also be configured to forward IP
+   packets on to the Internet.
 
-10. **Run Diagnostics.** The small cell likely includes some level of
-    diagnostic support, for example, allowing you to run ``ping`` or
-    ``traceroute``. This can be used to verify connectivity, first to
-    the UPF, and then to the Internet the UPF routes to.
+10. **Run Diagnostics.** Visit the ``Support`` page to run
+    diagnostics, for example, ``ping`` and ``traceroute``. This can be
+    used to verify connectivity, first to the UPF, and then to the
+    rest of the Internet via the UPF.
 

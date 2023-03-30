@@ -51,20 +51,20 @@ Hands-on Programming appendix of our companion SDN book.
    <https://sdn.systemsapproach.org/exercises.html>`__. November 2021.
 
 Both AiaB and RiaB provide a way to get started with the components
-described in this book, but a significant gap remains between these
-canned versions of Aether and an operational 5G-enabled edge cloud
-deployed into a particular target environment.  To address that gap,
-there is an ongoing effort to re-package Aether in a way that provides
-an incremental path for users to:
+described in this book, but a significant gap remains between this
+these self-contained versions of Aether and an operational 5G-enabled
+edge cloud deployed into a particular target environment.  To address
+that gap, there is an ongoing effort to re-package Aether in a way
+that provides an incremental path for users to:
 
 * Learn about all the moving parts in Aether.
-* Customize Aether for different target environments.
+* Customize Aether blueprints for different environments.
 * Deploy and operate Aether with live traffic.
 
 The new packaging, called `Aether OnRamp
-<https://github.com/SystemsApproach/aether-onramp>`__, is derived from
-AiaB, refactored to help users step through a sequence of increasingly
-complex configurations. The goal of OnRamp is to prescribe a (mostly)
+<https://github.com/SystemsApproach/aether-onramp>`__, started with
+AiaB, but has been refactored to help users step through a sequence of
+increasingly complex blueprints. The goal is to prescribe a (mostly)
 linear sequence of steps a new user can follow to bring up an
 operational system that runs 24/7 and supports live 5G workloads.
 Aether OnRamp is still a work in progress, but anyone interested in
