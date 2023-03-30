@@ -58,7 +58,7 @@ that gap, there is an ongoing effort to re-package Aether in a way
 that provides an incremental path for users to:
 
 * Learn about all the moving parts in Aether.
-* Customize Aether blueprints for different environments.
+* Customize Aether for different target environments.
 * Deploy and operate Aether with live traffic.
 
 The new packaging, called `Aether OnRamp

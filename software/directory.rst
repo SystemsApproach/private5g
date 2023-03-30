@@ -71,8 +71,8 @@ chapter of our companion Edge Cloud Operations book.
 
 Finally, Aether OnRamp—the focus of this appendix—defines one possible
 way to integrate all of the above artifacts into an end-to-end system
-that can be deployed on set of target blueprints. OnRamp is available
-on GitHub:
+that can be deployed according to a set of blueprints. OnRamp is
+available on GitHub:
 
  | https://github.com/SystemsApproach/aether-onramp
 
