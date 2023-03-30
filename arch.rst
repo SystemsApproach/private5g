@@ -20,7 +20,7 @@ Chapter 2:  Architecture
    in on best practices in cloud-based managed services.
    
 This chapter identifies the main architectural components of the
-mobile cellular networks. We need to introduce some terminology to do
+mobile cellular network. We need to introduce some terminology to do
 this, which can be confusing for those whose networking background
 comes from the Internet. This is partly because some of what needs to
 happen in a mobile network, such as keeping track of which base
