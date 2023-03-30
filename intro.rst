@@ -418,7 +418,7 @@ technologies.
 From the moment MNOs started rolling out 5G in 2019, people started
 talking about what comes next. The obvious answer is 6G, but it's not
 at all clear that the decadal generations of the past 40 years will
-continue into the future. Today, you often hear alternatives like
+continue into the future. Today, you hear alternatives like
 “NextG” and “Beyond 5G” more often than 6G, which could be a sign that
 the industry is undergoing a fundamental shift. And there is an
 argument that we're in the midst of a sea change that will render the
