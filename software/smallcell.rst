@@ -482,8 +482,9 @@ instructions that follow.
    which the small cell can be configured to query periodically. To do
    so, visit the ``Settings > SAS``.  Acquiring the credentials needed
    to access the SAS requires you go through a certification process,
-   but as a practical matter, it may not be necessary to complete that
-   process before testing an isolated/low-power femto cell indoors.
+   but as a practical matter, it may be possible to test an
+   isolated/low-power femto cell indoors before completing that
+   process. Consult with your local network administrator.
 
 6. **Configure Radio Parameters.** Visit the ``Settings > NR Cell
    Configuration`` page (shown in the figure) to set parameters that
