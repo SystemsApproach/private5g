@@ -20,7 +20,7 @@ Chapter 2:  Architecture
    in on best practices in cloud-based managed services.
    
 This chapter identifies the main architectural components of the
-mobile cellular networks. We need to introduce some terminology to do
+mobile cellular network. We need to introduce some terminology to do
 this, which can be confusing for those whose networking background
 comes from the Internet. This is partly because some of what needs to
 happen in a mobile network, such as keeping track of which base
@@ -50,7 +50,7 @@ in 5G.
 The mobile cellular network provides wireless connectivity to devices
 that are (potentially) on the move. These devices, which are known as *User
 Equipment (UE)*, have traditionally corresponded to mobile phones and
-tablets, but increasingly including cars, drones, industrial and
+tablets, but increasingly include cars, drones, industrial and
 agricultural machines, robots, home appliances, medical devices, and
 so on. In some cases, the UEs may be devices that do not move, e.g.,
 router interfaces using cellular connectivity to provide broadband
@@ -61,7 +61,7 @@ access to remote dwellings.
     :width: 600px
     :align: center
 	    
-    Mobile cellular networks consists of a Radio Access Network (RAN)
+    Mobile cellular networks consist of a Radio Access Network (RAN)
     and a Mobile Core.
 
 As shown in :numref:`Figure %s <fig-cellular>`, the mobile cellular
@@ -157,7 +157,7 @@ the overall architecture.
     :width: 400px
     :align: center
     
-    Mobile Core divided into a Control Plan and a User Plane, an
+    Mobile Core divided into a Control Plane and a User Plane, an
     architectural feature known as CUPS: Control and User Plane
     Separation.
 
