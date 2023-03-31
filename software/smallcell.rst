@@ -42,66 +42,100 @@ In this example, the interface is ``enp193s0f0``, although we refer to
 it using the ``DATA_IFACE`` variable throughout this section.
 	   
 
-Local Configuration Changes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Local Blueprint
+~~~~~~~~~~~~~~~
 
 Unlike earlier stages that took advantage of canned configurations,
 adding a physical base station means you will need to account for
 specifics of your local environment. Editing various configuration
 files is a necessary step in customizing a deployment, and so Aether
-OnRamp establishes a simple convention to help manage the process.
+OnRamp establishes a simple convention to help manage that process.
 
-Specifically, the ``configs`` directory includes four files:
-``latest``, ``local``, ``release-2.0``, and ``release-2.1``.  These
-files are the ultimate source of information for four different
-deployment scenarios—each specifies (a) a set of Helm Charts, and (b)
-a set of override values for those charts.  Up to this point we have
-been using ``latest``; it is the default value for Makefile variable
-``CHARTS``. For the purpose of this stage, we will be using ``local``,
-which is identical to ``latest``, except it points to alternative
-override value files for the SD-Core, and alternative model files for
-the ROC (as explained below).
+Specifically, the ``blueprints`` directory currently defines four
+distinct ways to configure and deploy Aether:
+
+* ``release-2.0``: Deploys Aether v2.0 in a single server/VM, running
+  an emulated RAN.
+
+* ``release-2.1``: Deploys Aether v2.1 in a single server/VM, running
+  an emulated RAN.
+
+* ``latest``: Deploys the latest version of Aether in a single
+  server/VM, running an emulated RAN.
+
+* ``radio``: Deploys the latest version of Aether in a single
+  server/VM, connected to an external small cell radio.
+
+Up to this point, we have been using ``latest`` as our default
+blueprint, but for this stage, we will shift to ``radio``.
+
+Each blueprint specifies three sets of parameters that define how
+Aether is configured and deployed: (1) a set of Makefile variables
+that customize the deployment process; (2) a set of Helm Charts that
+customize the Kubernetes workload that gets deployed; and (3) a set of
+value override (and similar) files that customize how the
+microservices in that workload are configured. All of these parameters
+are defined in the blueprint's ``config`` file, so using the ``radio``
+blueprint as an example:
 
 .. code-block::
 
-   $ cd configs
-   $ diff latest local
-   22,25c22,25
-   < ROC_4G_MODELS  := $(MAKEDIR)/aether-latest/roc-4g-models.json
-   < ROC_5G_MODELS  := $(MAKEDIR)/aether-latest/roc-5g-models.json
-   < 4G_CORE_VALUES := $(MAKEDIR)/aether-latest/sd-core-4g-values.yaml
-   < 5G_CORE_VALUES := $(MAKEDIR)/aether-latest/sd-core-5g-values.yaml
-   ---
-   > ROC_4G_MODELS  := $(MAKEDIR)/aether-local/roc-4g-models.json
-   > ROC_5G_MODELS  := $(MAKEDIR)/aether-local/roc-5g-models.json
-   > 4G_CORE_VALUES := $(MAKEDIR)/aether-local/sd-core-4g-values.yaml
-   > 5G_CORE_VALUES := $(MAKEDIR)/aether-local/sd-core-5g-values.yaml
+   $ cat blueprints/radio/config
+   # Configuration or External (4G or 5G) Radio Blueprint
+
+   # Variables
+   ENABLE_RANSIM := false
+   LOCAL_CHARTS := false
+   DATA_IFACE := eth0
+
+   # For installing the Core
+   SD_CORE_CHART            := aether/sd-core
+
+   # For installing the ROC
+   AETHER_ROC_UMBRELLA_CHART := aether/aether-roc-umbrella
+   ATOMIX_CONTROLLER_CHART   := atomix/atomix-controller
+   ATOMIX_RAFT_STORAGE_CHART := atomix/atomix-raft-storage
+   ATOMIX_RUNTIME_CHART      := atomix/atomix-runtime --version 0.1.9  # v0.2.0 not working
+   ONOS_OPERATOR_CHART       := onosproject/onos-operator
+
+   # For installing monitoring
+   RANCHER_MONITORING_CRD_CHART := rancher/rancher-monitoring-crd
+   RANCHER_MONITORING_CHART     := rancher/rancher-monitoring
+
+   # Helm Value Overrides and other Config Files
+   ROC_VALUES     := $(BLUEPRINTDIR)/roc-values.yaml
+   ROC_DEFAULTENT_MODEL := $(BLUEPRINTDIR)/roc-defaultent-model.json
+   ROC_4G_MODELS  := $(BLUEPRINTDIR)/roc-4g-models.json
+   ROC_5G_MODELS  := $(BLUEPRINTDIR)/roc-5g-models.json
+   4G_CORE_VALUES := $(BLUEPRINTDIR)/sd-core-4g-values.yaml
+   5G_CORE_VALUES := $(BLUEPRINTDIR)/sd-core-5g-values.yaml
+   TEST_APP_VALUES := $(BLUEPRINTDIR)/5g-test-apps-values.yaml
+   MONITORING_VALUES := $(BLUEPRINTDIR)/monitoring.yaml
 
 As your deployment deviates more and more from the release—either to
-account for differences in your target environment or changes you make
-to the software being deployed—you can record these changes in
-``configs/local`` and ``aether-local/`` (or other variants as
-circumstances dictate).  Since we will be editing the ``yaml`` and
-``json`` files in ``aether-local/`` to reflect your particular
-environment in the sections that follow, we recommend familiarizing
-yourself with ``aether-local/sd-core-5g-alt-values.yaml`` and
-``aether-local/roc-5g-models.json`` (or their 4G counterparts).
+account for differences in your target computing environment or
+changes you make to the software being deployed—you can record these
+changes in these or other blueprints that you create. For the purpose
+of this section, we will simply edit files in the ``blueprints/radio``
+directory, but you may want to make your own local blueprint
+directory, copy these files into it, and make your changes there.
 
-Finally, we recommend you modify the default settings for three
-variables in ``MakefileVar.mk``, substituting your local interface for
-``enp193s0f0``. The ``CHARTS`` variable specifies which configuration
-to use, and as its name suggests, ``ENABLE_RANSIM`` specifies whether
-the system you deploy emulates the RAN or supports external small
-cells.
+At this point, you need to make two edits. The first is to the
+``DATA_IFACE`` variable in ``blueprints/radio/config``, changing it
+from ``eth0`` to whatever name you noted earlier (e.g.,
+``enp193s0f0``). The second is to the default ``BLUEPRINT`` setting in
+``MakefileVar.mk``, changing it from ``latest`` to
+``radio``. Alternatively, you can modify that variable on a
+case-by-case basis; for example:
 
 .. code-block::
 
-   CHARTS ?= local
-   ENABLE_RANSIM ?= false
-   DATA_IFACE ?= enp193s0f0
+   BLUEPRINT=radio make net-prep
 
-We assume these edits in the sections that follow, although you can
-instead override the current defaults on a case-by-case basis.
+Going forward, you will be editing the ``yaml`` and ``json`` files in
+the ``radio`` blueprint, so we recommend familiarizing yourself with
+``radio/sd-core-5g-alt-values.yaml`` and ``radio/roc-5g-models.json``
+(or their 4G counterparts).
    
 Prepare UEs 
 ~~~~~~~~~~~~
@@ -130,10 +164,10 @@ will need to configure ``internet`` as the *Access Point Name (APN)*.
 
 Finally, modify the the ``subscribers`` block of the
 ``omec-sub-provision`` section in file
-``aether-local/sd-core-5g-values.yaml`` to record the IMSI, OPc, and
+``radio/sd-core-5g-values.yaml`` to record the IMSI, OPc, and
 Key values configured onto your SIM cards. The block also defines a
 sequence number that is intended to thwart replay attacks. (As a
-reminder, these values go in ``aether-local/sd-core-4g-values.yaml``
+reminder, these values go in ``radio/sd-core-4g-values.yaml``
 if you are using a 4G small cell.) For example, the following code
 block adds IMSIs between ``315010999912301`` and ``315010999912303``:
 
@@ -153,11 +187,8 @@ Bring Up Aether
 You are now ready to bring Aether on-line, but it is safest to start
 with a fresh install of Kubernetes, so first type ``make clean`` if
 you still have a cluster running from an earlier stage. Then execute
-the following two Make targets, but this time having specified the
-local configuration (``CHARTS=aether-local``), disabled the RAN
-emulator (``ENABLE_RANSIM=false``), and identified the network
-interface (``DATA_IFACE=enp193s0f0``) with the edits to the respective
-variables in ``MakefileVar.mk``:
+the following two Make targets (again assuming you have already edited
+the ``BLUEPRINT`` variable in ``MakefileVar.mk``):
 
 .. code-block::
 
@@ -250,8 +281,8 @@ The above output from ``ifconfig`` shows the two outside interfaces;
 
 All four are Macvlan interfaces bridged with ``DATA_IFACE``.  There
 are two subnets on this bridge: the two ``access`` interfaces are on
-192.168.252.0/24 and the two ``core`` interfaces are on
-192.168.250.0/24.  It is helpful to think of two links, called
+``192.168.252.0/24`` and the two ``core`` interfaces are on
+``192.168.250.0/24``.  It is helpful to think of two links, called
 ``access`` and ``core``, connecting the hosting server and the UPF.
 
 The ``access`` interface inside the UPF has an IP address of
@@ -276,7 +307,7 @@ The high-level behavior of the UPF is to forward packets between its
 removing/adding GTP encapsulation on the ``access`` side.  Upstream
 packets arriving on the ``access`` side from a UE have their GTP
 headers removed and the raw IP packets are forwarded to the ``core``
-interface.  The routes inside the UPF's `bessd` container will look
+interface.  The routes inside the UPF's ``bessd`` container will look
 something like this:
 
 .. code-block::
@@ -290,7 +321,7 @@ something like this:
    192.168.250.0/24 dev core proto kernel scope link src 192.168.250.3
    192.168.252.0/24 dev access proto kernel scope link src 192.168.252.3
 
-The default route via 192.168.250.1 is directing upstream packets to
+The default route via ``192.168.250.1`` is directing upstream packets to
 the Internet via the ``core`` interface, with a next hop of the
 ``core`` interface outside the UPF.  These packets undergo source NAT
 in the kernel and are sent to the IP destination in the packet.  The
@@ -340,19 +371,18 @@ Runtime Control
 Aether defines an API (and associated GUI) for managing connectivity
 at runtime. Even though some connectivity parameters are passed
 directly to the SD-Core at startup using Helm Chart overrides, (e.g.,
-the IMSI-related edits of ``aether-local/sd-core-5g-values.yaml``
-described above), others correspond to abstractions that ROC layers on
-top of SD-Core, where file ``aether-local/roc-5g-models.json``
-"bootstraps" the ROC database with an initial set of data (saving you
-from a laborious GUI session).
+the IMSI-related edits of ``radio/sd-core-5g-values.yaml`` described
+above), others correspond to abstractions that ROC layers on top of
+SD-Core, where file ``radio/roc-5g-models.json`` "bootstraps"
+the ROC database with an initial set of data (saving you from a
+laborious GUI session).
 
 To bring up the ROC, you first need to edit
-``aether-local/roc-5g-models.json`` to record the same IMSI
-information as before, editing, adding or removing ``sim-card``
-entries as necessary. Note that only the IMSIs need to match the
-earlier data; the ``sim-id`` and ``display-name`` values are arbitrary
-and need only be consistently *within*
-``aether-local/roc-5g-models.json``.
+``radio/roc-5g-models.json`` to record the same IMSI information as
+before, editing, adding or removing ``sim-card`` entries as
+necessary. Note that only the IMSIs need to match the earlier data;
+the ``sim-id`` and ``display-name`` values are arbitrary and need only
+be consistently *within* ``radio/roc-5g-models.json``.
 
 .. code-block::
 
@@ -380,7 +410,7 @@ Then type
    $ make 5g monitoring
 
 To see these initial configuration values using the GUI, open the
-dashboard available at `http://<server-ip>:31194`. If you select
+dashboard available at ``http://<server-ip>:31194``. If you select
 ``Configuration > Site`` from the drop-down menu at top right, and
 click the ``Edit`` icon associated with the ``Aether Site`` you can
 see (and potentially change) the following values:
@@ -401,12 +431,12 @@ drop-down menu at the top right, and adding a new device group.  When
 you are done with these edits, select the ``Basket`` icon at top right
 and click the ``Commit`` button.
 
-As currently configured, the Device-Group information is duplicated
-between ``aether-loca/sd-core-5g-values.yaml`` and
-``aether-local/roc-5g-models.json``. This makes it possible to bring
-up the SD-Core without the ROC, for example as we just did to verify
-the configuration, but it can lead to problems of keeping the two in
-sync.  As an exercise, you can delete the *Device-Group* blocks in the
+As currently configured, the *Device-Group* information is duplicated
+between ``radio/sd-core-5g-values.yaml`` and
+``radio/roc-5g-models.json``. This makes it possible to bring up the
+SD-Core without the ROC, for example as we just did to verify the
+configuration, but it can lead to problems of keeping the two in sync.
+As an exercise, you can delete the *Device-Group* blocks in the
 former, restart the SD-Core, and see that the latter brings the Aether
 up in the correct state. Once running, changes should be made via the
 ROC (either the GUI or the API).
@@ -419,7 +449,7 @@ Once the SD-Core is up and running, we are ready to bring up the
 external gNodeB. The details of how to do this depend on the small
 cell you are using, but we identify the main issues you need to
 address. For examples of small cells commonly used with Aether, we
-recommend the following SERCOMM devices from the ONF MarketPlace:
+recommend the two SERCOMM devices from the ONF MarketPlace:
 
 .. _reading_sercomm:
 .. admonition:: Further Reading

@@ -89,6 +89,7 @@ Tofino
 UE
 UPF
 UDM
+VM
 Vachuska
 Virtualized
 vSwitch
