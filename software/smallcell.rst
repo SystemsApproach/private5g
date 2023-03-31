@@ -473,8 +473,8 @@ instructions that follow.
    (i.e., place it in a window). The ``Status`` page of the management
    dashboard should report its latitude, longitude, and fix time.
 
-5. **Spectrum Access System.** The reason each radio needs GPS is so
-   it can report its location to a Spectrum Access System (SAS), a
+5. **Spectrum Access System.** One reason the radio needs GPS is so it
+   can report its location to a Spectrum Access System (SAS), a
    requirement in the US to coordinate access to the CBRS Spectrum in
    the 3.5 GHz band. For example, the production deployment of Aether
    uses the `Google SAS portal
