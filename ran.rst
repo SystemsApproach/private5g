@@ -368,20 +368,20 @@ example, B4) is compelling.
 One way to characterize xApps is based on the current practice of
 controlling the mobile link at two different levels. At a fine-grained
 level, per-node and per-link control are conducted using the RRM
-functions that are distributed across the individual base stations.\ [#]_
-RRM functions include scheduling, handover control, link and
+functions that are distributed across the individual base stations.\
+[#]_ RRM functions include scheduling, handover control, link and
 carrier aggregation control, bearer control, and access control.  At a
 coarse-grained level, regional mobile network optimization and
 configuration is conducted using *Self-Organizing Network (SON)*
 functions. These functions oversee neighbor lists, manage load
 balancing, optimize coverage and capacity, aim for network-wide
-interference mitigation, centrally configured parameters, and so on. As
-a consequence of these two levels of control, it is not uncommon to
-see reference to *RRM Applications* and *SON Applications*,
-respectively, in O-RAN documents for SD-RAN. For example, the
-Interference Management and Load Balancing xApps in :numref:`Figure %s
-<fig-ran-controller>` are SON Applications, while the other two xApps
-are RRM Applications.
+interference mitigation, manage centrally configured parameters, and
+so on. As a consequence of these two levels of control, it is not
+uncommon to see reference to *RRM Applications* and *SON
+Applications*, respectively, in O-RAN documents for SD-RAN. For
+example, the Interference Management and Load Balancing xApps in
+:numref:`Figure %s <fig-ran-controller>` are SON Applications, while
+the other two xApps are RRM Applications.
 
 .. [#] Pedantically, Radio Resource Management (RRM) is another name
        for the collection of control functionality typically

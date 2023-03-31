@@ -190,8 +190,8 @@ implements the Internet’s so-called *last mile*. (Another common
 access technology is *Passive Optical Networks (PON)*, colloquially
 known as Fiber-to-the-Home.) These mobile access networks have
 historically been provided by both big and small *Mobile Network
-Operators (MNOs)*. Global MNOs like AT&T run access networks at
-thousands of aggregation points of presence across a country like the
+Operators (MNOs)*. Global MNOs such as AT&T run access networks at
+thousands of aggregation points of presence across a country such as the
 US, along with a national backbone that interconnects those
 sites. Small regional and municipal MNOs might run an access network
 with one or two points of presence, and then connect to the rest of
@@ -225,7 +225,7 @@ and it is reasonable to think of them as defining the edge of an
 operator-managed access network. For simplicity, we sometimes use the
 term “Central Office” as a synonym for both types of edge sites.
 
-Finally, one aspect the the mobile network that may not be obvious
+Finally, one aspect of the mobile network that may not be obvious
 from :numref:`Figure %s <fig-global>` is that it supports global
 connectivity, independent of the Internet (which is technically just
 one of many available backbone technologies). That is, the cellular
@@ -323,7 +323,7 @@ commonly referred to as a *hybrid cloud*.
     managed cloud service.       
    
 Hosting a 5G connectivity service on an edge cloud is perfectly
-aligned with one of the most pronounce trends in cloud computing:
+aligned with one of the most pronounced trends in cloud computing:
 moving elements of the cloud from the datacenter to locations that are
 in close proximity to end users and their devices. Before looking at
 how to realize 5G on an edge cloud, we start by considering why edge
@@ -344,7 +344,8 @@ end users.
 
 The idea of such deployments is to first collect operational data on
 assets and infrastructure, from sensors, video feeds and telemetry
-from machinery. It then applies ML to this data to gain insights,
+from machinery. It then applies Machine Learning (ML) or other forms
+of analysis to this data to gain insights,
 identify patterns and predict outcomes (e.g., when a device is likely
 to fail). The final step is to automate industrial processes so as to
 minimize human intervention and enable remote operations (e.g., power
@@ -356,7 +357,7 @@ But precisely where this edge is *physically* located depends on who
 you ask. If you ask a network operator that already owns and operates
 thousands of Central Offices, then their Central Offices are an
 obvious answer.  Others might claim the edge is located at the 14,000
-Starbucks across the US, and still others might point to the
+Starbucks locations (for example) across the US, and still others might point to the
 tens of thousands of cell towers spread across the globe. Our approach
 is to be location agnostic, but to make the discussion concrete, we
 use enterprises as our exemplar deployment.
@@ -375,14 +376,14 @@ advantage of the same economies of scale and feature velocity as cloud
 providers. CORD gave them a general architecture to work towards, but
 also an open source Kubernetes-based reference implementation to model
 their solutions on. That original implementation of CORD is the direct
-predecessor to the Aether platform we use as a reference
+predecessor to the Aether platform that we use as a reference
 implementation in this book.
 
 .. _reading_cord:
 .. admonition:: Further Reading
 
     L. Peterson, *et al*. `Central Office Re-architected as a
-    Datacenter, IEEE Communications.
+    Datacenter.
     <https://wiki.opencord.org/download/attachments/1278027/PETERSON_CORD.pdf>`__.
     IEEE Communications, October 2016.
 
@@ -397,7 +398,7 @@ how clouds are built. This includes the use of *commodity hardware*
 *microservices* (also referred to as *cloud native*), and
 *Software-Defined Networks (SDN)*. It is also helpful to have an
 appreciation for how cloud software is developed, tested, deployed, and
-operated, including practices like *DevOps* and *Continuous Integration
+operated, including practices such as *DevOps* and *Continuous Integration
 / Continuous Deployment (CI/CD)*. We recommend two companion books to
 help fill the gaps in your understanding of these foundational
 technologies.

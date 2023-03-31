@@ -132,6 +132,7 @@ eNodeBs
 entral
 ethernet
 evolvable
+femto
 ffice
 frontend
 fronthaul
