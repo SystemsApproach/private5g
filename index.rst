@@ -18,6 +18,7 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    :caption: Table of Contents 
    :glob:
 
+   foreword.rst
    preface.rst	     
    intro.rst
    arch.rst
