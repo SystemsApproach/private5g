@@ -62,9 +62,10 @@ corrections to the book, including:
 - Andy Bavier
 - Edmar Candeia Gurjão  
 - Mugahed Izzeldin
-- Robert MacDavid 
+- Robert MacDavid
+- Simon Leinen  
 
 The picture of a Magma deployment in Chapter 5 was provided by Shaddi Hasan.
 
 | Larry Peterson, Oguz Sunay, and Bruce Davie
-| January 2023
+| April 2023
