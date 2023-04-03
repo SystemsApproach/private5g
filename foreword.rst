@@ -55,7 +55,7 @@ access network, and how the pieces come together to be more than the
 sum of their parts. More than that, the book shows that, despite the
 complexity of the 3GPP cellular standards and the long and frustrating
 history of closed network equipment in the cellular networking space,
-open-source software is gaining a foothold. Open-source platforms like
+open source software is gaining a foothold. Open source platforms like
 Aether and Magma–both discussed in this book–are seeing practical
 deployment in a wide variety of settings. The book even has a guide
 for readers to bring up the Aether platform, including a 5G small
@@ -65,7 +65,7 @@ cell.
 For me, then, the story comes full circle. Private 5G networks are
 something you can touch, code, and deploy yourself. Armed with the
 knowledge of how 5G access networks work, and with hands-on experience
-with open-source software, just imagine the places you’ll go!
+with open source software, just imagine the places you’ll go!
 
 | Jennifer Rexford
 | Princeton, New Jersey
