@@ -170,16 +170,16 @@ Make targets:
    $ make 5g-roc
    $ make 5g-monitoring
 
-The first command brings up ROC and loads it database with bootstrap
+The first command brings up ROC and loads its database with bootstrap
 information (e.g., defining a default Aether site). The second command
 brings up the Monitoring Service (Grafana running on top of
 Prometheus) and loads it with a set of dashboards.
 
-`kubectl` will show the `aether-roc` and `cattle-monitoring-system`
-namespaces now running in support of these two services, respectively,
-plus new `atomix-runtime` pods in the `kube-system` namespace.
-Atomix is the scalable Key/Value Store that keeps the ROC data model
-persistent.
+Once complete, `kubectl` will show the `aether-roc` and
+`cattle-monitoring-system` namespaces now running in support of these
+two services, respectively, plus new `atomix-runtime` pods in the
+`kube-system` namespace.  Atomix is the scalable Key/Value Store that
+keeps the ROC data model persistent.
 
 You can access the dashboards for the two subsystems, respectively, at
 
@@ -192,7 +192,8 @@ More information about the Control and Monitoring dashboards is given
 in their respective sections of the Aether Guide. Note that the
 programmatic API underlying the Control Dashboard, which was
 introduced in Section 6.4, can be accessed at
-`http://10.76.28.113:31194/aether-roc-api/` in our example deployment.
+``http://10.76.28.113:31194/aether-roc-api/`` in our example
+deployment.
 
 .. _reading_dashboards:
 .. admonition:: Further Reading
@@ -225,8 +226,8 @@ selecting `Device-Groups` will show how those UEs are grouped into
 aggregates. In an operational environment, these values would be
 entered into the ROC through either the GUI or the underlying API. For
 the emulated environment we're limiting ourselves to in Stage 1, these
-values are loaded from `aether-latest/roc-5g-models.json` and match
-the settings in `aether-latest/sd-core-5g-values.yaml`.
+values are loaded from ``blueprints/latest/roc-5g-models.json`` and match
+the settings in ``blueprints/latest/sd-core-5g-values.yaml``.
 
 Run Emulated RAN Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -263,3 +264,4 @@ If you want to also tear down Kubernetes for a fresh install, type:
 
    $ make net-clean
    $ make clean
+

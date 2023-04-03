@@ -3,20 +3,19 @@ Stage 2: GitOps Tooling
 
 The Makefile targets used in Stage 1 invoke Helm to install the
 applications, using application-specific *values files* found the
-cloned directory (e.g.,
-`~/systemsapproach/aether-onramp/roc-values.yaml`) to override the
-values for the corresponding Helm charts. In an operational setting, all
-the information needed to deploy a set of Kubernetes applications is
-checked into a Git repo, with a tool like Fleet automatically updating
-the deployment whenever it detects changes to the configuration
-checked into the repo.
+cloned directory (e.g., ``blueprint/latest/roc-values.yaml``) to
+override the values for the corresponding Helm charts. In an
+operational setting, all the information needed to deploy a set of
+Kubernetes applications is checked into a Git repo, with a tool like
+Fleet automatically updating the deployment whenever it detects
+changes to the configuration checked into the repo.
 
 ..
   Note: There is an intermediate step that could be included. First
   use "fleet apply" locally, and then engage Fleet in the GitOps-style
   via a remote GitHub repo.
 
-To see how this works, look at the `resources/deploy.yaml` file
+To see how this works, look at the ``resources/deploy.yaml`` file
 included in the cloned directory:
 
 .. code-block::
@@ -33,8 +32,8 @@ included in the cloned directory:
        - aether-2.1-alpha   # Specify one of "aether-2.0" or "aether-2.1-alpha"
 
 This particular version uses
-`https://github.com/systemsapproach/aether-apps` as its *source repo*.
-Fork that repo and then edit your local `deploy.yaml` to point to your
+``https://github.com/systemsapproach/aether-apps`` as its *source repo*.
+Fork that repo and then edit your local ``deploy.yaml`` to point to your
 new repo. Then install Fleet on your Kubernetes cluster by typing:
 
 .. code-block::
@@ -46,7 +45,7 @@ running. All that's left is to type the following command to activate Fleet:
 
 .. code-block::
    
-   $ kubectl apply -f deploy.yaml
+   $ kubectl apply -f resources/deploy.yaml
 
 The following command will let you track Fleet as it makes progress
 installing applications (which Fleet refers to as *bundles*):
