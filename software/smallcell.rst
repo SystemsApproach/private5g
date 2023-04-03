@@ -3,11 +3,10 @@ Stage 3: External Radio
 
 We are now ready to replace the emulated RAN with a physical small
 cell and real UEs. Unlike earlier stages of Aether OnRamp that worked
-exclusively with 5G, this stage allows either 4G or 5G small cells (but
-not both simultaneously). The following instructions are written for
-the 5G scenario, but as a general rule, you can substitute "4G" for
-"5G" in every command or file name.  Exceptions to that rule are
-explicitly noted.
+exclusively with 5G, this stage allows either 4G or 5G small cells
+(but not both simultaneously). The following instructions are written
+for the 5G scenario, but you can substitute "4G" for "5G" in every
+command or file name.  (Exceptions to that rule are explicitly noted.)
 
 In addition to the physical server used in previous stages, we now
 assume that server and the external radio are connected to the same L2
@@ -122,9 +121,9 @@ directory, copy these files into it, and make your changes there.
 
 At this point, you need to make two edits. The first is to the
 ``DATA_IFACE`` variable in ``blueprints/radio/config``, changing it
-from ``eth0`` to whatever name you noted earlier (e.g.,
-``enp193s0f0``). The second is to the default ``BLUEPRINT`` setting in
-``MakefileVar.mk``, changing it from ``latest`` to
+from ``eth0`` to whatever name you noted earlier (e.g., ``enp193s0f0``
+in our running example). The second is to the default ``BLUEPRINT``
+setting in ``MakefileVar.mk``, changing it from ``latest`` to
 ``radio``. Alternatively, you can modify that variable on a
 case-by-case basis; for example:
 
@@ -202,7 +201,7 @@ are then ready to bring up the SD-Core as before:
 
    $ make 5g-core
 
-You can verify the installation by running ``kubectl`` just as you did
+You can verify the installation by running `kubectl` just as you did
 in Stage 1. You should see all pods with status ``Running``, keeping
 in mind that you will see containers that implement the 4G core
 instead of the 5G core running in the ``omec`` namespace if you
@@ -448,8 +447,8 @@ gNodeB Setup
 Once the SD-Core is up and running, we are ready to bring up the
 external gNodeB. The details of how to do this depend on the small
 cell you are using, but we identify the main issues you need to
-address. For examples of small cells commonly used with Aether, we
-recommend the two SERCOMM devices from the ONF MarketPlace:
+address. For example 4G and 5G small cells commonly used with Aether,
+we recommend the two SERCOMM devices on the ONF MarketPlace:
 
 .. _reading_sercomm:
 .. admonition:: Further Reading

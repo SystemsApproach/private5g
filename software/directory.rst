@@ -71,7 +71,7 @@ chapter of our companion Edge Cloud Operations book.
 
 Finally, Aether OnRamp—the focus of this appendix—defines one possible
 way to integrate all of the above artifacts into an end-to-end system
-that can be deployed according to a set of blueprints. OnRamp is
+that can be deployed and operated with live traffic. OnRamp is
 available on GitHub:
 
  | https://github.com/SystemsApproach/aether-onramp
@@ -79,7 +79,7 @@ available on GitHub:
 As described in the following sections, OnRamp prescribes a
 step-by-step process for growing an Aether deployment from a single VM
 to a multi-site hybrid cloud carrying live traffic. An important
-aspect of OnRamp's approach is to describe the interworking of the
+aspect of OnRamp's approach is to describe the internals of the
 deployment machinery in enough detail so anyone can deploy and operate
 Aether, with each stage highlighting the next set of touchpoints for
 customizing the configuration. All of these customizations are
