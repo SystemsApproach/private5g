@@ -1,4 +1,4 @@
-Stage 2: GitOps Tooling
+Stage 3: GitOps Tooling
 --------------------------
 
 The Makefile targets used in Stage 1 invoke Helm to install the

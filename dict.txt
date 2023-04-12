@@ -47,6 +47,7 @@ IPv
 Jaeger
 Kahn
 Kobayashi
+Ksniff
 Lifecycle
 LTE
 Macvlan
@@ -88,6 +89,7 @@ Terraform
 Tofino
 UE
 UPF
+upf
 UDM
 VM
 Vachuska
@@ -97,6 +99,7 @@ VMware
 Whitepaper
 Wi
 Wi-Fi
+Wireshark
 xApp
 xApps
 allocators
@@ -177,6 +180,7 @@ operationalize
 operationalized
 operationalization
 orchestrator
+performant
 pre
 prem
 programmability
@@ -193,6 +197,7 @@ rollout
 runtime
 schedulable
 serverless
+siloed
 spacings
 subbands
 subcarrier

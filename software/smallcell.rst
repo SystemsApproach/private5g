@@ -1,4 +1,4 @@
-Stage 3: External Radio
+Stage 4: External Radio
 ========================
 
 We are now ready to replace the emulated RAN with a physical small
@@ -314,7 +314,6 @@ something like this:
    $ kubectl -n omec exec -ti upf-0 -c bessd -- ip route
    default via 169.254.1.1 dev eth0
    default via 192.168.250.1 dev core metric 110
-   10.76.28.0/24 via 192.168.252.1 dev access
    10.76.28.113 via 169.254.1.1 dev eth0
    169.254.1.1 dev eth0 scope link
    192.168.250.0/24 dev core proto kernel scope link src 192.168.250.3
@@ -341,18 +340,7 @@ from the SD-Core value files, are allocated from the
 ``core`` IP address inside the UPF.  The second rule says that next
 hop address is reachable on the ``core`` interface outside the UPF.
 As a result, the downstream packets arrive in the UPF where they are
-GTP-encapsulated with the IP address of the gNB.  Inside the UPF these
-packets will match a route like the one output above
-(``10.76.28.0/24`` in this case is the subnet of the ``DATA_IFACE``):
-
-.. code-block::
-   
-    10.76.28.0/24 via 192.168.252.1 dev access
-
-These packets are forwarded to the ``access`` interface outside the
-UPF and out ``DATA_IFACE`` to the gNB.  Recall that we assume that the
-gNB is on the same subnet as ``DATA_IFACE``, so in this case it also
-has an IP address in the ``10.76.28.0/24`` range.
+GTP-encapsulated with the IP address of the gNB.
 
 Note that If you are not finding ``access`` and ``core`` interfaces on
 outside the UPF, the following commands can be used to create these
@@ -548,7 +536,12 @@ reference in the instructions that follow.
    packets on to the Internet.
 
 10. **Run Diagnostics.** Visit the ``Support`` page to run
-    diagnostics, for example, ``ping`` and ``traceroute``. This can be
-    used to verify connectivity, first to the UPF, and then to the
-    rest of the Internet via the UPF.
+    diagnostics, for example, ``ping`` and ``traceroute``. You can
+    also run the packet capture tool described in Stage 2, as well as
+    ``ping`` from *within* the UPF. For example, the following command
+    verifies that you have connectivity between the UPF and the small
+    cell via the local enterprise network:
 
+.. code-block::
+   
+    $ kubectl -n omec exec -ti upf-0 bessd -- ping 10.76.28.187
