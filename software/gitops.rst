@@ -1,4 +1,4 @@
-Stage 3: GitOps Tooling
+Stage 2: GitOps Tooling
 --------------------------
 
 The Makefile targets used in Stage 1 invoke Helm to install the
@@ -74,7 +74,10 @@ running and instead modify your forked copy of the `aether-apps` repo
 to no longer include applications you do not want Fleet to
 automatically instantiate. This mimics how an operator would change a
 deployment by checking in *Configuration-as-Code*, a practice that
-proves useful when supporting live 5G workloads.
+proves useful when supporting live 5G workloads. Until you get to that
+stage, however, it is probably easiest to continue working with the
+Makefile targets distributed with Aether OnRamp (which is what we
+assume in the next stage).
 
 ..
   Note: The set of bundles included in the *aether-apps* repo is not

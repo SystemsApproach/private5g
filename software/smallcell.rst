@@ -1,4 +1,4 @@
-Stage 4: External Radio
+Stage 3: External Radio
 ========================
 
 We are now ready to replace the emulated RAN with a physical small
@@ -147,7 +147,8 @@ different PLMN ids: ``315010`` constructed from MCC=315 (US) and
 MNC=010 (CBRS), and ``00101`` constructed from MCC=001 (TEST) and
 MNC=01 (TEST). You should use whatever values are appropriate for your
 local environment.  You then assign an IMSI and two secret keys to
-each SIM card. Throughout this section, we use the following values:
+each SIM card. Throughout this section, we use the following values as
+exemplars:
 
 * IMSI: each one is unique, matching pattern ``315010*********`` (15 digits)
 * OPc: ``69d5c2eb2e2e624750541d3bbc692ba5``
@@ -160,6 +161,10 @@ greater) and Google Pixel phones (4 and greater).  CBRS may also be
 supported by recent phones from Samsung, LG Electronics and Motorola
 Mobility, but these have not been tested. Note that on each phone you
 will need to configure ``internet`` as the *Access Point Name (APN)*.
+Another good option is to use a 5G dongle connected to a Raspberry Pi
+as a demonstration UE. This makes it easier to run diagnostic tests
+from the UE. For example, we have used `APAL's 5G dongle
+<https://www.apaltec.com/dongle/>`__ with Aether.
 
 Finally, modify the the ``subscribers`` block of the
 ``omec-sub-provision`` section in file
@@ -537,10 +542,10 @@ reference in the instructions that follow.
 
 10. **Run Diagnostics.** Visit the ``Support`` page to run
     diagnostics, for example, ``ping`` and ``traceroute``. You can
-    also run the packet capture tool described in Stage 2, as well as
+    also run the packet capture tool described in Stage 1, as well as
     ``ping`` from *within* the UPF. For example, the following command
     verifies that you have connectivity between the UPF and the small
-    cell via the local enterprise network:
+    cell at address ``10.76.28.187`` on the local enterprise network:
 
 .. code-block::
    
