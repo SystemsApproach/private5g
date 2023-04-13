@@ -216,7 +216,7 @@ Note that we postpone bringing up the AMP until we are confident the
 SD-Core is running correctly.
 
 
-Validating Configuration
+Validate Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Regardless of whether you bring up a 4G or 5G version of the Control
@@ -502,15 +502,15 @@ reference in the instructions that follow.
    uses the `Google SAS portal
    <https://cloud.google.com/spectrum-access-system/docs/overview>`__,
    which the small cell can be configured to query periodically. To do
-   so, visit the ``Settings > SAS``.  Acquiring the credentials needed
-   to access the SAS requires you go through a certification process,
-   but as a practical matter, it may be possible to test an
+   so, visit the ``Settings > SAS`` page.  Acquiring the credentials
+   needed to access the SAS requires you go through a certification
+   process, but as a practical matter, it may be possible to test an
    isolated/low-power femto cell indoors before completing that
    process. Consult with your local network administrator.
 
 6. **Configure Radio Parameters.** Visit the ``Settings > NR Cell
    Configuration`` page (shown in the figure) to set parameters that
-   control the radio. It is usually sufficient to use the default
+   control the radio. It should be sufficient to use the default
    settings when getting started.
 
 7. **Configure the PLMN.** Visit the ``Settings > 5GC`` page to set
