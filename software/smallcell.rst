@@ -540,16 +540,6 @@ reference in the instructions that follow.
    so requires that your server also be configured to forward IP
    packets on to the Internet.
 
-10. **Run Diagnostics.** Visit the ``Support`` page to run
-    diagnostics, for example, ``ping`` and ``traceroute``. You can
-    also run the packet capture tool described in Stage 1, as well as
-    ``ping`` from *within* the UPF. For example, the following command
-    verifies that you have connectivity between the UPF and the small
-    cell at address ``10.76.28.187`` on the local enterprise network:
-
-.. code-block::
-   
-    $ kubectl -n omec exec -ti upf-0 bessd -- ping 10.76.28.187
 
 Run Diagnostics
 ~~~~~~~~~~~~~~~~~
