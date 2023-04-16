@@ -256,47 +256,23 @@ the microservices that implement Aether. Output from Ksniff can then
 be fed into `Wireshark <https://www.wireshark.org/>`__.
 
 To install the Ksniff plugin on the server running Aether, you need to
-first install the Kubernetes plugin manager ``krew``. Cut-and-paste
-the following in a shell window on your Aether server:
-
-.. code-block::
-   
-    (
-      set -x; cd "$(mktemp -d)" &&
-      OS="$(uname | tr '[:upper:]' '[:lower:]')" &&
-      ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')" &&
-      KREW="krew-${OS}_${ARCH}" &&
-      curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz" &&
-      tar zxvf "${KREW}.tar.gz" &&
-      ./"${KREW}" install krew
-    )
-
-You also need to add ``krew`` to your search path:
-
-.. code-block::
-   
-   $ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-
-To verify that ``krew`` is correctly installed, run:
-
-.. code-block::
-
-   $ kubectl krew
-
-You are now ready to install Ksniff:
+first install ``krew``, the Kubernetes plugin manager. Instructions on
+doing that can be found `online
+<https://krew.sigs.k8s.io/docs/user-guide/setup/install/>`__. Once
+that's done, you can install Ksniff by typing:
 
 .. code-block::
 
    $ kubectl krew install sniff
 
-Finally, run Ksniff in the context of a specific Kubernetes pod by
+You can then run Ksniff in the context of a specific Kubernetes pod by
 specifying their namespace and instance names, and then redirecting
 the output to Wireshark. If you don't have a desktop environment on
 your Aether server, you can either view the output using a simpler
 packet analyzer, such as `tshark
-<https://www.wireshark.org/docs/man-pages/tshark.html>`__, or redirect
-the PCAP output in a file and transfer it a desktop machine for
-viewing in Wireshark.
+<https://www.wireshark.org/docs/man-pages/tshark.html>`__, or by
+redirecting the PCAP output in a file and transfer it a desktop
+machine for viewing in Wireshark.
 
 For example, the following captures and displays traffic into and out
 of the UPF.  Of course, you'll also need to restart the RAN emulator
@@ -320,9 +296,9 @@ In this case, ``access-gw`` is the name of the router's access-side
 interface.
 
 Packet capture is a great way to learn about the SD-Core and other
-components by watching them in action, but it is also a valuable
-diagnostic tool that we will use as we bring up more complex
-configurations in later stages.
+components, since you can watch them in action. It can also be a
+valuable diagnostic tool, which is a topic we return to in later
+stages as we bring up more complex configurations.
 
 
 Clean Up

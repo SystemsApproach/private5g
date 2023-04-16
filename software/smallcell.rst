@@ -550,3 +550,51 @@ reference in the instructions that follow.
 .. code-block::
    
     $ kubectl -n omec exec -ti upf-0 bessd -- ping 10.76.28.187
+
+Run Diagnostics
+~~~~~~~~~~~~~~~~~
+
+Successfully connecting a UE to the Internet is not a straightforward
+exercise. It involves configuring the UE, small cell, and SD-Core
+software in a consistent way; establishing SCTP-based control plane
+and GTP-based user plane connections between the base station and
+Mobile Core; and traversing multiple IP subnets along the end-to-end
+path.
+
+The UE and small cell provide limited diagnostic tools. For example,
+it's possible to run ``ping`` and ``traceroute`` from both. You can
+also run the ``ksniff`` tool described in Stage 1, but the most
+helpful packet traces you can capture are shown in the following
+commands. You can run these on the Aether server, where we use our
+example ``enp193s0f0`` interface for illustrative purposes:
+
+.. code-block::
+   
+   $ sudo tcpdump -i any sctp -w sctp-test.pcap
+   $ sudo tcpdump -i enp193s0f0 port 2152 -w gtp-outside.pcap
+   $ sudo tcpdump -i access port 2152 -w gtp-inside.pcap
+   $ sudo tcpdump -i core net 172.250.0.0/16 -w n6-inside.pcap
+   $ sudo tcpdump -i enp193s0f0 net 172.250.0.0/16 -w n6-outside.pcap
+
+The first trace, saved in file ``sctp.pcap``, captures SCTP packets
+sent to establish the control path between the base station and the
+Mobile Core. Toggling "Mobile Data" on the UE, for example by turning
+Airplane Mode off and on, will generate the relevant control plane
+traffic.
+
+The second and third traces, saved in files ``gtp-outside.pcap`` and
+``gtp-inside.pcap``, respectively, capture GTP packets (tunneled
+through port ``2152`` ) on the RAN side of the UPF. Setting the
+interface to ``enp193s0f0`` corresponds to "outside" the UPF and setting
+the interface to ``access`` corresponds to "inside" the UPF.  Running
+``ping`` from the UE will generate the relevant user plane traffic.
+
+Similarly, the fourth and fifth traces, saved in files
+``n6-inside.pcap`` and ``n6-outside.pcap``, respectively, capture IP
+packets on the Internet side of the UPF (which is known as the **N6**
+interface in 3GPP). In these two tests, ``net 172.250.0.0/16``
+corresponds to the IP addresses assigned to UEs by the AMF. Running
+``ping`` from the UE will generate the relevant user plane traffic.
+
+
+
