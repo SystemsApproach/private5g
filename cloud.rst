@@ -691,7 +691,7 @@ Central to this role is the requirement that Service Orchestration be
 able to represent a set of abstract objects, which is to say, it
 implements a *data model*. The API is then generated from this data
 model, and persistent state associated with instances of the models is
-stored in a Key/Value store. Aether uses YANG to specify the models,
+stored in a key-value store. Aether uses YANG to specify the models,
 in part because it is a rich language for data modeling, but also
 because there is a robust collection of YANG-based tools that we can
 build upon.

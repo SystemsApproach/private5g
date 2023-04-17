@@ -178,7 +178,7 @@ Prometheus) and loads it with a set of dashboards.
 Once complete, `kubectl` will show the `aether-roc` and
 `cattle-monitoring-system` namespaces now running in support of these
 two services, respectively, plus new `atomix-runtime` pods in the
-`kube-system` namespace.  Atomix is the scalable Key/Value Store that
+`kube-system` namespace.  Atomix is the scalable key-value store that
 keeps the ROC data model persistent.
 
 You can access the dashboards for the two subsystems, respectively, at

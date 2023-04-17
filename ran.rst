@@ -431,7 +431,7 @@ Specifically, the ONOS-based RIC includes a Topology Service to keep
 track of the fixed RAN infrastructure, a Device Service to track the
 UEs, and a Configuration Service to manage RAN-wide configuration
 state. All three of these services are implemented as Kubernetes-based
-microservices, and take advantage of a scalable Key/Value Store.
+microservices, and take advantage of a scalable key-value store.
 
 Of the three interfaces called out in :numref:`Figure %s <fig-ric>`,
 the **A1** and **E2** interfaces are based on pre-existing 3GPP

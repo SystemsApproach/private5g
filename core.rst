@@ -212,7 +212,7 @@ application:
    subscriber-related information.
 
 -  *UDSF (Unstructured Data Storage Network Function):* Used to store
-   unstructured data, and so is similar to a *Key/Value Store*.
+   unstructured data, and so is similar to a *key-value store*.
 
 -  *NEF (Network Exposure Function):* Exposes select capabilities to
    third-party services, and so is similar to an *API Server*.
@@ -292,7 +292,7 @@ Core are specified so that they can be stateless, simplifying the task
 of horizontally scaling them out as load dictates. (The rough
 correspondence between 4G and 5G is: MME-to-AMF, SPGW_C-to-SMF,
 HSS-to-UDM, and PCRF-to-PCF.) Although not shown in the schematic,
-there is also a scalable Key/Value Store microservice based on
+there is also a scalable key-value store microservice based on
 MongoDB.  It is used to make Core-related state persistent for the
 Control Planes; for example, UDM/UDR (5G) and HSS (4G) write
 subscriber state to MongoDB.
