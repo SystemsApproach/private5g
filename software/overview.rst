@@ -17,7 +17,7 @@ team with significant insider knowledge about Aether's engineering
 details. It is difficult for individuals to reproduce that know-how
 and bring up their own Aether clusters.  Aether is also available as
 two self-contained software packages that were originally designed to
-support developers working individual components.  These packages are
+support developers working on individual components.  These packages are
 straightforward to install and run, even in a VM on your laptop, so
 they also provide a way to get started:
 
