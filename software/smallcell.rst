@@ -80,7 +80,7 @@ blueprint as an example:
 .. code-block::
 
    $ cat blueprints/radio/config
-   # Configuration or External (4G or 5G) Radio Blueprint
+   # Configuration for External (4G or 5G) Radio Blueprint
 
    # Variables
    ENABLE_RANSIM := false
@@ -140,7 +140,7 @@ Prepare UEs
 ~~~~~~~~~~~~
 
 5G-connected devices must have a SIM card, which you are responsible
-for creating and inserting.  You will need a SIM card writer (which
+for creating and inserting.  You will need a SIM card writer (these
 are readily available for purchase on Amazon) and a PLMN identifier
 constructed from a valid MCC/MNC pair. For our purposes, we use two
 different PLMN ids: ``315010`` constructed from MCC=315 (US) and

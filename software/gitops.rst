@@ -2,7 +2,7 @@ Stage 2: GitOps Tooling
 --------------------------
 
 The Makefile targets used in Stage 1 invoke Helm to install the
-applications, using application-specific *values files* found the
+applications, using application-specific *values files* found in the
 cloned directory (e.g., ``blueprint/latest/roc-values.yaml``) to
 override the values for the corresponding Helm charts. In an
 operational setting, all the information needed to deploy a set of
