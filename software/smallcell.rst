@@ -221,8 +221,7 @@ Validate Configuration
 
 Regardless of whether you bring up a 4G or 5G version of the Control
 Plane, the UPF pod implements SD-Core's User Plane. To verify that the
-UPF is properly connected to the network (which is important because
-the UPF has to connect to the radio), you can check to see that the
+UPF is properly connected to the network, you can check to see that the
 Macvlan networks ``core`` and ``access`` are properly configured on
 your server. This can be done using ``ifconfig``, and you should see
 results similar to the following:
@@ -249,11 +248,13 @@ results similar to the following:
 
 Understanding why these two interfaces exist is helpful in
 troubleshooting your deployment. They enable the UPF to exchange
-packets with the gNB (``access``) and the Internet (``core``). But
-these two interfaces exist both **inside** and **outside** the UPF.
-The above output from ``ifconfig`` shows the two outside interfaces;
-``kubectl`` can be used to see what's running inside the UPF, where
-``access`` and ``core`` are the last two interfaces shown below:
+packets with the gNB (``access``) and the Internet (``core``). In 3GPP
+terms, these correspond to the N6 and N3 interfaces, respectively, as
+shown in :numref:`Figure %s <fig-sd-core>`. But these two interfaces
+exist both **inside** and **outside** the UPF.  The above output from
+``ifconfig`` shows the two outside interfaces; ``kubectl`` can be used
+to see what's running inside the UPF, where ``access`` and ``core``
+are the last two interfaces shown below:
 
 .. code-block::
    
@@ -286,11 +287,26 @@ The above output from ``ifconfig`` shows the two outside interfaces;
 All four are Macvlan interfaces bridged with ``DATA_IFACE``.  There
 are two subnets on this bridge: the two ``access`` interfaces are on
 ``192.168.252.0/24`` and the two ``core`` interfaces are on
-``192.168.250.0/24``.  It is helpful to think of two links, called
-``access`` and ``core``, connecting the hosting server and the UPF.
+``192.168.250.0/24``. Note that while we refer to ``core`` and
+``access`` as interfaces in the context of a particular compute
+environment, they can also be viewed as virtual bridges or virtual
+links connecting a pair of compute environments, such as the hosting
+server and the UPF container in our particular scenario. This makes
+the schematic shown in :numref:`Figure %s <fig-macvlan>` a helpful way
+to visualize the setup.
 
-The ``access`` interface inside the UPF has an IP address of
-``192.168.252.3``; this is the destination IP address of
+.. _fig-macvlan:
+.. figure:: ../figures/Slide27.png 
+    :width: 600px
+    :align: center
+	    
+    The UPF container running inside the Aether hosting server, with
+    ``core`` and ``access`` bridging the two. Information shown
+    in gray (``10.76.28.187``, ``10.76.28.113``, ``enp193s0f0``) is
+    specific to a particular deployment site.
+    
+In this setting, the ``access`` interface inside the UPF has an IP
+address of ``192.168.252.3``; this is the destination IP address of
 GTP-encapsulated data plane packets from the gNB.  In order for these
 packets to find their way to the UPF, they must arrive on the
 ``DATA_IFACE`` interface and then be forwarded on the ``access``
@@ -324,13 +340,15 @@ something like this:
    192.168.250.0/24 dev core proto kernel scope link src 192.168.250.3
    192.168.252.0/24 dev access proto kernel scope link src 192.168.252.3
 
-The default route via ``192.168.250.1`` is directing upstream packets to
-the Internet via the ``core`` interface, with a next hop of the
+The default route via ``192.168.250.1`` is directing upstream packets
+to the Internet via the ``core`` interface, with a next hop of the
 ``core`` interface outside the UPF.  These packets undergo source NAT
-in the kernel and are sent to the IP destination in the packet.  The
-return (downstream) packets undergo reverse NAT and now have a
-destination IP address of the UE.  They are forwarded by the kernel to
-the ``core`` interface by these rules on the server:
+in the kernel and are sent to the IP destination in the packet. This
+means that the ``172.250.0.0/16`` addresses assigned to UEs are not
+visible beyond the Aether server. The return (downstream) packets
+undergo reverse NAT and now have a destination IP address of the UE.
+They are forwarded by the kernel to the ``core`` interface by these
+rules on the server:
 
 .. code-block::
 
@@ -339,8 +357,7 @@ the ``core`` interface by these rules on the server:
    172.250.0.0     192.168.250.3   255.255.0.0     UG    0      0        0 core
    192.168.250.0   0.0.0.0         255.255.255.0   U     0      0        0 core
 
-The first rule above matches packets to the UEs, which you will see
-from the SD-Core value files, are allocated from the
+The first rule above matches packets to the UEs on the
 ``172.250.0.0/16`` subnet.  The next hop for these packets is the
 ``core`` IP address inside the UPF.  The second rule says that next
 hop address is reachable on the ``core`` interface outside the UPF.
