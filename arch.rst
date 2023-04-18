@@ -443,7 +443,7 @@ connectivity than meets the eye: the Mobile Core ensures that
 subscribers are authenticated and aims to deliver the service
 qualities to which they have subscribed. As subscribers may move
 around among base station coverage areas, the Mobile Core needs to
-keeping track of their whereabouts at the granularity of the serving
+keep track of their whereabouts at the granularity of the serving
 base station. The reasons for this tracking are discussed further in
 Chapter 5. It is this support for security, mobility, and QoS that
 differentiates the cellular network from Wi-Fi.
