@@ -1,20 +1,21 @@
-Stage 3: External Radio
+Stage 3: Physical Radio
 ========================
 
 We are now ready to replace the emulated RAN with a physical small
-cell and real UEs. Unlike earlier stages of Aether OnRamp that worked
-exclusively with 5G, this stage allows either 4G or 5G small cells
-(but not both simultaneously). The following instructions are written
-for the 5G scenario, but you can substitute "4G" for "5G" in every
-command or file name.  (Exceptions to that rule are explicitly noted.)
+cell radio and real UEs. Unlike earlier stages of Aether OnRamp that
+worked exclusively with 5G, this stage allows either 4G or 5G small
+cells (but not both simultaneously). The following instructions are
+written for the 5G scenario, but you can substitute "4G" for "5G" in
+every command or file name.  (Exceptions to that rule are explicitly
+noted.)
 
 In addition to the physical server used in previous stages, we now
 assume that server and the external radio are connected to the same L2
 network and share an IP subnet.  This is not a hard requirement for
-all deployments, but it does simplify communication between the
-external radio and the UPF running within Kubernetes on the server.
-Take note of the network interface on your server that provides
-connectivity to the external radio, for example by typing:
+all deployments, but it does simplify communication between the radio
+and the UPF running within Kubernetes on the server.  Take note of the
+network interface on your server that provides connectivity to the
+radio, for example by typing:
 
 .. code-block::
 
@@ -63,7 +64,7 @@ distinct ways to configure and deploy Aether:
   server/VM, running an emulated RAN.
 
 * ``radio``: Deploys the latest version of Aether in a single
-  server/VM, connected to an external small cell radio.
+  server/VM, connected to a physical small cell radio.
 
 Up to this point, we have been using ``latest`` as our default
 blueprint, but for this stage, we will shift to ``radio``.
@@ -184,6 +185,23 @@ block adds IMSIs between ``315010999912301`` and ``315010999912303``:
      opc: "69d5c2eb2e2e624750541d3bbc692ba5"
      key: "000102030405060708090a0b0c0d0e0f"
      sequenceNumber: 135
+
+Further down in the same ``omec-sub-provision`` section you will find
+a ``device-group`` block that assigns IMSIs to *Device Groups* (with
+Device Groups subsequently associated with *Slices*). You will need to
+re-enter the individual IMSIs there:
+
+.. code-block::
+
+   device-groups:
+   - name:  "5g-user-group1"
+      imsis:
+          - "315010999912301"
+          - "315010999912302"		  
+          - "315010999912303"
+
+Multiple *Device Groups* and *Slices* will come into play in future
+stages, but for now we are limiting our configuration to one of each.
 
 Bring Up Aether
 ~~~~~~~~~~~~~~~~~~~~~
@@ -335,6 +353,7 @@ something like this:
    $ kubectl -n omec exec -ti upf-0 -c bessd -- ip route
    default via 169.254.1.1 dev eth0
    default via 192.168.250.1 dev core metric 110
+   10.76.28.0/24 via 192.168.252.1 dev access
    10.76.28.113 via 169.254.1.1 dev eth0
    169.254.1.1 dev eth0 scope link
    192.168.250.0/24 dev core proto kernel scope link src 192.168.250.3
@@ -455,7 +474,7 @@ gNodeB Setup
 ~~~~~~~~~~~~~~~~~~~~
 
 Once the SD-Core is up and running, we are ready to bring up the
-external gNodeB. The details of how to do this depend on the small
+physical gNodeB. The details of how to do this depend on the small
 cell you are using, but we identify the main issues you need to
 address. For example 4G and 5G small cells commonly used with Aether,
 we recommend the two SERCOMM devices on the ONF MarketPlace:
