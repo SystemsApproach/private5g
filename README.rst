@@ -19,6 +19,16 @@ following information:
 | *Source:* https://github.com/SystemsApproach/private5g 
 | *License:* \ `CC BY-NC-ND 4.0 <https://creativecommons.org/licenses/by-nc-nd/4.0>`__
 
+This book incorporates introductory and background content from:
+
+| *Title: 5G Mobile Networks: A Systems Approach* 
+| *Authors: Larry Peterson and Oguz Sunay* 
+| *Source:* https://github.com/SystemsApproach/5g 
+| *License:* \ `CC BY-NC-ND 4.0 <https://creativecommons.org/licenses/by-nc-nd/4.0>`__
+
+a version of which was also published by Morgan & Claypool in 2020
+as part of their Synthesis Lectures on Network Systems.
+
 Read the Book
 -------------
 

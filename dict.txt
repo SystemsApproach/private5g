@@ -16,6 +16,7 @@ Backhaul
 Barros
 Bavier
 Cascone
+Claypool
 CLI
 CP
 Changhoon
