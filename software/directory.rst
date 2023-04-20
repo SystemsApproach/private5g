@@ -41,8 +41,8 @@ Docker Images
 
  | https://hub.docker.com/u/aetherproject
 
-The Aether CI/CD pipeline, which keeps the above artifact repos in
-sync with the source repos, can be found here:
+The Aether CI/CD pipeline keeps the above artifact repos in sync with
+the source repos, which can be found here:
 
  | ROC: https://gerrit.opencord.org/plugins/gitiles/roc-helm-charts
  | SD-RAN: https://github.com/onosproject/sdran-helm-charts
@@ -50,11 +50,8 @@ sync with the source repos, can be found here:
  | SD-Fabric (Servers): https://github.com/onosproject/onos-helm-charts  
  | SD-Fabric (Switches): https://github.com/stratum/stratum-helm-charts
 
-The Jenkins Jobs that implement the CI/CD pipeline are checked into:
-
- | https://gerrit.opencord.org/plugins/gitiles/aether-ci-management 
-
-These jobs, in turn, depend on QA tests that are checked into:
+And the QA tests run against code checked into these source repos can
+be found here:
 
  | https://gerrit.opencord.org/plugins/gitiles/aether-system-tests 
 

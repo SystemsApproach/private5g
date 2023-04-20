@@ -267,7 +267,7 @@ results similar to the following:
 Understanding why these two interfaces exist is helpful in
 troubleshooting your deployment. They enable the UPF to exchange
 packets with the gNB (``access``) and the Internet (``core``). In 3GPP
-terms, these correspond to the N6 and N3 interfaces, respectively, as
+terms, these correspond to the N3 and N6 interfaces, respectively, as
 shown in :numref:`Figure %s <fig-sd-core>`. But these two interfaces
 exist both **inside** and **outside** the UPF.  The above output from
 ``ifconfig`` shows the two outside interfaces; ``kubectl`` can be used
@@ -307,11 +307,11 @@ are two subnets on this bridge: the two ``access`` interfaces are on
 ``192.168.252.0/24`` and the two ``core`` interfaces are on
 ``192.168.250.0/24``. Note that while we refer to ``core`` and
 ``access`` as interfaces in the context of a particular compute
-environment, they can also be viewed as virtual bridges or virtual
-links connecting a pair of compute environments, such as the hosting
-server and the UPF container in our particular scenario. This makes
-the schematic shown in :numref:`Figure %s <fig-macvlan>` a helpful way
-to visualize the setup.
+environment (e.g., the UPF container), they can also be viewed as
+virtual bridges or virtual links connecting a pair of compute
+environments (e.g., the hosting server and the UPF container). This
+makes the schematic shown in :numref:`Figure %s <fig-macvlan>` a
+helpful way to visualize the setup.
 
 .. _fig-macvlan:
 .. figure:: ../figures/Slide27.png 
@@ -383,7 +383,7 @@ hop address is reachable on the ``core`` interface outside the UPF.
 As a result, the downstream packets arrive in the UPF where they are
 GTP-encapsulated with the IP address of the gNB.
 
-Note that If you are not finding ``access`` and ``core`` interfaces on
+Note that If you are not finding ``access`` and ``core`` interfaces
 outside the UPF, the following commands can be used to create these
 two interfaces manually:
 

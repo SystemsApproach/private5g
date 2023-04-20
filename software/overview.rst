@@ -14,12 +14,12 @@ find the relevant code repositories.)
 A multi-site deployment of Aether has been running since 2020 in
 support of the *Pronto Project*, but that deployment depends on an ops
 team with significant insider knowledge about Aether's engineering
-details. It is difficult for individuals to reproduce that know-how
-and bring up their own Aether clusters.  Aether is also available as
-two self-contained software packages that were originally designed to
-support developers working on individual components.  These packages are
-straightforward to install and run, even in a VM on your laptop, so
-they also provide a way to get started:
+details. It is difficult for others to reproduce that know-how and
+bring up their own Aether clusters.  Aether is also available as two
+self-contained software packages that were originally designed to
+support developers working on individual components.  These packages
+are straightforward to install and run, even in a VM on your laptop,
+so they also provide a way to get started:
 
 * `Aether-in-a-Box (Aiab)
   <https://docs.aetherproject.org/master/developer/aiab.html>`__:
@@ -51,10 +51,10 @@ Hands-on Programming appendix of our companion SDN book.
    <https://sdn.systemsapproach.org/exercises.html>`__. November 2021.
 
 As a tool targeted at developers, AiaB and RiaB support a streamlined
-modify-build-test loop, but a significant gap remains between this
-these self-contained versions of Aether and an operational 5G-enabled
-edge cloud deployed into a particular target environment. `Aether
-OnRamp <https://github.com/SystemsApproach/aether-onramp>`__ is a
+modify-build-test loop, but a significant gap remains between these
+self-contained versions of Aether and an operational 5G-enabled edge
+cloud deployed into a particular target environment. `Aether OnRamp
+<https://github.com/SystemsApproach/aether-onramp>`__ is a
 re-packaging of Aether to address that gap. It provides an incremental
 path for users to:
 

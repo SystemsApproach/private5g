@@ -77,7 +77,11 @@ namespaces are operational:
    
 If you are not familiar with `kubectl` (the CLI for Kubernetes), we
 recommend that you start with `Kubernetes Tutorial
-<https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.
+<https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.  And
+although not required, you may also want to install `k9s
+<https://k9scli.io/>`__, a terminal-based UI that provides a
+convenient alternative to `kubtctl` for interacting with Kubernetes.
+
 
 Helm also has a command-line interface that can be helpful in tracking
 progress. For example,
@@ -242,8 +246,28 @@ As the emulation progresses, the monitoring dashboard will show two
 emulated gNBs and five emulated UEs come online, with the performance
 graph plotting upstream and downstream transfer rates. All of these
 indicators go "silent" once the emulation completes, but you can
-execute the `5g-test` target multiple times without restarting the
+execute the ``5g-test`` target multiple times without restarting the
 SD-Core to see additional activity.
+
+In addition to the monitoring dashboard, the emulation itself outputs
+a detailed trace to the terminal, which concludes with the following
+lines when successful:
+
+.. code-block::
+
+   ...
+   2023-04-20T20:21:36Z [INFO][GNBSIM][Profile][profile2] ExecuteProfile ended
+   2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] Profile Name: profile2 , Profile Type: pdusessest
+   2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] UEs Passed: 5 , UEs Failed: 0
+   2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] Profile Status: PASS
+
+You can modify the emulation parameters by editing the ``5g-ran-sim``
+section of ``blueprints/latest/sd-core-5g-values.yaml``; this block is
+used to configure the ``gnbsim-0`` pod in the ``omec`` name space.
+Documentation on how to make such configuration changes can be found
+in the `gNBsim GitHub repo
+<https://github.com/omec-project/gnbsim>`__.
+   
 
 Run Ksniff and Wireshark
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
