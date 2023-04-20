@@ -9,9 +9,11 @@ AMF
 Anthos
 Analytics
 Argela
+Arrobo
 Atomix
 Azure
 Backhaul
+Barros
 Bavier
 Cascone
 CLI
