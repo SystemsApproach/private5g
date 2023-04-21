@@ -383,7 +383,7 @@ hop address is reachable on the ``core`` interface outside the UPF.
 As a result, the downstream packets arrive in the UPF where they are
 GTP-encapsulated with the IP address of the gNB.
 
-Note that If you are not finding ``access`` and ``core`` interfaces
+Note that if you are not finding ``access`` and ``core`` interfaces
 outside the UPF, the following commands can be used to create these
 two interfaces manually:
 
