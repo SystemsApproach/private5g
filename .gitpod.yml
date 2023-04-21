@@ -3,7 +3,7 @@
 # and commit this file to your remote git repository to share the goodness with others.
 
 tasks:
-  - init: sudo apt-get -y install libenchant-2-dev
+  - init: sudo apt-get -y install libenchant-2-dev; pyenv install 3.8.6; pyenv global 3.8.6
     command: make html
   - name: Start web server
     init: python -m http.server 8000
