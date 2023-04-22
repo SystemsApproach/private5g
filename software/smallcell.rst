@@ -619,7 +619,7 @@ Similarly, the fourth and fifth traces, saved in files
 ``n6-inside.pcap`` and ``n6-outside.pcap``, respectively, capture IP
 packets on the Internet side of the UPF (which is known as the **N6**
 interface in 3GPP). In these two tests, ``net 172.250.0.0/16``
-corresponds to the IP addresses assigned to UEs by the AMF. Running
+corresponds to the IP addresses assigned to UEs by the SMF. Running
 ``ping`` from the UE will generate the relevant user plane traffic.
 
 

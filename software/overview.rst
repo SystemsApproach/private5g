@@ -32,8 +32,8 @@ so they also provide a way to get started:
   <https://docs.sd-ran.org/master/sdran-in-a-box/README.html>`__:
   Includes the ONOS-based nRT-RIC, the O-RAN defined E2SM-KPI and
   E2SM-RC Service Models, and example xApps. RiaB can be configured to
-  work with either an emulated RAN or with OAI's open source RAN stack
-  running on USRP devices.
+  work with either an emulated RAN (5G) or with OAI's open source RAN stack
+  running on USRP devices (4G).
 
 Note that these two packages do not include SD-Fabric, which depends
 on programmable switching hardware. Readers interested in learning
