@@ -565,8 +565,8 @@ re-triggering the setup functions indicated by (3), which in turn
 re-builds the user plane tunnel between the base station and the
 Core-UP shown in :numref:`Figure %s <fig-per-hop>`. One of the most
 unique features of the cellular network is that the Mobile Core's user
-plane buffers data during the handover transition, avoiding dropped
-packets and subsequent end-to-end retransmissions.
+plane buffers data while UE is idle and during the transition to active state,
+avoiding dropped packets and subsequent end-to-end retransmissions.
 
 In other words, the mobile cellular network maintains the *UE session*
 in the face of mobility (corresponding to the control and data

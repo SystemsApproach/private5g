@@ -117,7 +117,7 @@ example.
    `Docker Tutorial
    <https://www.docker.com/101-tutorial>`__.
 
-Kubernetes is a container management system. It provides a
+Kubernetes is a container orchestration system. It provides a
 programmatic interface for scaling container instances up and down,
 allocating server resources to them, setting up virtual networks to
 interconnect those instances, and opening service ports that external
@@ -244,7 +244,7 @@ SD-Fabric, we refer you to a companion book.
 As shown in :numref:`Figure %s <fig-ace>`, ACE hosts two additional
 microservice-based subsystems on top of this platform; they
 collectively implement *5G-as-a-Service*. The first subsystem, SD-RAN,
-is the SDN-based implementation of the Radio Access Network described
+is the SDN-based implementation of the Radio Access Network described --seems wrong
 in Chapter 4. It controls the small cell base stations deployed
 throughout the enterprise. The second subsystem, SD-Core, is an
 SDN-based implementation of the User Plane half of the Mobile Core
@@ -391,8 +391,9 @@ scenarios. Examples include:
   switches for resiliency), with or without SDN-based control. In the
   limit, an Aether edge can run on a single server.
 
-* It is possible to substitute legacy small cells for an SD-RAN
-  solution that includes a near RT-RIC and associated xApps.
+* It is possible to substitute legacy small cells for an ORAN compliant
+  small cells and SD-RAN solution that includes a near RT-RIC and associated
+  xApps.
 
 * It is possible co-locate both AMP and the SD-Core CP on the edge
   cluster, resulting in a complete Aether deployment that is
