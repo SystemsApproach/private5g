@@ -182,13 +182,14 @@ which base station currently serves each UE. The SMF then allocates an
 IP address to each AMF-authorized UE, and directly interacts with the
 UPF to maintain per-device session state.
 
-Of particular note, the per-UE session state controlled by the SMF (and
-implemented by the UPF) includes a packet buffer in which packets
-destine to a idle UE are queued during the time UE transition to active. This feature
-was originally designed to avoid data loss during a voice call, but
-its value is less obvious when the data is an IP packet since
-end-to-end protocols like TCP are prepared to retransmit lost
-packets.
+Of particular note, the per-UE session state controlled by the SMF
+(and implemented by the UPF) includes a packet buffer in which packets
+destine to an idle UE are queued during the time the UE transitions to
+active. This feature was originally designed to avoid data loss during
+a voice call, but its value is less obvious when the data is an IP
+packet since end-to-end protocols like TCP are prepared to retransmit
+lost packets. On the other hand, if idle-to-active transitions are too
+frequent, they can be problematic for TCP.
 
 Before continuing with our inventory of control-related elements in
 :numref:`Figure %s <fig-5g-core>`, it is important to note we show
@@ -590,15 +591,15 @@ terminology are also called "rules", of which there are four types:
 * **Buffering Action Rules (BARs):** Instructs the UPF to buffer
   downlink traffic for idle UEs, while also sending a `Downlink Data
   Notification` to the Control Plane. This notification, in turn,
-  causes the CP to instruct the base station to awaken the UE. Once the
-  UE becomes active, the UPF releases the buffered traffic and resumes
-  normal forwarding. The buffering and notification functions are
-  activated by modifying a FAR to include `buffer` and `notify` flags,
-  as just described. An additional set of parameters are used to
-  configure the buffer, for example setting its maximum size (number
-  of bytes) and duration (amount of time). Optionally CP can buffer
-  packets and this is achieved by installing a PDR which leads to
-  UPF forwarding data packets to control plane.
+  causes the CP to instruct the base station to awaken the UE. Once
+  the UE becomes active, the UPF releases the buffered traffic and
+  resumes normal forwarding. The buffering and notification functions
+  are activated by modifying a FAR to include `buffer` and `notify`
+  flags, as just described. An additional set of parameters are used
+  to configure the buffer, for example setting its maximum size
+  (number of bytes) and duration (amount of time). Optionally, the CP
+  can itself buffer packets by installing a PDR that directs the UPF to
+  forward data packets to control plane.
 
 * **Usage Reporting Rules (URRs):** Instructs the UPF to periodically
   send usage reports for each UE to the CP. These reports include
