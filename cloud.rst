@@ -392,7 +392,7 @@ scenarios. Examples include:
   limit, an Aether edge can run on a single server.
 
 * It is possible to substitute legacy small cells for O-RAN compliant
-  small cells and an SD-RAN solution that includes a near RT-RIC and
+  small cells and the SD-RAN solution that includes a near RT-RIC and
   associated xApps.
 
 * It is possible co-locate both AMP and the SD-Core CP on the edge

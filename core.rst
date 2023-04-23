@@ -7,7 +7,7 @@ another, ensures that this connectivity fulfills the promised QoS
 requirements, and meters usage for billing.
 
 Historically, all of these functions were provided by one or more
-network functions running on proprietary hardware. But like the rest of the 5G mobile
+proprietary network appliances. But like the rest of the 5G mobile
 network, these appliances are being disaggregated and implemented as a
 set of cloud services, with the goal of improving feature velocity for
 new classes of applications. It is also the case that as the range of
@@ -599,7 +599,7 @@ terminology are also called "rules", of which there are four types:
   to configure the buffer, for example setting its maximum size
   (number of bytes) and duration (amount of time). Optionally, the CP
   can itself buffer packets by installing a PDR that directs the UPF to
-  forward data packets to control plane.
+  forward data packets to the control plane.
 
 * **Usage Reporting Rules (URRs):** Instructs the UPF to periodically
   send usage reports for each UE to the CP. These reports include
