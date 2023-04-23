@@ -7,7 +7,7 @@ another, ensures that this connectivity fulfills the promised QoS
 requirements, and meters usage for billing.
 
 Historically, all of these functions were provided by one or more
-proprietary network appliances. But like the rest of the 5G mobile
+network functions running on proprietary hardware. But like the rest of the 5G mobile
 network, these appliances are being disaggregated and implemented as a
 set of cloud services, with the goal of improving feature velocity for
 new classes of applications. It is also the case that as the range of
@@ -184,13 +184,11 @@ UPF to maintain per-device session state.
 
 Of particular note, the per-UE session state controlled by the SMF (and
 implemented by the UPF) includes a packet buffer in which packets
-destine to a UE currently in the middle of being handed off from one
-base station to another are queued during the transition. This feature
+destine to a idle UE are queued during the time UE transition to active. This feature
 was originally designed to avoid data loss during a voice call, but
 its value is less obvious when the data is an IP packet since
 end-to-end protocols like TCP are prepared to retransmit lost
-packets. On the other hand, if hand-offs are too frequent, they can be
-problematic for TCP.
+packets.
 
 Before continuing with our inventory of control-related elements in
 :numref:`Figure %s <fig-5g-core>`, it is important to note we show
@@ -225,10 +223,10 @@ some cases, similar to well-known microservices.  In
 such cases, substituting an existing cloud native component is a
 viable implementation option. For example, MongoDB can be used to
 implement a UDSF. In other cases, however, such a one-for-one swap is
-not possible due to assumptions 3GPP makes. For example, AUSF, UMD,
-UMR, and AMF collectively implement a *Authentication and
+not possible due to assumptions 3GPP makes. For example, AUSF, UDM,
+UDR, and AMF collectively implement a *Authentication and
 Authorization Service*, but an option like OAuth2 could not be used in
-their place because (a) UMD and UMR are assumed to be part of the
+their place because (a) UDM and UDR are assumed to be part of the
 global identity mapping service discussed in Section 5.1, and (b) 3GPP
 specifies the interface by which the various components request
 service from each other (e.g., AMF connects to the RAN via the N2 interface
@@ -598,7 +596,9 @@ terminology are also called "rules", of which there are four types:
   activated by modifying a FAR to include `buffer` and `notify` flags,
   as just described. An additional set of parameters are used to
   configure the buffer, for example setting its maximum size (number
-  of bytes) and duration (amount of time).
+  of bytes) and duration (amount of time). Optionally CP can buffer
+  packets and this is achieved by installing a PDR which leads to
+  UPF forwarding data packets to control plane.
 
 * **Usage Reporting Rules (URRs):** Instructs the UPF to periodically
   send usage reports for each UE to the CP. These reports include
@@ -797,4 +797,3 @@ in the switching hardware are identical to the counters in the Model
 UPF. When the Mobile Core requests counter values from the Model UPF,
 the backend translator polls the corresponding hardware switch
 counters and relays the response.
-
