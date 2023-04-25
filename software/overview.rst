@@ -2,14 +2,14 @@ Overview
 =============
 
 Many of the implementation details presented in this book were
-informed by Aether, an open source edge cloud that includes a 5G
-connectivity service.  Source code for all the individual components
-(e.g., AMP, SD-Core, SD-RAN, SD-Fabric) can be downloaded, and
-deployment artifacts built from that source code (e.g., Docker Images,
-Helm Charts, Fleet Bundles, Terraform Templates) can be used to bring
-up a running instance of Aether on local hardware. (See the *Source
-Directory* section of this appendix for information about where to
-find the relevant code repositories.)
+informed by Aether, an open source 5G edge cloud connectivity service.
+Source code for all the individual components (e.g., AMP, SD-Core,
+SD-RAN, SD-Fabric) can be downloaded, and deployment artifacts built
+from that source code (e.g., Docker Images, Helm Charts, Fleet
+Bundles, Terraform Templates) can be used to bring up a running
+instance of Aether on local hardware. (See the *Source Directory*
+section of this appendix for information about where to find the
+relevant code repositories.)
 
 A multi-site deployment of Aether has been running since 2020 in
 support of the *Pronto Project*, but that deployment depends on an ops
@@ -19,9 +19,9 @@ bring up their own Aether clusters.  Aether is also available as two
 self-contained software packages that were originally designed to
 support developers working on individual components.  These packages
 are straightforward to install and run, even in a VM on your laptop,
-so they also provide a way to get started:
+so they also provide an easy way to get started:
 
-* `Aether-in-a-Box (Aiab)
+* `Aether-in-a-Box (AiaB)
   <https://docs.aetherproject.org/master/developer/aiab.html>`__:
   Includes SD-Core and the online aspects of AMP (Service
   Orchestrator and the Monitoring Subsystem). AiaB can be configured
@@ -39,7 +39,7 @@ Note that these two packages do not include SD-Fabric, which depends
 on programmable switching hardware. Readers interested in learning
 more about that capability (including a P4-based UPF) should see the
 Hands-on Programming appendix of our companion SDN book.
-  
+
 .. _reading_pronto:
 .. admonition:: Further Reading
 

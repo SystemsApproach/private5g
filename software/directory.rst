@@ -9,8 +9,8 @@ multiple repositories:
   for the jobs that implement the CI/CD pipeline.
 
 * GitHub repository for the OMEC Project
-  (https://github.com/omec-project): Microservices for SD-Core, plus
-  the emulator that subjects SD-Core to RAN workloads.
+  (https://github.com/omec-project): Microservices for SD-Core (5GC), plus
+  the emulator (gNBsim) that subjects SD-Core to RAN workloads.
 
 * GitHub repository for the ONOS Project
   (https://github.com/onosproject): Microservices for SD-Fabric and
@@ -18,13 +18,21 @@ multiple repositories:
 
 * GitHub repository for the Stratum Project
   (https://github.com/stratum): On-switch components of SD-Fabric.
-  
+
 For Gerrit, you can either browse Gerrit (select the `master` branch)
 or clone the corresponding *<repo-name>* by typing:
 
 .. code-block::
 
-   $ git clone ssh://gerrit.opencord.org:29418/<repo-name>
+  $ git clone ssh://gerrit.opencord.org:29418/<repo-name>
+
+If port 29418 is blocked by your network administrator, you can try cloning
+using https instead of ssh:
+
+.. code-block::
+
+  $ git clone https://gerrit.opencord.org/<repo-name>
+
 
 Deployment artifacts are pulled from the following repositories:
 
@@ -34,12 +42,12 @@ Helm Charts
  | https://charts.onosproject.org
  | https://charts.opencord.org
  | https://charts.atomix.io
- | https://sdrancharts.onosproject.org                 
+ | https://sdrancharts.onosproject.org
  | https://charts.rancher.io/
 
 Docker Images
 
- | https://hub.docker.com/u/aetherproject
+ | https://registry.aetherproject.org
 
 The Aether CI/CD pipeline keeps the above artifact repos in sync with
 the source repos, which can be found here:
@@ -47,13 +55,13 @@ the source repos, which can be found here:
  | ROC: https://gerrit.opencord.org/plugins/gitiles/roc-helm-charts
  | SD-RAN: https://github.com/onosproject/sdran-helm-charts
  | SD-Core: https://gerrit.opencord.org/plugins/gitiles/sdcore-helm-charts
- | SD-Fabric (Servers): https://github.com/onosproject/onos-helm-charts  
+ | SD-Fabric (Servers): https://github.com/onosproject/onos-helm-charts
  | SD-Fabric (Switches): https://github.com/stratum/stratum-helm-charts
 
 And the QA tests run against code checked into these source repos can
 be found here:
 
- | https://gerrit.opencord.org/plugins/gitiles/aether-system-tests 
+ | https://gerrit.opencord.org/plugins/gitiles/aether-system-tests
 
 For more information about Aether's CI/CD pipeline, including its QA
 and version control strategies, we recommend the Lifecycle Management
@@ -81,5 +89,5 @@ deployment machinery in enough detail so anyone can deploy and operate
 Aether, with each stage highlighting the next set of touchpoints for
 customizing the configuration. All of these customizations are
 recorded as a set of *blueprints* that govern how Aether is deployed.
-(See the ``blueprints`` directory of the OnRamp repo for the currently
-available set.)
+(See the `blueprints <https://github.com/SystemsApproach/aether-onramp/tree/master/blueprints>`_
+directory of the OnRamp repo for the currently available sets.)

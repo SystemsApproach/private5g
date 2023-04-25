@@ -9,8 +9,8 @@ written for the 5G scenario, but you can substitute "4G" for "5G" in
 every command or file name.  (Exceptions to that rule are explicitly
 noted.)
 
-In addition to the physical server used in previous stages, we now
-assume that server and the external radio are connected to the same L2
+In addition to the physical host used in previous stages, we now
+assume that host and the external radio are connected to the same L2
 network and share an IP subnet.  This is not a hard requirement for
 all deployments, but it does simplify communication between the radio
 and the UPF running within Kubernetes on the server.  Take note of the
@@ -19,28 +19,24 @@ radio, for example by typing:
 
 .. code-block::
 
-   $ ifconfig
-   enp193s0f0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-           inet 10.76.28.113  netmask 255.255.255.0  broadcast 10.76.28.255
-           inet6 fe80::2ef0:5dff:fef2:d821  prefixlen 64  scopeid 0x20<link>
-           ether 2c:f0:5d:f2:d8:21  txqueuelen 1000  (Ethernet)
-           RX packets 72409278  bytes 97551531344 (97.5 GB)
-           RX errors 0  dropped 156  overruns 0  frame 5
-           TX packets 31165137  bytes 2399311268 (2.3 GB)
-           TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-
-   lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
-           inet 127.0.0.1  netmask 255.0.0.0
-           inet6 ::1  prefixlen 128  scopeid 0x10<host>
-           loop  txqueuelen 1000  (Local Loopback)
-           RX packets 2000815905  bytes 614846017824 (614.8 GB)
-           RX errors 0  dropped 0  overruns 0  frame 0
-           TX packets 2000815905  bytes 614846017824 (614.8 GB)
-           TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+   $ ip a
+   1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+       link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+       inet 127.0.0.1/8 scope host lo
+          valid_lft forever preferred_lft forever
+       inet6 ::1/128 scope host
+          valid_lft forever preferred_lft forever
+   2: enp193s0f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+       link/ether 2c:f0:5d:f2:d8:21 brd ff:ff:ff:ff:ff:ff
+       altname enp19s0f0
+       inet 10.76.28.113/24 metric 100 brd 10.76.28.255 scope global ens3
+          valid_lft forever preferred_lft forever
+       inet6 fe80::2ef0:5dff:fef2:d821/64 scope link
+          valid_lft forever preferred_lft forever
 
 In what will serve as a running example throughout this section, the interface is
 ``enp193s0f0`` with IP address ``10.76.28.113``.
-	   
+
 
 Local Blueprint
 ~~~~~~~~~~~~~~~
@@ -54,17 +50,17 @@ establishes a simple convention to help manage that process.
 Specifically, the ``blueprints`` directory currently defines four
 distinct ways to configure and deploy Aether:
 
-* ``release-2.0``: Deploys Aether v2.0 in a single server/VM, running
+* ``release-2.0``: Deploys Aether v2.0 in a single machine/VM, running
   an emulated RAN.
 
-* ``release-2.1``: Deploys Aether v2.1 in a single server/VM, running
+* ``release-2.1``: Deploys Aether v2.1 in a single machine/VM, running
   an emulated RAN.
 
 * ``latest``: Deploys the latest version of Aether in a single
-  server/VM, running an emulated RAN.
+  machine/VM, running an emulated RAN.
 
 * ``radio``: Deploys the latest version of Aether in a single
-  server/VM, connected to a physical small cell radio.
+  machine/VM, connected to a physical gNB cell.
 
 Up to this point, we have been using ``latest`` as our default
 blueprint, but for this stage, we will shift to ``radio``.
@@ -136,8 +132,8 @@ Going forward, you will be editing the ``yaml`` and ``json`` files in
 the ``radio`` blueprint, so we recommend familiarizing yourself with
 ``radio/sd-core-5g-values.yaml`` and ``radio/roc-5g-models.json``
 (or their 4G counterparts).
-   
-Prepare UEs 
+
+Prepare UEs
 ~~~~~~~~~~~~
 
 5G-connected devices must have a SIM card, which you are responsible
@@ -151,17 +147,17 @@ local environment.  You then assign an IMSI and two secret keys to
 each SIM card. Throughout this section, we use the following values as
 exemplars:
 
-* IMSI: each one is unique, matching pattern ``315010*********`` (15 digits)
+* IMSI: each one is unique, matching pattern ``315010*********`` (up to 15 digits)
 * OPc: ``69d5c2eb2e2e624750541d3bbc692ba5``
 * Key: ``000102030405060708090a0b0c0d0e0f``
 
 Insert the SIM cards into whatever devices you plan to connect to
 Aether.  Be aware that not all phones support the CBRS frequency bands
 that Aether uses. Aether is known to work with recent iPhones (11 and
-greater) and Google Pixel phones (4 and greater).  CBRS may also be
-supported by recent phones from Samsung, LG Electronics and Motorola
-Mobility, but these have not been tested. Note that on each phone you
-will need to configure ``internet`` as the *Access Point Name (APN)*.
+greater), Google Pixel phones (4 and greater) and OnePlus phones.  CBRS
+may also be supported by recent phones from Samsung, LG Electronics and
+Motorola Mobility, but these have not been tested. Note that on each phone
+you will need to configure ``internet`` as the *Access Point Name (APN)*.
 Another good option is to use a 5G dongle connected to a Raspberry Pi
 as a demonstration UE. This makes it easier to run diagnostic tests
 from the UE. For example, we have used `APAL's 5G dongle
@@ -180,7 +176,7 @@ block adds IMSIs between ``315010999912301`` and ``315010999912303``:
 
    subscribers:
    - ueId-start: "315010999912301"
-     ueId-end: "315010999912303"
+     ueId-end: "315010999912310"
      plmnId: "315010"
      opc: "69d5c2eb2e2e624750541d3bbc692ba5"
      key: "000102030405060708090a0b0c0d0e0f"
@@ -189,7 +185,8 @@ block adds IMSIs between ``315010999912301`` and ``315010999912303``:
 Further down in the same ``omec-sub-provision`` section you will find
 a ``device-group`` block that assigns IMSIs to *Device Groups* (with
 Device Groups subsequently associated with *Slices*). You will need to
-re-enter the individual IMSIs there:
+enter the individual IMSIs from the ``subscribers`` block that will be
+part of the device-group:
 
 .. code-block::
 
@@ -197,7 +194,7 @@ re-enter the individual IMSIs there:
    - name:  "5g-user-group1"
       imsis:
           - "315010999912301"
-          - "315010999912302"		  
+          - "315010999912302"
           - "315010999912303"
 
 Multiple *Device Groups* and *Slices* will come into play in future
@@ -230,9 +227,6 @@ in mind that you will see containers that implement the 4G core
 instead of the 5G core running in the ``omec`` namespace if you
 configured for that scenario.
 
-Note that we postpone bringing up the AMP until we are confident the
-SD-Core is running correctly.
-
 
 Validate Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -241,28 +235,26 @@ Regardless of whether you bring up a 4G or 5G version of the Control
 Plane, the UPF pod implements SD-Core's User Plane. To verify that the
 UPF is properly connected to the network, you can check to see that the
 Macvlan networks ``core`` and ``access`` are properly configured on
-your server. This can be done using ``ifconfig``, and you should see
-results similar to the following:
+your server. This can be done using ``ip``, and you should see results
+similar to the following:
 
 .. code-block::
-   
-   $ ifconfig core
-   core: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-       inet 192.168.250.1  netmask 255.255.255.0  broadcast 192.168.250.255
-       ether 16:9d:c1:0f:19:3a  txqueuelen 1000  (Ethernet)
-       RX packets 513797  bytes 48400525 (48.4 MB)
-       RX errors 0  dropped 0  overruns 0  frame 0
-       TX packets 102996  bytes 26530538 (26.5 MB)
-       TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
-   $ ifconfig access
-   access: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-       inet 192.168.252.1  netmask 255.255.255.0  broadcast 192.168.252.255
-       ether 7a:9f:38:c0:18:15  txqueuelen 1000  (Ethernet)
-       RX packets 558162  bytes 64064410 (64.0 MB)
-       RX errors 0  dropped 0  overruns 0  frame 0
-       TX packets 99553  bytes 16646682 (16.6 MB)
-       TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+   $ ip addr show core
+   15: core@ens3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+       link/ether 06:f7:7c:65:31:fc brd ff:ff:ff:ff:ff:ff
+       inet 192.168.250.1/24 brd 192.168.250.255 scope global core
+          valid_lft forever preferred_lft forever
+       inet6 fe80::4f7:7cff:fe65:31fc/64 scope link
+          valid_lft forever preferred_lft forever
+
+   $ ip addr show access
+   14: access@ens3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+       link/ether 82:ef:d3:bb:d3:74 brd ff:ff:ff:ff:ff:ff
+       inet 192.168.252.1/24 brd 192.168.252.255 scope global access
+          valid_lft forever preferred_lft forever
+       inet6 fe80::80ef:d3ff:febb:d374/64 scope link
+          valid_lft forever preferred_lft forever
 
 Understanding why these two interfaces exist is helpful in
 troubleshooting your deployment. They enable the UPF to exchange
@@ -270,12 +262,12 @@ packets with the gNB (``access``) and the Internet (``core``). In 3GPP
 terms, these correspond to the N3 and N6 interfaces, respectively, as
 shown in :numref:`Figure %s <fig-sd-core>`. But these two interfaces
 exist both **inside** and **outside** the UPF.  The above output from
-``ifconfig`` shows the two outside interfaces; ``kubectl`` can be used
+``ip`` shows the two outside interfaces; ``kubectl`` can be used
 to see what's running inside the UPF, where ``access`` and ``core``
 are the last two interfaces shown below:
 
 .. code-block::
-   
+
    $ kubectl -n omec exec -ti upf-0 bessd -- ip addr
    1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
        link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -309,23 +301,23 @@ are two subnets on this bridge: the two ``access`` interfaces are on
 ``access`` as interfaces in the context of a particular compute
 environment (e.g., the UPF container), they can also be viewed as
 virtual bridges or virtual links connecting a pair of compute
-environments (e.g., the hosting server and the UPF container). This
+environments (e.g., the host machine and the UPF container). This
 makes the schematic shown in :numref:`Figure %s <fig-macvlan>` a
 helpful way to visualize the setup.
 
 .. _fig-macvlan:
-.. figure:: ../figures/Slide27.png 
+.. figure:: ../figures/Slide27.png
     :width: 600px
     :align: center
-	    
+
     The UPF container running inside the Aether hosting server, with
     ``core`` and ``access`` bridging the two. Information shown
     in gray (``10.76.28.187``, ``10.76.28.113``, ``enp193s0f0``) is
     specific to a particular deployment site.
-    
+
 In this setting, the ``access`` interface inside the UPF has an IP
 address of ``192.168.252.3``; this is the destination IP address of
-GTP-encapsulated data plane packets from the gNB.  In order for these
+GTP-encapsulated user plane packets from the gNB.  In order for these
 packets to find their way to the UPF, they must arrive on the
 ``DATA_IFACE`` interface and then be forwarded on the ``access``
 interface outside the UPF.  (As described later in this section, it is
@@ -367,7 +359,7 @@ means that the ``172.250.0.0/16`` addresses assigned to UEs are not
 visible beyond the Aether server. The return (downstream) packets
 undergo reverse NAT and now have a destination IP address of the UE.
 They are forwarded by the kernel to the ``core`` interface by these
-rules on the server:
+rules on the host:
 
 .. code-block::
 
@@ -421,7 +413,7 @@ be consistent *within* ``radio/roc-5g-models.json``.
           "format": "CCCNNNEESSSSSSS"
    },
    ...
-   
+
    "sim-card": [
           {
               "sim-id": "aiab-sim-1",
@@ -438,7 +430,7 @@ Then type
    $ make 5g monitoring
 
 To see these initial configuration values using the GUI, open the
-dashboard available at ``http://<server-ip>:31194``. If you select
+dashboard available at ``http://<host-ip>:31194``. If you select
 ``Configuration > Site`` from the drop-down menu at top right, and
 click the ``Edit`` icon associated with the ``Aether Site`` you can
 see (and potentially change) the following values:
@@ -474,9 +466,9 @@ gNodeB Setup
 ~~~~~~~~~~~~~~~~~~~~
 
 Once the SD-Core is up and running, we are ready to bring up the
-physical gNodeB. The details of how to do this depend on the small
-cell you are using, but we identify the main issues you need to
-address. For example 4G and 5G small cells commonly used with Aether,
+physical gNodeB. The details of how to do this depend on the gNB
+you are using, but we identify the main issues you need to address.
+For example 4G and 5G small cells commonly used with Aether,
 we recommend the two SERCOMM devices on the ONF MarketPlace:
 
 .. _reading_sercomm:
@@ -498,13 +490,13 @@ discussion concrete, where the gNB is assigned IP address
 Aether is at IP address ``10.76.28.113``. (Recall that we assume these
 are both on the same subnet.)  See :numref:`Figure %s <fig-sercomm>`
 for a screenshot of the SERCOMM gNB management dashboard, which we
-reference in the instructions that follow.
+reference in the instructions that follow:
 
 .. _fig-sercomm:
-.. figure:: ../figures/Sercomm.png 
+.. figure:: ../figures/Sercomm.png
     :width: 500px
     :align: center
-    
+
     Management dashboard on the Sercomm gNB, showing the dropdown
     ``Settings`` menu overlayed on the ``NR Cell Configuration`` page
     (which shows default radio settings).
@@ -581,13 +573,13 @@ Run Diagnostics
 ~~~~~~~~~~~~~~~~~
 
 Successfully connecting a UE to the Internet is not a straightforward
-exercise. It involves configuring the UE, small cell, and SD-Core
-software in a consistent way; establishing SCTP-based control plane
-and GTP-based user plane connections between the base station and
+exercise. It involves configuring the UE, gNB, and SD-Core
+software in a consistent way; establishing SCTP-based control plane (N2)
+and GTP-based user plane (N3) connections between the base station and
 Mobile Core; and traversing multiple IP subnets along the end-to-end
 path.
 
-The UE and small cell provide limited diagnostic tools. For example,
+The UE and gNB provide limited diagnostic tools. For example,
 it's possible to run ``ping`` and ``traceroute`` from both. You can
 also run the ``ksniff`` tool described in Stage 1, but the most
 helpful packet traces you can capture are shown in the following
@@ -595,7 +587,7 @@ commands. You can run these on the Aether server, where we use our
 example ``enp193s0f0`` interface for illustrative purposes:
 
 .. code-block::
-   
+
    $ sudo tcpdump -i any sctp -w sctp-test.pcap
    $ sudo tcpdump -i enp193s0f0 port 2152 -w gtp-outside.pcap
    $ sudo tcpdump -i access port 2152 -w gtp-inside.pcap
@@ -604,16 +596,16 @@ example ``enp193s0f0`` interface for illustrative purposes:
 
 The first trace, saved in file ``sctp.pcap``, captures SCTP packets
 sent to establish the control path between the base station and the
-Mobile Core. Toggling "Mobile Data" on the UE, for example by turning
-Airplane Mode off and on, will generate the relevant control plane
-traffic.
+Mobile Core (i.e., N2 messages). Toggling "Mobile Data" on the UE,
+for example by turning Airplane Mode off and on, will generate the
+relevant control plane traffic.
 
 The second and third traces, saved in files ``gtp-outside.pcap`` and
 ``gtp-inside.pcap``, respectively, capture GTP packets (tunneled
 through port ``2152`` ) on the RAN side of the UPF. Setting the
 interface to ``enp193s0f0`` corresponds to "outside" the UPF and setting
 the interface to ``access`` corresponds to "inside" the UPF.  Running
-``ping`` from the UE will generate the relevant user plane traffic.
+``ping`` from the UE will generate the relevant user plane (N3) traffic.
 
 Similarly, the fourth and fifth traces, saved in files
 ``n6-inside.pcap`` and ``n6-outside.pcap``, respectively, capture IP

@@ -38,11 +38,13 @@ GBR
 Gbps
 Gerrit
 gNB
+gNBsim
 Grafana
 GTP
 Haswell
 HSS 
 Hasan
+https
 IaaS
 iPhones
 IoT

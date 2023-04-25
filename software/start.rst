@@ -45,7 +45,7 @@ need to export `PROXY_ENABLED=true` by typing the following:
 
    $ export PROXY_ENABLED=true
 
-This variable can also be set in your `.bashrc` file to make it
+This variable can also be set in your ``~/.bashrc`` file to make it
 permanent.
 
 Proxy or no-proxy, Stage 1 involves downloading many Docker images and
@@ -63,7 +63,7 @@ machine:
 
    $ mkdir ~/systemsapproach
    $ cd ~/systemsapproach
-   $ git clone https://github.com/systemsapproach/aether-onramp 
+   $ git clone https://github.com/systemsapproach/aether-onramp
    $ cd aether-onramp
 
 You will then execute the sequence of Makefile targets described in
@@ -74,14 +74,13 @@ namespaces are operational:
 .. code-block::
 
    $ kubectl get pods --all-namespaces
-   
+
 If you are not familiar with `kubectl` (the CLI for Kubernetes), we
 recommend that you start with `Kubernetes Tutorial
 <https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.  And
 although not required, you may also want to install `k9s
 <https://k9scli.io/>`__, a terminal-based UI that provides a
-convenient alternative to `kubtctl` for interacting with Kubernetes.
-
+convenient alternative to `kubectl` for interacting with Kubernetes.
 
 Helm also has a command-line interface that can be helpful in tracking
 progress. For example,
@@ -110,7 +109,7 @@ target server. Do this by typing:
 .. code-block::
 
    $ make node-prep
-  
+
 `kubectl` will show the `kube-system` and `calico-system` namespaces
 running.
 
@@ -137,10 +136,10 @@ specifies several configuration parameters for the cluster. After the
 
 Of particular note, this example cluster runs on a server at IP
 address ``10.76.28.113`` and we have instructed Kubernetes to allow
-service ports ranging from ``2000`` to ``36767``. We will see both of
-these settings come into play as we move to more complex blueprints.
+service for ports ranging from ``2000`` to ``36767``. We will see both
+of these settings come into play as we move to more complex blueprints.
 
-     
+
 Configure the Network
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -153,7 +152,7 @@ time.  Type:
 .. code-block::
 
    $ make net-prep
-   
+
 This target configures Linux (via `systemctl`), but also starts a
 Quagga router running inside the cluster. To see how routing is set up
 for Aether OnRamp (which you will need to understand in later stages),
@@ -189,9 +188,9 @@ You can access the dashboards for the two subsystems, respectively, at
 
 .. code-block::
 
-   http://<server_ip>:31194 
-   http://<server_ip>:30950 
-   
+   http://<host_ip>:31194
+   http://<host_ip>:30950
+
 More information about the Control and Monitoring dashboards is given
 in their respective sections of the Aether Guide. Note that the
 programmatic API underlying the Control Dashboard, which was
@@ -205,7 +204,7 @@ deployment.
    `Aether Control Dashboard <https://docs.aetherproject.org/master/operations/gui.html>`__.
 
    `Aether Monitoring Dashboard <https://docs.aetherproject.org/master/developer/aiabhw5g.html#enable-monitoring>`__.
- 
+
 Bring Up SD-Core
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -233,7 +232,7 @@ the emulated environment we're limiting ourselves to in Stage 1, these
 values are loaded from ``blueprints/latest/roc-5g-models.json`` and match
 the settings in ``blueprints/latest/sd-core-5g-values.yaml``.
 
-Run Emulated RAN Test 
+Run Emulated RAN Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We can now test SD-Core with emulated traffic by typing:
@@ -263,11 +262,11 @@ lines when successful:
 
 You can modify the emulation parameters by editing the ``5g-ran-sim``
 section of ``blueprints/latest/sd-core-5g-values.yaml``; this block is
-used to configure the ``gnbsim-0`` pod in the ``omec`` name space.
+used to configure the ``gnbsim-0`` pod in the ``omec`` namespace.
 Documentation on how to make such configuration changes can be found
 in the `gNBsim GitHub repo
 <https://github.com/omec-project/gnbsim>`__.
-   
+
 
 Run Ksniff and Wireshark
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -279,7 +278,7 @@ capture packets and display their headers as they flow into and out of
 the microservices that implement Aether. Output from Ksniff can then
 be fed into `Wireshark <https://www.wireshark.org/>`__.
 
-To install the Ksniff plugin on the server running Aether, you need to
+To install the Ksniff plugin on the machine running Aether, you need to
 first install ``krew``, the Kubernetes plugin manager. Instructions on
 doing that can be found `online
 <https://krew.sigs.k8s.io/docs/user-guide/setup/install/>`__. Once
@@ -292,7 +291,7 @@ that's done, you can install Ksniff by typing:
 You can then run Ksniff in the context of a specific Kubernetes pod by
 specifying their namespace and instance names, and then redirecting
 the output to Wireshark. If you don't have a desktop environment on
-your Aether server, you can either view the output using a simpler
+your Aether machine, you can either view the output using a simpler
 packet analyzer, such as `tshark
 <https://www.wireshark.org/docs/man-pages/tshark.html>`__, or by
 redirecting the PCAP output in a file and transfer it a desktop
