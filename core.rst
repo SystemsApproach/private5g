@@ -141,7 +141,7 @@ collection of components shown in :numref:`Figure %s <fig-5g-core>` as
 a set of microservices is a reasonable working model (for now).
 
 .. _fig-5g-core:
-.. figure:: figures/Slide22.png 
+.. figure:: figures/Slide21.png 
     :width: 700px 
     :align: center 
 	    
@@ -276,7 +276,7 @@ schematic even though it looks quite similar to :numref:`Figure %s
     `SD-Core <https://opennetworking.org/sd-core/>`__.
 
 .. _fig-sd-core:
-.. figure:: figures/Slide25.png 
+.. figure:: figures/Slide22.png 
     :width: 600px
     :align: center
 	    
@@ -781,7 +781,7 @@ switches and servers. A high-level schematic of this software stack is
 shown in :numref:`Figure %s <fig-p4-upf>`.
 	
 .. _fig-p4-upf:
-.. figure:: figures/Slide26.png 
+.. figure:: figures/Slide23.png 
     :width: 500px
     :align: center
 	    

@@ -306,7 +306,7 @@ makes the schematic shown in :numref:`Figure %s <fig-macvlan>` a
 helpful way to visualize the setup.
 
 .. _fig-macvlan:
-.. figure:: ../figures/Slide27.png
+.. figure:: ../figures/Slide24.png
     :width: 600px
     :align: center
 
