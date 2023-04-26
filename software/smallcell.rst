@@ -59,11 +59,15 @@ distinct ways to configure and deploy Aether:
 * ``latest``: Deploys the latest version of Aether in a single
   machine/VM, running an emulated RAN.
 
-* ``radio``: Deploys the latest version of Aether in a single
-  machine/VM, connected to a physical gNB cell.
+* ``4g-radio``: Deploys the latest version of Aether in a single 
+  machine/VM, connected to a physical eNB. 
 
+* ``5g-radio``: Deploys the latest version of Aether in a single 
+  machine/VM, connected to a physical gNB. 
+  
 Up to this point, we have been using ``latest`` as our default
-blueprint, but for this stage, we will shift to ``radio``.
+blueprint, but for this stage, we will shift to ``5g-radio`` (or use
+the ``4g-radio`` blueprint, as appropriate).
 
 Each blueprint specifies three sets of parameters that define how
 Aether is configured and deployed: (1) a set of Makefile variables
@@ -71,7 +75,7 @@ that customize the deployment process; (2) a set of Helm Charts that
 customize the Kubernetes workload that gets deployed; and (3) a set of
 value override (and similar) files that customize how the
 microservices in that workload are configured. All of these parameters
-are defined in the blueprint's ``config`` file, so using the ``radio``
+are defined in the blueprint's ``config`` file, so using the ``5g-radio``
 blueprint as an example:
 
 .. code-block::
@@ -101,36 +105,33 @@ blueprint as an example:
    # Helm Value Overrides and other Config Files
    ROC_VALUES     := $(BLUEPRINTDIR)/roc-values.yaml
    ROC_DEFAULTENT_MODEL := $(BLUEPRINTDIR)/roc-defaultent-model.json
-   ROC_4G_MODELS  := $(BLUEPRINTDIR)/roc-4g-models.json
    ROC_5G_MODELS  := $(BLUEPRINTDIR)/roc-5g-models.json
-   4G_CORE_VALUES := $(BLUEPRINTDIR)/sd-core-4g-values.yaml
    5G_CORE_VALUES := $(BLUEPRINTDIR)/sd-core-5g-values.yaml
-   TEST_APP_VALUES := $(BLUEPRINTDIR)/5g-test-apps-values.yaml
    MONITORING_VALUES := $(BLUEPRINTDIR)/monitoring.yaml
 
 As your deployment deviates more and more from the release—either to
 account for differences in your target computing environment or
 changes you make to the software being deployed—you can record these
 changes in these or other blueprints that you create. For the purpose
-of this section, we will simply edit files in the ``blueprints/radio``
+of this section, we will simply edit files in the ``blueprints/5g-radio``
 directory, but you may want to make your own local blueprint
 directory, copy these files into it, and make your changes there.
 
 At this point, you need to make two edits. The first is to the
-``DATA_IFACE`` variable in ``blueprints/radio/config``, changing it
+``DATA_IFACE`` variable in ``blueprints/5g-radio/config``, changing it
 from ``eth0`` to whatever name you noted earlier (e.g., ``enp193s0f0``
 in our running example). The second is to the default ``BLUEPRINT``
 setting in ``MakefileVar.mk``, changing it from ``latest`` to
-``radio``. Alternatively, you can modify that variable on a
+``5g-radio``. Alternatively, you can modify that variable on a
 case-by-case basis; for example:
 
 .. code-block::
 
-   BLUEPRINT=radio make net-prep
+   BLUEPRINT=5g-radio make net-prep
 
 Going forward, you will be editing the ``yaml`` and ``json`` files in
-the ``radio`` blueprint, so we recommend familiarizing yourself with
-``radio/sd-core-5g-values.yaml`` and ``radio/roc-5g-models.json``
+the ``5g-radio`` blueprint, so we recommend familiarizing yourself with
+``5g-radio/sd-core-5g-values.yaml`` and ``5g-radio/roc-5g-models.json``
 (or their 4G counterparts).
 
 Prepare UEs
@@ -165,10 +166,10 @@ from the UE. For example, we have used `APAL's 5G dongle
 
 Finally, modify the the ``subscribers`` block of the
 ``omec-sub-provision`` section in file
-``radio/sd-core-5g-values.yaml`` to record the IMSI, OPc, and
+``5g-radio/sd-core-5g-values.yaml`` to record the IMSI, OPc, and
 Key values configured onto your SIM cards. The block also defines a
 sequence number that is intended to thwart replay attacks. (As a
-reminder, these values go in ``radio/sd-core-4g-values.yaml``
+reminder, these values go in ``4g-radio/sd-core-4g-values.yaml``
 if you are using a 4G small cell.) For example, the following code
 block adds IMSIs between ``315010999912301`` and ``315010999912303``:
 
@@ -391,18 +392,18 @@ Runtime Control
 Aether defines an API (and associated GUI) for managing connectivity
 at runtime. Even though some connectivity parameters are passed
 directly to the SD-Core at startup using Helm Chart overrides, (e.g.,
-the IMSI-related edits of ``radio/sd-core-5g-values.yaml`` described
+the IMSI-related edits of ``5g-radio/sd-core-5g-values.yaml`` described
 above), others correspond to abstractions that ROC layers on top of
-SD-Core, where file ``radio/roc-5g-models.json`` "bootstraps"
+SD-Core, where file ``5g-radio/roc-5g-models.json`` "bootstraps"
 the ROC database with an initial set of data (saving you from a
 laborious GUI session).
 
 To bring up the ROC, you first need to edit
-``radio/roc-5g-models.json`` to record the same IMSI information as
+``5g-radio/roc-5g-models.json`` to record the same IMSI information as
 before. Do this by editing, adding or removing ``sim-card`` entries as
 necessary. Note that only the IMSIs need to match the earlier data;
 the ``sim-id`` and ``display-name`` values are arbitrary and need only
-be consistent *within* ``radio/roc-5g-models.json``.
+be consistent *within* ``5g-radio/roc-5g-models.json``.
 
 .. code-block::
 
@@ -452,8 +453,8 @@ you are done with these edits, select the ``Basket`` icon at top right
 and click the ``Commit`` button.
 
 As currently configured, the *Device-Group* information is duplicated
-between ``radio/sd-core-5g-values.yaml`` and
-``radio/roc-5g-models.json``. This makes it possible to bring up the
+between ``5g-radio/sd-core-5g-values.yaml`` and
+``5g-radio/roc-5g-models.json``. This makes it possible to bring up the
 SD-Core without the ROC, for example as we just did to verify the
 configuration, but it can lead to problems of keeping the two in sync.
 As an exercise, you can delete the *Device-Group* blocks in the
