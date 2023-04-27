@@ -80,8 +80,8 @@ blueprint as an example:
 
 .. code-block::
 
-   $ cat blueprints/radio/config
-   # Configuration for External (4G or 5G) Radio Blueprint
+   $ cat blueprints/5g-radio/config
+   # Configuration for External 5G Radio (gNB) Blueprint
 
    # Variables
    ENABLE_RANSIM := false
