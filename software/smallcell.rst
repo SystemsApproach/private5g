@@ -9,8 +9,8 @@ written for the 5G scenario, but you can substitute "4G" for "5G" in
 every command or file name.  (Exceptions to that rule are explicitly
 noted.)
 
-In addition to the physical host used in previous stages, we now
-assume that host and the external radio are connected to the same L2
+In addition to the physical server used in previous stages, we now
+assume that server and the external radio are connected to the same L2
 network and share an IP subnet.  This is not a hard requirement for
 all deployments, but it does simplify communication between the radio
 and the UPF running within Kubernetes on the server.  Take note of the
@@ -50,24 +50,24 @@ establishes a simple convention to help manage that process.
 Specifically, the ``blueprints`` directory currently defines four
 distinct ways to configure and deploy Aether:
 
-* ``release-2.0``: Deploys Aether v2.0 in a single machine/VM, running
-  an emulated RAN.
+* ``release-2.0``: Deploys Aether v2.0 in a single server (or VM),
+  running an emulated RAN.
 
-* ``release-2.1``: Deploys Aether v2.1 in a single machine/VM, running
-  an emulated RAN.
+* ``release-2.1``: Deploys Aether v2.1 in a single server (or VM),
+  running an emulated RAN.
 
-* ``latest``: Deploys the latest version of Aether in a single
-  machine/VM, running an emulated RAN.
+* ``latest``: Deploys the latest version of Aether in a single server
+  (or VM), running an emulated RAN.
 
-* ``4g-radio``: Deploys the latest version of Aether in a single 
-  machine/VM, connected to a physical eNB. 
+* ``4g-radio``: Deploys the latest version of Aether in a single
+  server (or VM), connected to a physical eNB.
 
-* ``5g-radio``: Deploys the latest version of Aether in a single 
-  machine/VM, connected to a physical gNB. 
+* ``5g-radio``: Deploys the latest version of Aether in a single
+  server (or VM), connected to a physical gNB.
   
 Up to this point, we have been using ``latest`` as our default
-blueprint, but for this stage, we will shift to ``5g-radio`` (or use
-the ``4g-radio`` blueprint, as appropriate).
+blueprint, but for this stage, we will shift to the ``5g-radio``
+blueprint (or ``4g-radio``, as appropriate).
 
 Each blueprint specifies three sets of parameters that define how
 Aether is configured and deployed: (1) a set of Makefile variables
@@ -104,7 +104,6 @@ blueprint as an example:
 
    # Helm Value Overrides and other Config Files
    ROC_VALUES     := $(BLUEPRINTDIR)/roc-values.yaml
-   ROC_DEFAULTENT_MODEL := $(BLUEPRINTDIR)/roc-defaultent-model.json
    ROC_5G_MODELS  := $(BLUEPRINTDIR)/roc-5g-models.json
    5G_CORE_VALUES := $(BLUEPRINTDIR)/sd-core-5g-values.yaml
    MONITORING_VALUES := $(BLUEPRINTDIR)/monitoring.yaml
@@ -197,6 +196,15 @@ part of the device-group:
           - "315010999912301"
           - "315010999912302"
           - "315010999912303"
+
+And still further down in the same section you will fine a ``network
+slices`` block where you will need to reenter the PLMN information:
+
+.. code-block::
+
+   plmn:
+       mcc: "315"
+       mnc: "010"
 
 Multiple *Device Groups* and *Slices* will come into play in future
 stages, but for now we are limiting our configuration to one of each.
@@ -302,7 +310,7 @@ are two subnets on this bridge: the two ``access`` interfaces are on
 ``access`` as interfaces in the context of a particular compute
 environment (e.g., the UPF container), they can also be viewed as
 virtual bridges or virtual links connecting a pair of compute
-environments (e.g., the host machine and the UPF container). This
+environments (e.g., the host server and the UPF container). This
 makes the schematic shown in :numref:`Figure %s <fig-macvlan>` a
 helpful way to visualize the setup.
 
@@ -311,7 +319,7 @@ helpful way to visualize the setup.
     :width: 600px
     :align: center
 
-    The UPF container running inside the Aether hosting server, with
+    The UPF container running inside the server hosting Aether, with
     ``core`` and ``access`` bridging the two. Information shown
     in gray (``10.76.28.187``, ``10.76.28.113``, ``enp193s0f0``) is
     specific to a particular deployment site.
@@ -360,7 +368,7 @@ means that the ``172.250.0.0/16`` addresses assigned to UEs are not
 visible beyond the Aether server. The return (downstream) packets
 undergo reverse NAT and now have a destination IP address of the UE.
 They are forwarded by the kernel to the ``core`` interface by these
-rules on the host:
+rules on the server:
 
 .. code-block::
 
@@ -428,10 +436,10 @@ Then type
 .. code-block::
 
    $ make 5g-roc
-   $ make 5g monitoring
+   $ make 5g-monitoring
 
 To see these initial configuration values using the GUI, open the
-dashboard available at ``http://<host-ip>:31194``. If you select
+dashboard available at ``http://<server-ip>:31194``. If you select
 ``Configuration > Site`` from the drop-down menu at top right, and
 click the ``Edit`` icon associated with the ``Aether Site`` you can
 see (and potentially change) the following values:
@@ -452,15 +460,15 @@ drop-down menu at the top right, and adding a new device group.  When
 you are done with these edits, select the ``Basket`` icon at top right
 and click the ``Commit`` button.
 
-As currently configured, the *Device-Group* information is duplicated
-between ``5g-radio/sd-core-5g-values.yaml`` and
-``5g-radio/roc-5g-models.json``. This makes it possible to bring up the
-SD-Core without the ROC, for example as we just did to verify the
-configuration, but it can lead to problems of keeping the two in sync.
-As an exercise, you can delete the *Device-Group* blocks in the
-former, restart the SD-Core, and see that the latter brings the Aether
-up in the correct state. Once running, changes should be made via the
-ROC (either the GUI or the API).
+As currently configured, the *Device-Group* and *Slice* information is
+duplicated between ``5g-radio/sd-core-5g-values.yaml`` and
+``5g-radio/roc-5g-models.json``. This makes it possible to bring up
+the SD-Core without the ROC, for example, as we just did to verify the
+configuration. Unfortunately, this can lead to problems of keeping the
+two in sync.  A tool to help address this problem the first time you
+bring up Aether is in the works, but as a general rule, changes should
+be made via the ROC (either the GUI or the API) once a deployment is
+stable.
 
 
 gNodeB Setup

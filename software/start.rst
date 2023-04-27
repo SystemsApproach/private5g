@@ -57,7 +57,7 @@ Download Aether OnRamp
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Once ready, clone the Aether OnRamp repo on this target deployment
-machine:
+server:
 
 .. code-block::
 
@@ -188,8 +188,8 @@ You can access the dashboards for the two subsystems, respectively, at
 
 .. code-block::
 
-   http://<host_ip>:31194
-   http://<host_ip>:30950
+   http://<server_ip>:31194
+   http://<server_ip>:30950
 
 More information about the Control and Monitoring dashboards is given
 in their respective sections of the Aether Guide. Note that the
@@ -278,7 +278,7 @@ capture packets and display their headers as they flow into and out of
 the microservices that implement Aether. Output from Ksniff can then
 be fed into `Wireshark <https://www.wireshark.org/>`__.
 
-To install the Ksniff plugin on the machine running Aether, you need to
+To install the Ksniff plugin on the server running Aether, you need to
 first install ``krew``, the Kubernetes plugin manager. Instructions on
 doing that can be found `online
 <https://krew.sigs.k8s.io/docs/user-guide/setup/install/>`__. Once
@@ -291,7 +291,7 @@ that's done, you can install Ksniff by typing:
 You can then run Ksniff in the context of a specific Kubernetes pod by
 specifying their namespace and instance names, and then redirecting
 the output to Wireshark. If you don't have a desktop environment on
-your Aether machine, you can either view the output using a simpler
+your Aether server, you can either view the output using a simpler
 packet analyzer, such as `tshark
 <https://www.wireshark.org/docs/man-pages/tshark.html>`__, or by
 redirecting the PCAP output in a file and transfer it a desktop

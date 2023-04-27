@@ -9,7 +9,7 @@ multiple repositories:
   for the jobs that implement the CI/CD pipeline.
 
 * GitHub repository for the OMEC Project
-  (https://github.com/omec-project): Microservices for SD-Core (5GC), plus
+  (https://github.com/omec-project): Microservices for SD-Core, plus
   the emulator (gNBsim) that subjects SD-Core to RAN workloads.
 
 * GitHub repository for the ONOS Project
