@@ -4,8 +4,8 @@ Stage 1: Emulated RAN
 The first stage of Aether OnRamp provides a good way to get
 started. It brings up a one-node Kubernetes cluster, deploys all of
 the Aether subsystems on that cluster, and runs an emulated workload
-(i.e., ICMP packets) against those subsystems. It assumes a low-end
-server that meets the following requirements:
+(ICMP packets) against those subsystems. It assumes a low-end server
+that meets the following requirements:
 
 * Haswell CPU (or newer), with at least 4 CPUs and 12GB RAM.
 * Clean install of Ubuntu 18.04, 20.04, or 22.04, with 4.15 (or later) kernel.
@@ -316,7 +316,7 @@ specific interface on the router:
     $ kubectl sniff -n default router -i access-gw -o - | tshark -r -
 
 In this case, ``access-gw`` is the name of the router's access-side
-interface (i.e., N3 interface).
+interface (i.e., the N3 interface as defined by 3GPP).
 
 Packet capture is a great way to learn about the SD-Core and other
 components, since you can watch them in action. It can also be a

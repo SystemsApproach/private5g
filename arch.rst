@@ -499,7 +499,7 @@ ramifications is given at the end of the section.
     Sequence of steps to establish secure Control and User Plane 
     channels. 
 
-With this starting point, :numref:`Figure %s <fig-secure>` shows the
+:numref:`Figure %s <fig-secure>` shows the
 per-UE connection sequence. When a UE first becomes active, it
 communicates with a nearby base station over a temporary
 (unauthenticated) radio link (Step 1).  The base station forwards the
