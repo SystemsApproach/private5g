@@ -4,14 +4,14 @@ Stage 1: Emulated RAN
 The first stage of Aether OnRamp provides a good way to get
 started. It brings up a one-node Kubernetes cluster, deploys all of
 the Aether subsystems on that cluster, and runs an emulated workload
-against those subsystems. It assumes a low-end server that meets the
-following requirements:
+(i.e., ICMP packets) against those subsystems. It assumes a low-end
+server that meets the following requirements:
 
 * Haswell CPU (or newer), with at least 4 CPUs and 12GB RAM.
 * Clean install of Ubuntu 18.04, 20.04, or 22.04, with 4.15 (or later) kernel.
 
 While this appendix focuses on deploying Aether OnRamp on a physical
-server (in anticipation of later stages), Stage 1 can also run in a VM.
+machine (in anticipation of later stages), Stage 1 can also run in a VM.
 Options include an AWS VM (Ubuntu 20.04 image on `t2.xlarge`
 instance); a VirtualBox VM running `bento/ubuntu-20.04` `Vagrant
 <https://www.vagrantup.com>`_ box on Intel Mac; a VM created using
@@ -162,7 +162,7 @@ Bring Up Aether Management Platform
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The runtime management of Aether is implemented by two Kubernetes
-applications: *Runtime Control (ROC)* and a *Monitoring
+applications: *Runtime Operational Control (ROC)* and a *Monitoring
 Service*. (Note that what the implementation calls ROC, Chapter 6
 refers to generically as *Service Orchestration*.) The two management
 services can be deployed on the same cluster with the following two
@@ -188,8 +188,8 @@ You can access the dashboards for the two subsystems, respectively, at
 
 .. code-block::
 
-   http://<server_ip>:31194
-   http://<server_ip>:30950
+   http://<host_ip>:31194
+   http://<host_ip>:30950
 
 More information about the Control and Monitoring dashboards is given
 in their respective sections of the Aether Guide. Note that the
@@ -235,7 +235,7 @@ the settings in ``blueprints/latest/sd-core-5g-values.yaml``.
 Run Emulated RAN Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We can now test SD-Core with emulated traffic by typing:
+We can now test SD-Core with emulated traffic (ICMP packets) by typing:
 
 .. code-block::
 
@@ -316,7 +316,7 @@ specific interface on the router:
     $ kubectl sniff -n default router -i access-gw -o - | tshark -r -
 
 In this case, ``access-gw`` is the name of the router's access-side
-interface.
+interface (i.e., N3 interface).
 
 Packet capture is a great way to learn about the SD-Core and other
 components, since you can watch them in action. It can also be a
