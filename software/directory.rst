@@ -82,12 +82,12 @@ available on GitHub:
  | https://github.com/SystemsApproach/aether-onramp
 
 As described in the following sections, OnRamp prescribes a
-step-by-step process for growing an Aether deployment from a single VM
-to a multi-site hybrid cloud carrying live traffic. An important
-aspect of OnRamp's approach is to describe the internals of the
-deployment machinery in enough detail so anyone can deploy and operate
-Aether, with each stage highlighting the next set of touchpoints for
-customizing the configuration. All of these customizations are
-recorded as a set of *blueprints* that govern how Aether is deployed.
-(See the `blueprints <https://github.com/SystemsApproach/aether-onramp/tree/master/blueprints>`_
+step-by-step process for growing an Aether deployment from a single
+machine (bare metal or VM) to a multi-site hybrid cloud carrying
+live traffic. An important aspect of OnRamp's approach is to describe
+the internals of the deployment machinery in enough detail so anyone
+can deploy and operate Aether, with each stage highlighting the next
+set of touchpoints for customizing the configuration. All of these
+customizations are recorded as a set of *blueprints* that govern how
+Aether is deployed. (See the `blueprints <https://github.com/SystemsApproach/aether-onramp/tree/master/blueprints>`_
 directory of the OnRamp repo for the currently available sets.)

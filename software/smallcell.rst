@@ -28,7 +28,6 @@ radio, for example by typing:
           valid_lft forever preferred_lft forever
    2: enp193s0f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
        link/ether 2c:f0:5d:f2:d8:21 brd ff:ff:ff:ff:ff:ff
-       altname enp19s0f0
        inet 10.76.28.113/24 metric 100 brd 10.76.28.255 scope global ens3
           valid_lft forever preferred_lft forever
        inet6 fe80::2ef0:5dff:fef2:d821/64 scope link
@@ -47,7 +46,7 @@ of your local environment. Editing various configuration files is a
 necessary step in customizing a deployment, and so Aether OnRamp
 establishes a simple convention to help manage that process.
 
-Specifically, the ``blueprints`` directory currently defines four
+Specifically, the ``blueprints`` directory currently defines five
 distinct ways to configure and deploy Aether:
 
 * ``release-2.0``: Deploys Aether v2.0 in a single server (or VM),
@@ -64,7 +63,7 @@ distinct ways to configure and deploy Aether:
 
 * ``5g-radio``: Deploys the latest version of Aether in a single
   server (or VM), connected to a physical gNB.
-  
+
 Up to this point, we have been using ``latest`` as our default
 blueprint, but for this stage, we will shift to the ``5g-radio``
 blueprint (or ``4g-radio``, as appropriate).
@@ -163,7 +162,7 @@ as a demonstration UE. This makes it easier to run diagnostic tests
 from the UE. For example, we have used `APAL's 5G dongle
 <https://www.apaltec.com/dongle/>`__ with Aether.
 
-Finally, modify the the ``subscribers`` block of the
+Finally, modify the ``subscribers`` block of the
 ``omec-sub-provision`` section in file
 ``5g-radio/sd-core-5g-values.yaml`` to record the IMSI, OPc, and
 Key values configured onto your SIM cards. The block also defines a
@@ -224,7 +223,7 @@ the ``BLUEPRINT`` variable in ``MakefileVar.mk``):
    $ make net-prep
 
 Once Kubernetes is running and the network properly configured, you
-are then ready to bring up the SD-Core as before:
+are then ready to bring up the SD-Core as before, but without the ROC:
 
 .. code-block::
 
@@ -394,8 +393,8 @@ two interfaces manually:
     $ ip link add access link <DATA_IFACE> type macvlan mode bridge 192.168.252.3
 
 
-Runtime Control
-~~~~~~~~~~~~~~~
+Runtime Operational Control
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Aether defines an API (and associated GUI) for managing connectivity
 at runtime. Even though some connectivity parameters are passed
@@ -623,5 +622,12 @@ interface in 3GPP). In these two tests, ``net 172.250.0.0/16``
 corresponds to the IP addresses assigned to UEs by the SMF. Running
 ``ping`` from the UE will generate the relevant user plane traffic.
 
+If the ``gtp-outside.pcap`` has packets and the ``gtp-inside.pcap``
+is empty (no packets captured), you may run the following commands
+to make sure packets are forwarded from the ``enp193s0f0`` interface
+to the ``access`` interface and vice versa:
 
+.. code-block::
 
+   $ sudo iptables -A FORWARD -i enp193s0f0 -o access -j ACCEPT
+   $ sudo iptables -A FORWARD -i access -o enp193s0f0 -j ACCEPT
