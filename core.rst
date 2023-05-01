@@ -130,22 +130,23 @@ with their new (dynamically assigned) IP address.
 5.2 Functional Components
 -------------------------
 
-The 5G Mobile Core, which 3GPP calls the *NG-Core*, adopts a
-microservice-like architecture. We say “microservice-like” because
-while the 3GPP specification spells out this level of disaggregation,
-it is really just describing a set of functional blocks and not
-prescribing an implementation. In practice, a set of functional blocks
-is very different from the collection of engineering decisions that go
+The 5G Mobile Core, which 3GPP calls the *5GC*, adopts a
+microservice-like architecture, known as Service Based Architecture
+in 3GPP terms. We say “microservice-like” because while the 3GPP
+specification spells out this level of disaggregation, it is really
+just describing a set of functional blocks and not prescribing an
+implementation. In practice, a set of functional blocks is very
+different from the collection of engineering decisions that go
 into designing a microservice-based system. That said, viewing the
 collection of components shown in :numref:`Figure %s <fig-5g-core>` as
 a set of microservices is a reasonable working model (for now).
 
 .. _fig-5g-core:
-.. figure:: figures/Slide21.png 
-    :width: 700px 
-    :align: center 
-	    
-    5G Mobile Core (NG-Core), represented as a collection of
+.. figure:: figures/Slide21.png
+    :width: 700px
+    :align: center
+
+    5G Mobile Core (5GC), represented as a collection of
     microservices, where 3GPP defines the interfaces connecting the
     Mobile Core CP and UP to the RAN (denoted N2 and N3, respectively).
 
@@ -167,10 +168,10 @@ represent the majority of the functionality that's unique to the
 Mobile Core CP (as sketched in :numref:`Figure %s <fig-secure>` of
 Section 2.4):
 
-*  *AMF (Core Access and Mobility Management Function):* Responsible for
+*  *AMF (Access and Mobility Management Function):* Responsible for
    connection and reachability management, mobility management, access
    authorization, and location services.
-   
+
 *  *SMF (Session Management Function):* Manages each UE session,
    including IP address allocation, selection of associated UP
    function, control aspects of QoS, and control aspects of UP
@@ -185,9 +186,9 @@ UPF to maintain per-device session state.
 Of particular note, the per-UE session state controlled by the SMF
 (and implemented by the UPF) includes a packet buffer in which packets
 destine to an idle UE are queued during the time the UE transitions to
-active. This feature was originally designed to avoid data loss during
-a voice call, but its value is less obvious when the data is an IP
-packet since end-to-end protocols like TCP are prepared to retransmit
+active state. This feature was originally designed to avoid data loss
+during a voice call, but its value is less obvious when the data is an
+IP packet since end-to-end protocols like TCP are prepared to retransmit
 lost packets. On the other hand, if idle-to-active transitions are too
 frequent, they can be problematic for TCP.
 
@@ -204,19 +205,19 @@ application:
 
 -  *AUSF (Authentication Server Function):* Authenticates UEs.
 
--  *UDM (Unified Data Management):* Manages user identity, including 
-   the generation of authentication credentials.
+-  *UDM (Unified Data Management):* Manages user identity, including
+   the generation of authentication credentials and access authorization.
 
 -  *UDR (Unified Data Repository):* Manages user static
    subscriber-related information.
 
--  *UDSF (Unstructured Data Storage Network Function):* Used to store
+-  *UDSF (Unstructured Data Storage Function):* Used to store
    unstructured data, and so is similar to a *key-value store*.
 
 -  *NEF (Network Exposure Function):* Exposes select capabilities to
    third-party services, and so is similar to an *API Server*.
 
-- *NRF (NF Repository Function):* Used to discover available services
+- *NRF (Network Repository Function):* Used to discover available services
   (network functions), and so is similar to a *Discovery Service*.
 
 The above list includes 3GPP-specified control functions that are, in
@@ -231,9 +232,9 @@ their place because (a) UDM and UDR are assumed to be part of the
 global identity mapping service discussed in Section 5.1, and (b) 3GPP
 specifies the interface by which the various components request
 service from each other (e.g., AMF connects to the RAN via the N2 interface
-depicted in the figure). We will see how to cope with such
-issues in Section 5.3, where we talk about implementation issues in
-more detail.
+depicted in :numref:`Figure %s <fig-5g-core>`). We will see how to cope
+with such issues in Section 5.3, where we talk about implementation issues
+in more detail.
 
 Finally, :numref:`Figure %s <fig-5g-core>` shows two other functional
 elements that export a northbound interface to the management plane
@@ -242,7 +243,7 @@ elements that export a northbound interface to the management plane
 -  *PCF (Policy Control Function):* Manages the policy rules for the
    rest of the Mobile Core CP.
 
--  *NSSF (Network Slicing Selector Function):* Manages how network
+-  *NSSF (Network Slice Selection Function):* Manages how network
    slices are selected to serve a given UE.
 
 Keep in mind that even though 3GPP does not directly prescribe a
@@ -276,10 +277,10 @@ schematic even though it looks quite similar to :numref:`Figure %s
     `SD-Core <https://opennetworking.org/sd-core/>`__.
 
 .. _fig-sd-core:
-.. figure:: figures/Slide22.png 
+.. figure:: figures/Slide22.png
     :width: 600px
     :align: center
-	    
+
     SD-Core implementation of the Mobile Core Control Plane, including
     support for Standalone (SA) deployment of both 4G and 5G.
 
@@ -332,17 +333,17 @@ backbone network (*N6*).
 
 The schematic also shows interfaces between the individual
 microservices that make up the Core's Control Plane; for example,
-*Nudm* is the interface to the UDM microservice. These latter interfaces
-are RESTful, meaning clients access each microservice by issuing GET,
+*Nudm* is the interface to the UDM microservice. In 3GPP terms,
+the interface between the different microsersives is known as
+service based interface (SBI). These latter interfaces are RESTful,
+meaning clients access each microservice by issuing GET,
 PUT, POST, PATCH, and DELETE operations over HTTP, where a
 service-specific schema defines the available resources that can be
-accessed. (The 4G counterparts, such as *S1-U* and *S1-MME* are not
-RESTful, but rather, conventional over-the-wire protocols.) Note that
-some of these interfaces are necessary for interoperability (e.g.,
-*N1* and *N Uu* make it possible to connect your phone to any MNO's
-network), but others could be seen as internal implementation
-details. We'll see how Magma takes advantage of this distinction in
-the next section.
+accessed. Note that some of these interfaces are necessary for
+interoperability (e.g., *N1* and *N Uu* make it possible to connect
+your phone to any MNO's network), but others could be seen as
+internal implementation details. We'll see how Magma takes advantage
+of this distinction in the next section.
 
 Fourth, by adopting a cloud native design, SD-Core benefits from being
 able to horizontally scale individual microservices. But realizing
@@ -385,7 +386,7 @@ many of the challenges that unreliable backhaul links introduce in
 conventional approaches.
 
 .. _fig-magma-arch:
-.. figure:: figures/sdn/Slide11.png 
+.. figure:: figures/sdn/Slide11.png
     :width: 600px
     :align: center
 
@@ -425,8 +426,8 @@ postpone a general discussion of orchestration until Chapter 6.
     A sample Magma deployment in rural Peru, showing (a)
     point-to-point wireless backhaul, (b) LTE radio and antenna, (c)
     ruggedized embedded PC serving as AGW, and (d) solar power and
-    battery backup for site. 
- 
+    battery backup for site.
+
 Magma differs from the standard 3GPP approach in that it terminates
 3GPP protocols logically close to the edge, which in this context
 corresponds to two interface points: (1) the radio interface
@@ -545,9 +546,9 @@ approach in more detail in an NSDI paper.
 
 .. _reading_magma:
 .. admonition:: Further Reading
-                
+
     S. Hasan, *et al.* `Building Flexible, Low-Cost Wireless Access
-    Networks With Magma <https://arxiv.org/abs/2209.10001>`__. 
+    Networks With Magma <https://arxiv.org/abs/2209.10001>`__.
     NSDI, April 2023.
 
 Finally, while we have focused on its Control Plane, Magma also
@@ -580,7 +581,7 @@ end-point into consideration. Each attached UE has at least two PDRs,
 one for uplink traffic and one for downlink traffic, plus possibly
 additional PDRs to support multiple traffic classes (e.g., for
 different QoS levels, pricing plans, and so on.). The Control Plane
-installs, changes, and removes PDRs as UEs attach, move, and detach.
+creates, updates, and removes PDRs as UEs attach, move, and detach.
 
 Each PDR then identifies one or more actions to execute, which in 3GPP
 terminology are also called "rules", of which there are four types:
@@ -595,7 +596,7 @@ terminology are also called "rules", of which there are four types:
   tunneled down to a base station; a `buffer` flag indicates the
   packet should be buffered until the UE becomes active; and a
   `notify` flag indicates that the CP should be notified to awaken an
-  idle UE. FARs are installed and removed when a device attaches or
+  idle UE. FARs are created and removed when a device attaches or
   detaches, respectively, and the downlink FAR changes the processing
   flag when the device moves, goes idle, or awakes.
 
@@ -609,14 +610,14 @@ terminology are also called "rules", of which there are four types:
   flags, as just described. An additional set of parameters are used
   to configure the buffer, for example setting its maximum size
   (number of bytes) and duration (amount of time). Optionally, the CP
-  can itself buffer packets by installing a PDR that directs the UPF to
+  can itself buffer packets by creating a PDR that directs the UPF to
   forward data packets to the control plane.
 
 * **Usage Reporting Rules (URRs):** Instructs the UPF to periodically
   send usage reports for each UE to the CP. These reports include
   counts of the packets sent/received for uplink/downlink traffic for
   each UE and traffic class.  These reports are used to both limit and
-  bill subscribers. The CP installs and removes URRs when the device
+  bill subscribers. The CP creates and removes URRs when the device
   attaches and detaches, respectively, and each URR specifies whether
   usage reports should be sent periodically or when a quota is
   exceeded. A UE typically has two URRs (for uplink/downlink usage),
@@ -627,7 +628,7 @@ terminology are also called "rules", of which there are four types:
 * **Quality Enforcement Rules (QERs):** Instructs the UPF to guarantee
   a minimum amount of bandwidth and to enforce a bandwidth cap. These
   parameters are specified on a per-UE / per-direction / per-class
-  basis.  The CP installs and removes QERs when a device attaches and
+  basis.  The CP creates and removes QERs when a device attaches and
   detaches, respectively, and modifies them according to
   operator-defined events, such as when the network becomes more or
   less congested, the UE exceeds a quota, or the network policy
@@ -646,7 +647,7 @@ A seemingly straightforward approach to supporting the set of
 Match/Action rules just described is to implement the UPF in software
 on a commodity server. Like any software-based router, the process
 would read a packet from an input port, classify the packet by
-matching it against a table of installed PDRs, execute the associated
+matching it against a table of configured PDRs, execute the associated
 action(s), and then write the packet to an output port. Such a process
 could then be packaged as a Docker container, with one or more
 instances spun up on a Kubernetes cluster as workload dictates. This
@@ -658,7 +659,7 @@ What we mean by this is that the UPF has two pieces of state that
 needs to be maintained on a per-UE / per-direction / per-class basis:
 (1) a finite state machine that transitions between `forward`,
 `tunnel`, `buffer`, and `notify`; and (2) a corresponding packet
-buffer when in the `buffer` state. This means that as the UPF scales
+buffer when in `buffer` state. This means that as the UPF scales
 up to handle more and more traffic—by adding a second, third, and
 fourth instance—packets still need to be directed to the original
 instance that knows the state for that particular flow. This breaks a
@@ -667,7 +668,7 @@ which traffic can be randomly directed to any instance in a way that
 balances the load. It also forces you to do packet classification
 before selecting which instance is the right one, which can
 potentially become a performance bottleneck, although it is possible
-to offload the classification stage to a SmartNIC.
+to offload the classification stage to a SmartNIC/IPU.
 
 .. Could talk about other ways to accomplish that -- e.g., assigning
    IP addresses to instances in a way that causes the upstream router
@@ -699,7 +700,7 @@ to implementing the UPF in P4.
 
     `Software-Defined Networks: A Systems Approach
     <https://sdn.systemsapproach.org>`__.  November 2021.
-    
+
 First, P4-programmable forwarding pipelines include an explicit
 "matching" mechanism built on *Ternary Content-Addressable Memory
 (TCAM)*. This memory supports fast table lookups for patterns that
@@ -736,7 +737,7 @@ when instructed to do so. The following elaborates on how this would
 work.
 
 When the Mobile Core detects that a UE has gone idle (or is in the
-middle of a handover), it installs a FAR with the `buffer` flag set,
+middle of a handover), it creates a FAR with the `buffer` flag set,
 causing the on-switch P4 program to redirect packets to the buffering
 microservice. Packets are redirected without modifying their IP
 headers by placing them in a tunnel, using the same tunneling protocol
@@ -790,17 +791,17 @@ UPF-specific P4RT interface, and then write translators that (1)
 connect SMF to P4RT, and (2) connect P4RT to the underlying physical
 switches and servers. A high-level schematic of this software stack is
 shown in :numref:`Figure %s <fig-p4-upf>`.
-	
+
 .. _fig-p4-upf:
-.. figure:: figures/Slide23.png 
+.. figure:: figures/Slide23.png
     :width: 500px
     :align: center
-	    
+
     A model P4-based implementation of the UPF is used to generate the
     interface that is then used by the SMF running in the Mobile Core
     control plane to control the physical implementation of the UPF
     running on a combination of hardware switches and servers.
-    
+
 Note that while this summary focuses on how the CP controls the UPF
 (the downward part of the schematic shown in :numref:`Figure %s
 <fig-p4-upf>`), the usage counters needed to generate URRs that flow
