@@ -131,13 +131,13 @@ with their new (dynamically assigned) IP address.
 -------------------------
 
 The 5G Mobile Core, which 3GPP calls the *5GC*, adopts a
-microservice-like architecture, known as Service Based Architecture
-in 3GPP terms. We say “microservice-like” because while the 3GPP
-specification spells out this level of disaggregation, it is really
-just describing a set of functional blocks and not prescribing an
-implementation. In practice, a set of functional blocks is very
-different from the collection of engineering decisions that go
-into designing a microservice-based system. That said, viewing the
+microservice-like architecture officially known as the 3GPP *Service
+Based Architecture*.  We say “microservice-like” because while the
+3GPP specification spells out this level of disaggregation, it is
+really just describing a set of functional blocks and not prescribing
+an implementation. In practice, a set of functional blocks is very
+different from the collection of engineering decisions that go into
+designing a microservice-based system. That said, viewing the
 collection of components shown in :numref:`Figure %s <fig-5g-core>` as
 a set of microservices is a reasonable working model (for now).
 
@@ -333,17 +333,15 @@ backbone network (*N6*).
 
 The schematic also shows interfaces between the individual
 microservices that make up the Core's Control Plane; for example,
-*Nudm* is the interface to the UDM microservice. In 3GPP terms,
-the interface between the different microsersives is known as
-service based interface (SBI). These latter interfaces are RESTful,
-meaning clients access each microservice by issuing GET,
-PUT, POST, PATCH, and DELETE operations over HTTP, where a
-service-specific schema defines the available resources that can be
+*Nudm* is the interface to the UDM microservice.  These latter
+interfaces are RESTful, meaning clients access each microservice by
+issuing GET, PUT, POST, PATCH, and DELETE operations over HTTP, where
+a service-specific schema defines the available resources that can be
 accessed. Note that some of these interfaces are necessary for
 interoperability (e.g., *N1* and *N Uu* make it possible to connect
-your phone to any MNO's network), but others could be seen as
-internal implementation details. We'll see how Magma takes advantage
-of this distinction in the next section.
+your phone to any MNO's network), but others could be seen as internal
+implementation details. We'll see how Magma takes advantage of this
+distinction in the next section.
 
 Fourth, by adopting a cloud native design, SD-Core benefits from being
 able to horizontally scale individual microservices. But realizing
