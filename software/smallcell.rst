@@ -1,5 +1,5 @@
 Stage 3: Physical Radio
-========================
+------------------------------
 
 We are now ready to replace the emulated RAN with a physical small
 cell radio and real UEs. Unlike earlier stages of Aether OnRamp that
