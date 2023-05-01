@@ -268,7 +268,7 @@ into a cloud native implementation. A high-level schematic is shown in
 :numref:`Figure %s <fig-sd-core>`, where each element corresponds to a
 scalable set of Kubernetes-hosted containers. We include this
 schematic even though it looks quite similar to :numref:`Figure %s
-<fig-5g-core>` because it highlights three implementation details.
+<fig-5g-core>` because it highlights four implementation details.
 
 .. _reading_sd-core:
 .. admonition:: Further Reading
@@ -343,6 +343,17 @@ some of these interfaces are necessary for interoperability (e.g.,
 network), but others could be seen as internal implementation
 details. We'll see how Magma takes advantage of this distinction in
 the next section.
+
+Fourth, by adopting a cloud native design, SD-Core benefits from being
+able to horizontally scale individual microservices. But realizing
+this benefit isn't always straightforward. In particular, because the
+AMF is connected to the RAN by SCTP (corresponding to the *N1* and
+*N2* interfaces shown in :numref:`Figure %s <fig-sd-core>`), it is
+necessary to put an *SCTP load balancer* in front of the AMF. This
+load balancer terminates the SCTP connections, and distributes
+requests across a set of AMF containers. These AMF instances then
+depend on a scalable backend store (specifically MongoDB) to read and
+write shared state.
 
 5.3.2 Magma
 ~~~~~~~~~~~

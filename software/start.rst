@@ -2,10 +2,10 @@ Stage 1: Emulated RAN
 -----------------------
 
 The first stage of Aether OnRamp provides a good way to get
-started. It brings up a one-node Kubernetes cluster, deploys all of
-the Aether subsystems on that cluster, and runs an emulated workload
-(ICMP packets) against those subsystems. It assumes a low-end server
-that meets the following requirements:
+started. It brings up a one-node Kubernetes cluster, deploys SD-Core
+and the Aether Management Platform (AMP) on that cluster, and runs an
+emulated workload (ICMP packets) against those subsystems. It assumes
+a low-end server that meets the following requirements:
 
 * Haswell CPU (or newer), with at least 4 CPUs and 12GB RAM.
 * Clean install of Ubuntu 18.04, 20.04, or 22.04, with 4.15 (or later) kernel.

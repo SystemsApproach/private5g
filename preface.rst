@@ -62,6 +62,7 @@ Thanks to the members of the community who contributed text or
 corrections to the book, including:
 
 - Edmar Candeia Gurjão  
+- Muhammad Shahbaz
 - Mugahed Izzeldin
 - Robert MacDavid
 - Simon Leinen

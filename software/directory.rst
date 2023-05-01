@@ -33,7 +33,6 @@ using https instead of ssh:
 
   $ git clone https://gerrit.opencord.org/<repo-name>
 
-
 Deployment artifacts are pulled from the following repositories:
 
 Helm Charts
@@ -48,6 +47,12 @@ Helm Charts
 Docker Images
 
  | https://registry.aetherproject.org
+
+Note that as of version 1.20.8, Kubernetes uses the `Contanierd
+<https://containerd.io/>`__ runtime system instead of Docker. This is
+transparent to anyone using Aether, which manages containers
+indirectly through Kubernetes (e.g., using ``kubectl``), but does
+impact anyone directly using the Docker toolchain.
 
 The Aether CI/CD pipeline keeps the above artifact repos in sync with
 the source repos, which can be found here:

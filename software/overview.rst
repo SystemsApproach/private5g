@@ -63,13 +63,13 @@ path for users to:
 * Deploy and operate Aether with live traffic.
 
 Aether OnRamp starts with AiaB, refactored to help users step through
-a sequence of increasingly complex *blueprints*. The goal is to
-prescribe a (mostly) linear sequence of steps a new user can follow to
-bring up an operational system that runs 24/7 and supports live 5G
-workloads.  Aether OnRamp is still a work in progress, but anyone
-interested in participating in that effort is encouraged to join the
-discussion on Slack in the `ONF Community Workspace
-<https://onf-community.slack.com/>`__. A roadmap for the work that
-needs to be done can be found in the `Aether OnRamp Wiki
-<https://github.com/SystemsApproach/aether-onramp/wiki>`__.
+a sequence of increasingly complex *blueprints*. Starting with SD-Core
+as the centerpiece, OnRamp prescribes a (mostly) linear sequence of
+steps a new user can follow to bring up an operational system that
+runs 24/7 and supports live 5G workloads.  Aether OnRamp is still a
+work in progress, but anyone interested in participating in that
+effort is encouraged to join the discussion on Slack in the `ONF
+Community Workspace <https://onf-community.slack.com/>`__. A roadmap
+for the work that needs to be done can be found in the `Aether OnRamp
+Wiki <https://github.com/SystemsApproach/aether-onramp/wiki>`__.
 
