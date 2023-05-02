@@ -314,7 +314,7 @@ makes the schematic shown in :numref:`Figure %s <fig-macvlan>` a
 helpful way to visualize the setup.
 
 .. _fig-macvlan:
-.. figure:: ../figures/Slide24.png
+.. figure:: figures/Slide24.png
     :width: 600px
     :align: center
 
@@ -501,7 +501,7 @@ for a screenshot of the SERCOMM gNB management dashboard, which we
 reference in the instructions that follow:
 
 .. _fig-sercomm:
-.. figure:: ../figures/Sercomm.png
+.. figure:: figures/Sercomm.png
     :width: 500px
     :align: center
 
