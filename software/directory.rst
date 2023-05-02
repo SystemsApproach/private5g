@@ -52,7 +52,10 @@ Note that as of version 1.20.8, Kubernetes uses the `Contanierd
 <https://containerd.io/>`__ runtime system instead of Docker. This is
 transparent to anyone using Aether, which manages containers
 indirectly through Kubernetes (e.g., using ``kubectl``), but does
-impact anyone directly using the Docker toolchain.
+impact anyone that directly depends on the Docker toolchain. Also note
+that while Aether documentation often refers its use of "Docker
+containers," it is now more accurate to say that Aether uses
+`OCI-Compliant containers <https://opencontainers.org/>`__.
 
 The Aether CI/CD pipeline keeps the above artifact repos in sync with
 the source repos, which can be found here:
