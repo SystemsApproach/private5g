@@ -182,10 +182,11 @@ block adds IMSIs between ``315010999912301`` and ``315010999912303``:
      sequenceNumber: 135
 
 Further down in the same ``omec-sub-provision`` section you will find
-a ``device-group`` block that assigns IMSIs to *Device Groups* (with
-Device Groups subsequently associated with *Slices*). You will need to
-enter the individual IMSIs from the ``subscribers`` block that will be
-part of the device-group:
+two other blocks that need to be edited. The first, ``device-groups``,
+assigns IMSIs to *Device Groups* (with Device Groups subsequently
+associated with *Slices*). You will need to reenter the individual
+IMSIs from the ``subscribers`` block that will be part of the
+device-group:
 
 .. code-block::
 
@@ -196,8 +197,9 @@ part of the device-group:
           - "315010999912302"
           - "315010999912303"
 
-And still further down in the same section you will fine a ``network
-slices`` block where you will need to reenter the PLMN information:
+The second block, ``network-slices``, sets various parameters
+associated with the *Slices* that connect devices to applications.
+Here, you will need to reenter the PLMN information:
 
 .. code-block::
 
@@ -205,8 +207,16 @@ slices`` block where you will need to reenter the PLMN information:
        mcc: "315"
        mnc: "010"
 
-Multiple *Device Groups* and *Slices* will come into play in future
-stages, but for now we are limiting our configuration to one of each.
+Aether supports multiple *Device Groups* and *Slices*, but the data
+entered here is purposely minimal; it's just enough to bring up and
+debug an initial system. Long-term, information about *Device Groups*
+and *Slices* (and the other abstractions they build upon) should be
+entered via the ROC, as described in a later section. When you get to
+that point, variable ``provision-network-slice`` should be set to
+``false``, causing the ``device-groups`` and ``network-slices``
+blocks of ``sd-core-5g-values.yaml`` to be ignored. (The
+``subscribers`` block is always required to configure SD-Core.)
+
 
 Bring Up Aether
 ~~~~~~~~~~~~~~~~~~~~~
@@ -463,12 +473,32 @@ As currently configured, the *Device-Group* and *Slice* information is
 duplicated between ``5g-radio/sd-core-5g-values.yaml`` and
 ``5g-radio/roc-5g-models.json``. This makes it possible to bring up
 the SD-Core without the ROC, for example, as we just did to verify the
-configuration. Unfortunately, this can lead to problems of keeping the
-two in sync.  A tool to help address this problem the first time you
-bring up Aether is in the works, but as a general rule, changes should
-be made via the ROC (either the GUI or the API) once a deployment is
-stable.
+configuration. The values included in the released version of these
+two files are correctly synchronized, but in general, this can lead to
+problems of keeping the two in sync.
 
+As a general rule, Aether is designed to treat the ROC as the "single
+source of truth" for *Slices* and *Device Groups* (along with the
+other abstract objects it defines), so we recommend using either the
+GUI or API to make changes over time. And if you want to codify the
+"bootstrap state" in a text file, we recommend you do so in
+``5g-radio/roc-5g-models.json``. Once you settle on this approach, you
+will need to edit the ``omec-sub-provision`` section of
+``5g-radio/sd-core-5g-values.yaml`` to set:
+
+.. code-block::
+
+   provision-network-slice: false
+
+You will also need to be sure to bring up the ROC before the Core:
+
+.. code-block::
+
+   $ make 5g-roc
+   $ make 5g-core
+
+The monitoring subsystem can be instantiated before or after the Core,
+and will correctly run after restarts of the Core.
 
 gNodeB Setup
 ~~~~~~~~~~~~~~~~~~~~
