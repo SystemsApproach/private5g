@@ -26,18 +26,6 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    ran.rst 
    core.rst
    cloud.rst
+   appendix.rst
    README.rst
    authors.rst
-
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:	      
-   :caption: About the Software
-
-   software/overview.rst
-   software/directory.rst
-   software/start.rst
-   software/gitops.rst
-   software/smallcell.rst
-
