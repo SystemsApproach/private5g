@@ -19,3 +19,5 @@ tracking the latest changes to the software, is available at:
 .. include:: software/gitops.rst
 
 .. include:: software/smallcell.rst
+
+.. include:: software/roc.rst
