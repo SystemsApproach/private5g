@@ -22,6 +22,7 @@ CP
 Changhoon
 Cloudification
 Config
+Connor
 Davie
 Disaggregating
 Dockerfile
@@ -83,6 +84,7 @@ Repos
 Rexford
 RiaB
 RIC
+ROC
 RRC
 Shaddi
 Sunay

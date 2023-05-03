@@ -40,4 +40,5 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    software/start.rst
    software/gitops.rst
    software/smallcell.rst
+   software/roc.rst
 
