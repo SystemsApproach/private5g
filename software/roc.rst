@@ -81,10 +81,10 @@ instantiation of the SD-Core:
    $ make 5g-roc
    $ make 5g-core
 
-You may also need to reboot the gNB, although it typically restarts
-automatically when it detects that the Core has failed. Note that the
-order is important, since the Core depends on configuration parameters
-provided by the ROC.
+The order is important, since the Core depends on configuration
+parameters provided by the ROC. Also note that you may need to reboot
+the gNB, although it typically restarts automatically when it detects
+that the Core has failed.
 
 To see these initial configuration values using the GUI, open the
 dashboard available at ``http://<server-ip>:31194``. If you select
