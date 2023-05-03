@@ -169,7 +169,7 @@ Key values configured onto your SIM cards. The block also defines a
 sequence number that is intended to thwart replay attacks. (As a
 reminder, these values go in ``4g-radio/sd-core-4g-values.yaml``
 if you are using a 4G small cell.) For example, the following code
-block adds IMSIs between ``315010999912301`` and ``315010999912303``:
+block adds IMSIs between ``315010999912301`` and ``315010999912310``:
 
 .. code-block::
 
@@ -182,10 +182,10 @@ block adds IMSIs between ``315010999912301`` and ``315010999912303``:
      sequenceNumber: 135
 
 Further down in the same ``omec-sub-provision`` section you will find
-a ``device-group`` block that assigns IMSIs to *Device Groups* (with
-Device Groups subsequently associated with *Slices*). You will need to
-enter the individual IMSIs from the ``subscribers`` block that will be
-part of the device-group:
+two other blocks that need to be edited. The first, ``device-groups``,
+assigns IMSIs to *Device Groups*. You will need to reenter the
+individual IMSIs from the ``subscribers`` block that will be part of
+the device-group:
 
 .. code-block::
 
@@ -196,8 +196,10 @@ part of the device-group:
           - "315010999912302"
           - "315010999912303"
 
-And still further down in the same section you will fine a ``network
-slices`` block where you will need to reenter the PLMN information:
+The second block, ``network-slices``, sets various parameters
+associated with the *Slices* that connect device groups to
+applications.  Here, you will need to reenter the PLMN information,
+with the other slice parameters remaining unchanged (for now):
 
 .. code-block::
 
@@ -205,8 +207,17 @@ slices`` block where you will need to reenter the PLMN information:
        mcc: "315"
        mnc: "010"
 
-Multiple *Device Groups* and *Slices* will come into play in future
-stages, but for now we are limiting our configuration to one of each.
+Aether supports multiple *Device Groups* and *Slices*, but the data
+entered here is purposely minimal; it's just enough to bring up and
+debug an initial system. Over the lifetime of a running system,
+information about *Device Groups* and *Slices* (and the other
+abstractions they build upon) should be entered via the ROC, as
+described in Stage 4. When you get to that point, variable
+``provision-network-slice`` should be set to ``false``, causing the
+``device-groups`` and ``network-slices`` blocks of
+``sd-core-5g-values.yaml`` to be ignored. (The ``subscribers`` block
+is always required to configure SD-Core.)
+
 
 Bring Up Aether
 ~~~~~~~~~~~~~~~~~~~~~
@@ -235,6 +246,17 @@ in mind that you will see containers that implement the 4G core
 instead of the 5G core running in the ``omec`` namespace if you
 configured for that scenario.
 
+We postpone bringing up the ROC until Stage 4 (having fewer moving
+parts makes debugging the configuration easier), but you may want to
+bring up the monitoring system at this point, as it provides useful
+information about the progress you're making:
+
+.. code-block::
+
+   $ make 5g-monitoring
+
+Note that the monitoring subsystem can be instantiated before or after
+the Core, and correctly runs after restarts of the Core.
 
 Validate Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -391,83 +413,6 @@ two interfaces manually:
 
     $ ip link add core link <DATA_IFACE> type macvlan mode bridge 192.168.250.3
     $ ip link add access link <DATA_IFACE> type macvlan mode bridge 192.168.252.3
-
-
-Runtime Operational Control
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Aether defines an API (and associated GUI) for managing connectivity
-at runtime. Even though some connectivity parameters are passed
-directly to the SD-Core at startup using Helm Chart overrides, (e.g.,
-the IMSI-related edits of ``5g-radio/sd-core-5g-values.yaml`` described
-above), others correspond to abstractions that ROC layers on top of
-SD-Core, where file ``5g-radio/roc-5g-models.json`` "bootstraps"
-the ROC database with an initial set of data (saving you from a
-laborious GUI session).
-
-To bring up the ROC, you first need to edit
-``5g-radio/roc-5g-models.json`` to record the same IMSI information as
-before. Do this by editing, adding or removing ``sim-card`` entries as
-necessary. Note that only the IMSIs need to match the earlier data;
-the ``sim-id`` and ``display-name`` values are arbitrary and need only
-be consistent *within* ``5g-radio/roc-5g-models.json``.
-
-.. code-block::
-
-   "imsi-definition": {
-         "mcc": "315",
-          "mnc": "010",
-          "enterprise": 1,
-          "format": "CCCNNNEESSSSSSS"
-   },
-   ...
-
-   "sim-card": [
-          {
-              "sim-id": "aiab-sim-1",
-              "display-name": "SIM 1",
-              "imsi": "315010999912301"
-          },
-   ...
-
-Then type
-
-.. code-block::
-
-   $ make 5g-roc
-   $ make 5g-monitoring
-
-To see these initial configuration values using the GUI, open the
-dashboard available at ``http://<server-ip>:31194``. If you select
-``Configuration > Site`` from the drop-down menu at top right, and
-click the ``Edit`` icon associated with the ``Aether Site`` you can
-see (and potentially change) the following values:
-
-* MCC: 315
-* MNC: 010
-
-If you make a change to these values click ``Update`` to save them.
-
-Similarly, if you select ``Sim Cards`` from the drop-down menu at top
-right, the ``Edit`` icon associated with each SIM cards allows you to
-see (and potentially change) the IMSI values associated with each device.
-
-Finally, the registered IMISs can be aggregated into *Device-Groups*
-(a ROC abstraction that makes it easier to associated classes of
-devices to different Slices) by selecting ``Device-Groups`` from the
-drop-down menu at the top right, and adding a new device group.  When
-you are done with these edits, select the ``Basket`` icon at top right
-and click the ``Commit`` button.
-
-As currently configured, the *Device-Group* and *Slice* information is
-duplicated between ``5g-radio/sd-core-5g-values.yaml`` and
-``5g-radio/roc-5g-models.json``. This makes it possible to bring up
-the SD-Core without the ROC, for example, as we just did to verify the
-configuration. Unfortunately, this can lead to problems of keeping the
-two in sync.  A tool to help address this problem the first time you
-bring up Aether is in the works, but as a general rule, changes should
-be made via the ROC (either the GUI or the API) once a deployment is
-stable.
 
 
 gNodeB Setup
