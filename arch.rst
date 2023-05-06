@@ -3,7 +3,7 @@ Chapter 2:  Architecture
 
 .. The general plan is for the sections in this chapter to introduce
    each of the chapters that follow. It introduces high-level concepts
-   and terminology, but does not go into implementation details.  The
+   and terminology, but does not go into implementation details. The
    main takeaways should be an understanding of the main concepts
    (e.g., support for mobility, slicing/QoS, security/authentication,
    identity/addresses), but without saying too much about how they are
@@ -18,7 +18,7 @@ Chapter 2:  Architecture
    enterprise and private deployments. The second is to explain that
    the system as a whole has to be managed and operated, but then zero
    in on best practices in cloud-based managed services.
-   
+
 This chapter identifies the main architectural components of the
 mobile cellular network. We need to introduce some terminology to do
 this, which can be confusing for those whose networking background
@@ -32,14 +32,14 @@ other Internet-related efforts. To further confuse matters, 3GPP
 terminology often changes with each generation (e.g., a base station
 is called eNB in 4G and gNB in 5G). We address situations like this by
 using generic terminology (e.g., base station), and referencing the
-3GPP-specific counterpart only when the distinction is helpful.  This
-example is only the tip of the terminology iceberg. Marcin Dryjanski’s
+3GPP-specific counterpart only when the distinction is helpful. This
+example is only the tip of the terminology iceberg. Marcin Dryjanski's
 blog post gives a broader perspective on the complexity of terminology
 in 5G.
 
 .. _reading_terminology:
 .. admonition:: Further Reading
-		
+
    Marcin Dryjanski. `LTE and 5G Differences: System Complexity
    <https://www.grandmetric.com/blog/2018/07/14/lte-and-5g-differences-system-complexity/>`__.
    July 2018.
@@ -48,31 +48,31 @@ in 5G.
 ------------
 
 The mobile cellular network provides wireless connectivity to devices
-that are (potentially) on the move. These devices, which are known as *User
-Equipment (UE)*, have traditionally corresponded to mobile phones and
-tablets, but increasingly include cars, drones, industrial and
+that are (potentially) on the move. These devices, which are known as
+*User Equipment (UE)*, have traditionally corresponded to mobile phones
+and tablets, but increasingly include cars, drones, industrial and
 agricultural machines, robots, home appliances, medical devices, and
 so on. In some cases, the UEs may be devices that do not move, e.g.,
 router interfaces using cellular connectivity to provide broadband
 access to remote dwellings.
 
 .. _fig-cellular:
-.. figure:: figures/Slide2.png 
+.. figure:: figures/Slide2.png
     :width: 600px
     :align: center
-	    
+
     Mobile cellular networks consist of a Radio Access Network (RAN)
     and a Mobile Core.
 
 As shown in :numref:`Figure %s <fig-cellular>`, the mobile cellular
 network consists of two main subsystems: the *Radio Access Network
-(RAN)* and the *Mobile Core*. The RAN manages the radio spectrum,
-making sure it is used efficiently and meets the quality of service
-requirements of every user.  It corresponds to a distributed
-collection of base stations. As noted above, these are cryptically
-named *eNodeB* or *eNB* (which is short for *evolved Node B*) in 4G.
-In 5G, base stations are known as *gNB*, where the "g" stands for
-*next Generation*.
+(RAN)* and the *Mobile Core*. The RAN manages the radio resources
+(i.e., spectrum), making sure it is used efficiently and meets the
+quality of service (QoS) requirements of every user. It corresponds
+to a distributed collection of base stations. As noted above, these
+are cryptically named *eNodeB* or *eNB* (which is short for *evolved
+Node B*) in 4G. In 5G, base stations are known as *gNB*, where the
+"g" stands for *next Generation*.
 
 The Mobile Core is a bundle of functionality (conventionally packaged
 as one or more devices) that serves several purposes.
@@ -86,8 +86,8 @@ as one or more devices) that serves several purposes.
 For readers familiar with the Internet architecture and Wi-Fi as a
 common access technology, some of these functions might look a bit
 surprising. For example, Wi-Fi, like most of the Internet, normally
-provides a best-effort service, whereas cellular networks often aim to
-deliver some sort of QoS guarantee. Tracking subscribers for both
+provides a best-effort service, whereas cellular networks often aim
+to deliver some sort of QoS guarantee. Tracking subscribers for both
 mobility and billing are also not the sort of things we tend to think
 about in the Internet, but they are considered important functions for
 cellular networks. The reasons for these differences are numerous,
@@ -105,17 +105,16 @@ control over latency and bandwidth.
 
 Note that Mobile Core is another example of a generic term. In 4G it
 was called the *Evolved Packet Core (EPC)* and in 5G it is called the
-*Next Generation Core (NG-Core)*. Moreover, even though the word
-“Core” is in its name, the Mobile Core runs near the edge of the
-network, effectively providing a bridge between the RAN in some
-geographic area and the greater IP-based Internet. 3GPP provides
-significant flexibility in how the Mobile Core is geographically
-deployed, ranging from minimal deployments (the RAN and the mobile
-core can be co-located) to areas that are hundreds of kilometers
-wide. A common model is that an instantiation of the Mobile Core
-serves a metropolitan area. The corresponding RAN would then span
-several dozens (or even hundreds) of cell towers in that geographic
-area.
+*5G Core (5GC)*. Moreover, even though the word “Core” is in its name,
+the Mobile Core runs near the edge of the network, effectively providing
+a bridge between the RAN in some geographic area and the greater
+IP-based Internet. 3GPP provides significant flexibility in how the
+Mobile Core is geographically deployed, ranging from minimal deployments
+(the RAN and the mobile core can be co-located) to areas that are
+hundreds of kilometers wide. A common model is that an instantiation
+of the Mobile Core serves a metropolitan area. The corresponding RAN
+would then span several dozens (or even hundreds) of cell towers in
+that geographic area.
 
 Taking a closer look at :numref:`Figure %s <fig-cellular>`, we see
 that a *Backhaul Network* interconnects the base stations that
@@ -153,10 +152,10 @@ about the over-the-air radio transmission to appreciate its impact on
 the overall architecture.
 
 .. _fig-cups:
-.. figure:: figures/Slide3.png 
+.. figure:: figures/Slide3.png
     :width: 400px
     :align: center
-    
+
     Mobile Core divided into a Control Plane and a User Plane, an
     architectural feature known as CUPS: Control and User Plane
     Separation.
@@ -169,7 +168,7 @@ the ideas of software-defined networking (SDN) by placing control and
 user planes in separate devices. 3GPP has introduced a corresponding
 acronym—\ *CUPS, Control and User Plane Separation*—to denote this
 idea. One motivation for CUPS is to enable control plane resources and
-data plane resources to be scaled independently of each other. 
+data plane resources to be scaled independently of each other.
 
 Finally, one of the key aspirational goals of 5G is the ability to
 segregate traffic for different usage domains into isolated *network
@@ -180,10 +179,10 @@ although as we'll see in later chapters, the implementation details
 differ.
 
 .. _fig-slice:
-.. figure:: figures/Slide4.png 
+.. figure:: figures/Slide4.png
     :width: 500px
     :align: center
-    
+
     Different usage domains (e.g., IoT and Video Streaming)
     instantiate distinct *network slices* to connect a set of devices
     with one or more applications.
@@ -234,12 +233,12 @@ but in the realm of information theory rather than system design that
 is the focus of this book.
 
 .. _fig-quality:
-.. figure:: figures/Slide5.png 
+.. figure:: figures/Slide5.png
     :width: 300px
     :align: center
-    
+
     Abstractly, measures of signal quality (CQI) and declarations
-    of intended data delivery quality (QCI) are passed up and down
+    of intended data delivery quality (5QI) are passed up and down
     the RAN stack.
 
 Second, there are two important pieces of information shared between
@@ -249,8 +248,8 @@ transmissions on a particular base station. One is the signal-to-noise
 ratio that the base station observes when communicating with each
 UE. This is called the *Channel Quality Indicator (CQI)* and it is
 passed *up* from the radio. The other is the quality of service the
-network wants to give a particular UE. This is called the *QoS Class
-Indicator (QCI)* and it is passed *down* to the radio. This abstract
+network wants to give a particular UE. This is called the *5G QoS
+Identifier (5QI)* and it is passed *down* to the radio. This abstract
 summary, as shown in :numref:`Figure %s <fig-quality>`, is sufficient
 to introduce the RAN and Mobile Core. We will fill in more details
 about both of these parameters in Chapter 3.
@@ -260,7 +259,7 @@ about both of these parameters in Chapter 3.
    While it is common in networking to abstract the link layer by
    treating the link as something that just delivers packets at some
    rate from point A to point B, there are important differences
-   between wireless links and fixed links that cannot be entirely
+   between wireless links and wired links that cannot be entirely
    abstracted away at higher layers. This is especially true when
    mobile devices are involved, as the quality of a link will vary
    depending on the distance between transmitter and receiver, the
@@ -275,8 +274,8 @@ about both of these parameters in Chapter 3.
    another. The decision to do so is not just a matter of picking the
    base station with the best channel quality, but rather a matter of
    trying to optimize the whole system, in which the goal is to
-   support as many UEs as possible at the desired quality level given the
-   available spectrum and coverage. 
+   support as many UEs as possible at the desired quality level given
+   the available spectrum and coverage.
 
 ..   Talk about quality of the "link" being continuous in a wireless
 ..   network, versus discrete in a wireline network (the link is up or
@@ -307,20 +306,20 @@ how a router works—not an unreasonable place to start, but it doesn't
 fully do justice to the end-to-end story.
 
 First, each base station establishes the wireless channel for a
-subscriber’s UE upon power-up or upon handover when the UE is active.
+subscriber's UE upon power-up or upon handover when the UE is active.
 This channel is released when the UE remains idle for a predetermined
 period of time. Using 3GPP terminology, this wireless channel is said
-to provide a *bearer service*. The term “bearer” has historically been
-used in telecommunications (including early wireline technologies such as
-ISDN) to denote a data channel, as opposed to a channel that carries
+to provide a *radio bearer*. The term “bearer” has historically been
+used in telecommunications (including early wireline technologies such
+as ISDN) to denote a data channel, as opposed to a channel that carries
 signaling information.
 
 .. _fig-active-ue:
-.. figure:: figures/Slide6.png 
+.. figure:: figures/Slide6.png
     :width: 500px
     :align: center
 
-    Base Station detects (and connects to) active UEs.
+    UE detects (and connects to) base station.
 
 Second, each base station establishes “3GPP Control Plane”
 connectivity between the UE and the corresponding Mobile Core Control
@@ -329,10 +328,10 @@ signaling traffic enables UE authentication, registration, and
 mobility tracking.
 
 .. _fig-control-plane:
-.. figure:: figures/Slide7.png 
+.. figure:: figures/Slide7.png
     :width: 500px
     :align: center
-	    
+
     Base Station establishes control plane connectivity
     between each UE and the Mobile Core.
 
@@ -344,12 +343,12 @@ aspires to support many such tunnels as part of a generalized network
 slicing mechanism.
 
 .. _fig-user-plane:
-.. figure:: figures/Slide8.png 
+.. figure:: figures/Slide8.png
     :width: 500px
     :align: center
-	    
+
     Base station establishes one or more tunnels between each UE and
-    the Mobile Core’s User Plane.
+    the Mobile Core's User Plane (known in 3GPP terms as PDU session).
 
 Fourth, the base station forwards both control and user plane packets
 between the Mobile Core and the UE. These packets are tunneled over
@@ -369,10 +368,10 @@ characterized the RAN Backhaul as an overlay running on top of some
 Layer 2 technology.
 
 .. _fig-tunnels:
-.. figure:: figures/Slide9.png 
+.. figure:: figures/Slide9.png
     :width: 500px
     :align: center
-	    
+
     Base Station to Mobile Core (and Base Station to Base
     Station) control plane tunneled over SCTP/IP and user plane
     tunneled over GTP/UDP/IP.
@@ -383,25 +382,25 @@ station-to-core connectivity shown in the previous figure, these links
 are used to transfer both control plane (SCTP over IP) and user plane
 (GTP over UDP/IP) packets. The decision as to when to do a handover is
 based on the CQI values being reported by the radio on each of the
-base stations within range of the UE, coupled with the QCI value those
+base stations within range of the UE, coupled with the 5QI value those
 base stations know the RAN has promised to deliver to the UE.
 
 .. _fig-handover:
-.. figure:: figures/Slide10.png 
+.. figure:: figures/Slide10.png
     :width: 500px
     :align: center
-	    
+
     Base Stations cooperate to implement UE hand over.
-    
+
 Sixth, the base stations coordinate wireless multi-point transmission to
 a UE from multiple base stations, which may or may not be part of a UE
 handover from one base station to another.
 
 .. _fig-link-aggregation:
-.. figure:: figures/Slide11.png 
+.. figure:: figures/Slide11.png
     :width: 500px
     :align: center
-	    
+
     Base Stations cooperate to implement multipath transmission (link
     aggregation) to UEs.
 
@@ -424,7 +423,7 @@ In other words, the RAN as a whole (i.e., not just a single base
 station) not only supports handovers (an obvious requirement for
 mobility), but also *link aggregation* and *load balancing*,
 mechanisms that are similar to those found in other types of networks.
-These functions imply a global decision-making process, whereby it’s
+These functions imply a global decision-making process, whereby it's
 possible to forward traffic to a different base station (or to
 multiple base stations) in an effort to make efficient use of the
 radio spectrum over a larger geographic area. We will revisit how such
@@ -449,7 +448,7 @@ Chapter 5. It is this support for security, mobility, and QoS that
 differentiates the cellular network from Wi-Fi.
 
 We start with the security architecture, which is grounded in two
-trust assumptions.  First, each base station trusts that it is
+trust assumptions. First, each base station trusts that it is
 connected to the Mobile Core by a secure private network, over which
 it establishes the tunnels introduced in :numref:`Figure %s
 <fig-tunnels>`: a GTP/UDP/IP tunnel to the Core's User Plane (Core-UP)
@@ -459,20 +458,20 @@ that uniquely identifies the subscriber and includes a secret key that
 the UE uses to authenticate itself.
 
 The identifier burned into each SIM card, called an *IMSI
-(International Mobile Subscriber Identity)*, is a globally unique identifier
-for every device connected to the global mobile network. Each IMSI is
-a 64-bit, self-describing identifier, which is to say, it includes a
-*Format* field that effectively serves as a mask for extracting other
-relevant fields. For example, the following is the interpretation we
-assume in this book (where IMSIs are commonly represented as a
-15-digit decimal number):
+(International Mobile Subscriber Identity)*, is a globally unique
+identifier for every device connected to the global mobile network.
+Each IMSI is a 64-bit, self-describing identifier, which is to say,
+it includes a *Format* field that effectively serves as a mask for
+extracting other relevant fields. For example, the following is the
+interpretation we assume in this book (where IMSIs are commonly
+represented as an up to 15-digit decimal number):
 
 * **MCC:** Mobile Country Code (3-digit decimal number).
 
-* **MNC:** Mobile Network Code (3-digit decimal number).
+* **MNC:** Mobile Network Code (2 or 3-digit decimal number).
 
 * **ENT:** Enterprise Code (3-digit decimal number).
-   
+
 * **SUB:** Subscriber (6-digit decimal number).
 
 The first two fields (*MCC*, *MNC*) are universally understood to
@@ -483,7 +482,7 @@ connectivity to enterprises (hence the *ENT* field), but other MNOs
 might assign the last 9 digits using some other structure.
 
 The *MCC/MNC* pair—which is also called the *Public Land Mobile
-Nodework (PLMN)* identifier—plays a role in roaming: when a UE tries
+Network (PLMN)* identifier—plays a role in roaming: when a UE tries
 to connect to a "foreign network" those fields are used to find the
 "home network", where the rest of the IMSI leads to a subscriber
 profile that says whether or not roaming is enabled for this
@@ -492,20 +491,20 @@ connects to its home network; more information about the global
 ramifications is given at the end of the section.
 
 .. _fig-secure:
-.. figure:: figures/Slide12.png 
-    :width: 600px 
-    :align: center 
-	    
-    Sequence of steps to establish secure Control and User Plane 
-    channels. 
+.. figure:: figures/Slide12.png
+    :width: 600px
+    :align: center
+
+    Sequence of steps to establish secure Control and User Plane
+    channels.
 
 :numref:`Figure %s <fig-secure>` shows the
 per-UE connection sequence. When a UE first becomes active, it
 communicates with a nearby base station over a temporary
-(unauthenticated) radio link (Step 1).  The base station forwards the
-request to the Core-CP over the existing tunnel, and the Core-CP
-(assuming it recognizes the IMSI) initiates an authentication protocol
-with the UE (Step 2). 3GPP identifies a set of options for
+(unauthenticated) radio link (Step 1). The base station forwards the
+request to the Core-CP over the existing SCTP connection, and the
+Core-CP (assuming it recognizes the IMSI) initiates an authentication
+protocol with the UE (Step 2). 3GPP identifies a set of options for
 authentication and encryption, where the actual protocols used are an
 implementation choice. For example, *Advanced Encryption Standard*
 (AES) is one of the options for encryption. Note that this
@@ -513,13 +512,13 @@ authentication exchange is initially in the clear since the base
 station to UE link is not yet secure.
 
 Once the UE and Core-CP are satisfied with each other's identity, the
-Core-CP informs the other components of the parameters they will need
+Core-CP informs the other 5GC components of the parameters they will need
 to service the UE (Step 3). This includes: (a) instructing the Core-UP
 to initialize the user plane (e.g., assign an IP address to the UE and
-set the appropriate QCI); (b) instructing the base station to
+set the appropriate 5QI); (b) instructing the base station to
 establish an encrypted channel to the UE; and (c) giving the UE the
 symmetric key it will need to use the encrypted channel with the base
-station.  The symmetric key is encrypted using the public key of the
+station. The symmetric key is encrypted using the public key of the
 UE (so only the UE can decrypt it, using its secret key). Once
 complete, the UE can use the end-to-end user plane channel through the
 Core-UP (Step 4).
@@ -532,22 +531,21 @@ session. In other words, unlike the Internet, the network is able to
 "control" the communication settings in edge devices.
 
 Second, the user plane channel established during Step 4 is referred
-to as the *Default Bearer Service*, but additional channels can be
+to as the *Default Data Radio Bearer*, but additional channels can be
 established between the UE and Core-UP, each with a potentially
-different QCI. This might be done on an application-by-application
-basis, for example, under the control of the Mobile Core doing *Deep
-Packet Inspection* (DPI) on the traffic, looking for flows that
-require special treatment.
+different 5QI. This might be done on an application-by-application
+basis, for example, based on policies present in the Core-CP for
+packets that require special/different treatment.
 
 .. _fig-per-hop:
-.. figure:: figures/Slide13.png 
-    :width: 500px 
-    :align: center 
-	    
-    Sequence of per-hop tunnels involved in an end-to-end User Plane 
-    channel. 
+.. figure:: figures/Slide13.png
+    :width: 500px
+    :align: center
 
-In practice, these per-flow tunnels are often bundled into an single
+    Sequence of per-hop tunnels involved in an end-to-end User Plane
+    channel.
+
+In practice, these per-flow tunnels are often bundled into a single
 inter-component tunnel, which makes it impossible to differentiate the
 level of service given to any particular end-to-end UE channel. This
 is a limitation of 4G that 5G has ambitions to correct as part of its
@@ -555,12 +553,12 @@ support for network slicing.
 
 Support for mobility can now be understood as the process of
 re-executing one or more of the steps shown in :numref:`Figure %s
-<fig-secure>` as the UE moves throughout the RAN.  The unauthenticated
+<fig-secure>` as the UE moves throughout the RAN. The unauthenticated
 link indicated by (1) allows the UE to be known to all base stations
 within range. (We refer to these as *potential links* in later
-chapters.)  Based on the signal's measured CQI, the base stations
-communicate directly with each other to make a handover decision. Once
-made, the decision is then communicated to the Mobile Core,
+chapters.) Based on the signal's measured CQI, the base stations
+communicate directly with each other to make a handover decision.
+Once made, the decision is then communicated to the Mobile Core,
 re-triggering the setup functions indicated by (3), which in turn
 re-builds the user plane tunnel between the base station and the
 Core-UP shown in :numref:`Figure %s <fig-per-hop>`. One of the most
@@ -573,7 +571,7 @@ In other words, the mobile cellular network maintains the *UE session*
 in the face of mobility (corresponding to the control and data
 channels depicted by (2) and (4) in :numref:`Figure %s <fig-secure>`,
 respectively), but it is able to do so only when the same Mobile Core
-serves the UE (i.e., only the base station changes).  This would
+serves the UE (i.e., only the base station changes). This would
 typically be the case for a UE moving within a metropolitan area.
 Moving between metro areas—and hence, between Mobile Cores—is
 indistinguishable from power cycling a UE. The UE is assigned a new IP
@@ -627,7 +625,7 @@ the telephony network.\ [#]_
        adopting cloud practices. But this transition is a slow process
        due to all the legacy systems the Telcos need to continue
        supporting.
-       
+
 When we talk about "operationalizing" a network, we are referring to a
 substantial system that operators (whether they are traditional MNOs
 or cloud service providers) use to activate and manage all the
@@ -647,7 +645,7 @@ way to map high-level *Intents* onto low-level *Actions*.
 
 This overview, as illustrated in :numref:`Figure %s <fig-intent>`, is
 obviously quite abstract. To make the discussion more concrete, we use
-an open source implementation, called Aether, as an example.  Aether
+an open source implementation, called Aether, as an example. Aether
 is a Kubernetes-based edge cloud, augmented with a 5G-based
 connectivity service. Aether is targeted at enterprises that want to
 take advantage of 5G connectivity in support of edge applications that
@@ -697,7 +695,7 @@ represents all the functionality needed to offer Aether as a managed
 cloud service, with system administrators using a portal exported by
 this platform to operate the underlying infrastructure and services
 within their enterprise.
-   
+
 Once we deconstruct the individual components in more details in the
 next three chapters, we return to the question of how the resulting
 set of components can be assembled into an operational edge cloud in

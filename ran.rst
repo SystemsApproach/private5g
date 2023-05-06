@@ -305,7 +305,7 @@ the Near-RT RIC implemented as an SDN Controller hosting a set of SDN
 control apps. The RIC maintains a *RAN Network Information Base
 (R-NIB)*—a common set of information that can be consumed by numerous
 control apps. The R-NIB includes time-averaged CQI values and other
-per-session state (e.g., GTP tunnel IDs, QCI values for the type of
+per-session state (e.g., GTP tunnel IDs, 5QI values for the type of
 traffic), while the MAC (as part of the DU) maintains the
 instantaneous CQI values required by the real-time scheduler.  More
 generally, the R-NIB includes the following state:
@@ -332,7 +332,7 @@ generally, the R-NIB includes the following state:
     -  Identifiers
     -  Link Type
     -  Config/Bearer Parameters
-    -  QCI Value
+    -  5QI Value
 
 * Virtual Constructs (Slice Attributes)
 
