@@ -2,7 +2,7 @@ Chapter 1:  Introduction
 ===========================
 
 Mobile networks, which have a 40-year history that parallels the
-Internet’s, have undergone significant change. The first two
+Internet's, have undergone significant change. The first two
 generations supported voice and then text, with 3G defining the
 transition to broadband access, supporting data rates measured in
 hundreds of kilobits per second. Today, the industry is transitioning
@@ -14,19 +14,19 @@ But 5G is about much more than increased bandwidth. 5G represents a
 fundamental rearchitecting of the access network in a way that
 leverages several key technology trends and sets it on a path to
 enable much greater innovation. In the same way that 3G defined the
-transition from voice to broadband, 5G’s promise is primarily about
+transition from voice to broadband, 5G's promise is primarily about
 the transition from a single access service (broadband connectivity)
 to a richer collection of edge services and devices. 5G is expected to
-provide support for immersive user interfaces (e.g., AR/VR),
-mission-critical applications (e.g., public safety, autonomous
-vehicles), and the Internet of Things (IoT). Because these use cases
-will include everything from home appliances to industrial robots to
-self-driving cars, 5G will support not only humans accessing the Internet
-from their smartphones, but also swarms of autonomous devices working
-together on their behalf.
+provide support for immersive user interfaces (e.g., Augmented Reality,
+Virtual Reality), mission-critical applications (e.g., public safety,
+autonomous vehicles), and the Internet of Things (IoT). Because these
+use cases will include everything from home appliances to industrial
+robots to self-driving cars, 5G will support not only humans accessing
+the Internet from their smartphones, but also swarms of autonomous
+devices working together on their behalf.
 
 There is more to supporting these services than just improving
-bandwidth or latency to individual users.  As we will see, a
+bandwidth or latency to individual users. As we will see, a
 fundamentally different edge network architecture is required. The
 requirements for this architecture are ambitious, and can be
 illustrated by three classes of capabilities:
@@ -40,11 +40,11 @@ illustrated by three classes of capabilities:
   ultra-high availability (greater than 99.999% or "five nines"),
   ultra-low latency (as low as 1 ms), and extreme mobility (up to 100
   km/h).
-  
-- To support *Enhanced Mobile Broadband*, potentially including extreme data rates
-  (multi-Gbps peak, 100+ Mbps sustained) and extreme
+
+- To support *Enhanced Mobile Broadband*, potentially including extreme
+  data rates (multi-Gbps peak, 100+ Mbps sustained) and extreme
   capacity (10 Tbps of aggregate throughput per square kilometer).
-  
+
 These targets will certainly not be met overnight, but that's in keeping
 with each generation of the mobile network being a decade-long
 endeavor.
@@ -76,7 +76,7 @@ first is to apply a *systems lens*, which is to say, we explain the
 sequence of design decisions that lead to a solution rather than fall
 back on enumerating the overwhelming number of acronyms or individual
 point technologies as a *fait accompli*. The second is to aggressively
-disaggregate the system.  Building a disaggregated, virtualized, and
+disaggregate the system. Building a disaggregated, virtualized, and
 software-defined 5G access network is the direction the industry is
 already headed (for good technical and business reasons), but breaking
 the 5G network down into its elemental components is also the best way
@@ -101,7 +101,7 @@ will ultimately distinguish 5G from earlier generations.
 .. admonition:: Further Reading
 
 	K. Schwab. `The Fourth Industrial Revolution
-	<https://www.weforum.org/about/the-fourth-industrial-revolution-by-klaus-schwab>`__. 
+	<https://www.weforum.org/about/the-fourth-industrial-revolution-by-klaus-schwab>`__.
 	World Economic Forum.
 
 What this all means is that there is no simple definition of 5G, any
@@ -122,7 +122,7 @@ As of 3G, the generational designation corresponds to a standard
 defined by the *3rd Generation Partnership Project (3GPP)*. Even
 though its name has “3G” in it, the 3GPP continues to define the
 standards for 4G, 5G, and so on, each of which corresponds to a
-sequence of releases of the standard.  Release 15 is considered the
+sequence of releases of the standard. Release 15 is considered the
 demarcation point between 4G and 5G, with Release 17 having been
 completed in 2022.
 
@@ -148,7 +148,7 @@ radars and satellite ground stations); followed by priority users who
 receive this right over 10MHz bands for three years via regional
 auctions; and finally the rest of the population, who can access and
 utilize a portion of this band as long as they first check with a
-central database of registered users.  CBRS, along with
+central database of registered users. CBRS, along with
 standardization efforts to extend mobile cellular networks to operate
 in the unlicensed bands, opens the door for private cellular networks
 similar to Wi-Fi. This is proving especially attractive to enterprises
@@ -186,7 +186,7 @@ founding members) creating O-RAN to break vendor lock-in.
 .. This section focuses on the traditional Telco perspective
 
 The mobile cellular network is part of the access network that
-implements the Internet’s so-called *last mile*. (Another common
+implements the Internet's so-called *last mile*. (Another common
 access technology is *Passive Optical Networks (PON)*, colloquially
 known as Fiber-to-the-Home.) These mobile access networks have
 historically been provided by both big and small *Mobile Network
@@ -195,13 +195,13 @@ thousands of aggregation points of presence across a country such as the
 US, along with a national backbone that interconnects those
 sites. Small regional and municipal MNOs might run an access network
 with one or two points of presence, and then connect to the rest of
-the Internet through some large operator’s backbone.
+the Internet through some large operator's backbone.
 
 .. _fig-global:
-.. figure:: figures/Slide1.png 
+.. figure:: figures/Slide1.png
     :width: 500px
     :align: center
-    
+
     A global mobile network built by first aggregating traffic from
     hundreds of wireless base stations, and then interconnecting those
     aggregation points over the Internet.
@@ -254,11 +254,11 @@ network and the cloud.
 .. sidebar:: 5G, Wi-Fi, and the Role of Spectrum
 
   WiFi networks use unlicensed radio spectrum that do not require WiFi
-  network operators to get advance regulatory approval.  At the same
+  network operators to get advance regulatory approval. At the same
   time, anyone can access the same spectrum, subject to limits on
   transmission power. As a result, WiFi networks share their bands
   with devices including baby monitors, cordless phones, etc., so the
-  WiFi MAC layer assumes the presence of physical-layer interference. 
+  WiFi MAC layer assumes the presence of physical-layer interference.
   Enterprise WiFi deployments, such as those on college campuses and
   in corporate office buildings, perform more centralized management
   of interference across multiple overlapping access points, but risk
@@ -289,7 +289,7 @@ practices to deliver mobile connectivity, the 5G network is built from
 commodity hardware, software-defined networks, and cloud-based
 operational practices. And, just as with familiar cloud applications,
 the end result is a system that increases both feature velocity and
-operational uniformity.  These advantages are available to legacy
+operational uniformity. These advantages are available to legacy
 MNOs, but whether they will fully embrace them is yet to be seen, so
 we do not limit ourselves to existing stakeholders or business
 models. In particular, this book focuses on how enterprises can be
@@ -309,19 +309,18 @@ storage or compute service. Finally, applications are distributed
 across both edge and centralized clouds, taking advantage of what is
 commonly referred to as a *hybrid cloud*.
 
-.. [#] We use the terms "data plane" and "control plane" in the
-       generic sense in this description. As we'll see in Chapter 2,
-       the 5G architecture has a more complex structure and uses
-       different terminology.
+.. [#] We use the term "data plane" in the generic sense in this
+       description. As we'll see in Chapter 2, the 5G architecture
+       refers to it as "user plane".
 
 .. _fig-enterprise:
-.. figure:: figures/ops/Slide1.png 
+.. figure:: figures/ops/Slide1.png
     :width: 600px
     :align: center
-    
+
     Enterprise-based deployment of 5G connectivity, running as a
-    managed cloud service.       
-   
+    managed cloud service.
+
 Hosting a 5G connectivity service on an edge cloud is perfectly
 aligned with one of the most pronounced trends in cloud computing:
 moving elements of the cloud from the datacenter to locations that are
@@ -345,22 +344,22 @@ end users.
 The idea of such deployments is to first collect operational data on
 assets and infrastructure, from sensors, video feeds and telemetry
 from machinery. It then applies Machine Learning (ML) or other forms
-of analysis to this data to gain insights,
-identify patterns and predict outcomes (e.g., when a device is likely
-to fail). The final step is to automate industrial processes so as to
-minimize human intervention and enable remote operations (e.g., power
-optimization, idling quiescent machinery). The overall goal is to
-create an IT foundation for continually improving industrial
-operations through software.
+of analysis to this data to gain insights, identify patterns and
+predict outcomes (e.g., when a device is likely to fail). The final
+step is to automate industrial processes so as to minimize human
+intervention and enable remote operations (e.g., power optimization,
+idling quiescent machinery). The overall goal is to create an IT
+foundation for continually improving industrial operations through
+software.
 
 But precisely where this edge is *physically* located depends on who
 you ask. If you ask a network operator that already owns and operates
 thousands of Central Offices, then their Central Offices are an
-obvious answer.  Others might claim the edge is located at the 14,000
-Starbucks locations (for example) across the US, and still others might point to the
-tens of thousands of cell towers spread across the globe. Our approach
-is to be location agnostic, but to make the discussion concrete, we
-use enterprises as our exemplar deployment.
+obvious answer. Others might claim the edge is located at the 14,000
+Starbucks locations (for example) across the US, and still others might
+point to the tens of thousands of cell towers spread across the globe.
+Our approach is to be location agnostic, but to make the discussion
+concrete, we use enterprises as our exemplar deployment.
 
 At the same time cloud providers started pursuing edge deployments,
 network operators began to re-architect their access network to use
@@ -406,10 +405,10 @@ technologies.
 .. _reading_devops:
 .. admonition:: Further Reading
 
-   `Software-Defined Networks: A Systems Approach 
+   `Software-Defined Networks: A Systems Approach
    <https://sdn.systemsapproach.org/>`__. November 2021.
 
-   `Edge Cloud Operations: A Systems Approach 
+   `Edge Cloud Operations: A Systems Approach
    <https://ops.systemsapproach.org/>`__. June 2022.
 
 
@@ -429,7 +428,7 @@ about Private 5G.
 
 The first factor is that by adopting cloud technologies, the mobile
 cellular network is hoping to cash in on the promise of feature
-velocity.  This "agility" story was always included in the early 5G
+velocity. This "agility" story was always included in the early 5G
 promotional material, as part of the case for why a 5G upgrade would
 be a worthwhile investment, but the consequence of those technologies
 now finding their way into the mainstream is that new features can be
@@ -437,11 +436,11 @@ introduced rapidly and deployed continuously. At some point, the
 frequency of continual improvements renders generational distinctions
 irrelevant.
 
-The second factor is that agility isn’t only about cadence; it’s also
+The second factor is that agility isn't only about cadence; it's also
 about customization. That is, these changes can be introduced
 bottom-up—for example by enterprises and their edge cloud partners in
 the case of Private 5G—without necessarily depending on (or waiting
-for) a global standardization effort.  If an enterprise finds a new
+for) a global standardization effort. If an enterprise finds a new
 use case that requires a specialized deployment, only its Private 5G
 deployment needs to adopt the necessary changes. Reaching agreement
 with all the incumbent stakeholders will no longer be a requirement.
@@ -450,15 +449,15 @@ It's anyone's guess where this will take us, but it will be
 interesting to see how this dynamic impacts the role of
 standardization: what aspects of the mobile network require global
 agreement and what aspects do not because they can evolve on a
-case-by-case basis.  While standards often spur innovation (TCP and
+case-by-case basis. While standards often spur innovation (TCP and
 HTTP are two great examples from the Internet experience), sometimes
 standards actually serve as a barrier to competition, and hence,
-innovation.  Now that software is eating the mobile cellular
+innovation. Now that software is eating the mobile cellular
 network—with Private 5G deployed in enterprises likely setting the
 pace—we will learn which standards are which.
 
 In summary, that 5G is on an evolutionary path is the central theme of
-this book.  We call attention to its importance here, and revisit the
+this book. We call attention to its importance here, and revisit the
 topic throughout the book. We are writing this book for *system
 generalists*, with the goal of helping bring a community that
 understands a broad range of systems issues (but knows little or
