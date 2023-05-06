@@ -255,11 +255,13 @@ to make its decision as to how to allocate PRBs during the subsequent
 TTI.
 
 Another input to the scheduling decision is the *QoS Class Identifier
-(QCI)*, which indicates the quality-of-service each class of traffic is
-to receive. In 4G, the QCI value assigned to each class (there are nine
-such classes, in total) indicates whether the traffic has a *Guaranteed
-Bit Rate (GBR)* or not *(non-GBR)*, plus the class’s relative priority
-within those two categories. 
+(QCI)*, which indicates the quality-of-service each class of traffic
+is to receive. In 4G, the QCI value assigned to each class (there are
+nine such classes, in total) indicates whether the traffic has a
+*Guaranteed Bit Rate (GBR)* or not *(non-GBR)*, plus the class’s
+relative priority within those two categories. (Note that the 5QI
+parameter introduced in Chapter 2 serves the same purpose as the
+QCI parameter in 4G.)
 
 Finally, keep in mind that :numref:`Figure %s <fig-sched-grid>` focuses on
 scheduling transmissions from a single antenna, but the MIMO technology
@@ -338,10 +340,10 @@ during each time interval.
 
 :numref:`Figure %s <fig-scheduler>` depicts the role of the scheduler
 from this more abstract perspective. Just as with 4G, CQI
-feedback from the receivers and the QCI quality-of-service class
+feedback from the receivers and the 5QI quality-of-service class
 selected by the subscriber are the two key pieces of input to the
-scheduler. Note that the set of QCI values available in 5G is
-considerably greater than in 4G,
+scheduler. Note that the set of 5QI values available in 5G is
+considerably greater than its QCI counterpart in 4G,
 reflecting the increasing differentiation among classes that 5G aims
 to support. For 5G,
 each class includes the following attributes:
@@ -354,8 +356,8 @@ each class includes the following attributes:
 -  Maximum Data Burst
 
 Note that while the preceding discussion could be interpreted to imply a
-one-to-one relationship between subscribers and a QCI, it is more
-accurate to say that each QCI is associated with a class of traffic
+one-to-one relationship between subscribers and a 5QI, it is more
+accurate to say that each 5QI is associated with a class of traffic
 (often corresponding to some type of application), where a given
 subscriber might be sending and receiving traffic that belongs to
 multiple classes at any given time.
@@ -375,7 +377,7 @@ multiple classes at any given time.
     :align: center
 
     Scheduler allocates Resource Blocks to user data streams based on
-    CQI feedback from receivers and the QCI parameters associated with
+    CQI feedback from receivers and the 5QI parameters associated with
     each class of service.
 
 3.3 Virtualized Scheduler (Slicing)
