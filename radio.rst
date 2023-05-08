@@ -461,7 +461,7 @@ increased bandwidth. 3GPP defined five such use cases:
 * Enhanced Mobile Broadband (eMBB)
 * Ultra-Reliable Low-Latency Communications (URLLC)
 * Massive Internet of Things (MIoT)
-* Vehicle to Infraestructure/Vehicle (V2X)
+* Vehicle to Infrastructure/Vehicle (V2X)
 * High-Performance Machine-Type Communications (HMTC)
 
 These use cases reflect the requirements introduced in Chapter 1, and

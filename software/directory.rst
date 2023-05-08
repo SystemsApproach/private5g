@@ -98,4 +98,4 @@ can deploy and operate Aether, with each stage highlighting the next
 set of touchpoints for customizing the configuration. All of these
 customizations are recorded as a set of *blueprints* that govern how
 Aether is deployed. (See the `blueprints <https://github.com/SystemsApproach/aether-onramp/tree/master/blueprints>`_
-directory of the OnRamp repo for the currently available sets.)
+directory of the OnRamp repo for the currently available set.)
