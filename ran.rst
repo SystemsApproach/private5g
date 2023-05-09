@@ -60,14 +60,13 @@ The key stages are as follows.
    plane.
 
 -  PDCP (Packet Data Convergence Protocol) → Responsible for compressing
-   and decompressing IP headers, ciphering and dechipering, integrity
+   and decompressing IP headers, ciphering and deciphering, integrity
    protection and integrity verification, duplication, reordering and
    in-order delivery, and out-of-order delivery.
 
--  RLC (Radio Link Control) → Responsible for segmentation and
-   reassembly, including, only for acknowledge mode (AM) data transfer,
-   re-segmentation and reliably transmitting/receiving segments using
-   error correction through ARQ (automatic repeat request).
+- RLC (Radio Link Control) → Responsible for segmentation and
+   reassembly, as well as reliably transmitting/receiving segments
+   using error correction through ARQ (automatic repeat request).
 
 -  MAC (Media Access Control) → Responsible for buffering, multiplexing
    and demultiplexing segments, including all real-time scheduling
@@ -396,10 +395,6 @@ dichotomy—can be expected to emerge over time.
 4.4 Near Real-Time RIC
 ----------------------
 
-.. This is where we talk about some implementation details for the
-   ONOS RIC. Currently cut-and-pasted from SDN book, where there
-   was significant assumed knowledge of ONOS.
-
 Drilling down to the next level of detail, :numref:`Figure %s
 <fig-ric>` shows an exemplar implementation of a RIC based on a
 retargeting of the Open Network OS (ONOS) for the SD-RAN use
@@ -467,14 +462,13 @@ operations against this Service Model.
 Of course, it is the RAN element, through its published Service Model,
 that defines the relevant set of functions that can be activated, the
 variables that can be reported, and policies that can be set. The
-O-RAN community is working on a few vendor-agnostic Service Models. The
-first, called *Key Performance Measurement* (abbreviated *E2SM-KPM*),
-specifies the metrics that can be retrieved from RAN elements. The
-second, called *RAN Control* (abbreviated *E2SM-RC*), specifies
-parameters that can be set to control RAN elements. And the third,
-called *Cell Configuration and Control* (abbreviated *E2SM-CCC*),
-used to expose and initiate control and/or configuration of node
-level and cell level configuration and/or parameters.
+O-RAN community is working on three vendor-agnostic Service
+Models. The first, called *Key Performance Measurement* (abbreviated
+*E2SM-KPM*), specifies the metrics that can be retrieved from RAN
+elements. The second, called *RAN Control* (abbreviated *E2SM-RC*),
+specifies parameters that can be set to control RAN elements. The
+third, called *Cell Configuration and Control* (abbreviated
+*E2SM-CCC*), exposes configuration parameters at the cell level.
 
 In simple terms, E2SM-KPM defines what values can be *read* and
 E2SM-RC and E2SM-CCC defines what values can be *written*. Because
