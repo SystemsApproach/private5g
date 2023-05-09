@@ -8,7 +8,7 @@ Chapter 3:  Radio Transmission
 
    Emphasizes use cases, which can be anchored in features of the
    radio (which the rest of the stack then need to take into account).
-   
+
 For anyone familiar with wireless access technologies that offer a
 best-effort service, such as Wi-Fi, the cellular network presents a
 notable contrast. This is mostly because cellular networks carefully
@@ -31,7 +31,7 @@ radio systems is motivated by the need to deal with these challenges.
 
 As we will see in this chapter, mobile cellular networks use a
 reservation-based strategy, whereas Wi-Fi is contention-based. This
-difference is rooted in each system’s fundamental assumption about
+difference is rooted in each system's fundamental assumption about
 utilization: Wi-Fi assumes a lightly loaded network (and hence
 optimistically transmits when the wireless link is idle and backs off
 if contention is detected), while 5G assumes (and strives for) high
@@ -59,12 +59,12 @@ addressed by a combination of coding and modulation, as depicted in
 :numref:`Figure %s <fig-modulation>`.
 
 .. _fig-modulation:
-.. figure:: figures/Slide14.png 
+.. figure:: figures/Slide14.png
     :width: 500px
     :align: center
 
     The role of coding and modulation in mobile communication.
-     
+
 At its core, coding inserts extra bits into the data to help recover
 from all the environmental factors that interfere with signal
 propagation. This typically implies some form of *Forward Error
@@ -86,7 +86,7 @@ following multiple paths from the transmitter to the receiver, who may
 also be moving.
 
 .. _fig-multipath:
-.. figure:: figures/Slide15.png 
+.. figure:: figures/Slide15.png
     :width: 600px
     :align: center
 
@@ -120,17 +120,17 @@ to the target physical environment), it is possible to calculate
 :math:`T_c`, which in turn bounds the rate at which symbols can be
 transmitted without undue risk of interference. The dynamic nature of
 the wireless channel is a central challenge to address in the cellular
-network.  
+network.
 
 .. _fig-coherence:
-.. figure:: figures/Slide16.png 
+.. figure:: figures/Slide16.png
     :width: 500px
     :align: center
 
     Received data spread over time due to multipath
     variation.
 
-To complicate matters further,    
+To complicate matters further,
 :numref:`Figure %s <fig-multipath>` and :numref:`%s <fig-coherence>` imply
 the transmission originates from a single
 antenna, but cell towers are equipped with an array of antennas, each
@@ -146,7 +146,7 @@ best utilize the wireless medium on their behalf. 3GPP specifies a
 *Channel Quality Indicator (CQI)* for this purpose. In practice,
 the receiver sends a CQI status report to the base station periodically
 (e.g., every millisecond). These CQI messages report the observed
-signal-to-noise ratio, which impacts the receiver’s ability to recover
+signal-to-noise ratio, which impacts the receiver's ability to recover
 the data bits. The base station then uses this information to adapt how
 it allocates the available radio spectrum to the subscribers it is
 serving, as well as which coding and modulation scheme to employ.
@@ -207,8 +207,8 @@ risk of data loss due to interference.
 The use of OFDMA naturally leads to conceptualizing the radio spectrum
 as a 2-D resource, as shown in :numref:`Figure %s <fig-sched-grid>`,
 with the subcarriers represented in the vertical dimension and the time to
-transmit symbols on each subcarrier represented in the horizontal dimension.  The
-basic unit of transmission, called a *Resource Element (RE)*,
+transmit symbols on each subcarrier represented in the horizontal dimension.
+The basic unit of transmission, called a *Resource Element (RE)*,
 corresponds to a 15-kHz band around one subcarrier frequency and the
 time it takes to transmit one OFDMA symbol. The number of bits that
 can be encoded in each symbol depends on the modulation scheme in use.
@@ -220,10 +220,10 @@ based on the measured channel quality, sending more bits per symbol
 (and thus more bits per second) when the quality is high.
 
 .. _fig-sched-grid:
-.. figure:: figures/Slide17.png 
+.. figure:: figures/Slide17.png
     :width: 600px
     :align: center
-	    
+
     Spectrum abstractly represented by a 2-D grid of
     schedulable Resource Elements.
 
@@ -242,7 +242,7 @@ preparing and transmitting a sequence of PRBs.
 Note that OFDMA is not a coding/modulation algorithm, but instead
 provides a framework for selecting a specific coding and modulation for
 each subcarrier frequency. QAM is one common example modulation. It is
-the scheduler’s responsibility to select the modulation to use for each
+the scheduler's responsibility to select the modulation to use for each
 PRB, based on the CQI feedback it has received. The scheduler also
 selects the coding on a per-PRB basis, for example, by how it sets the
 parameters to the turbo code algorithm.
@@ -257,8 +257,8 @@ TTI.
 Another input to the scheduling decision is the *QoS Class Identifier
 (QCI)*, which indicates the quality-of-service each class of traffic
 is to receive. In 4G, the QCI value assigned to each class (there are
-nine such classes, in total) indicates whether the traffic has a
-*Guaranteed Bit Rate (GBR)* or not *(non-GBR)*, plus the class’s
+twenty six such classes, in total) indicates whether the traffic has
+a *Guaranteed Bit Rate (GBR)* or not *(non-GBR)*, plus the class's
 relative priority within those two categories. (Note that the 5QI
 parameter introduced in Chapter 2 serves the same purpose as the
 QCI parameter in 4G.)
@@ -270,8 +270,8 @@ described above means the scheduler also has to determine which antenna
 each receiver. But again, in the abstract, the scheduler is charged with
 allocating a sequence of Resource Elements.
 
-Note that the scheduler has many degrees of freedom: it has to decide which set of
-users to service during a given time interval, how many resource
+Note that the scheduler has many degrees of freedom: it has to decide which
+set of users to service during a given time interval, how many resource
 elements to allocate to each such user, how to select the coding and
 modulation levels, and which antenna to transmit their data on. This is
 an optimization problem that, fortunately, we are not trying to solve
@@ -307,22 +307,17 @@ These different waveforms affect the scheduling and subcarrier intervals
 (i.e., the “size” of the resource elements described in the previous
 section).
 
--  For sub-1 GHz bands, 5G allows maximum 50 MHz bandwidths. In this case,
-   there are two waveforms: one with subcarrier spacing of 15 kHz and
-   another of 30 kHz. (We used 15 kHz in the example shown in
-   :numref:`Figure %s <fig-sched-grid>`.)
-   The corresponding scheduling intervals are
-   0.5 and 0.25 ms, respectively. (We used 0.5 ms in the example shown
-   in :numref:`Figure %s <fig-sched-grid>`.)
+-  For frequency range 1 (410 MHz - 7125 MHz), 5G allows maximum 100 MHz
+   bandwidths. In this case, there are three waveforms with subcarrier
+   spacings of 15, 30 and 60 kHz. (We used 15 kHz in the example shown in
+   :numref:`Figure %s <fig-sched-grid>`.) The corresponding to scheduling
+   intervals of 0.5, 0.25, and 0.125 ms, respectively. (We used 0.5 ms in
+   the example shown in :numref:`Figure %s <fig-sched-grid>`.)
 
--  For 1-6 GHz bands, maximum bandwidths go up to 100 MHz.
-   Correspondingly, there are three waveforms with subcarrier spacings
-   of 15, 30 and 60 kHz, corresponding to scheduling intervals of
-   0.5, 0.25, and 0.125 ms, respectively.
-
--  For millimeter bands, bandwidths may go up to 400 MHz. There are two
-   waveforms, with subcarrier spacings of 60 kHz and 120 kHz. Both have
-   scheduling intervals of 0.125 ms.
+-  For millimeter bands, also known as frequency range 2 (24.25 GHz -
+   52.6 GHz), bandwidths may go from 50 MHz up to 400 MHz. There are
+   two waveforms, with subcarrier spacings of 60 kHz and 120 kHz. Both
+   have scheduling intervals of 0.125 ms.
 
 These various configurations of subcarrier spacing and scheduling
 intervals are sometimes called the *numerology* of the radio's air
@@ -333,7 +328,7 @@ of freedom to the scheduler. In addition to allocating radio resources
 to users, it has the ability to dynamically adjust the size of the
 resource by changing the waveform being used. With this additional
 freedom, fixed-sized REs are no longer the primary unit of resource
-allocation.  We instead use more abstract terminology, and talk about
+allocation. We instead use more abstract terminology, and talk about
 allocating *Resource Blocks* to subscribers, where the 5G scheduler
 determines both the size and number of Resource Blocks allocated
 during each time interval.
@@ -345,15 +340,14 @@ selected by the subscriber are the two key pieces of input to the
 scheduler. Note that the set of 5QI values available in 5G is
 considerably greater than its QCI counterpart in 4G,
 reflecting the increasing differentiation among classes that 5G aims
-to support. For 5G,
-each class includes the following attributes:
+to support. For 5G, each class includes the following attributes:
 
 -  Resource Type: Guaranteed Bit Rate (GBR), Delay-Critical GBR, Non-GBR
 -  Priority Level
 -  Packet Delay Budget
 -  Packet Error Rate
--  Averaging Window
 -  Maximum Data Burst
+-  Averaging Window
 
 Note that while the preceding discussion could be interpreted to imply a
 one-to-one relationship between subscribers and a 5QI, it is more
@@ -369,10 +363,10 @@ multiple classes at any given time.
 
 .. Might try to say more about QCI. Check out this reference:
    https://www.tech-invite.com/3m23/toc/tinv-3gpp-23-501_za.html#e-5-7-3
-   
+
 
 .. _fig-scheduler:
-.. figure:: figures/Slide18.png 
+.. figure:: figures/Slide18.png
     :width: 600px
     :align: center
 
@@ -395,7 +389,7 @@ applications care about latency and others care more about bandwidth.
 While in principle one could define a sophisticated scheduler that
 takes dozens of different factors into account, 5G has introduced a
 mechanism that allows the underlying resources (in this case radio
-spectrum) to be "sliced" between different uses.  The key to slicing
+spectrum) to be "sliced" between different uses. The key to slicing
 is to add a layer of indirection between the scheduler and the
 physical resource blocks. Slicing, like much of 5G, has received a
 degree of hype, but it boils down to virtualization at the level of
@@ -410,11 +404,11 @@ to each user (or virtual machine in the computing case) from the
 decision as to which physical resources are actually assigned. This
 virtual-to-physical mapping is performed by a layer typically known as
 a *Hypervisor*, and the important thing to keep in mind is that it is
-totally agnostic about which user’s segment is affected by each
+totally agnostic about which user's segment is affected by each
 translation.
 
 .. _fig-hypervisor:
-.. figure:: figures/Slide19.png 
+.. figure:: figures/Slide19.png
     :width: 600px
     :align: center
 
@@ -438,7 +432,7 @@ could be reserved for premium customers or other high-priority traffic
    waste BW that isn't needed by one slice
 
 .. _fig-multi-sched:
-.. figure:: figures/Slide20.png 
+.. figure:: figures/Slide20.png
     :width: 600px
     :align: center
 
@@ -462,11 +456,13 @@ for transmission, but when taken as a whole, the end result is a
 qualitatively more powerful radio. This new 5G air interface
 specification, which is commonly referred to as *New Radio (NR)*,
 enables new use cases that go well beyond simply delivering
-increased bandwidth. 3GPP defined three such use cases:
+increased bandwidth. 3GPP defined five such use cases:
 
-* Enhanced Mobile Broadband
-* Ultra-Reliable Low-Latency Communications
-* Massive Machine-Type Communications
+* Enhanced Mobile Broadband (eMBB)
+* Ultra-Reliable Low-Latency Communications (URLLC)
+* Massive Internet of Things (MIoT)
+* Vehicle to Infrastructure/Vehicle (V2X)
+* High-Performance Machine-Type Communications (HMTC)
 
 These use cases reflect the requirements introduced in Chapter 1, and
 can be attributed to four fundamental improvements in how 5G
@@ -487,10 +483,10 @@ downstream traffic in both the time and frequency domains. Doing so
 provides finer-grained scheduling control needed by latency-sensitive
 applications.
 
-The third advance is related to the new spectrum available to 5G NR, with the
-mmWave allocations opening above 24 GHz being especially
+The third advance is related to the new spectrum available to 5G NR,
+with the mmWave allocations opening above 24 GHz being especially
 important. This is not only because of the abundance of capacity—which
-makes it possible to set aside dedicated capacity for 
+makes it possible to set aside dedicated capacity for
 applications that require low-latency communication—but also because
 the higher frequency enables even finer-grained resource blocks (e.g.,
 scheduling intervals as short as 0.125 ms). Again, this improves
@@ -508,31 +504,27 @@ less power.
 
 Support for IoT device connectivity revolves around allocating some of
 the available radio spectrum to a light-weight (simplified) air
-interface.  This approach started with Release 13 of LTE via two
-complementary technologies: mMTC and NB-IoT (NarrowBand-IoT).  Both
+interface. This approach started with Release 13 of LTE via two
+complementary technologies: mMTC and NB-IoT (NarrowBand-IoT). Both
 technologies build on a significantly simplified version of LTE—i.e.,
 limiting the numerology and flexibility needed to achieve high spectrum
 utilization—so as to allow for simpler IoT hardware design. mMTC
 delivers up to 1 Mbps over 1.4 MHz of bandwidth and NB-IoT delivers a
 few tens of kbps over 200 kHz of bandwidth; hence the term
-*NarrowBand*.  Both technologies have been designed to support over 1
-million devices per square kilometer. With Release 16, both
+*NarrowBand*. Both technologies have been designed to support over
+1 million devices per square kilometer. With Release 16, both
 technologies can be operated in-band with 5G, but still based on LTE
 numerology. Starting with Release 17, a simpler version of 5G NR,
 called *NR-Light*, will be introduced as the evolution of mMTC.
 NR-Light is expected to scale the device density even further.
 
-
 As a complement to these four improvements, 5G NR is designed to
 support partitioning the available bandwidth, with different
 partitions dynamically allocated to different classes of traffic
-(e.g., high-bandwidth, low-latency, and low-complexity). This is the
-essence of *slicing*, as discussed above.
+(e.g., high-bandwidth, low-latency, and low-complexity). This is
+the essence of *slicing*, as discussed above.
 Moreover, once traffic with different requirements can be served by
 different slices, 5G NR's approach to multiplexing is general enough
 to support varied scheduling decisions for those slices, each tailored
 for the target traffic. We return to the applications of slicing in
 Chapter 6.
-
-
-

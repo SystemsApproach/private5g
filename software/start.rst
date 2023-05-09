@@ -195,8 +195,9 @@ More information about the Control and Monitoring dashboards is given
 in their respective sections of the Aether Guide. The programmatic API
 underlying the Control Dashboard, which was introduced in Section 6.4,
 can be accessed at ``http://10.76.28.113:31194/aether-roc-api/`` in
-our example deployment. Finally, note that there is much more to say
-about the ROC; we take a closer look at the role it plays in Stage 4.
+our example deployment (where Aether runs on host ``10.76.28.113``).
+Finally, note that there is much more to say about the ROC; we take a
+closer look at the role it plays in Stage 4.
 
 .. _reading_dashboards:
 .. admonition:: Further Reading

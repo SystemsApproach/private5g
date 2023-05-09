@@ -7,8 +7,7 @@ SD-Fabric) can be downloaded, and deployment artifacts built from that
 source code (e.g., Docker Images, Helm Charts, Fleet Bundles,
 Terraform Templates) can be used to bring up a running instance of
 Aether on local hardware. See the *Source Directory* section of this
-appendix for information about where to find the relevant code
-repositories.
+appendix for information about where to find the relevant repositories.
 
 A multi-site deployment of Aether has been running since 2020 in
 support of the *Pronto Project*, but that deployment depends on an ops
@@ -62,12 +61,12 @@ path for users to:
 * Deploy and operate Aether with live traffic.
 
 Aether OnRamp starts with AiaB, refactored to help users step through
-a sequence of increasingly complex *blueprints*. Starting with SD-Core
-as the centerpiece, OnRamp prescribes a (mostly) linear sequence of
-steps a new user can follow to bring up an operational system that
-runs 24/7 and supports live 5G workloads.  Aether OnRamp is still a
-work in progress, but anyone interested in participating in that
-effort is encouraged to join the discussion on Slack in the `ONF
+a sequence of increasingly complex *blueprints* (all of which include
+the SD-Core its centerpiece). OnRamp then prescribes a (mostly) linear
+sequence of steps a new user can follow to bring up an operational
+system that runs 24/7 and supports live 5G workloads.  Aether OnRamp
+is still a work in progress, but anyone interested in participating in
+that effort is encouraged to join the discussion on Slack in the `ONF
 Community Workspace <https://onf-community.slack.com/>`__. A roadmap
 for the work that needs to be done can be found in the `Aether OnRamp
 Wiki <https://github.com/SystemsApproach/aether-onramp/wiki>`__.
