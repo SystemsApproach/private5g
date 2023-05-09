@@ -3,7 +3,7 @@ Chapter 6:  Managed Cloud Service
 
 .. This is where we show how all the pieces can be pulled together
    into an end-to-end solution that can be deployed in enterprises as
-   a managed service. 
+   a managed service.
 
    Current version is one edit pass beyond a cut-and-paste from the
    OPs book. Still needs a thorough edit to even out the level of
@@ -11,7 +11,7 @@ Chapter 6:  Managed Cloud Service
 
    Would probably benefit from a use case (e.g., IoT) to help tie it
    all together.
-   
+
 This chapter describes how to assemble all the pieces described in the
 previous chapters to provide 5G connectivity as a managed cloud
 service. Such a service might be deployed in enterprises, for example,
@@ -41,8 +41,8 @@ companion book, and here focus instead on a from-scratch cloud-based
 design.
 
 .. _reading_ops:
-.. admonition:: Further Reading 
-   
+.. admonition:: Further Reading
+
     L. Peterson, A. Bavier, S. Baker, Z. Williams, and B. Davie. `Edge
     Cloud Operations: A Systems Approach
     <https://ops.systemsapproach.org/lifecycle.html>`__. June 2022.
@@ -149,7 +149,7 @@ Helm Charts.
    `Helm Tutorial
    <https://helm.sh/docs/intro/quickstart/>`__.
 
-Fleet an application deployment manager that is responsible for
+Fleet, an application deployment manager, is responsible for
 installing a *Bundle* of Helm Charts on one or more target
 clusters. If we were trying to deploy a single Chart on just one
 Kubernetes cluster, then Helm would be sufficient. The value of Fleet
@@ -172,7 +172,7 @@ collection of Helm-specified applications. It does this using an
 approach known as *Infrastructure-as-Code*, which documents exactly
 how the infrastructure is to be configured in a declarative format
 that can be (a) checked into a repo, (b) version-controlled, and (c)
-executed just like any piece of software.  Terraform assumes an
+executed just like any piece of software. Terraform assumes an
 underlying provisioning API, with Microsoft's Azure Kubernetes Service
 (AKS), AWS's Amazon Elastic Kubernetes Service (EKS), Google's Google
 Kubernetes Engine (GKE) and Rancher's Rancher Kubernetes Engine (RKE)
@@ -223,10 +223,10 @@ Core's User Plane Function (UPF), but for an in-depth description of
 SD-Fabric, we refer you to a companion book.
 
 .. _reading_sdn:
-.. admonition:: Further Reading 
-   
+.. admonition:: Further Reading
+
    L. Peterson, C. Cascone, B. O'Connor, T. Vachuska, and B. Davie.
-   `Software-Defined Networks: A Systems Approach 
+   `Software-Defined Networks: A Systems Approach
    <https://sdn.systemsapproach.org>`__.  November 2021.
 
 .. _fig-ace:
@@ -240,7 +240,7 @@ SD-Fabric, we refer you to a companion book.
    base stations, and between the Network OS and the individual
    switches) represent control relationships (e.g., SD-RAN controls
    the small cells and SD-Fabric controls the switches).
-	
+
 As shown in :numref:`Figure %s <fig-ace>`, ACE hosts two additional
 microservice-based subsystems on top of this platform; they
 collectively implement *5G-as-a-Service*. The first subsystem, SD-RAN,
@@ -256,12 +256,12 @@ microservices, just as any other cloud native workload.
 
 Once an edge cluster is running in this configuration, it is ready to
 host a collection of cloud-native edge applications (not shown in
-:numref:`Figure %s <fig-ace>`). What’s unique to our example
+:numref:`Figure %s <fig-ace>`). What's unique to our example
 configuration is its ability to connect such applications to mobile
 devices throughout the enterprise using the 5G Connectivity Service
 implemented by SD-RAN and SD-Core, without the resulting network
 traffic ever leaving the enterprise; a scenario known as *local
-breakout*.  Moreover, this service is offered as a managed service,
+breakout*. Moreover, this service is offered as a managed service,
 with enterprise system administrators able to use a programmatic API
 (and associated GUI portal) to control that service; that is,
 authorize devices, restrict access, set QoS profiles for different
@@ -278,7 +278,7 @@ subsystems running in the central cloud: (1) one or more
 instantiations of the Mobile Core Control Plane (CP), and (2) the
 Aether Management Platform (AMP).
 
-Each SD-Core CP controls one or more SD-Core UPFs.  Exactly how CP
+Each SD-Core CP controls one or more SD-Core UPFs. Exactly how CP
 instances (running centrally) are paired with UPF instances (running
 at the edges) is a runtime decision, and depends on the degree of
 isolation the enterprise sites require. AMP is Aether's realization of
@@ -287,7 +287,7 @@ centralized and edge subsystems (as introduced in the next section).
 
 .. Discuss variable number of Cores, vs one-per-metro as suggested
    earlier. This is for isolation purposes (and potentially, customization).
-   
+
 
 .. _fig-aether:
 .. figure:: figures/ops/Slide6.png
@@ -301,13 +301,13 @@ centralized and edge subsystems (as introduced in the next section).
 There is an important aspect of this hybrid cloud that is not obvious
 from :numref:`Figure %s <fig-aether>`, which is that the “hybrid
 cloud” we keep referring to is best described as a set of Kubernetes
-clusters, rather than a set of physical clusters.  This is because,
+clusters, rather than a set of physical clusters. This is because,
 while each ACE site usually corresponds to a physical cluster built
 out of bare-metal components, each of the SD-Core CP subsystems shown
 in :numref:`Figure %s <fig-aether>` is actually deployed in a logical
 Kubernetes cluster on a commodity cloud. The same is true for
-AMP. Aether’s centralized components are able to run in Google Cloud
-Platform, Microsoft Azure, and Amazon’s AWS. They also run as an
+AMP. Aether's centralized components are able to run in Google Cloud
+Platform, Microsoft Azure, and Amazon's AWS. They also run as an
 emulated cluster implemented by a system like KIND (Kubernetes in
 Docker), making it possible for developers to run these components on
 their laptops.
@@ -354,7 +354,7 @@ For Aether, we care about two primary stakeholders: (1) the *cloud
 operators* who manage the hybrid cloud as a whole, and (2) the
 *enterprise users* who decide on a per-site basis how to take
 advantage of the local cloud resources (e.g., what edge applications
-to run and how to slice connectivity resources among those apps).  We
+to run and how to slice connectivity resources among those apps). We
 sometimes call the latter "enterprise admins" to distinguish them from
 "end-users" who might want to manage their own personal devices.
 
@@ -395,15 +395,15 @@ scenarios. Examples include:
   small cells and the SD-RAN solution that includes a near RT-RIC and
   associated xApps.
 
-* It is possible co-locate both AMP and the SD-Core CP on the edge
+* It is possible co-locate both AMP and the SD-Core on the edge
   cluster, resulting in a complete Aether deployment that is
   self-contained in a single site.
 
 These are all straightforward configuration options. A very different
 approach is to start with an edge cluster that is managed by one of
 the hyperscalers, rather than have Aether provision Kubernetes on
-bare-metal.  Google’s Anthos, Microsoft’s Azure Arc, and Amazon’s
-ECS-Anywhere are examples of such edge cloud products.  In such a
+bare-metal. Google's Anthos, Microsoft's Azure Arc, and Amazon's
+ECS-Anywhere are examples of such edge cloud products. In such a
 scenario, AMP still manages the SD-Core and SD-RAN applications
 running on top of Kubernetes, but not the underlying platform (which
 may or may not include an SDN-based switching fabric).
@@ -414,7 +414,7 @@ provider, an enterprise, or a traditional MNO owning the hardware,
 there are situations where a third-party, often called a *neutral
 host*, owns and operates the hardware (along with the real estate it
 sits in), and then rents access to these resources to multiple 5G
-providers. Each mobile service provider is then a tenant of of that
+providers. Each mobile service provider is then a tenant of that
 shared infrastructure.
 
 This kind of arrangement has existed for years, albeit with
@@ -427,12 +427,12 @@ buildings, and dense urban centers—instead of datacenter resources.
 The business arrangements would also have to be different from Private
 5G, but the technical design outlined in this book still applies.
 
-6.3 Cloud Management Platform 
+6.3 Cloud Management Platform
 ------------------------------
 
 Operationalizing the hardware and software components described in the
 previous two sections is the essence of what it means to offer 5G as a
-*managed service*.  This responsibility falls to the Cloud Management
+*managed service*. This responsibility falls to the Cloud Management
 Platform, which in Aether corresponds to the centralized AMP component
 shown in :numref:`Figure %s <fig-aether>`. AMP manages both the
 distributed set of ACE clusters and one or more SD-Core CP clusters
@@ -479,11 +479,11 @@ At a high level, AMP is organized around the four subsystems shown in
   to failures, tune performance, do root cause analysis, perform
   security audits, and understand when it is necessary to provision
   additional capacity.
-    
+
 AMP implements all four subsystems, but an alternative perspective
 that characterizes the management platform as having *online* and
 *offline* components is also instructive. Such a two dimensional
-schematic is shown in :numref:`Figure %s <fig-2D>`.  Lifecycle
+schematic is shown in :numref:`Figure %s <fig-2D>`. Lifecycle
 Management (coupled with Resource Provisioning) runs offline, sitting
 adjacent to the hybrid cloud. Operators and Developers provision and
 change the system by checking code (including configuration specs)
@@ -494,9 +494,9 @@ an API that can be used to read and write parameters of the running
 system, which serves as a foundation for building closed-loop control.
 
 .. _fig-2D:
-.. figure:: figures/ops/Slide11.png 
-   :width: 500px 
-   :align: center 
+.. figure:: figures/ops/Slide11.png
+   :width: 500px
+   :align: center
 
    Alternative representation of the management platform, highlighting
    the offline and online aspects of cloud management.
@@ -536,7 +536,7 @@ seamless way to accommodate both. To this end, our approach is to
 first overlay a *logical structure* on top of hardware resources,
 making them roughly equivalent to the virtual resources we get from a
 commercial cloud provider. This results in a hybrid scenario similar
-to the one shown in :numref:`Figure %s <fig-infra>`.  One way to think
+to the one shown in :numref:`Figure %s <fig-infra>`. One way to think
 about this is that the task of booting hardware into the "ready" state
 involves installing and configuring several subsystems that
 collectively form the cloud platform. It is this platform that
@@ -611,10 +611,7 @@ Repo. This is the cornerstone of *Configuration-as-Code* (also known
 as *GitOps*), the cloud native approach to CI/CD. The third is that
 there is an opportunity for operators to apply discretion to the
 pipeline, as denoted by the *"Deployment Gate"* in the Figure,
-controlling what features get deployed when. (Keep in mind that
-"continuous" does not necessarily mean "instantaneous"; there can be a
-variety of gating functions injected into the CI/CD pipeline to
-control when upgrades get rolled out.)
+controlling what features get deployed when.
 
 The third repository shown in :numref:`Figure %s <fig-cicd>` is the
 Code Repo (on the far left). Developers continually check new features
@@ -649,7 +646,7 @@ the pipeline.
 Service Orchestration is responsible for managing the Kubernetes
 workloads once they are up and running, which in our case means
 providing a programmatic API that can be used by various stakeholders
-to manage the 5G connectivity service.  As shown in :numref:`Figure %s
+to manage the 5G connectivity service. As shown in :numref:`Figure %s
 <fig-control>`, the Service Orchestrator hides the implementation
 details of 5G connectivity, which spans four different components and
 multiple clouds. It does this by providing a coherent service
@@ -670,13 +667,13 @@ situations a single backend component might implement the entirety of
 a service, but in the case of 5G, which is constructed from a
 collection of disaggregated components, Service Orchestration is where
 we define an API that logically integrates those components into a
-unified and coherent whole.  It is also an opportunity to “raise the
+unified and coherent whole. It is also an opportunity to “raise the
 level of abstraction” for the underlying subsystems, hiding
 unnecessary implementation details.
 
 We describe this connectivity interface in Section 6.4. For now, our
 focus is on the main issues Service Orchestration must address in
-order to offer such an API.  At a high level, it must:
+order to offer such an API. At a high level, it must:
 
 1. Authenticate the principal wanting to perform the operation.
 
@@ -725,9 +722,9 @@ Metrics are quantitative data about a system. These include common
 performance metrics such as link bandwidth, CPU utilization, and
 memory usage, but also binary results corresponding to "up" and
 "down", as well as other state variables that can be encoded
-numerically.  These values are produced and collected periodically
+numerically. These values are produced and collected periodically
 (e.g., every few seconds), either by reading a counter, or by
-executing a runtime test that returns a value.  These metrics can be
+executing a runtime test that returns a value. These metrics can be
 associated with physical resources such as servers and switches,
 virtual resources such as VMs and containers, or high-level
 abstractions such as the *Connectivity Service* described in the next
@@ -769,14 +766,14 @@ microservices in a cloud setting. This makes the problem challenging,
 but also critically important because it is often the case that the
 only way to understand time-dependent phenomena—such as why a
 particular resource is overloaded—is to understand how multiple
-independent workflows interact with each other.  Jaeger is a popular
+independent workflows interact with each other. Jaeger is a popular
 open source tool used for tracing.
 
 .. _reading_tracing:
-.. admonition:: Further Reading 
+.. admonition:: Further Reading
 
-   `Jaeger: End-to-End Distributed Tracing 
-   <https://www.jaegertracing.io/>`__. 
+   `Jaeger: End-to-End Distributed Tracing
+   <https://www.jaegertracing.io/>`__.
 
 Finally, note that our framing of monitoring and telemetry as part of
 the online aspect of management is somewhat simplistic. Certainly
@@ -808,20 +805,20 @@ on a set of resources (objects):
 
 * GET: Retrieve an object.
 * POST: Create an object.
-* PUT,  PATCH: Modify an existing object.
+* PUT, PATCH: Modify an existing object.
 * DELETE: Delete an object.
 
-Each object, in turn, is typically defined by a data model.  In Aether
+Each object, in turn, is typically defined by a data model. In Aether
 this model is specified in YANG, but rather than dive into the
 particulars of YANG, this section describes the models informally by
 describing the relevant fields.
 
 Every object contains an `id` field that is used to uniquely identify
-the object.  Some objects contain references to other objects. For
+the object. Some objects contain references to other objects. For
 example, many objects contain references to the `Enterprise` object,
 which allows them to be associated with a particular enterprise. That
 is, references are constructed using the `id` field of the referenced
-object. 
+object.
 
 In addition to the `id` field, several other fields are also common to
 all models. These include:
@@ -852,7 +849,7 @@ contains the following fields:
 `Enterprises` are further divided into `Sites`. A site is a
 point-of-presence for an `Enterprise` and may be either physical or
 logical (i.e., a single geographic location could contain several
-logical sites). The`Site` model, in turn, contains the following
+logical sites). The `Site` model, in turn, contains the following
 fields:
 
 * `enterprise`: A link to the `Enterprise` that owns this site.
@@ -876,7 +873,7 @@ identify and locate UEs throughout the global cellular network.
 Aether models 5G connectivity as a `Slice`, which represents an
 isolated communication channel (and associated QoS parameters) that
 connects a set of devices (modeled as a `Device-Group`) to a set of
-applications (each of which is modeled as an `Application`).  For
+applications (each of which is modeled as an `Application`). For
 example, an enterprise might configure one slice to carry IoT traffic
 and another slice to carry video traffic. The `Slice` model has the
 following fields:
@@ -884,7 +881,6 @@ following fields:
 * `device-group`: A list of `Device-Group` objects that can participate in this `Slice`. Each
   entry in the list contains both the reference to the `Device-Group` as well as an `enable`
   field which may be used to temporarily remove access to the group.
-
 * `application`: A list of `Application` objects that are either allowed or denied for this
   `Slice`. Each entry in the list contains both a reference to the `Application` as well as an
   `allow` field which can be set to `true` to allow the application or `false` to deny it.
@@ -896,9 +892,9 @@ following fields:
 * `site`: Reference to the `Site` where this `Slice` is deployed.
 * `sst`, `sd`: 3GPP-defined slice identifiers assigned by the operations team.
 * `mbr.uplink`, `mbr.downlink`, `mbr.uplink-burst-size`,
-  `mbr.downlink-burst-size`.  Maximum bit-rate and burst sizes for
+  `mbr.downlink-burst-size`: Maximum bit-rate and burst sizes for
   this slice.
-  
+
 The rate-related parameters are initialized using a selected
 `template`, as described below, but these values may be changed at
 runtime. Also note that this example illustrates how modeling can be
@@ -923,9 +919,9 @@ applications. The `Device-Group` model contains the following fields:
   IP and DNS settings for UEs within this group.
 * `site`: Reference to the site where this `Device-Group` may be
   used. (This field indirectly identifies the `Enterprise` since a
-  `Site` contains a reference to `Enterprise`.) 
+  `Site` contains a reference to `Enterprise`.)
 * `mbr.uplink`, `mbr.downlink`: Maximum bit-rate for the device group.
-* `traffic-class`: The traffic class to be used for devices in this group.  
+* `traffic-class`: The traffic class to be used for devices in this group.
 
 At the other end of a Slice is a list of `Application` objects, which
 specifies the endpoints for the program devices talk to. The
@@ -959,8 +955,6 @@ RAN, Core, and Fabric.
 6.4.3 QoS Profiles
 ~~~~~~~~~~~~~~~~~~
 
-
-
 Associated with each Slice is a QoS-related profile that governs how
 traffic carried by that slice is to be treated. This starts with a
 `Template` model, which defines the valid (accepted) connectivity
@@ -983,7 +977,7 @@ the slice as a whole (based on the selected `Template`) and then
 individual devices and applications connected to that slice can define
 their own, more-restrictive QoS parameters on an instance-by-instance
 basis.
-  
+
 Finally, the `Traffic-Class` model specifies the classes of traffic,
 and includes the following fields:
 
