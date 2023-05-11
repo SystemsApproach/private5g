@@ -636,7 +636,7 @@ layer (whether it is an OSS/BSS or a cloud orchestrator) provides a
 way to map high-level *Intents* onto low-level *Actions*.
 
 .. _fig-intent:
-.. figure:: figures/ops/Slide2.png
+.. figure:: figures/ops-Slide2.png
    :width: 300px
    :align: center
 
@@ -669,7 +669,7 @@ the local processing of sensor data or control applications for the
 IoT devices, for example.
 
 .. _fig-hybrid:
-.. figure:: figures/ops/Slide3.png
+.. figure:: figures/ops-Slide3.png
    :width: 700px
    :align: center
 

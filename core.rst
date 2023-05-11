@@ -384,7 +384,7 @@ many of the challenges that unreliable backhaul links introduce in
 conventional approaches.
 
 .. _fig-magma-arch:
-.. figure:: figures/sdn/Slide11.png
+.. figure:: figures/sdn-Slide11.png
     :width: 600px
     :align: center
 

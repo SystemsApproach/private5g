@@ -314,7 +314,7 @@ commonly referred to as a *hybrid cloud*.
        refers to it as "user plane".
 
 .. _fig-enterprise:
-.. figure:: figures/ops/Slide1.png
+.. figure:: figures/ops-Slide1.png
     :width: 600px
     :align: center
 

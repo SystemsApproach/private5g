@@ -74,7 +74,7 @@ switching fabric to emphasize that software running on the servers
 controls the switches (as we will see in the next section).
 
 .. _fig-hw:
-.. figure:: figures/ops/Slide4.png
+.. figure:: figures/ops-Slide4.png
    :width: 400px
    :align: center
 
@@ -230,7 +230,7 @@ SD-Fabric, we refer you to a companion book.
    <https://sdn.systemsapproach.org>`__.  November 2021.
 
 .. _fig-ace:
-.. figure:: figures/ops/Slide5.png
+.. figure:: figures/ops-Slide5.png
    :width: 350px
    :align: center
 
@@ -290,7 +290,7 @@ centralized and edge subsystems (as introduced in the next section).
 
 
 .. _fig-aether:
-.. figure:: figures/ops/Slide6.png
+.. figure:: figures/ops-Slide6.png
    :width: 600px
    :align: center
 
@@ -445,7 +445,7 @@ operationalizing an edge cloud, we refer you to the companion book
 mentioned in the introduction to this chapter.
 
 .. _fig-amp:
-.. figure:: figures/ops/Slide7.png
+.. figure:: figures/ops-Slide7.png
    :width: 600px
    :align: center
 
@@ -494,7 +494,7 @@ an API that can be used to read and write parameters of the running
 system, which serves as a foundation for building closed-loop control.
 
 .. _fig-2D:
-.. figure:: figures/ops/Slide11.png
+.. figure:: figures/ops-Slide11.png
    :width: 500px
    :align: center
 
@@ -543,7 +543,7 @@ collectively form the cloud platform. It is this platform that
 Terraform interacts with, indirectly, through a cloud provisioning API.
 
 .. _fig-infra:
-.. figure:: figures/ops/Slide12.png
+.. figure:: figures/ops-Slide12.png
     :width: 450px
     :align: center
 
@@ -565,7 +565,7 @@ Repositories, while CD consumes Docker Images and Helm Charts, pulling
 them from the respective Repositories.
 
 .. _fig-cicd:
-.. figure:: figures/ops/Slide8.png
+.. figure:: figures/ops-Slide8.png
    :width: 600px
    :align: center
 
@@ -654,7 +654,7 @@ interface for users, enabling them to authorize
 devices and set QoS parameters on an end-to-end basis.
 
 .. _fig-control:
-.. figure:: figures/ops/Slide9.png
+.. figure:: figures/ops-Slide9.png
    :width: 400px
    :align: center
 

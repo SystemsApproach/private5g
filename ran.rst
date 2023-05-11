@@ -45,7 +45,7 @@ towards a cloud-based implementation, one possible implementation
 strategy would be a microservice per box.
 
 .. _fig-pipeline:
-.. figure:: figures/sdn/Slide1.png
+.. figure:: figures/sdn-Slide1.png
     :width: 600px
     :align: center
 
@@ -123,7 +123,7 @@ components mirrors the split made in SDN, with similar motivations. We
 discuss further how SDN techniques are applied to the RAN below.
 
 .. _fig-split-ran:
-.. figure:: figures/sdn/Slide2.png
+.. figure:: figures/sdn-Slide2.png
     :width: 600px
     :align: center
 
@@ -140,7 +140,7 @@ Scheduler that is part of the MAC stage is responsible for all
 real-time scheduling decisions.
 
 .. _fig-ran-hierarchy:
-.. figure:: figures/sdn/Slide3.png
+.. figure:: figures/sdn-Slide3.png
     :width: 400px
     :align: center
 
@@ -206,7 +206,7 @@ out the details. Instead, we're going to comment on the availability
 of open source implementations for each component.
 
 .. _fig-split-alt:
-.. figure:: figures/sdn/Slide10.png
+.. figure:: figures/sdn-Slide10.png
     :width: 150px
     :align: center
 
@@ -270,7 +270,7 @@ implemented in the CU, as opposed to the ~1ms control loop required by
 the MAC scheduler running in the DU.
 
 .. _fig-rrc-split:
-.. figure:: figures/sdn/Slide4.png
+.. figure:: figures/sdn-Slide4.png
     :width: 600px
     :align: center
 
@@ -290,7 +290,7 @@ introduce new module boundaries, as long as the original 3GPP-defined
 interfaces are preserved.
 
 .. _fig-ran-controller:
-.. figure:: figures/sdn/Slide5.png
+.. figure:: figures/sdn-Slide5.png
     :width: 400px
     :align: center
 
@@ -413,7 +413,7 @@ collection of subsystems (microservices) as in the wireline case.\
        and the suite of Control Apps that run on it.
 
 .. _fig-ric:
-.. figure:: figures/sdn/Slide6.png
+.. figure:: figures/sdn-Slide6.png
     :width: 400px
     :align: center
 
@@ -521,7 +521,7 @@ specific disaggregation options from 3GPP and is developing open
 interfaces between these components.
 
 .. _fig-disagg1:
-.. figure:: figures/sdn/Slide7.png
+.. figure:: figures/sdn-Slide7.png
     :width: 450px
     :align: center
 
@@ -536,7 +536,7 @@ Mobile Core and the disaggregated RAN components (as well as to the
 UE).
 
 .. _fig-disagg2:
-.. figure:: figures/sdn/Slide8.png
+.. figure:: figures/sdn-Slide8.png
     :width: 450px
     :align: center
 
@@ -556,7 +556,7 @@ section. (Note that all the edges in :numref:`Figures %s
 details are outside the scope of this discussion.)
 
 .. _fig-ctl_loops:
-.. figure:: figures/sdn/Slide9.png
+.. figure:: figures/sdn-Slide9.png
     :width: 800px
     :align: center
 
