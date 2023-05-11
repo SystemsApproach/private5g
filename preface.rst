@@ -68,7 +68,9 @@ corrections to the book, including:
 - Simon Leinen
 - Tiago Barros
 
-The picture of a Magma deployment in Chapter 5 was provided by Shaddi Hasan.
+The picture of a Magma deployment in Chapter 5 was provided by Shaddi
+Hasan.  The cover photo is by Richard T and published on Unsplash at
+\url{https://unsplash.com}.
 
 | Larry Peterson, Oguz Sunay, and Bruce Davie
-| April 2023
+| May 2023
