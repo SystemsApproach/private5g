@@ -64,7 +64,7 @@ The key stages are as follows.
    protection and integrity verification, duplication, reordering and
    in-order delivery, and out-of-order delivery.
 
-- RLC (Radio Link Control) → Responsible for segmentation and
+-  RLC (Radio Link Control) → Responsible for segmentation and
    reassembly, as well as reliably transmitting/receiving segments
    using error correction through ARQ (automatic repeat request).
 
