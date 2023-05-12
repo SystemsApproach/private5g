@@ -256,7 +256,7 @@ about both of these parameters in Chapter 3.
 
 .. sidebar:: Uniqueness of Wireless Links
 
-   While it is common in networking to abstract the link layer by
+   *While it is common in networking to abstract the link layer by
    treating the link as something that just delivers packets at some
    rate from point A to point B, there are important differences
    between wireless links and wired links that cannot be entirely
@@ -266,16 +266,16 @@ about both of these parameters in Chapter 3.
    relative velocity of the endpoints, reflections of radio waves from
    other objects, and interference from other transmitters. All of
    these factors come into play in determining the Channel Quality
-   Indicator (CQI).
+   Indicator (CQI).*
 
-   Further complicating the picture in a mobile network is that a
+   *Further complicating the picture in a mobile network is that a
    given UE is often within reach of more than one base station,
    presenting the option to handover the UE from one base station to
    another. The decision to do so is not just a matter of picking the
    base station with the best channel quality, but rather a matter of
    trying to optimize the whole system, in which the goal is to
    support as many UEs as possible at the desired quality level given
-   the available spectrum and coverage.
+   the available spectrum and coverage.*
 
 ..   Talk about quality of the "link" being continuous in a wireless
 ..   network, versus discrete in a wireline network (the link is up or
