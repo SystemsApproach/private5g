@@ -68,6 +68,7 @@ corrections to the book, including:
 - Simon Leinen
 - Tiago Barros
 - Gabriel Arrobo
+- Ajay Thakur
 
 The picture of a Magma deployment in Chapter 5 was provided by Shaddi
 Hasan.  The cover photo is by `Erwan Hesry <https://unsplash.com/@erwanhesry>`__ and published on `Unsplash <https://unsplash.com>`__.
