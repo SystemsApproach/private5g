@@ -67,7 +67,8 @@ corrections to the book, including:
 - Robert MacDavid
 - Simon Leinen
 - Tiago Barros
-
+- Gabriel Arrobo
+  
 The picture of a Magma deployment in Chapter 5 was provided by Shaddi Hasan.
 
 | Larry Peterson, Oguz Sunay, and Bruce Davie
