@@ -29,6 +29,13 @@ This book incorporates introductory and background content from:
 a version of which was also published by Morgan & Claypool in 2020
 as part of their Synthesis Lectures on Network Systems.
 
+Designations used by companies to distinguish their products are often
+claimed as trademarks or registered trademarks. In all instances in
+which Systems Approach, LLC, is aware of a claim, the product names
+appear in initial capital or all capital letters. Readers, however,
+should contact the appropriate companies for more complete information
+regarding trademarks and registration.
+
 Read the Book
 -------------
 
