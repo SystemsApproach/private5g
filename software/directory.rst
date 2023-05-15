@@ -48,7 +48,7 @@ Docker Images
 
  | https://registry.aetherproject.org
 
-Note that as of version 1.20.8, Kubernetes uses the `Contanierd
+Note that as of version 1.20.8, Kubernetes uses the `Containerd
 <https://containerd.io/>`__ runtime system instead of Docker. This is
 transparent to anyone using Aether, which manages containers
 indirectly through Kubernetes (e.g., using ``kubectl``), but does
