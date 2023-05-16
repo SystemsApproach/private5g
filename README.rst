@@ -44,7 +44,7 @@ This book is part of the `Systems Approach Series
 `https://5G.systemsapproach.org <https://5g.systemsapproach.org>`__.
 
 For those users looking for our earlier 5G book, *5G Mobile Networks:
-A Systems Approach*, published as this URL, you can still find source
+A Systems Approach*, you can still find source
 for it archived on `GitHub <https://github.com/SystemsApproach/5g>`__.
 This new book incorporates the background material covered in the old
 one, plus goes into significant detail about how Private 5G is
