@@ -28,7 +28,8 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    cloud.rst
    README.rst
    authors.rst
-
+   latest.rst
+   print.rst
 
 .. toctree::
    :maxdepth: 1
