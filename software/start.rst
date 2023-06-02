@@ -19,6 +19,13 @@ instance); a VirtualBox VM running `bento/ubuntu-20.04` `Vagrant
 `VMware Fusion <https://www.vmware.com/products/fusion.html>`__
 to run a VM on a Mac.
 
+For example, if you have Multipass installed on your laptop, you can
+launch a suitable VM instance by typing:
+
+.. code-block::
+
+   $ multipass launch 20.04 --cpus 4 --disk 50G --memory 16G --name onramp
+
 Prep Environment
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -50,8 +57,8 @@ permanent.
 
 Proxy or no-proxy, Stage 1 involves downloading many Docker images and
 Helm Charts. If any of the steps described below fail, it may be due
-to network delays, in which case re-executing the step is usually all
-it takes to make progress.
+to this download taking too long, in which case re-executing the step
+is usually all it takes to make progress.
 
 Download Aether OnRamp
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
