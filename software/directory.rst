@@ -1,5 +1,18 @@
-Source Directory
---------------------------
+Repositories
+---------------
+
+Aether is assembled from multiple components spanning several Git
+repositories. These include repos for different subsystems (e.g.,
+SD-Core, SD-RAN), but also for different stages of the development
+pipeline (e.g., source code, deployment artifacts).
+
+This section identifies all the Aether-related repositories, with the
+OnRamp repos (enumerated at the end) serving as the starting point for
+a user that wants to come up-to-speed on the rest of the system.
+
+
+Source Repos
+~~~~~~~~~~~~~~~~
 
 Source code for Aether and all of its subsystems is distributed across
 multiple repositories:
@@ -33,7 +46,15 @@ using https instead of ssh:
 
   $ git clone https://gerrit.opencord.org/<repo-name>
 
-Deployment artifacts are pulled from the following repositories:
+Anyone wanting to participate in Aether's ongoing development will
+want to learn how to contribute new features to these source repos.
+
+Artifact Repos
+~~~~~~~~~~~~~~~~
+
+Aether includes a *Continuous Integration (CI)* pipeline that builds
+deployment artifacts (e.g., Helm Charts, Docker Images) from the
+source code. These artifacts are stored in the following repositories:
 
 Helm Charts
 
@@ -57,8 +78,8 @@ that while Aether documentation often refers its use of "Docker
 containers," it is now more accurate to say that Aether uses
 `OCI-Compliant containers <https://opencontainers.org/>`__.
 
-The Aether CI/CD pipeline keeps the above artifact repos in sync with
-the source repos, which can be found here:
+The Aether CI pipeline keeps the above artifact repos in sync with the
+source repos, which can be found here:
 
  | ROC: https://gerrit.opencord.org/plugins/gitiles/roc-helm-charts
  | SD-RAN: https://github.com/onosproject/sdran-helm-charts
@@ -66,13 +87,13 @@ the source repos, which can be found here:
  | SD-Fabric (Servers): https://github.com/onosproject/onos-helm-charts
  | SD-Fabric (Switches): https://github.com/stratum/stratum-helm-charts
 
-And the QA tests run against code checked into these source repos can
-be found here:
+The QA tests run against code checked into these source repos can be
+found here:
 
  | https://gerrit.opencord.org/plugins/gitiles/aether-system-tests
 
-For more information about Aether's CI/CD pipeline, including its QA
-and version control strategies, we recommend the Lifecycle Management
+For more information about Aether's CI pipeline, including its QA and
+version control strategy, we recommend the Lifecycle Management
 chapter of our companion Edge Cloud Operations book.
 
 .. _reading_cicd:
@@ -82,20 +103,33 @@ chapter of our companion Edge Cloud Operations book.
     Cloud Operations: A Systems Approach
     <https://ops.systemsapproach.org/lifecycle.html>`__. June 2022.
 
-Finally, Aether OnRamp—the focus of this appendix—defines one possible
-way to integrate all of the above artifacts into an end-to-end system
-that can be deployed and operated with live traffic. OnRamp is
-available on GitHub:
+OnRamp Repos
+~~~~~~~~~~~~~~~~~~~
 
- | https://github.com/SystemsApproach/aether-onramp
+The deployment artifacts listed above are, of course, meant to be
+deployed into a running system. This process is typically managed by
+the *Continuous Deployment (CD)* half of a CI/CD pipeline (sometimes
+referred to as GitOps). This is where OnRamp adopts a different
+approach than that originally used by the ONF ops team to manage its
+multi-site deployment of Aether.  That approach depends on insider
+knowlege and has proven difficult for others to replicate.
 
-As described in the following sections, OnRamp prescribes a
-step-by-step process for growing an Aether deployment from a single
-machine (bare metal or VM) to a multi-site hybrid cloud carrying
-live traffic. An important aspect of OnRamp's approach is to describe
-the internals of the deployment machinery in enough detail so anyone
-can deploy and operate Aether, with each stage highlighting the next
-set of touchpoints for customizing the configuration. All of these
-customizations are recorded as a set of *blueprints* that govern how
-Aether is deployed. (See the `blueprints <https://github.com/SystemsApproach/aether-onramp/tree/master/blueprints>`_
-directory of the OnRamp repo for the currently available set.)
+In its place, OnRamp adopts minimal tooling that makes it easier for
+non-experts to "take ownership" of the configuration parameters that
+define their specific deployment scenario. The rest of this appendix
+walks you through a step-by-step process of deploying and operating
+Aether on your own hardware.  For now, we simply point you at the
+collection of OnRamp repos:
+
+ | Deploy Aether: https://github.com/opennetworkinglab/aether-onramp
+ | Deploy 5G Core: https://github.com/opennetworkinglab/aether-5gc
+ | Deploy 4G Core: https://github.com/opennetworkinglab/aether-4gc
+ | Deploy Management Plane: https://github.com/opennetworkinglab/aether-amp 
+ | Deploy 5G RAN Simulator: https://github.com/opennetworkinglab/aether-gnbsim
+ | Deploy Kuberntes: https://github.com/opennetworkinglab/aether-k8s
+ 
+It is the first repo that defines a way to integrate all of the Aether
+artifacts into an operational system. That repo, in turn,
+automatically incorporates the others (although each of the others is
+self-contained if you are interested in deploying only that subsystem).
+

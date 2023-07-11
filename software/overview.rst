@@ -54,7 +54,7 @@ As a tool targeted at developers, AiaB and RiaB support a streamlined
 modify-build-test loop, but a significant gap remains between these
 self-contained versions of Aether and an operational 5G-enabled edge
 cloud deployed into a particular target environment. `Aether OnRamp
-<https://github.com/SystemsApproach/aether-onramp>`__ is a
+<https://github.com/opennetworkinglab/aether-onramp>`__ is a
 re-packaging of Aether to address that gap. It provides an incremental
 path for users to:
 
@@ -62,14 +62,16 @@ path for users to:
 * Customize Aether for different target environments.
 * Deploy and operate Aether with live traffic.
 
-Aether OnRamp starts with AiaB, refactored to help users step through
-a sequence of increasingly complex *blueprints* (all of which include
-the SD-Core its centerpiece). OnRamp then prescribes a (mostly) linear
-sequence of steps a new user can follow to bring up an operational
-system that runs 24/7 and supports live 5G workloads.  Aether OnRamp
-is still a work in progress, but anyone interested in participating in
-that effort is encouraged to join the discussion on Slack in the `ONF
-Community Workspace <https://onf-community.slack.com/>`__. A roadmap
-for the work that needs to be done can be found in the `Aether OnRamp
-Wiki <https://github.com/SystemsApproach/aether-onramp/wiki>`__.
+Aether OnRamp begins with a "quick start" deployment similar to AiaB,
+but then goes on to prescribe a sequence of steps a user can follow to
+deploy increasingly complex configuations. This culminates in an
+operational Aether cluster capable of running 24/7 and supporting live
+5G workloads.
+
+Aether OnRamp is still a work in progress, but anyone
+interested in participating in that effort is encouraged to join the
+discussion on Slack in the `ONF Community Workspace
+<https://onf-community.slack.com/>`__. A roadmap for the work that
+needs to be done can be found in the `Aether OnRamp Wiki
+<https://github.com/opennetworkinglab/aether-onramp/wiki>`__.
 

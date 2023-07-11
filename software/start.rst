@@ -1,23 +1,22 @@
-Stage 1: Emulated RAN
+Quick Start
 -----------------------
 
-The first stage of Aether OnRamp provides a good way to get
-started. It brings up a one-node Kubernetes cluster, deploys SD-Core
-and the Aether Management Platform (AMP) on that cluster, and runs an
-emulated workload (ICMP packets) against those subsystems. It assumes
-a low-end server that meets the following requirements:
+Aether OnRamp provides a low-overhead way to get started. It brings up
+a one-node Kubernetes cluster, deploys a 5G version of SD-Core on that
+cluster, and runs an emulated 5G workload against the 5G Core. It
+assumes a low-end server that meets the following requirements:
 
 * Haswell CPU (or newer), with at least 4 CPUs and 12GB RAM.
 * Clean install of Ubuntu 18.04, 20.04, or 22.04, with 4.15 (or later) kernel.
 
 While this appendix focuses on deploying Aether OnRamp on a physical
-machine (in anticipation of later stages), Stage 1 can also run in a VM.
-Options include an AWS VM (Ubuntu 20.04 image on `t2.xlarge`
+machine (in anticipation of later stages), this stage can also run in
+a VM.  Options include an AWS VM (Ubuntu 20.04 image on `t2.xlarge`
 instance); a VirtualBox VM running `bento/ubuntu-20.04` `Vagrant
 <https://www.vagrantup.com>`_ box on Intel Mac; a VM created using
 `Multipass <https://multipass.run>`_ on Linux, Mac, or Windows; or
-`VMware Fusion <https://www.vmware.com/products/fusion.html>`__
-to run a VM on a Mac.
+`VMware Fusion <https://www.vmware.com/products/fusion.html>`__ to run
+a VM on a Mac.
 
 For example, if you have Multipass installed on your laptop, you can
 launch a suitable VM instance by typing:
@@ -55,10 +54,10 @@ need to export `PROXY_ENABLED=true` by typing the following:
 This variable can also be set in your ``~/.bashrc`` file to make it
 permanent.
 
-Proxy or no-proxy, Stage 1 involves downloading many Docker images and
-Helm Charts. If any of the steps described below fail, it may be due
-to this download taking too long, in which case re-executing the step
-is usually all it takes to make progress.
+Proxy or no-proxy, using OnRamp involves downloading many Docker
+images and Helm Charts. If any of the steps described below fail, it
+may be due to this download taking too long, in which case
+re-executing the step is usually all it takes to make progress.
 
 Download Aether OnRamp
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -70,198 +69,278 @@ server:
 
    $ mkdir ~/systemsapproach
    $ cd ~/systemsapproach
-   $ git clone https://github.com/systemsapproach/aether-onramp
+   $ git clone https://github.com/opennetworkinglab/aether-onramp
    $ cd aether-onramp
 
-You will then execute the sequence of Makefile targets described in
-the rest of this appendix. After each of these steps, run the
-following command to verify that the specified set of Kubernetes
-namespaces are operational:
+OnRamp uses Ansible as its primary deployment tool. A general
+understanding of Ansible is helpful (an overview can be found `here
+<https://www.ansible.com/overview/how-ansible-works>`_), but this
+appendix walks you through the process step-by-step, so previous
+experience with Ansible is not a requirement. Note that Ansible has
+evolved to be both a "Community Toolset" anyone can use to manage a
+software deployment, and an "Automation Platform" offered as a service
+by RedHat. OnRamp uses the toolset, but not the platform/service.
+
+Taking a quick look at your ``aether-onramp`` directory, there are
+five things to note
+
+1. The ``deps`` directory contains the Ansible deployment
+   specifications for all the Aether subsystems. Each of these
+   subdirectories (e.g., ``deps/5gc``) is self-contained, meaning you
+   can execute the Make targets (e.g., ``5gc-core-install``) in each
+   individual directory. Doing so causes Ansible to run the
+   corresponding playbook. Those playbooks can be found in the
+   ``roles`` directory; for example,
+   ``deps/5gc/roles/core/tasks/install.yml``.
+
+2. The Makefile in the main OnRamp directory includes the
+   per-subsystem Makefiles, meaning all the individual steps required
+   to install Aether can be managed from this main directory.  That is
+   the assumption we make throughout the rest of this Appendix.
+
+3. File ``vars/main.yml`` defines all the Ansible variables you will
+   potentially need to modify to specify your deployment scenario.
+   This file is the union of all the per-component ``var/main.yml``
+   files you find in the corresponding ``deps`` directory. This
+   top-level variable file overrides the per-component var files, so
+   you will not need to modify the latter.
+
+4. File ``hosts.ini`` (host inventory) is Ansible's way of specifying
+   the set of servers (physical or virtual) that Ansible targets with
+   various installation playbooks. The default version of ``host.ini``
+   included with OnRamp is simplified to run everything on a single
+   host (the one you've cloned the repo onto), with many of the lines
+   you'll need for a multi-node cluster commented out.
+
+5. Directory ``config`` contains a collection of per-component
+   configuration files, each of which is typically passed to one of
+   the components when it is instantiated. For example,
+   ``config/5g-core-values.yaml`` is an override values file that Helm
+   passes to SD-Core when it installs the Core on a Kubernetes
+   cluster.  You will need to modify some of these files to match the
+   particulars of your deployment, as described in later sections.
+
+Configure Site Parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The quick start sequence described in this section requires that you
+modify two parameters to reflect the specifics of your target
+deployment.
+
+The first is in file ``host.ini``, where you will need to give the IP
+address and login credentials for the host you are working on:
+
+.. code-block::
+
+   node1  ansible_host=172.16.41.103 ansible_user=aether ansible_password=aether ansible_sudo_pass=aether
+
+In this example, address ``172.16.41.103`` and the three occurances of
+the string ``aether`` need to be replaced with the appropriate values.
+Note that if you set up your server to use SSH keys instead of
+passwords, then ``ansible_password=aether`` needs to be replaced with
+``ansible_ssh_private_key_file=workdir/id_rsa``, and you'll need to
+put a (password protected) copy of your private key in your main
+OnRamp directory.
+
+The second is in ``vars/main.yml``, where the **two** lines currently
+reading
+
+.. code-block::
+
+   data_iface: ens18
+
+need to be edited to replace ``ens18`` with the device interface for
+you server. You can learn the interface by typing
+
+.. code-block::
+
+   $ ip a
+   1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+       link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+       inet 127.0.0.1/8 scope host lo
+          valid_lft forever preferred_lft forever
+       inet6 ::1/128 scope host
+          valid_lft forever preferred_lft forever
+   2: enp193s0f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+       link/ether 2c:f0:5d:f2:d8:21 brd ff:ff:ff:ff:ff:ff
+       inet 10.76.28.113/24 metric 100 brd 10.76.28.255 scope global ens3
+          valid_lft forever preferred_lft forever
+       inet6 fe80::2ef0:5dff:fef2:d821/64 scope link
+          valid_lft forever preferred_lft forever
+
+In what will serve as a running example throughout this appendix, the
+interface is ``enp193s0f0`` with IP address ``10.76.28.113``.
+
+Run Ansible
+~~~~~~~~~~~~~~~~~~
+
+You need to first install Ansible before you can use it to manage your
+Aether deployment. While it is possible to do this directly on your
+target server, OnRamp includes a Make target to set up a Docker
+container that includes a properly configured Ansible client. Start
+this container by running
+
+.. code-block::
+
+   $ make ansible
+
+As a result of executing this command, you will see a new prompt
+that looks something like this:
+
+.. code-block::
+
+   root@host:/workdir#
+
+This shows that you are running as root in the context of the
+container, with ``/workdir`` as your current directory. This is the
+same directory you were in when you invoked ``make``, but it is now
+the root of the containerized environment. You cannot see your actual
+home directory (including your ``.ssh`` directory), without first
+exiting the container. To do that, type either ``exit`` or ``^D``
+(Control-D).
+
+Every time you invoke a Make command from here on, it is assumed to be
+from this context (with this prompt). Because there are other commands
+you will want to execute—for example, to inspect various aspects of
+what you've just deployed—we recommend having two terminal windows
+open on your server: one running the Ansible container (with prompt
+``root@host:/workdir#``) and one running your regular login
+environment (which we designate with prompt ``$``).
+
+Many of the tasks specified in the various Ansible playbooks result in
+calls to Kubernetes, either directly (via ``kubectl``) or indirectly
+(via ``helm``). This means that after executing the sequence of
+Makefile targets described in the rest of this appendix, you'll want
+to run some combination of the following commands (in your regular
+terminal window) to verify that the right things happened:
 
 .. code-block::
 
    $ kubectl get pods --all-namespaces
-
-If you are not familiar with `kubectl` (the CLI for Kubernetes), we
-recommend that you start with `Kubernetes Tutorial
-<https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.  And
-although not required, you may also want to install `k9s
-<https://k9scli.io/>`__, a terminal-based UI that provides a
-convenient alternative to `kubectl` for interacting with Kubernetes.
-
-Helm also has a command-line interface that can be helpful in tracking
-progress. For example,
-
-.. code-block::
-
    $ helm repo list
-
-shows the known set of repos you are pulling charts from, and
-
-.. code-block::
-
    $ helm list --namespace kube-system
 
-shows the version numbers of the charts currently deployed in the
-`kube-system` namespace. Many of the Make targets you will execute in
-this section are implemented by a combination of `kubectl` and `helm`
-calls, so it is helpful to have a general understanding of how they work.
+The first reports whether the specified set of Kubernetes namespaces
+are operational; the second shows the known set of repos you are
+pulling charts from; and the third shows the version numbers of the
+charts currently deployed in the ``kube-system`` namespace.
+
+If you are not familiar with ``kubectl`` (the CLI for Kubernetes), we
+recommend that you start with `Kubernetes Tutorial
+<https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.  And
+although not required, you may also want to install
+`k9s <https://k9scli.io/>`__\ , a terminal-based UI that provides a
+convenient alternative to ``kubectl`` for interacting with Kubernetes.
+
+Note that we have not yet installed Kubernetes or Helm, so these
+commands are not yet available. At this point, the only verification
+step you can take is to type the following:
+
+.. code-block::
+
+   root@host:/workdir# make aether-pingall
+
+The output should show that Ansible is able to securely connect to all
+the nodes in your deployment (which is currently just the one that
+Ansible knows as ``node1``).
 
 Install Kubernetes
 ~~~~~~~~~~~~~~~~~~~
 
-The first step is to bring up an RKE2.0 Kubernetes cluster on your
+The next step is to bring up an RKE2.0 Kubernetes cluster on your
 target server. Do this by typing:
 
 .. code-block::
 
-   $ make node-prep
+   root@host:/workdir# make k8s-install
 
-`kubectl` will show the `kube-system` and `calico-system` namespaces
-running.
-
-Bringing up Kubernetes involves generating a ``config.yaml`` file that
-specifies several configuration parameters for the cluster. After the
-``node-prep`` target completes, you can find this file in
-``/etc/rancher/rke2/``, and it should look something like this:
+``kubectl`` will show the ``kube-system`` namespace running,
+with output looking something like this:
 
 .. code-block::
 
-   $ cat /etc/rancher/rke2/config.yaml
-   cni: multus,calico
-   cluster-cidr: 192.168.84.0/24
-   service-cidr: 192.168.85.0/24
-   kubelet-arg:
-   - --allowed-unsafe-sysctls=net.*
-   - --node-ip=10.76.28.113
-   pause-image: k8s.gcr.io/pause:3.3
-   kube-proxy-arg:
-   - --metrics-bind-address=0.0.0.0:10249
-   - --proxy-mode=ipvs
-   kube-apiserver-arg:
-   - --service-node-port-range=2000-36767
+   $ kubectl get pods --all-namespaces
+   NAMESPACE     NAME                                                    READY   STATUS      RESTARTS   AGE 
+   kube-system   cloud-controller-manager-node1                          1/1     Running     0          2m4s
+   kube-system   etcd-node1                                              1/1     Running     0          104s
+   kube-system   helm-install-rke2-canal-8s67r                           0/1     Completed   0          113s
+   kube-system   helm-install-rke2-coredns-bk5rh                         0/1     Completed   0          113s
+   kube-system   helm-install-rke2-ingress-nginx-lsjz2                   0/1     Completed   0          113s
+   kube-system   helm-install-rke2-metrics-server-t8kxf                  0/1     Completed   0          113s
+   kube-system   helm-install-rke2-multus-tbbhc                          0/1     Completed   0          113s
+   kube-system   kube-apiserver-node1                                    1/1     Running     0          97s
+   kube-system   kube-controller-manager-node1                           1/1     Running     0          2m7s
+   kube-system   kube-multus-ds-96cnl                                    1/1     Running     0          95s
+   kube-system   kube-proxy-node1                                        1/1     Running     0          2m1s
+   kube-system   kube-scheduler-node1                                    1/1     Running     0          2m7s
+   kube-system   rke2-canal-h79qq                                        2/2     Running     0          95s
+   kube-system   rke2-coredns-rke2-coredns-869b5d56d4-tffjh              1/1     Running     0          95s
+   kube-system   rke2-coredns-rke2-coredns-autoscaler-5b947fbb77-pj5vk   1/1     Running     0          95s
+   kube-system   rke2-ingress-nginx-controller-s68rx                     1/1     Running     0          48s
+   kube-system   rke2-metrics-server-6564db4569-snnv4                    1/1     Running     0          56s
 
-Of particular note, this example cluster runs on a server at IP
-address ``10.76.28.113`` and we have instructed Kubernetes to allow
-service for ports ranging from ``2000`` to ``36767``. We will see both
-of these settings come into play as we move to more complex blueprints.
+Remember to run this ``kubectl`` in your regular shell, not the
+Ansible container.
 
+You can see details about how Kubernetes is configured by looking at
+``config/master-params.yaml`` and the ``k8s:`` section of
+``vars/main.yml``. Of particular note, we have instructed Kubernetes
+to allow service for ports ranging from ``2000`` to ``36767`` and we
+are using the ``multus`` and ``canal`` CNI plugins.
 
-Configure the Network
-~~~~~~~~~~~~~~~~~~~~~
-
-Since Aether ultimately provides a connectivity service, how the
-cluster you just installed connects to the network is an important
-detail. As a first pass, Aether OnRamp borrows a configuration from
-AiaB; support for other options, including SR-IOV, will be added over
-time.  Type:
-
-.. code-block::
-
-   $ make net-prep
-
-This target configures Linux (via `systemctl`), but also starts a
-Quagga router running inside the cluster. To see how routing is set up
-for Aether OnRamp (which you will need to understand in later stages),
-you may want to inspect `resources/router.yaml`.
-
-Bring Up Aether Management Platform
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The runtime management of Aether is implemented by two Kubernetes
-applications: *Runtime Operational Control (ROC)* and a *Monitoring
-Service*. (Note that what the implementation calls ROC, Chapter 6
-refers to generically as *Service Orchestration*.) The two management
-services can be deployed on the same cluster with the following two
-Make targets:
-
-.. code-block::
-
-   $ make 5g-roc
-   $ make 5g-monitoring
-
-The first command brings up ROC and loads its database with bootstrap
-information (e.g., defining a default Aether site). The second command
-brings up the Monitoring Service (Grafana running on top of
-Prometheus) and loads it with a set of dashboards.
-
-Once complete, `kubectl` will show the `aether-roc` and
-`cattle-monitoring-system` namespaces now running in support of these
-two services, respectively, plus new `atomix-runtime` pods in the
-`kube-system` namespace.  Atomix is the scalable key-value store that
-keeps the ROC data model persistent.
-
-You can access the dashboards for the two subsystems, respectively, at
-
-.. code-block::
-
-   http://<host_ip>:31194
-   http://<host_ip>:30950
-
-More information about the Control and Monitoring dashboards is given
-in their respective sections of the Aether Guide. The programmatic API
-underlying the Control Dashboard, which was introduced in Section 6.4,
-can be accessed at ``http://10.76.28.113:31194/aether-roc-api/`` in
-our example deployment (where Aether runs on host ``10.76.28.113``).
-Finally, note that there is much more to say about the ROC; we take a
-closer look at the role it plays in Stage 4.
-
-.. _reading_dashboards:
-.. admonition:: Further Reading
-
-   `Aether Control Dashboard <https://docs.aetherproject.org/master/operations/gui.html>`__.
-
-   `Aether Monitoring Dashboard
-   <https://docs.aetherproject.org/master/developer/aiabhw5g.html#enable-monitoring>`__.
-
-
-
-Bring Up SD-Core
+Install SD-Core
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We are now ready to bring up the 5G version of the SD-Core:
+We are now ready to bring up the 5G version of the SD-Core. From
+with the Ansible container type:
 
 .. code-block::
 
-   $ make 5g-core
+   root@host:/workdir# make 5gc-core-install
 
-`kubectl` will show the `omec` namespace running. (For historical
-reasons, the Core is called `omec` instead of `sd-core`).
+``kubectl`` will now show the ``omec`` namespace running in addition
+to ``kube-system``, with output similar to the following:
 
-In addition, the monitoring dashboard will show an active (green) UPF,
-but no base stations or attached devices at this point.  Note that you
-will need to click on the "5G Dashboard" sub-page once you connect to
-the main monitoring page.
+.. code-block::
 
-You can also peruse the Control dashboard by starting with the
-dropdown menu in the upper right corner. For example, selecting
-`Devices` will show the set of UEs registered with Aether, and
-selecting `Device-Groups` will show how those UEs are grouped into
-aggregates. In an operational environment, these values would be
-entered into the ROC through either the GUI or the underlying API. For
-the emulated environment we're limiting ourselves to in Stage 1, these
-values are loaded from ``blueprints/latest/roc-5g-models.json`` and match
-the settings in ``blueprints/latest/sd-core-5g-values.yaml``.
+   $ kubectl get pods -n omec
+   NAME                         READY   STATUS             RESTARTS      AGE
+   amf-5887bbf6c5-pc9g2         1/1     Running            0             6m13s
+   ausf-6dbb7655c7-42z7m        1/1     Running            0             6m13s
+   kafka-0                      1/1     Running            0             6m13s
+   metricfunc-b9f8c667b-r2x9g   1/1     Running            0             6m13s
+   mongodb-0                    1/1     Running            0             6m13s
+   mongodb-1                    1/1     Running            0             4m12s
+   mongodb-arbiter-0            1/1     Running            0             6m13s
+   nrf-54bf88c78c-kcm7t         1/1     Running            0             6m13s
+   nssf-5b85b8978d-d29jm        1/1     Running            0             6m13s
+   pcf-758d7cfb48-dwz9x         1/1     Running            0             6m13s
+   sd-core-zookeeper-0          1/1     Running            0             6m13s
+   simapp-6cccd6f787-jnxc7      1/1     Running            0             6m13s
+   smf-7f89c6d849-wzqvx         1/1     Running            0             6m13s
+   udm-768b9987b4-9qz4p         1/1     Running            0             6m13s
+   udr-8566897d45-kv6zd         1/1     Running            0             6m13s
+   upf-0                        5/5     Running            0             6m13s
+   webui-5894ffd49d-gg2jh       1/1     Running            0             6m13s
+   
+You will recognize Kubernetes pods that correspond too many of the
+microservices discussed is Chapter 5. For example,
+``amf-5887bbf6c5-pc9g2`` implements the AMF. Note that for historical
+reasons, the Core is called ``omec`` instead of ``sd-core``.
+
 
 Run Emulated RAN Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We can now test SD-Core with emulated traffic (ICMP packets) by typing:
+We can now test SD-Core with emulated traffic by typing:
 
 .. code-block::
 
-   $ make 5g-test
+   root@host:/workdir# make gnbsim-install
+   root@host:/workdir# make gnbsim-run
 
-As the emulation progresses, the monitoring dashboard will show two
-emulated gNBs and five emulated UEs come online, with the performance
-graph plotting upstream and downstream transfer rates. All of these
-indicators go "silent" once the emulation completes, but you can
-execute the ``5g-test`` target multiple times without restarting the
-SD-Core to see additional activity.
-
-In addition to the monitoring dashboard, the emulation itself outputs
-a detailed trace to the terminal, which concludes with the following
-lines when successful:
+The results are available somewhere... You can re-execute the
+``gnbsim-run`` target multiple times.
 
 .. code-block::
 
@@ -271,18 +350,11 @@ lines when successful:
    2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] UEs Passed: 5 , UEs Failed: 0
    2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] Profile Status: PASS
 
-You can modify the emulation parameters by editing the ``5g-ran-sim``
-section of ``blueprints/latest/sd-core-5g-values.yaml``; this block is
-used to configure the ``gnbsim-0`` pod in the ``omec`` namespace.
-Documentation on how to make such configuration changes can be found
-in the `gNBsim GitHub repo
-<https://github.com/omec-project/gnbsim>`__.
-
 
 Run Ksniff and Wireshark
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In addition to the trace output generated by the emulation, a good way
+In addition to the trace output generated by the simulator, a good way
 to understand the inner working of Aether is to use `Ksniff
 <https://github.com/eldadru/ksniff>`__ (a Kubernetes plugin) to
 capture packets and display their headers as they flow into and out of
@@ -316,42 +388,27 @@ to generate workload for this tool to capture.
 
    $ kubectl sniff -n omec upf-0 -o - | tshark -r -
 
-As another example, you might want to sniff the ``router`` pod to see
-how traffic is passed between UEs and the UPF (on the access side) and
-between the UPF and the Internet (on the core side). In this case, it
-can be helpful to filter the output, for example, by selecting a
-specific interface on the router:
-
-.. code-block::
-
-    $ kubectl sniff -n default router -i access-gw -o - | tshark -r -
-
-In this case, ``access-gw`` is the name of the router's access-side
-interface (i.e., the N3 interface as defined by 3GPP).
-
-Packet capture is a great way to learn about the SD-Core and other
-components, since you can watch them in action. It can also be a
-valuable diagnostic tool, which is a topic we return to in later
-stages as we bring up more complex configurations.
-
-
 Clean Up
 ~~~~~~~~~~~~~~~~~
 
-Working in reverse order, the following Make targets tear down the
-three applications you just installed, restoring the base Kubernetes
+Working in reverse order, the following Make targets tear down
+the three components you just installed.
 cluster (plus Quagga router):
 
 .. code-block::
 
-   $ make core-clean
-   $ make monitoring-clean
-   $ make roc-clean
+   root@host:/workdir# make gnbsim-uninstall
+   root@host:/workdir# make 5gc-core-uninstall
+   root@host:/workdir# make k8s-uninstall   
 
-If you want to also tear down Kubernetes for a fresh install, type:
+Alternatively, executing just the first two will return you
+to a state with an empty Kubernetes cluseter.
+
+Note that while we stepped through the system one component at a time,
+comprehensive Make targets are also available. So you could have
+simply typed:
 
 .. code-block::
 
-   $ make net-clean
-   $ make clean
-
+   root@host:/workdir# make aether-install
+   root@host:/workdir# make aether-uninstall
