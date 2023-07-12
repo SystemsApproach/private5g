@@ -39,7 +39,11 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    software/overview.rst
    software/directory.rst
    software/start.rst
-   software/gitops.rst
-   software/smallcell.rst
+   software/inspect.rst
+   software/scale.rst
+   software/network.rst
+   software/gnbsim.rst
+   software/gnb.rst
    software/roc.rst
-
+   software/gitops.rst   
+   software/enb.rst

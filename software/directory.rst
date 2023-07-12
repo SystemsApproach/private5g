@@ -3,19 +3,18 @@ Repositories
 
 Aether is assembled from multiple components spanning several Git
 repositories. These include repos for different subsystems (e.g.,
-SD-Core, SD-RAN), but also for different stages of the development
+AMP, SD-Core, SD-RAN), but also for different stages of the development
 pipeline (e.g., source code, deployment artifacts).
 
 This section identifies all the Aether-related repositories, with the
-OnRamp repos (enumerated at the end) serving as the starting point for
+OnRamp repos listed at the end serving as the starting point for
 a user that wants to come up-to-speed on the rest of the system.
-
 
 Source Repos
 ~~~~~~~~~~~~~~~~
 
-Source code for Aether and all of its subsystems is distributed across
-multiple repositories:
+Source code for Aether and all of its subsystems can be found in
+the following repositories:
 
 * Gerrit repository for the CORD Project
   (https://gerrit.opencord.org): Microservices for AMP, plus source
@@ -79,7 +78,8 @@ containers," it is now more accurate to say that Aether uses
 `OCI-Compliant containers <https://opencontainers.org/>`__.
 
 The Aether CI pipeline keeps the above artifact repos in sync with the
-source repos, which can be found here:
+source repos listed above, where those source repos include the
+following Helm source files:
 
  | ROC: https://gerrit.opencord.org/plugins/gitiles/roc-helm-charts
  | SD-RAN: https://github.com/onosproject/sdran-helm-charts
@@ -108,18 +108,18 @@ OnRamp Repos
 
 The deployment artifacts listed above are, of course, meant to be
 deployed into a running system. This process is typically managed by
-the *Continuous Deployment (CD)* half of a CI/CD pipeline (sometimes
-referred to as GitOps). This is where OnRamp adopts a different
-approach than that originally used by the ONF ops team to manage its
-multi-site deployment of Aether.  That approach depends on insider
-knowlege and has proven difficult for others to replicate.
+the *Continuous Deployment (CD)* half of a CI/CD pipeline, which
+adopts a GitOps approach. This is where OnRamp differs from the
+specific GitOps mechanism originally used by the ONF ops team to
+manage its multi-site deployment of Aether.  That approach depends on
+insider knowlege and has proven difficult for others to replicate.
 
-In its place, OnRamp adopts minimal tooling that makes it easier for
-non-experts to "take ownership" of the configuration parameters that
-define their specific deployment scenario. The rest of this appendix
-walks you through a step-by-step process of deploying and operating
-Aether on your own hardware.  For now, we simply point you at the
-collection of OnRamp repos:
+In its place, OnRamp adopts minimal Ansible tooling. This makes it
+easier to "take ownership" of the configuration parameters that define
+your specific deployment scenario.  The rest of this appendix walks
+you through a step-by-step process of deploying and operating Aether
+on your own hardware.  For now, we simply point you at the collection
+of OnRamp repos:
 
  | Deploy Aether: https://github.com/opennetworkinglab/aether-onramp
  | Deploy 5G Core: https://github.com/opennetworkinglab/aether-5gc
@@ -133,3 +133,16 @@ artifacts into an operational system. That repo, in turn,
 automatically incorporates the others (although each of the others is
 self-contained if you are interested in deploying only that subsystem).
 
+Because OnRamp uses Ansible as its primary deployment tool, a general
+understanding of Ansible is helpful (see the suggested reference).
+However, this appendix walks you through the process step-by-step of
+deploying and operating Aether, so previous experience with Ansible is
+not a requirement. Note that Ansible has evolved to be both a
+"Community Toolset" anyone can use to manage a software deployment,
+and an "Automation Platform" offered as a service by RedHat. OnRamp
+uses the toolset, but not the platform/service.
+
+.. _reading_ansible:
+.. admonition:: Further Reading
+
+   `Overview: How Ansible Works <https://www.ansible.com/overview/how-ansible-works>`__.

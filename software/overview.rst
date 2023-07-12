@@ -62,11 +62,16 @@ path for users to:
 * Customize Aether for different target environments.
 * Deploy and operate Aether with live traffic.
 
-Aether OnRamp begins with a "quick start" deployment similar to AiaB,
+Aether OnRamp begins with a *Quick Start* deployment similar to AiaB,
 but then goes on to prescribe a sequence of steps a user can follow to
 deploy increasingly complex configuations. This culminates in an
 operational Aether cluster capable of running 24/7 and supporting live
 5G workloads.
+
+Note that OnRamp includes support for bringing up a 4G version of
+Aether connected to one or more physical eNBs, but we postpone a
+discussion of that capability until the final section. Everything up
+to that point assumes 5G.
 
 Aether OnRamp is still a work in progress, but anyone
 interested in participating in that effort is encouraged to join the

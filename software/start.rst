@@ -69,20 +69,11 @@ server:
 
    $ mkdir ~/systemsapproach
    $ cd ~/systemsapproach
-   $ git clone https://github.com/opennetworkinglab/aether-onramp
+   $ git clone --recursive https://github.com/opennetworkinglab/aether-onramp.git
    $ cd aether-onramp
 
-OnRamp uses Ansible as its primary deployment tool. A general
-understanding of Ansible is helpful (an overview can be found `here
-<https://www.ansible.com/overview/how-ansible-works>`_), but this
-appendix walks you through the process step-by-step, so previous
-experience with Ansible is not a requirement. Note that Ansible has
-evolved to be both a "Community Toolset" anyone can use to manage a
-software deployment, and an "Automation Platform" offered as a service
-by RedHat. OnRamp uses the toolset, but not the platform/service.
-
 Taking a quick look at your ``aether-onramp`` directory, there are
-five things to note
+four things to note:
 
 1. The ``deps`` directory contains the Ansible deployment
    specifications for all the Aether subsystems. Each of these
@@ -93,34 +84,32 @@ five things to note
    ``roles`` directory; for example,
    ``deps/5gc/roles/core/tasks/install.yml``.
 
-2. The Makefile in the main OnRamp directory includes the
-   per-subsystem Makefiles, meaning all the individual steps required
-   to install Aether can be managed from this main directory.  That is
-   the assumption we make throughout the rest of this Appendix.
+2. The Makefile in the main OnRamp directory imports (``#include``)
+   the per-subsystem Makefiles, meaning all the individual steps
+   required to install Aether can be managed from this main directory.
+   The Makefile includes comments listing the key Make targets defined
+   by the included Makefiles. *Importantly, the rest of this Appendix
+   assumes you are working in the main OnRamp directory, and not in
+   the individual subsystems.*
 
 3. File ``vars/main.yml`` defines all the Ansible variables you will
    potentially need to modify to specify your deployment scenario.
    This file is the union of all the per-component ``var/main.yml``
    files you find in the corresponding ``deps`` directory. This
    top-level variable file overrides the per-component var files, so
-   you will not need to modify the latter.
+   you will not need to modify the latter. *Importantly, be aware that
+   some variables (e.g., ``data_iface``) show up in multiple sections
+   of this top-level var file.*
 
 4. File ``hosts.ini`` (host inventory) is Ansible's way of specifying
    the set of servers (physical or virtual) that Ansible targets with
    various installation playbooks. The default version of ``host.ini``
    included with OnRamp is simplified to run everything on a single
-   host (the one you've cloned the repo onto), with many of the lines
-   you'll need for a multi-node cluster commented out.
+   host (the one you've cloned the repo onto), with the additional
+   line you may eventually need for a multi-node cluster commented
+   out.
 
-5. Directory ``config`` contains a collection of per-component
-   configuration files, each of which is typically passed to one of
-   the components when it is instantiated. For example,
-   ``config/5g-core-values.yaml`` is an override values file that Helm
-   passes to SD-Core when it installs the Core on a Kubernetes
-   cluster.  You will need to modify some of these files to match the
-   particulars of your deployment, as described in later sections.
-
-Configure Site Parameters
+Configuration Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The quick start sequence described in this section requires that you
@@ -128,7 +117,9 @@ modify two parameters to reflect the specifics of your target
 deployment.
 
 The first is in file ``host.ini``, where you will need to give the IP
-address and login credentials for the host you are working on:
+address and login credentials for the host you are working on. At this
+stage, we assume the host you downloaded OnRamp onto is the same host
+you will be installing Aether on.
 
 .. code-block::
 
@@ -142,8 +133,8 @@ passwords, then ``ansible_password=aether`` needs to be replaced with
 put a (password protected) copy of your private key in your main
 OnRamp directory.
 
-The second is in ``vars/main.yml``, where the **two** lines currently
-reading
+The second parameter is in ``vars/main.yml``, where the **two** lines
+currently reading
 
 .. code-block::
 
@@ -191,21 +182,21 @@ that looks something like this:
 
    root@host:/workdir#
 
-This shows that you are running as root in the context of the
-container, with ``/workdir`` as your current directory. This is the
-same directory you were in when you invoked ``make``, but it is now
-the root of the containerized environment. You cannot see your actual
-home directory (including your ``.ssh`` directory), without first
-exiting the container. To do that, type either ``exit`` or ``^D``
-(Control-D).
+This prompt indicates that you are running as root in the context of
+the container, with ``/workdir`` as your current directory. This is
+the same directory you were in when you invoked ``make``, but it is
+now the root of the containerized environment. You cannot see your
+actual home directory (including your ``.ssh`` directory), without
+first exiting the container. To do that, type either ``exit`` or
+``^D`` (Control-D).
 
 Every time you invoke a Make command from here on, it is assumed to be
-from this context (with this prompt). Because there are other commands
-you will want to execute—for example, to inspect various aspects of
-what you've just deployed—we recommend having two terminal windows
-open on your server: one running the Ansible container (with prompt
-``root@host:/workdir#``) and one running your regular login
-environment (which we designate with prompt ``$``).
+from this container (with this prompt). Because there are other
+commands you will want to execute—for example, to inspect various
+aspects of what you've just deployed—we recommend having two terminal
+windows open on your server: one running the Ansible container (with
+prompt ``root@host:/workdir#``) and one running your regular login
+shell (which we designate with prompt ``$``).
 
 Many of the tasks specified in the various Ansible playbooks result in
 calls to Kubernetes, either directly (via ``kubectl``) or indirectly
@@ -220,10 +211,10 @@ terminal window) to verify that the right things happened:
    $ helm repo list
    $ helm list --namespace kube-system
 
-The first reports whether the specified set of Kubernetes namespaces
-are operational; the second shows the known set of repos you are
-pulling charts from; and the third shows the version numbers of the
-charts currently deployed in the ``kube-system`` namespace.
+The first reports the set of Kubernetes namespaces currently running;
+the second shows the known set of repos you are pulling charts from;
+and the third shows the version numbers of the charts currently
+deployed in the ``kube-system`` namespace.
 
 If you are not familiar with ``kubectl`` (the CLI for Kubernetes), we
 recommend that you start with `Kubernetes Tutorial
@@ -254,7 +245,7 @@ target server. Do this by typing:
 
    root@host:/workdir# make k8s-install
 
-``kubectl`` will show the ``kube-system`` namespace running,
+Executing ``kubectl`` will show the ``kube-system`` namespace running,
 with output looking something like this:
 
 .. code-block::
@@ -282,24 +273,25 @@ with output looking something like this:
 Remember to run this ``kubectl`` in your regular shell, not the
 Ansible container.
 
-You can see details about how Kubernetes is configured by looking at
-``config/master-params.yaml`` and the ``k8s:`` section of
-``vars/main.yml``. Of particular note, we have instructed Kubernetes
-to allow service for ports ranging from ``2000`` to ``36767`` and we
-are using the ``multus`` and ``canal`` CNI plugins.
+If you are interested in seeing the details about how Kubernetes is
+configured, look at ``deps/5gc/templates/rke2/master-params.yaml`` and
+the ``k8s:`` section of ``vars/main.yml``. Of particular note, we have
+instructed Kubernetes to allow service for ports ranging from ``2000``
+to ``36767`` and we are using the ``multus`` and ``canal`` CNI
+plugins.
 
 Install SD-Core
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We are now ready to bring up the 5G version of the SD-Core. From
-with the Ansible container type:
+within the Ansible container type:
 
 .. code-block::
 
    root@host:/workdir# make 5gc-core-install
 
-``kubectl`` will now show the ``omec`` namespace running in addition
-to ``kube-system``, with output similar to the following:
+``kubectl`` will now show the ``omec`` namespace running (in addition
+to ``kube-system``), with output similar to the following:
 
 .. code-block::
 
@@ -326,8 +318,7 @@ to ``kube-system``, with output similar to the following:
 You will recognize Kubernetes pods that correspond too many of the
 microservices discussed is Chapter 5. For example,
 ``amf-5887bbf6c5-pc9g2`` implements the AMF. Note that for historical
-reasons, the Core is called ``omec`` instead of ``sd-core``.
-
+reasons, the Aether Core is called ``omec`` instead of ``sd-core``.
 
 Run Emulated RAN Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -351,64 +342,25 @@ The results are available somewhere... You can re-execute the
    2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] Profile Status: PASS
 
 
-Run Ksniff and Wireshark
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-In addition to the trace output generated by the simulator, a good way
-to understand the inner working of Aether is to use `Ksniff
-<https://github.com/eldadru/ksniff>`__ (a Kubernetes plugin) to
-capture packets and display their headers as they flow into and out of
-the microservices that implement Aether. Output from Ksniff can then
-be fed into `Wireshark <https://www.wireshark.org/>`__.
-
-To install the Ksniff plugin on the server running Aether, you need to
-first install ``krew``, the Kubernetes plugin manager. Instructions on
-doing that can be found `online
-<https://krew.sigs.k8s.io/docs/user-guide/setup/install/>`__. Once
-that's done, you can install Ksniff by typing:
-
-.. code-block::
-
-   $ kubectl krew install sniff
-
-You can then run Ksniff in the context of a specific Kubernetes pod by
-specifying their namespace and instance names, and then redirecting
-the output to Wireshark. If you don't have a desktop environment on
-your Aether server, you can either view the output using a simpler
-packet analyzer, such as `tshark
-<https://www.wireshark.org/docs/man-pages/tshark.html>`__, or by
-redirecting the PCAP output in a file and transfer it a desktop
-machine for viewing in Wireshark.
-
-For example, the following captures and displays traffic into and out
-of the UPF.  Of course, you'll also need to restart the RAN emulator
-to generate workload for this tool to capture.
-
-.. code-block::
-
-   $ kubectl sniff -n omec upf-0 -o - | tshark -r -
-
 Clean Up
 ~~~~~~~~~~~~~~~~~
 
-Working in reverse order, the following Make targets tear down
-the three components you just installed.
-cluster (plus Quagga router):
+We recommend continuing on to the next section before wrapping up, but
+when you are ready to tear down your Quick Start version Aether,
+simply execute the following commands:
 
 .. code-block::
 
    root@host:/workdir# make gnbsim-uninstall
    root@host:/workdir# make 5gc-core-uninstall
-   root@host:/workdir# make k8s-uninstall   
+   root@host:/workdir# make k8s-uninstall
 
-Alternatively, executing just the first two will return you
-to a state with an empty Kubernetes cluseter.
-
-Note that while we stepped through the system one component at a time,
-comprehensive Make targets are also available. So you could have
-simply typed:
+Finally, note that while we stepped through the system one component
+at a time, OnRamp includes compound Make targets. For example, you
+could have accomplished everything covered in this section by typing:
 
 .. code-block::
 
    root@host:/workdir# make aether-install
    root@host:/workdir# make aether-uninstall
+
