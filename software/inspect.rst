@@ -21,20 +21,21 @@ executing the following Make target:
 
    root@host:/workdir# make amp-install
 
-Once complete, `kubectl` will show the `aether-roc` and
-`cattle-monitoring-system` namespaces now running in support of these
-two services, respectively, plus new `atomix` pods in the
-`kube-system` namespace.  Atomix is the scalable key-value store that
+Once complete, ``kubectl`` will show the ``aether-roc`` and
+``cattle-monitoring-system`` namespaces now running in support of these
+two services, respectively, plus new ``atomix`` pods in the
+``kube-system`` namespace.  Atomix is the scalable key-value store that
 keeps the ROC data model persistent.
 
 .. [#] Note that what the implementation calls ROC, Chapter 6 refers
         to generically as *Service Orchestration*.
 
-You can access the dashboards for the two subsystems, respectively, at
+You can access the dashboards for the two subsystems,
+respectively, at
 
 .. code-block::
 
-   http://<host_ip>:31194
+   http://<host_ip>3:31194
    http://<host_ip>:30950
 
 The programmatic API underlying the Control Dashboard, which was
@@ -58,8 +59,8 @@ Kubernetes-related performance stats. Select the *5G Dashboard* option
 to display information reported by SD-Core. That page should show an
 active (green) UPF, but there will be no base stations or attached
 devices until you rerun the RAN simulator (gNBsim) introduced in the
-previous section. Doing so will result in the UPF throughput panel
-reporting only trace activity. This is because gNBsim generates very
+previous section. Doing so will also result in the UPF throughput
+panel reporting trace activity. This is because gNBsim generates very
 little User Plane traffic; it is primarily designed to stress test
 SD-Core's Control Plane.
 

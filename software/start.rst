@@ -98,21 +98,20 @@ four things to note:
    files you find in the corresponding ``deps`` directory. This
    top-level variable file overrides the per-component var files, so
    you will not need to modify the latter. *Importantly, be aware that
-   some variables (e.g., ``data_iface``) show up in multiple sections
+   some variables (e.g.,* ``data_iface``\ *) show up in multiple sections
    of this top-level var file.*
 
 4. File ``hosts.ini`` (host inventory) is Ansible's way of specifying
    the set of servers (physical or virtual) that Ansible targets with
    various installation playbooks. The default version of ``host.ini``
    included with OnRamp is simplified to run everything on a single
-   host (the one you've cloned the repo onto), with the additional
-   line you may eventually need for a multi-node cluster commented
-   out.
+   host (the one you've cloned the repo onto), with additional lines
+   you may eventually need for a multi-node cluster commented out.
 
-Configuration Parameters
+Set Target Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The quick start sequence described in this section requires that you
+The Quick Start sequence described in this section requires that you
 modify two parameters to reflect the specifics of your target
 deployment.
 
@@ -159,10 +158,11 @@ you server. You can learn the interface by typing
        inet6 fe80::2ef0:5dff:fef2:d821/64 scope link
           valid_lft forever preferred_lft forever
 
-In what will serve as a running example throughout this appendix, the
-interface is ``enp193s0f0`` with IP address ``10.76.28.113``.
+In this example, the reported interface is ``enp193s0f0`` and the IP
+address is ``10.76.28.113``. We will use these two values as a part of
+a running example throughout the Appendix.
 
-Run Ansible
+Install Ansible
 ~~~~~~~~~~~~~~~~~~
 
 You need to first install Ansible before you can use it to manage your
@@ -186,7 +186,7 @@ This prompt indicates that you are running as root in the context of
 the container, with ``/workdir`` as your current directory. This is
 the same directory you were in when you invoked ``make``, but it is
 now the root of the containerized environment. You cannot see your
-actual home directory (including your ``.ssh`` directory), without
+actual home directory (including your ``.ssh`` directory) without
 first exiting the container. To do that, type either ``exit`` or
 ``^D`` (Control-D).
 
@@ -245,8 +245,9 @@ target server. Do this by typing:
 
    root@host:/workdir# make k8s-install
 
-Executing ``kubectl`` will show the ``kube-system`` namespace running,
-with output looking something like this:
+Once the playbook completes, executing ``kubectl`` will show the
+``kube-system`` namespace running, with output looking something like
+this:
 
 .. code-block::
 
@@ -275,7 +276,7 @@ Ansible container.
 
 If you are interested in seeing the details about how Kubernetes is
 configured, look at ``deps/5gc/templates/rke2/master-params.yaml`` and
-the ``k8s:`` section of ``vars/main.yml``. Of particular note, we have
+the ``k8s`` section of ``vars/main.yml``. Of particular note, we have
 instructed Kubernetes to allow service for ports ranging from ``2000``
 to ``36767`` and we are using the ``multus`` and ``canal`` CNI
 plugins.

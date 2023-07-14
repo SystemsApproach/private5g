@@ -78,8 +78,8 @@ containers," it is now more accurate to say that Aether uses
 `OCI-Compliant containers <https://opencontainers.org/>`__.
 
 The Aether CI pipeline keeps the above artifact repos in sync with the
-source repos listed above, where those source repos include the
-following Helm source files:
+source repos listed above. Among those source repos are the source
+files for all the Helm Charts:
 
  | ROC: https://gerrit.opencord.org/plugins/gitiles/roc-helm-charts
  | SD-RAN: https://github.com/onosproject/sdran-helm-charts
@@ -107,12 +107,12 @@ OnRamp Repos
 ~~~~~~~~~~~~~~~~~~~
 
 The deployment artifacts listed above are, of course, meant to be
-deployed into a running system. This process is typically managed by
-the *Continuous Deployment (CD)* half of a CI/CD pipeline, which
-adopts a GitOps approach. This is where OnRamp differs from the
-specific GitOps mechanism originally used by the ONF ops team to
-manage its multi-site deployment of Aether.  That approach depends on
-insider knowlege and has proven difficult for others to replicate.
+deployed into a running system. This process, often referred to as
+GitOps, manages the *Continuous Deployment (CD)* half of the CI/CD
+pipeline. The approach that OnRamp takes to GitOps uses a different
+mechanism than the one the ONF ops team originally used to manage its
+multi-site deployment of Aether.  That approach has proven difficult
+for others to replicate.
 
 In its place, OnRamp adopts minimal Ansible tooling. This makes it
 easier to "take ownership" of the configuration parameters that define
@@ -130,12 +130,13 @@ of OnRamp repos:
  
 It is the first repo that defines a way to integrate all of the Aether
 artifacts into an operational system. That repo, in turn,
-automatically incorporates the others (although each of the others is
-self-contained if you are interested in deploying only that subsystem).
+automatically incorporates the other repos as submodules. Note that
+each of the submodules is self-contained if you are interested in
+deploying just that subsystem.
 
 Because OnRamp uses Ansible as its primary deployment tool, a general
 understanding of Ansible is helpful (see the suggested reference).
-However, this appendix walks you through the process step-by-step of
+However, this appendix walks you, step-by-step, through the process of
 deploying and operating Aether, so previous experience with Ansible is
 not a requirement. Note that Ansible has evolved to be both a
 "Community Toolset" anyone can use to manage a software deployment,
