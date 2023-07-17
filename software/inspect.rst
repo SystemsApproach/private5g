@@ -5,8 +5,8 @@ Before tearing down your Quick Start version of Aether, there are two
 additional steps you can take to watch the system in action. The first
 is to bring up the Aether Management Plane (AMP), which includes
 Dashboards showing different aspects of Aether's runtime behavior. The
-second is to enable packet capture, and then run a visualization tool
-to trace the flow of packets into and out of SD-Core.
+second is to enable packet capture, and then run an analysis tool to
+trace the flow of packets into and out of SD-Core.
 
 
 Install AMP
@@ -19,13 +19,13 @@ executing the following Make target:
 
 .. code-block::
 
-   root@host:/workdir# make amp-install
+   root@host:/workdir# make aether-amp-install
 
 Once complete, ``kubectl`` will show the ``aether-roc`` and
-``cattle-monitoring-system`` namespaces now running in support of these
+``cattle-monitoring-system`` namespaces running in support of these
 two services, respectively, plus new ``atomix`` pods in the
-``kube-system`` namespace.  Atomix is the scalable key-value store that
-keeps the ROC data model persistent.
+``kube-system`` namespace.  Atomix is the scalable key-value store
+that keeps the ROC data model persistent.
 
 .. [#] Note that what the implementation calls ROC, Chapter 6 refers
         to generically as *Service Orchestration*.
@@ -60,16 +60,17 @@ to display information reported by SD-Core. That page should show an
 active (green) UPF, but there will be no base stations or attached
 devices until you rerun the RAN simulator (gNBsim) introduced in the
 previous section. Doing so will also result in the UPF throughput
-panel reporting trace activity. This is because gNBsim generates very
-little User Plane traffic; it is primarily designed to stress test
-SD-Core's Control Plane.
+panel reporting just a small trace activity. This is because gNBsim
+generates very little User Plane traffic (a few ICMP packet); it is
+primarily designed to stress test SD-Core's Control Plane.
 
 When you are done experimenting with AMP, type the following
 to tear it down:
 
 .. code-block::
 
-   root@host:/workdir# make amp-uninstall
+   root@host:/workdir# make roc-uninstall
+   root@host:/workdir# make monitor-uninstall
    
 Run Ksniff and Wireshark
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

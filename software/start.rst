@@ -9,6 +9,9 @@ assumes a low-end server that meets the following requirements:
 * Haswell CPU (or newer), with at least 4 CPUs and 12GB RAM.
 * Clean install of Ubuntu 18.04, 20.04, or 22.04, with 4.15 (or later) kernel.
 
+For example, something like an Intel NUC is more than enough to get
+started.
+
 While this appendix focuses on deploying Aether OnRamp on a physical
 machine (in anticipation of later stages), this stage can also run in
 a VM.  Options include an AWS VM (Ubuntu 20.04 image on `t2.xlarge`
@@ -78,10 +81,9 @@ four things to note:
 1. The ``deps`` directory contains the Ansible deployment
    specifications for all the Aether subsystems. Each of these
    subdirectories (e.g., ``deps/5gc``) is self-contained, meaning you
-   can execute the Make targets (e.g., ``5gc-core-install``) in each
-   individual directory. Doing so causes Ansible to run the
-   corresponding playbook. Those playbooks can be found in the
-   ``roles`` directory; for example,
+   can execute the Make targets in each individual directory. Doing so
+   causes Ansible to run the corresponding playbook. Those playbooks
+   can be found in the ``roles`` directory; for example,
    ``deps/5gc/roles/core/tasks/install.yml``.
 
 2. The Makefile in the main OnRamp directory imports (``#include``)
@@ -105,26 +107,26 @@ four things to note:
    the set of servers (physical or virtual) that Ansible targets with
    various installation playbooks. The default version of ``host.ini``
    included with OnRamp is simplified to run everything on a single
-   host (the one you've cloned the repo onto), with additional lines
+   server (the one you've cloned the repo onto), with additional lines
    you may eventually need for a multi-node cluster commented out.
 
 Set Target Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Quick Start sequence described in this section requires that you
+The Quick Start tutorial described in this section requires that you
 modify two parameters to reflect the specifics of your target
 deployment.
 
 The first is in file ``host.ini``, where you will need to give the IP
-address and login credentials for the host you are working on. At this
-stage, we assume the host you downloaded OnRamp onto is the same host
-you will be installing Aether on.
+address and login credentials for the server you are working on. At
+this stage, we assume the server you downloaded OnRamp onto is the
+same server you will be installing Aether on.
 
 .. code-block::
 
    node1  ansible_host=172.16.41.103 ansible_user=aether ansible_password=aether ansible_sudo_pass=aether
 
-In this example, address ``172.16.41.103`` and the three occurances of
+In this example, address ``172.16.41.103`` and the three occurrences of
 the string ``aether`` need to be replaced with the appropriate values.
 Note that if you set up your server to use SSH keys instead of
 passwords, then ``ansible_password=aether`` needs to be replaced with
@@ -201,7 +203,7 @@ shell (which we designate with prompt ``$``).
 Many of the tasks specified in the various Ansible playbooks result in
 calls to Kubernetes, either directly (via ``kubectl``) or indirectly
 (via ``helm``). This means that after executing the sequence of
-Makefile targets described in the rest of this appendix, you'll want
+Makefile targets described in the rest of this Appendix, you'll want
 to run some combination of the following commands (in your regular
 terminal window) to verify that the right things happened:
 
@@ -232,8 +234,8 @@ step you can take is to type the following:
    root@host:/workdir# make aether-pingall
 
 The output should show that Ansible is able to securely connect to all
-the nodes in your deployment (which is currently just the one that
-Ansible knows as ``node1``).
+the nodes in your deployment, which is currently just the one that
+Ansible knows as ``node1``.
 
 Install Kubernetes
 ~~~~~~~~~~~~~~~~~~~
@@ -243,11 +245,11 @@ target server. Do this by typing:
 
 .. code-block::
 
-   root@host:/workdir# make k8s-install
+   root@host:/workdir# make aether-k8s-install
 
 Once the playbook completes, executing ``kubectl`` will show the
 ``kube-system`` namespace running, with output looking something like
-this:
+the following:
 
 .. code-block::
 
@@ -289,7 +291,7 @@ within the Ansible container type:
 
 .. code-block::
 
-   root@host:/workdir# make 5gc-core-install
+   root@host:/workdir# make aether-5gc-install
 
 ``kubectl`` will now show the ``omec`` namespace running (in addition
 to ``kube-system``), with output similar to the following:
@@ -328,7 +330,7 @@ We can now test SD-Core with emulated traffic by typing:
 
 .. code-block::
 
-   root@host:/workdir# make gnbsim-install
+   root@host:/workdir# make aether-gnbsim-install
    root@host:/workdir# make gnbsim-run
 
 The results are available somewhere... You can re-execute the
@@ -353,15 +355,15 @@ simply execute the following commands:
 .. code-block::
 
    root@host:/workdir# make gnbsim-uninstall
-   root@host:/workdir# make 5gc-core-uninstall
+   root@host:/workdir# make 5gc-uninstall
    root@host:/workdir# make k8s-uninstall
 
 Finally, note that while we stepped through the system one component
 at a time, OnRamp includes compound Make targets. For example, you
-could have accomplished everything covered in this section by typing:
+can uninstall everything covered in this section by typing:
 
 .. code-block::
 
-   root@host:/workdir# make aether-install
    root@host:/workdir# make aether-uninstall
 
+Look at the ``Makefile`` to see the available set of Make targets.

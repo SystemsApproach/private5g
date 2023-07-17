@@ -1,15 +1,15 @@
-Network Configuration
-------------------------
+Verify the Network
+-----------------------
 
 **[Lifted from old Radio section. Update in Progress. Would benefit from Bilal's network diagrams.]**
 
-This section goes into depth on how SD-Core—which runs *inside* a
-Kubernetes cluster—connects to the outside world. This "outside world"
-includes both an emulated RAN (as implemented by gNBsim running on its
-own server) and and a physical RAN (as implemented by one or more
-physical gNBs). For the purpose of this section, we assume you already
-have a scalable cluster running (as outlined in the previous section),
-and SD-Core has been installed on that cluster.
+This section goes into depth on how SD-Core (which runs *inside* the
+Kubernetes cluster) connects to either physical gNBs or an emulated
+RAN (both running *outside* the Kubernetes cluster). For the purpose
+of this section, we assume you already have a scalable cluster running
+(as outlined in the previous section), SD-Core has been installed on
+that cluster, and you have SSH'ed into the Master node in that cluster
+(where ``kubectl`` can be be executed).
 
 To begin, you can verify that the UPF is properly connected to the
 network by checking to see that the Macvlan networks ``core`` and

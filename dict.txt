@@ -6,6 +6,7 @@ AiaB
 Ajay
 Thakur
 AMF
+Ansible
 Anthos
 Analytics
 Argela
@@ -59,10 +60,12 @@ Lifecycle
 LTE
 Macvlan
 Makefile
+Makefiles
 Marcin
 Mbps
 Midhaul
 MIoT
+Multipass
 Multipath
 Multiprotocol
 NFV
@@ -214,6 +217,9 @@ subbands
 subcarrier
 subcarriers
 subcomponents
+subdirectories
+submodule
+submodules
 subnet
 subnets
 toolchain

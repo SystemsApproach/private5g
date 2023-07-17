@@ -8,7 +8,7 @@ pipeline (e.g., source code, deployment artifacts).
 
 This section identifies all the Aether-related repositories, with the
 OnRamp repos listed at the end serving as the starting point for
-a user that wants to come up-to-speed on the rest of the system.
+anyone that wants to come up-to-speed on the rest of the system.
 
 Source Repos
 ~~~~~~~~~~~~~~~~
@@ -107,12 +107,12 @@ OnRamp Repos
 ~~~~~~~~~~~~~~~~~~~
 
 The deployment artifacts listed above are, of course, meant to be
-deployed into a running system. This process, often referred to as
-GitOps, manages the *Continuous Deployment (CD)* half of the CI/CD
-pipeline. The approach that OnRamp takes to GitOps uses a different
+deployed as an operational cloud service. This process, sometimes
+referred to as GitOps, manages the *Continuous Deployment (CD)* half
+of the CI/CD pipeline. OnRamp's approach to GitOps uses a different
 mechanism than the one the ONF ops team originally used to manage its
-multi-site deployment of Aether.  That approach has proven difficult
-for others to replicate.
+multi-site deployment of Aether.  That approach has a large startup
+cost, which has proven difficult for others to replicate.
 
 In its place, OnRamp adopts minimal Ansible tooling. This makes it
 easier to "take ownership" of the configuration parameters that define
@@ -130,9 +130,9 @@ of OnRamp repos:
  
 It is the first repo that defines a way to integrate all of the Aether
 artifacts into an operational system. That repo, in turn,
-automatically incorporates the other repos as submodules. Note that
-each of the submodules is self-contained if you are interested in
-deploying just that subsystem.
+automatically includes the other repos as submodules. Note that each
+of the submodules is self-contained if you are interested in deploying
+just that subsystem.
 
 Because OnRamp uses Ansible as its primary deployment tool, a general
 understanding of Ansible is helpful (see the suggested reference).
@@ -147,3 +147,4 @@ uses the toolset, but not the platform/service.
 .. admonition:: Further Reading
 
    `Overview: How Ansible Works <https://www.ansible.com/overview/how-ansible-works>`__.
+

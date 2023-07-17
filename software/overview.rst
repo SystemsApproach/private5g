@@ -64,7 +64,7 @@ path for users to:
 
 Aether OnRamp begins with a *Quick Start* deployment similar to AiaB,
 but then goes on to prescribe a sequence of steps a user can follow to
-deploy increasingly complex configuations. This culminates in an
+deploy increasingly complex configurations. This culminates in an
 operational Aether cluster capable of running 24/7 and supporting live
 5G workloads.
 
