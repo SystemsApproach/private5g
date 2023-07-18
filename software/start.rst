@@ -153,14 +153,14 @@ you server. You can learn the interface by typing
           valid_lft forever preferred_lft forever
        inet6 ::1/128 scope host
           valid_lft forever preferred_lft forever
-   2: enp193s0f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+   2: ens18: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
        link/ether 2c:f0:5d:f2:d8:21 brd ff:ff:ff:ff:ff:ff
        inet 10.76.28.113/24 metric 100 brd 10.76.28.255 scope global ens3
           valid_lft forever preferred_lft forever
        inet6 fe80::2ef0:5dff:fef2:d821/64 scope link
           valid_lft forever preferred_lft forever
 
-In this example, the reported interface is ``enp193s0f0`` and the IP
+In this example, the reported interface is ``ens18`` and the IP
 address is ``10.76.28.113``. We will use these two values as a part of
 a running example throughout the Appendix.
 

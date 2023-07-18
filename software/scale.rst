@@ -6,21 +6,21 @@ configuration, with all the components running in a single server (VM
 or physical machine). We now describe how to scale Aether to run on
 multiple servers, where we assume this cluster-based configuration
 throughout the rest of this Appendix. Before continuing, though, you
-will need to remove the Quick Start configuration by typing:
+need to remove the Quick Start configuration by typing:
 
 .. code-block::
 
    root@host:/workdir# make aether-uninstall
 
 There are two aspects of our deployment that scale independently. One
-is Aether proper: a Kubernetes cluster running the set of microservices
-that implement SD-Core and AMP. The other is gNBsim: the emulated RAN
-that generates traffic directed at the Aether cluster. Minimally, two
-servers are required—one for the Aether cluster and one for
-gNBsim—with each able to grow independently. For example, having four
-servers would support a 3-node Aether cluster and a 1-node workload
-generator. This example configuration corresponds to the following
-``hosts.ini`` file:
+is Aether proper: a Kubernetes cluster running the set of
+microservices that implement SD-Core and AMP, and optionally, other
+edge apps. The other is gNBsim: the emulated RAN that generates
+traffic directed at the Aether cluster. Minimally, two servers are
+required—one for the Aether cluster and one for gNBsim—with each able
+to grow independently. For example, having four servers would support
+a 3-node Aether cluster and a 1-node workload generator. This example
+configuration corresponds to the following ``hosts.ini`` file:
 
 .. code-block::
 
@@ -45,12 +45,14 @@ The first block identifies all the nodes; the second block designates
 which node runs the Ansible client and the Kubernetes control plane
 (this is the node you ssh into and invoke Make targets and ``kubectl``
 commands); the third block designates the worker nodes being managed
-by the Ansible client; and the last indicate which nodes constitute
-the nodes run the gNBsim workload generator (gNBsim scales across
-multiple Docker containers, but these containers are **not** managed
-by Kubernetes).
+by the Ansible client; and the last block indicate which nodes run the
+gNBsim workload generator (gNBsim scales across multiple Docker
+containers, but these containers are **not** managed by Kubernetes).
+Note that having ``master_nodes`` and ``gnbsim_nodes`` contain exactly
+one/common node is what triggers Ansible to instantiate the Quick
+Start configuration.
 
-You will need to modify ``hosts.ini`` to match your target deployment.
+You need to modify ``hosts.ini`` to match your target deployment.
 Once you've done that (and assuming you deleted your earlier Quick
 Start configuration), you can re-execute the same set of targets you
 ran before:

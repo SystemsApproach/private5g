@@ -1,20 +1,48 @@
-Verify the Network
------------------------
-
-**[Lifted from old Radio section. Update in Progress. Would benefit from Bilal's network diagrams.]**
+Verify Network
+----------------
 
 This section goes into depth on how SD-Core (which runs *inside* the
 Kubernetes cluster) connects to either physical gNBs or an emulated
 RAN (both running *outside* the Kubernetes cluster). For the purpose
 of this section, we assume you already have a scalable cluster running
 (as outlined in the previous section), SD-Core has been installed on
-that cluster, and you have SSH'ed into the Master node in that cluster
-(where ``kubectl`` can be be executed).
+that cluster, and you have a terminal window open on the Master node
+in that cluster.
 
-To begin, you can verify that the UPF is properly connected to the
-network by checking to see that the Macvlan networks ``core`` and
-``access`` are properly configured on your server. This can be done
-using ``ip``, and you should see results similar to the following:
+:numref:`Figure %s <fig-macvlan>` shows a high-level schematic of
+Aether's end-to-end User Plane connectivity, where we start by
+focusing on the basics: a single Aether node, a single physical gNB,
+and just the UPF container running inside SD-Core. The identifiers
+shown in gray in the figure (``10.76.28.187``, ``10.76.28.113``,
+``ens18``) are taken from our running example of an actual
+deployment (meaning your details will be different). All the other
+names and addresses are part of a standard Aether configuration.
+
+.. _fig-macvlan:
+.. figure:: ../figures/Slide24.png
+    :width: 700px
+    :align: center
+
+    The UPF pod running inside the server hosting Aether, with
+    ``core`` and ``access`` bridging the two. Identifiers
+    ``10.76.28.187``, ``10.76.28.113``, ``ens18`` are specific to
+    a particular deployment site.
+
+As shown in the figure, there are two Macvlan bridges that connect the
+physical interface (``ens18`` in our example) with the UPF
+container. The ``access`` bridge connects the UPF downstream to the
+RAN (this corresponds to 3GPP's N3 interface) and is assigned IP subnet
+``192.168.252.0/24``.  The ``core`` bridge connects the UPF upstream
+to the Internet (this corresponds to 3GPP's N6 interface) and is assigned
+IP subnet ``192.168.250.0/24``.  This means, for example, that the
+``access`` interface *inside* the UPF (which is assigned address
+``192.168.252.3``) is the destination IP address of GTP-encapsulated
+user plane packets from the gNB.
+
+Following this basic schematic, it is possible to verify that the UPF
+is connected to the network by checking to see that the ``core`` and
+``access`` are properly configured. This can be done using ``ip``, and
+you should see results similar to the following:
 
 .. code-block::
 
@@ -34,15 +62,11 @@ using ``ip``, and you should see results similar to the following:
        inet6 fe80::80ef:d3ff:febb:d374/64 scope link
           valid_lft forever preferred_lft forever
 
-Understanding why these two interfaces exist is helpful in
-troubleshooting your deployment. They enable the UPF to exchange
-packets with the gNB (``access``) and the Internet (``core``). In 3GPP
-terms, these correspond to the N3 and N6 interfaces, respectively, as
-shown in :numref:`Figure %s <fig-sd-core>`. But these two interfaces
-exist both **inside** and **outside** the UPF.  The above output from
-``ip`` shows the two outside interfaces; ``kubectl`` can be used
-to see what's running inside the UPF, where ``access`` and ``core``
-are the last two interfaces shown below:
+The above output from ``ip`` shows the two interfaces visible to the
+server, but running *outside* the container. ``kubectl`` can be used
+to see what's running *inside* the UPF, where ``bessd`` is the name of
+the container that implements the UPF, and``access`` and ``core`` are
+the last two interfaces shown below:
 
 .. code-block::
 
@@ -72,37 +96,11 @@ are the last two interfaces shown below:
        inet6 fe80::4cac:69ff:fe31:a388/64 scope link
        valid_lft forever preferred_lft forever
 
-All four are Macvlan interfaces bridged with ``DATA_IFACE``.  There
-are two subnets on this bridge: the two ``access`` interfaces are on
-``192.168.252.0/24`` and the two ``core`` interfaces are on
-``192.168.250.0/24``. Note that while we refer to ``core`` and
-``access`` as interfaces in the context of a particular compute
-environment (e.g., the UPF container), they can also be viewed as
-virtual bridges or virtual links connecting a pair of compute
-environments (e.g., the host server and the UPF container). This
-makes the schematic shown in :numref:`Figure %s <fig-macvlan>` a
-helpful way to visualize the setup.
-
-.. _fig-macvlan:
-.. figure:: ../figures/Slide24.png
-    :width: 600px
-    :align: center
-
-    The UPF container running inside the server hosting Aether, with
-    ``core`` and ``access`` bridging the two. Information shown
-    in gray (``10.76.28.187``, ``10.76.28.113``, ``enp193s0f0``) is
-    specific to a particular deployment site.
-
-In this setting, the ``access`` interface inside the UPF has an IP
-address of ``192.168.252.3``; this is the destination IP address of
-GTP-encapsulated user plane packets from the gNB.  In order for these
-packets to find their way to the UPF, they must arrive on the
-``DATA_IFACE`` interface and then be forwarded on the ``access``
-interface outside the UPF.  (As described later in this section, it is
-possible to configure a static route on the gNB to send the GTP
-packets to ``DATA_IFACE``.)  Forwarding the packets to the ``access``
-interface is done by the following kernel route, which should be
-present if your Aether installation was successful:
+When packets flowing upstream from the gNB arrive on the server's
+physical interface, they need to be forwarded over the ``access``
+interface.  This is done by having the following kernel route
+installed, which should be the case if your Aether installation was
+successful:
 
 .. code-block::
 
@@ -110,13 +108,11 @@ present if your Aether installation was successful:
    Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
    192.168.252.0   0.0.0.0         255.255.255.0   U     0      0        0 access
 
-The high-level behavior of the UPF is to forward packets between its
-``access`` and ``core`` interfaces, while at the same time
-removing/adding GTP encapsulation on the ``access`` side.  Upstream
-packets arriving on the ``access`` side from a UE have their GTP
-headers removed and the raw IP packets are forwarded to the ``core``
-interface.  The routes inside the UPF's ``bessd`` container will look
-something like this:
+Within the UPF, the correct behavior is to forward packets between its
+``access`` and ``core`` interfaces.  Upstream packets arriving on the
+``access`` interface have their GTP headers removed and the raw IP
+packets are forwarded to the ``core`` interface.  The routes inside
+the UPF's ``bessd`` container will look something like this:
 
 .. code-block::
 
@@ -129,12 +125,12 @@ something like this:
    192.168.250.0/24 dev core proto kernel scope link src 192.168.250.3
    192.168.252.0/24 dev access proto kernel scope link src 192.168.252.3
 
-The default route via ``192.168.250.1`` is directing upstream packets
-to the Internet via the ``core`` interface, with a next hop of the
-``core`` interface outside the UPF.  These packets undergo source NAT
-in the kernel and are sent to the IP destination in the packet. This
-means that the ``172.250.0.0/16`` addresses assigned to UEs are not
-visible beyond the Aether server. The return (downstream) packets
+The default route via ``192.168.250.1`` directs upstream packets to
+the Internet via the ``core`` interface, with a next hop of the
+``core`` interface outside the UPF.  These packets then undergo source
+NAT in the kernel and are sent to the IP destination in the packet.
+This means that the ``172.250.0.0/16`` addresses assigned to UEs are
+not visible beyond the Aether server. The return (downstream) packets
 undergo reverse NAT and now have a destination IP address of the UE.
 They are forwarded by the kernel to the ``core`` interface by these
 rules on the server:
@@ -155,10 +151,68 @@ GTP-encapsulated with the IP address of the gNB.
 
 Note that if you are not finding ``access`` and ``core`` interfaces
 outside the UPF, the following commands can be used to create these
-two interfaces manually:
+two interfaces manually (again using our running example for the
+physical ethernet interface):
 
 .. code-block::
 
-    $ ip link add core link <DATA_IFACE> type macvlan mode bridge 192.168.250.3
-    $ ip link add access link <DATA_IFACE> type macvlan mode bridge 192.168.252.3
+    $ ip link add core link ens18 type macvlan mode bridge 192.168.250.3
+    $ ip link add access link ens18 type macvlan mode bridge 192.168.252.3
 
+Beyond this basic understanding, there are three other details of
+note. First, we have been focusing on the User Plane because Control
+Plane connectivity is much simpler: RAN elements (whether they are
+physical gNBs or gNBsim) reach the AMF using the server's actual IP
+address (``10.76.28.113`` in our running example). Kubernetes is
+configured to forward SCTP packets arriving on port ``38412`` to the
+AMF container.
+
+Second, the basic end-to-end schematic shown in :numref:`Figure %s
+<fig-macvlan>` assumes each gNB is assigned an address on the same L2
+network as the Aether cluster (e.g., ``10.76.28/8`` in our example
+scenario). This works when the gNB is physical or when we want to run
+a single gNBsim traffic source, but once we scale up the gNBsim by
+co-locating multiple containers on a single server, we need to
+introduce another network so each container has a unique IP address
+(even though they are all hosted at the same IP address). This more
+complex configuration is depicted in :numref:`Figure %s <fig-gnbsim>`,
+where ``172.20.0.0/16`` is the IP subnet for the virtual network (also
+implemented by a Macvlan bridge, and named ``gnbaccess``).
+
+.. _fig-gnbsim:
+.. figure:: ../figures/Slide25.png
+    :width: 600px
+    :align: center
+
+    A server running multiple instances of gNBsim, connected to Aether.
+
+Finally, all of the configurable parameters used throughout this
+section are defined in ``core`` and ``gnbsim.router`` sections of the
+``vars/main.yml`` file. Note that an empty value for
+``core.ran_subnet`` implies the physical L2 network is used to connect
+RAN elements to the core, as is typically the case when connecting
+physical gNBs.
+
+
+.. code-block::
+  
+    core:
+        standalone: "true"
+        data_iface: ens18
+        values_file: "/workdir/config/hpa-5g-values.yaml"
+        ran_subnet: "172.20.0.0/16"
+        helm:
+           chart_ref: aether/sd-core
+           chart_version: 0.12.6 
+        upf:
+           ip_prefix: "192.168.252.0/24"
+        amf:
+           ip: "172.16.41.103" 
+
+    gnbsim:
+        ...
+        router:
+            data_iface: ens18
+            macvlan:
+                iface: gnbaccess
+                subnet_prefix: "172.20"

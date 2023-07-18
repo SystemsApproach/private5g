@@ -21,7 +21,7 @@ server that provides connectivity to the radio, for example by typing:
           valid_lft forever preferred_lft forever
        inet6 ::1/128 scope host
           valid_lft forever preferred_lft forever
-   2: enp193s0f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+   2: ens18: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
        link/ether 2c:f0:5d:f2:d8:21 brd ff:ff:ff:ff:ff:ff
        inet 10.76.28.113/24 metric 100 brd 10.76.28.255 scope global ens3
           valid_lft forever preferred_lft forever
@@ -29,7 +29,7 @@ server that provides connectivity to the radio, for example by typing:
           valid_lft forever preferred_lft forever
 
 In what will serve as a running example throughout this section, the interface is
-``enp193s0f0`` with IP address ``10.76.28.113``.
+``ens18`` with IP address ``10.76.28.113``.
 
 
 Local Blueprint
@@ -112,7 +112,7 @@ directory, copy these files into it, and make your changes there.
 
 At this point, you need to make two edits. The first is to the
 ``DATA_IFACE`` variable in ``blueprints/5g-radio/config``, changing it
-from ``eth0`` to whatever name you noted earlier (e.g., ``enp193s0f0``
+from ``eth0`` to whatever name you noted earlier (e.g., ``ens18``
 in our running example). The second is to the default ``BLUEPRINT``
 setting in ``MakefileVar.mk``, changing it from ``latest`` to
 ``5g-radio``. Alternatively, you can modify that variable on a
@@ -376,15 +376,15 @@ it's possible to run ``ping`` and ``traceroute`` from both. You can
 also run the ``ksniff`` tool described in Stage 1, but the most
 helpful packet traces you can capture are shown in the following
 commands. You can run these on the Aether server, where we use our
-example ``enp193s0f0`` interface for illustrative purposes:
+example ``ens18`` interface for illustrative purposes:
 
 .. code-block::
 
    $ sudo tcpdump -i any sctp -w sctp-test.pcap
-   $ sudo tcpdump -i enp193s0f0 port 2152 -w gtp-outside.pcap
+   $ sudo tcpdump -i ens18 port 2152 -w gtp-outside.pcap
    $ sudo tcpdump -i access port 2152 -w gtp-inside.pcap
    $ sudo tcpdump -i core net 172.250.0.0/16 -w n6-inside.pcap
-   $ sudo tcpdump -i enp193s0f0 net 172.250.0.0/16 -w n6-outside.pcap
+   $ sudo tcpdump -i ens18 net 172.250.0.0/16 -w n6-outside.pcap
 
 The first trace, saved in file ``sctp.pcap``, captures SCTP packets
 sent to establish the control path between the base station and the
@@ -395,7 +395,7 @@ relevant control plane traffic.
 The second and third traces, saved in files ``gtp-outside.pcap`` and
 ``gtp-inside.pcap``, respectively, capture GTP packets (tunneled
 through port ``2152`` ) on the RAN side of the UPF. Setting the
-interface to ``enp193s0f0`` corresponds to "outside" the UPF and setting
+interface to ``ens18`` corresponds to "outside" the UPF and setting
 the interface to ``access`` corresponds to "inside" the UPF.  Running
 ``ping`` from the UE will generate the relevant user plane (N3) traffic.
 
@@ -408,10 +408,10 @@ corresponds to the IP addresses assigned to UEs by the SMF. Running
 
 If the ``gtp-outside.pcap`` has packets and the ``gtp-inside.pcap``
 is empty (no packets captured), you may run the following commands
-to make sure packets are forwarded from the ``enp193s0f0`` interface
+to make sure packets are forwarded from the ``ens18`` interface
 to the ``access`` interface and vice versa:
 
 .. code-block::
 
-   $ sudo iptables -A FORWARD -i enp193s0f0 -o access -j ACCEPT
-   $ sudo iptables -A FORWARD -i access -o enp193s0f0 -j ACCEPT
+   $ sudo iptables -A FORWARD -i ens18 -o access -j ACCEPT
+   $ sudo iptables -A FORWARD -i access -o ens18 -j ACCEPT
