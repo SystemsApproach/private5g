@@ -73,7 +73,7 @@ the latter, you can still run Aether on a single server, and then
 connect that node to one or more physical gNBs.
 
 Finally, apart from being able able to run SD-Core and gNBsim on
-separate nodes—i.e., cleaning decoupling the Core from the RAN—one
+separate nodes—thereby cleanly decoupling the Core from the RAN—one
 question we have not yet answered is why you might want to scale
 Aether. One answer is that you also want to run some other edge
 application, such as an IoT or AI/ML platform, on the Aether cluster.
