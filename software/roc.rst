@@ -1,14 +1,10 @@
 Runtime Control 
 -----------------------------------
 
-**[Not yet Updated]**
-
 Aether defines an API (and associated GUI) for managing connectivity
 at runtime. This stage brings up that API/GUI, as implemented by the
 *Runtime Operational Control (ROC)* subsystem, building on the
-physical gNB we connected to Aether in Stage 3. As in the previous
-stage, we focus on the ``5g-radio`` blueprint, but the same approach
-applies equally well to ``4g-radio`` and ``latest``.
+physical gNB we connected to Aether in the previous section. 
 
 This stage focuses on the abstractions that the ROC layers on top of
 the SD-Core. These abstractions are described in `Section 6.4
@@ -17,42 +13,43 @@ include *Device Groups* and *Slices*. (The full set of model
 definitions can be found in `GitHub
 <https://github.com/onosproject/aether-models>`__.)  Initial settings
 of these ROC-managed parameters are recorded in
-``5g-radio/roc-5g-models.json``. We use these values to bootstrap the
-ROC database, saving us from a laborious GUI session.
+``deps/amp/roles/5g-roc/templates/roc-5g-models.json``. We use these
+values to bootstrap the ROC database, saving us from a laborious GUI
+session.
 
 Somewhat confusingly, the *Device-Group* and *Slice* information is
-duplicated between ``5g-radio/sd-core-5g-values.yaml`` and
-``5g-radio/roc-5g-models.json``. This makes it possible to bring up
-the SD-Core without the ROC, which simplifies the process of debugging
-an initial installation (as was the case in Stage 3), but having two
-sources for this information leads to problems keeping them in sync,
-and should be avoided.
+duplicated between ``deps/5gc/templates/core/radio-5g-values.yaml``
+and this ``roc-5g-models.json`` file. This makes it possible to bring
+up the SD-Core without the ROC, which simplifies the process of
+debugging an initial installation, but having two sources for this
+information leads to problems keeping them in sync, and should be
+avoided.
 
 To this end, Aether treats the ROC as the "single source of truth" for
 *Slices*, *Device Groups*, and all the other abstract objects it
 defines, so we recommend using the GUI or API to make changes over
-time, and avoiding the override values once you've established basic
-connectivity. And if you want to save this bootstrap state in a text
-file for a possible restart, we recommend doing so in
-``5g-radio/roc-5g-models.json``. (This is still a "getting started"
-approach, and not a substitute for the operational practice of backing
-up the ROC database.)
+time, and avoiding the override values in ``radio-5gc-values.yaml``
+once you've established basic connectivity. And if you want to save
+this bootstrap state in a text file for a possible restart, we
+recommend doing so in ``roc-5g-models.json`` (although this is not a
+substitute for the operational practice of backing up the ROC
+database).
 
 To make ROC the authoritative source of runtime state, first edit the
-``SA_CORE`` variable in ``blueprints/5g-radio/config``, setting it to
-``false``. This variable indicates whether we want SD-Core to run in
-*Stand Alone* mode, which has been the default setting up to this
-point. Disabling ``SA_CORE`` causes the SD-Core to ignore the
-``device-groups`` and ``network-slices`` blocks of the
-``omec-sub-provision`` section in ``5g-radio/sd-core-5g-values.yaml``,
-and to instead retrieve this information from the ROC.
+``standalone`` variable in the ``core`` section of ``vars/main.yml``,
+setting it to ``false``. This variable indicates whether we want
+SD-Core to run in *Stand Alone* mode, which has been the default
+setting up to this point. Disabling ``standalone`` causes the SD-Core
+to ignore the ``device-groups`` and ``network-slices`` blocks of the
+``omec-sub-provision`` section in ``radio-5gc-values.yaml``, and to instead
+retrieve this information from the ROC.
 
-The next step is to edit ``5g-radio/roc-5g-models.json`` to record the
-same IMSI information you added to ``5g-radio/sd-core-5g-values.yaml``
-in Stage 3.  This includes modifying, adding and removing ``sim-card``
-entries as necessary. Note that only the IMSIs need to match the
-earlier data; the ``sim-id`` and ``display-name`` values are arbitrary
-and need only be consistent *within* ``5g-radio/roc-5g-models.json``.
+The next step is to edit ``roc-5g-models.json`` to record the same
+IMSI information you added to ``radio-5gc-values.yaml`` in the
+previous section.  This includes modifying, adding and removing
+``sim-card`` entries as necessary. Note that only the IMSIs need to
+match the earlier data; the ``sim-id`` and ``display-name`` values are
+arbitrary and need only be consistent *within* ``roc-5g-models.json``.
 
 .. code-block::
 
@@ -73,14 +70,14 @@ and need only be consistent *within* ``5g-radio/roc-5g-models.json``.
    ...
 
 Once you are done with these edits, uninstall the SD-Core you had
-running in Stage 3, and then bring up the ROC followed by a new
-instantiation of the SD-Core:
+running in the previous stage, and then bring up the ROC followed by a
+new instantiation of the SD-Core:
 
 .. code-block::
 
-   $ make core-clean
-   $ make 5g-roc
-   $ make 5g-core
+   root@host:/workdir# make aether-5gc-uninstall
+   root@host:/workdir# make aether-amp-install      
+   root@host:/workdir# make aether-5gc-install   
 
 The order is important, since the Core depends on configuration
 parameters provided by the ROC. Also note that you may need to reboot
