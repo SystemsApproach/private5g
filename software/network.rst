@@ -169,7 +169,7 @@ AMF container.
 
 Second, the basic end-to-end schematic shown in :numref:`Figure %s
 <fig-macvlan>` assumes each gNB is assigned an address on the same L2
-network as the Aether cluster (e.g., ``10.76.28/8`` in our example
+network as the Aether cluster (e.g., ``10.76.28.0/24`` in our example
 scenario). This works when the gNB is physical or when we want to run
 a single gNBsim traffic source, but once we scale up the gNBsim by
 co-locating multiple containers on a single server, we need to

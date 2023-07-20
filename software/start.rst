@@ -142,7 +142,8 @@ currently reading
    data_iface: ens18
 
 need to be edited to replace ``ens18`` with the device interface for
-you server. You can learn the interface by typing
+you server. You can learn the interface using the Linux ``ip``
+command:
 
 .. code-block::
 
@@ -161,8 +162,9 @@ you server. You can learn the interface by typing
           valid_lft forever preferred_lft forever
 
 In this example, the reported interface is ``ens18`` and the IP
-address is ``10.76.28.113``. We will use these two values as a part of
-a running example throughout the Appendix.
+address is ``10.76.28.113`` on subnet ``10.76.28.0/24``.  We will use
+these three values as a running example throughout the Appendix, as a
+placeholder for your local details.
 
 Install Ansible
 ~~~~~~~~~~~~~~~~~~
