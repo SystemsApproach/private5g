@@ -59,10 +59,10 @@ These config files then specify the second set of gNBsim parameters.
 A detailed description of these parameters is outside the scope of
 this Appendix (see https://github.com/omec-project/gnbsim for
 details), but at a high-level, gNBsim defines a set of *profiles*,
-each of which exercises a top-level control sequence that the Core has
-to deal with. Each of these "sequences" is represented by a
-``profileType`` in the config file. gNBsim supports seven profiles,
-which we list here:
+each of which exercises a common usage scenario that the Core has to
+deal with. Each of these sequences is represented by a ``profileType``
+in the config file. gNBsim supports seven profiles, which we list
+here:
 
 .. code-block::
    

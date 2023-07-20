@@ -82,8 +82,8 @@ four things to note:
    specifications for all the Aether subsystems. Each of these
    subdirectories (e.g., ``deps/5gc``) is self-contained, meaning you
    can execute the Make targets in each individual directory. Doing so
-   causes Ansible to run the corresponding playbook. Those playbooks
-   can be found in the ``roles`` directory; for example,
+   causes Ansible to run the corresponding playbook. For example, the
+   installation playbook for the 5G Core can be found in
    ``deps/5gc/roles/core/tasks/install.yml``.
 
 2. The Makefile in the main OnRamp directory imports (``#include``)
@@ -109,6 +109,7 @@ four things to note:
    included with OnRamp is simplified to run everything on a single
    server (the one you've cloned the repo onto), with additional lines
    you may eventually need for a multi-node cluster commented out.
+ 
 
 Set Target Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -165,6 +166,13 @@ In this example, the reported interface is ``ens18`` and the IP
 address is ``10.76.28.113`` on subnet ``10.76.28.0/24``.  We will use
 these three values as a running example throughout the Appendix, as a
 placeholder for your local details.
+
+Note that ``vars/main.yml`` and ``hosts.ini`` are the only two files
+you need to modify for now, but there are additional config files that
+you may want to modify as we move beyond the Quick Start deployment.
+We'll identify those files throughout this section, for informational
+purposes, and revisit them in later sections.
+
 
 Install Ansible
 ~~~~~~~~~~~~~~~~~~
@@ -279,11 +287,11 @@ Remember to run this ``kubectl`` in your regular shell, not the
 Ansible container.
 
 If you are interested in seeing the details about how Kubernetes is
-configured, look at ``deps/5gc/templates/rke2/master-params.yaml`` and
-the ``k8s`` section of ``vars/main.yml``. Of particular note, we have
-instructed Kubernetes to allow service for ports ranging from ``2000``
-to ``36767`` and we are using the ``multus`` and ``canal`` CNI
-plugins.
+customized for Aether, look at
+``deps/k8s/roles/rke2/templates/master-params.yaml``.  Of particular
+note, we have instructed Kubernetes to allow service for ports ranging
+from ``2000`` to ``36767`` and we are using the ``multus`` and
+``canal`` CNI plugins.
 
 Install SD-Core
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -325,6 +333,17 @@ microservices discussed is Chapter 5. For example,
 ``amf-5887bbf6c5-pc9g2`` implements the AMF. Note that for historical
 reasons, the Aether Core is called ``omec`` instead of ``sd-core``.
 
+If you are interested in seeing the details about how SD-Core is
+configured, look at ``deps/5gc/templates/core/5g-values.yaml``.  This
+is an example of a *values override* file that Helm passes to along to
+Kubernetes when launching the service. Most of the default settings
+will remain unchanged, with the main exception being the
+``subscribers`` block of the ``omec-sub-provision`` section. This
+block will eventually need to be edited to reflect the SIM cards you
+actually deploy. We return to this topic in the section describing how
+to bring up a physical gNB.
+
+
 Run Emulated RAN Test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -333,10 +352,18 @@ We can now test SD-Core with emulated traffic by typing:
 .. code-block::
 
    root@host:/workdir# make aether-gnbsim-install
-   root@host:/workdir# make gnbsim-run
+   root@host:/workdir# make aether-gnbsim-run
 
-The results are available somewhere... You can re-execute the
-``gnbsim-run`` target multiple times.
+Note that you can re-execute the ``aether-gnbsim-run`` target multiple
+times, where the results of each run are saved in a file within the
+Docker container running the test. You can access that file by typing:
+
+.. code-block::
+
+   $ docker exec -it gnbsim-1 cat summary.log
+
+If successful, the last lines of the output should look like the
+following:
 
 .. code-block::
 
@@ -345,6 +372,14 @@ The results are available somewhere... You can re-execute the
    2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] Profile Name: profile2 , Profile Type: pdusessest
    2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] UEs Passed: 5 , UEs Failed: 0
    2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] Profile Status: PASS
+
+This particular test, which runs the cryptically named ``pdusessest``
+profile, emulates five UEs, each of which registers with the Core,
+initiates a user plane session, and then send a minimal data packet
+over that session. If you are interested in the config file that
+controls the test, including the option of enabling other profiles,
+take a look at ``deps/gnbsim/config/gnbsim-default.yaml``. We return
+to the issue of customizing gNBsim in a later section.
 
 
 Clean Up
@@ -356,9 +391,9 @@ simply execute the following commands:
 
 .. code-block::
 
-   root@host:/workdir# make gnbsim-uninstall
-   root@host:/workdir# make 5gc-uninstall
-   root@host:/workdir# make k8s-uninstall
+   root@host:/workdir# make aether-gnbsim-uninstall
+   root@host:/workdir# make aether-5gc-uninstall
+   root@host:/workdir# make aether-k8s-uninstall
 
 Finally, note that while we stepped through the system one component
 at a time, OnRamp includes compound Make targets. For example, you

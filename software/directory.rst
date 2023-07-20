@@ -115,7 +115,7 @@ multi-site deployment of Aether.  That approach has a large startup
 cost, which has proven difficult for others to replicate.
 
 In its place, OnRamp adopts minimal Ansible tooling. This makes it
-easier to "take ownership" of the configuration parameters that define
+easier to take ownership of the configuration parameters that define
 your specific deployment scenario.  The rest of this appendix walks
 you through a step-by-step process of deploying and operating Aether
 on your own hardware.  For now, we simply point you at the collection
