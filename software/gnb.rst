@@ -1,131 +1,40 @@
 Physical gNB (5G)
 ---------------------
 
-**[Update in Progress]**
-
 We are now ready to replace the emulated RAN with physical gNBs and
-real UEs. In addition to the Kubernetes cluster we already have
-installed, we now assume the nodes in that cluster and the external
-gNBs are connected to the same L2 network and share an IP subnet.
-This is not a hard requirement for all deployments, but it does
-simplify communication between the radio and the UPF running within
-Kubernetes on the server.  Take note of the network interface on your
-server that provides connectivity to the radio, for example by typing:
+real UEs. You will need to edit ``hosts.ini`` to reflect the Aether
+cluster you want to support, where just a single server is sufficient
+and there is no reason to include nodes in the ``[gnbsim_nodes]`` set.
+We'll start with a single gNB, which we assume is connected to the
+same L2 network as the Aether cluster. In our running example, this
+implies both are on subnet ``10.76.28.0/24``.
+
+Modify Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Modify the ``core`` section of ``vars/main.yml`` to match the
+following, substituting your local details for ``ens18`` and
+``10.76.28.113``. Of particular note, setting ``ran_subnet`` to the
+empty string indicates that the gNB is connected to the same physical
+L2 network as your Aether cluster, and the new ``values_file`` is
+tailored for a physical RAN rather than the emulated RAN we've been
+using.
 
 .. code-block::
 
-   $ ip a
-   1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-       link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-       inet 127.0.0.1/8 scope host lo
-          valid_lft forever preferred_lft forever
-       inet6 ::1/128 scope host
-          valid_lft forever preferred_lft forever
-   2: ens18: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-       link/ether 2c:f0:5d:f2:d8:21 brd ff:ff:ff:ff:ff:ff
-       inet 10.76.28.113/24 metric 100 brd 10.76.28.255 scope global ens3
-          valid_lft forever preferred_lft forever
-       inet6 fe80::2ef0:5dff:fef2:d821/64 scope link
-          valid_lft forever preferred_lft forever
+   core:
+       standalone: "true"
+       data_iface: ens18
+       values_file: "deps/5gc/templates/core/radio-5g-values.yaml"
+       ran_subnet: ""
+       helm:
+           chart_ref: aether/sd-core
+           chart_version: 0.12.6 
+       upf:
+           ip_prefix: "192.168.252.0/24"
+       amf:
+           ip: "10.76.28.113"  
 
-In what will serve as a running example throughout this section, the interface is
-``ens18`` with IP address ``10.76.28.113``.
-
-
-Local Blueprint
-~~~~~~~~~~~~~~~
-
-Unlike earlier stages that took advantage of canned configurations,
-adding a physical base station means you need to account for specifics
-of your local environment. Editing various configuration files is a
-necessary step in customizing a deployment, and so Aether OnRamp
-establishes a simple convention to help manage that process.
-
-Specifically, the ``blueprints`` directory currently defines five
-distinct ways to configure and deploy Aether:
-
-* ``release-2.0``: Deploys Aether v2.0 in a single server (or VM),
-  running an emulated RAN.
-
-* ``release-2.1``: Deploys Aether v2.1 in a single server (or VM),
-  running an emulated RAN.
-
-* ``latest``: Deploys the latest version of Aether in a single server
-  (or VM), running an emulated RAN.
-
-* ``4g-radio``: Deploys the latest version of Aether in a single
-  server (or VM), connected to a physical eNB.
-
-* ``5g-radio``: Deploys the latest version of Aether in a single
-  server (or VM), connected to a physical gNB.
-
-Up to this point, we have been using ``latest`` as our default
-blueprint, but for this stage, we will shift to the ``5g-radio``
-blueprint (or ``4g-radio``, as appropriate).
-
-Each blueprint specifies three sets of parameters that define how
-Aether is configured and deployed: (1) a set of Makefile variables
-that customize the deployment process; (2) a set of Helm Charts that
-customize the Kubernetes workload that gets deployed; and (3) a set of
-value override (and similar) files that customize how the
-microservices in that workload are configured. All of these parameters
-are defined in the blueprint's ``config`` file, so using the ``5g-radio``
-blueprint as an example:
-
-.. code-block::
-
-   $ cat blueprints/5g-radio/config
-   # Configuration for External 5G Radio (gNB) Blueprint
-
-   # Variables
-   ENABLE_RANSIM := false
-   LOCAL_CHARTS := false
-   DATA_IFACE := eth0
-
-   # For installing the Core
-   SD_CORE_CHART            := aether/sd-core
-
-   # For installing the ROC
-   AETHER_ROC_UMBRELLA_CHART := aether/aether-roc-umbrella
-   ATOMIX_CONTROLLER_CHART   := atomix/atomix-controller
-   ATOMIX_RAFT_STORAGE_CHART := atomix/atomix-raft-storage
-   ATOMIX_RUNTIME_CHART      := atomix/atomix-runtime --version 0.1.9  # v0.2.0 not working
-   ONOS_OPERATOR_CHART       := onosproject/onos-operator
-
-   # For installing monitoring
-   RANCHER_MONITORING_CRD_CHART := rancher/rancher-monitoring-crd
-   RANCHER_MONITORING_CHART     := rancher/rancher-monitoring
-
-   # Helm Value Overrides and other Config Files
-   ROC_VALUES     := $(BLUEPRINTDIR)/roc-values.yaml
-   ROC_5G_MODELS  := $(BLUEPRINTDIR)/roc-5g-models.json
-   5G_CORE_VALUES := $(BLUEPRINTDIR)/sd-core-5g-values.yaml
-   MONITORING_VALUES := $(BLUEPRINTDIR)/monitoring.yaml
-
-As your deployment deviates more and more from the release—either to
-account for differences in your target computing environment or
-changes you make to the software being deployed—you can record these
-changes in these or other blueprints that you create. For the purpose
-of this section, we will simply edit files in the ``blueprints/5g-radio``
-directory, but you may want to make your own local blueprint
-directory, copy these files into it, and make your changes there.
-
-At this point, you need to make two edits. The first is to the
-``DATA_IFACE`` variable in ``blueprints/5g-radio/config``, changing it
-from ``eth0`` to whatever name you noted earlier (e.g., ``ens18``
-in our running example). The second is to the default ``BLUEPRINT``
-setting in ``MakefileVar.mk``, changing it from ``latest`` to
-``5g-radio``. Alternatively, you can modify that variable on a
-case-by-case basis; for example:
-
-.. code-block::
-
-   BLUEPRINT=5g-radio make net-prep
-
-Going forward, you will be editing the ``yaml`` and ``json`` files in
-the ``5g-radio`` blueprint, so we recommend familiarizing yourself with
-``5g-radio/sd-core-5g-values.yaml`` and ``5g-radio/roc-5g-models.json``
-(or their 4G counterparts).
 
 Prepare UEs
 ~~~~~~~~~~~~
@@ -159,12 +68,11 @@ from the UE. For example, we have used `APAL's 5G dongle
 
 Finally, modify the ``subscribers`` block of the
 ``omec-sub-provision`` section in file
-``5g-radio/sd-core-5g-values.yaml`` to record the IMSI, OPc, and
-Key values configured onto your SIM cards. The block also defines a
-sequence number that is intended to thwart replay attacks. (As a
-reminder, these values go in ``4g-radio/sd-core-4g-values.yaml``
-if you are using a 4G small cell.) For example, the following code
-block adds IMSIs between ``315010999912301`` and ``315010999912310``:
+``deps/5gc/templates/core/radio-5g-values.yaml`` to record the IMSI,
+OPc, and Key values configured onto your SIM cards. The block also
+defines a sequence number that is intended to thwart replay
+attacks. For example, the following code block adds IMSIs between
+``315010999912301`` and ``315010999912310``:
 
 .. code-block::
 
@@ -177,10 +85,10 @@ block adds IMSIs between ``315010999912301`` and ``315010999912310``:
      sequenceNumber: 135
 
 Further down in the same ``omec-sub-provision`` section you will find
-two other blocks that need to be edited. The first, ``device-groups``,
-assigns IMSIs to *Device Groups*. You will need to reenter the
-individual IMSIs from the ``subscribers`` block that will be part of
-the device-group:
+two other blocks that also need to be edited. The first,
+``device-groups``, assigns IMSIs to *Device Groups*. You will need to
+reenter the individual IMSIs from the ``subscribers`` block that will
+be part of the device-group:
 
 .. code-block::
 
@@ -204,85 +112,57 @@ with the other slice parameters remaining unchanged (for now):
 
 Aether supports multiple *Device Groups* and *Slices*, but the data
 entered here is purposely minimal; it's just enough to bring up and
-debug an initial system. Over the lifetime of a running system,
+debug the installation. Over the lifetime of a running system,
 information about *Device Groups* and *Slices* (and the other
 abstractions they build upon) should be entered via the ROC, as
-described in Stage 4. When you get to that point, variable
-``provision-network-slice`` should be set to ``false``, causing the
-``device-groups`` and ``network-slices`` blocks of
-``sd-core-5g-values.yaml`` to be ignored. (The ``subscribers`` block
-is always required to configure SD-Core.)
+described the section on Runtime Control. When you get to that point,
+Ansible variable ``standalone`` in ``vars/main.yml`` (which
+corresponds to the override value assigned to
+``provision-network-slice`` in ``radio-5g-values.yaml``) should be set
+to ``false``. Doing so causes the ``device-groups`` and
+``network-slices`` blocks of ``radio-5g-values.yaml`` to be
+ignored. The ``subscribers`` block is always required to configure
+SD-Core.
 
 
 Bring Up Aether
 ~~~~~~~~~~~~~~~~~~~~~
 
-You are now ready to bring Aether on-line, but it is safest to start
-with a fresh install of Kubernetes, so first type ``make clean`` if
-you still have a cluster running from an earlier stage. Then execute
-the following two Make targets (again assuming you have already edited
-the ``BLUEPRINT`` variable in ``MakefileVar.mk``):
+You are now ready to bring Aether on-line. We assume a fresh install
+by typing the following in the Ansible container:
 
 .. code-block::
 
-   $ make node-prep
-   $ make net-prep
+   root@host:/workdir# make aether-k8s-install
+   root@host:/workdir# make aether-5gc-install
 
-Once Kubernetes is running and the network properly configured, you
-are then ready to bring up the SD-Core as before, but without the ROC:
-
-.. code-block::
-
-   $ make 5g-core
-
-You can verify the installation by running `kubectl` just as you did
-in Stage 1. You should see all pods with status ``Running``, keeping
-in mind that you will see containers that implement the 4G core
-instead of the 5G core running in the ``omec`` namespace if you
-configured for that scenario.
-
-We postpone bringing up the ROC until Stage 4 (having fewer moving
-parts makes debugging the configuration easier), but you may want to
-bring up the monitoring system at this point, as it provides useful
-information about the progress you're making:
-
-.. code-block::
-
-   $ make 5g-monitoring
-
-Note that the monitoring subsystem can be instantiated before or after
-the Core, and correctly runs after restarts of the Core.
+You can verify the installation by running ``kubectl`` just as you did
+in earlier stages. Note that we postpone bringing up the AMP until
+later so as to have fewer moving parts to debug.
 
 
 gNodeB Setup
 ~~~~~~~~~~~~~~~~~~~~
 
 Once the SD-Core is up and running, we are ready to bring up the
-physical gNodeB. The details of how to do this depend on the gNB
-you are using, but we identify the main issues you need to address.
-For example 4G and 5G small cells commonly used with Aether,
-we recommend the two SERCOMM devices on the ONF MarketPlace:
+physical gNB. The details of how to do this depend on the specific
+device you are using, but we identify the main issues you need to
+address using SERCOMM's 5G femto cell as an example. That particular
+device uses the n78 band and is on the ONF MarketPlace, where you can
+also find a User's Guide.
 
 .. _reading_sercomm:
 .. admonition:: Further Reading
 
-   `SERCOMM – SCE4255W-BCS-A5
-   <https://opennetworking.org/products/sercomm-sce4255w-bcs-a5/>`__.
-
    `SERCOMM – SCE5164-B78 INDOOR SMALL CELL
    <https://opennetworking.org/products/sercomm-sce5164-b78/>`__.
 
-The first of these (4G eNB) is documented in the `Aether Guide
-<https://docs.aetherproject.org/master/edge_deployment/enb_installation.html>`__.
-The second of these (5G gNB) includes a `Users Guide
-<https://opennetworking.org/wp-content/uploads/2022/10/AiabSercomm-gNB-User-Guide_v1.2-20220922-Carl-Zhu.pdf>`__.
-We use details from the SERCOMM gNB in the following to make the
-discussion concrete, where the gNB is assigned IP address
-``10.76.28.187`` and per our running example, the server hosting
-Aether is at IP address ``10.76.28.113``. (Recall that we assume these
-are both on the same subnet.)  See :numref:`Figure %s <fig-sercomm>`
-for a screenshot of the SERCOMM gNB management dashboard, which we
-reference in the instructions that follow:
+For the purposes of the following description, we assume the gNB is
+assigned IP address ``10.76.28.187``, which per our running example,
+is on the same L2 network as our Aether server (``10.76.28.113``).
+:numref:`Figure %s <fig-sercomm>` shows a screenshot of the SERCOMM
+gNB management dashboard, which we reference in the instructions that
+follow:
 
 .. _fig-sercomm:
 .. figure:: ../figures/Sercomm.png
@@ -299,7 +179,7 @@ reference in the instructions that follow:
    browser at the device's management page (``https://10.10.10.189``).
    You will need to assign your laptop an IP address on the same subnet
    (e.g., ``10.10.10.100``).  Once connected, log in with the provided
-   credentials (``login=sc_femto``, ``password=scHt3pp``).
+   credentials provided by the vendor.
 
 2. **Configure WAN.** Visit the ``Settings > WAN`` page to configure
    how the small cell connects to the Internet via its WAN port,
@@ -341,25 +221,22 @@ reference in the instructions that follow:
    page, define the AMF Address to be the IP address of your Aether
    server (e.g., ``10.76.28.113``). Aether's SD-Core is configured to
    expose the corresponding AMF via a well-known port, so the server's
-   IP address is sufficient to establish connectivity. (The same is
-   true for the MME on a 4G small cell.) The ``Status`` page of the
-   management dashboard should confirm that control interface is
-   established.
+   IP address is sufficient to establish connectivity. The ``Status``
+   page of the management dashboard should confirm that control
+   interface is established.
 
 9. **Connect to Aether User Plane.** As described in an earlier
    section, the Aether User Plane (UPF) is running at IP address
-   ``192.168.252.3`` in both the 4G and 5G cases. Connecting to that
-   address requires installing a route to subnet
-   ``192.168.252.0/24``. How you install this route is device and
-   site-dependent. If the small cell provides a means to install
-   static routes, then a route to destination ``192.168.252.0/24`` via
-   gateway ``10.76.28.113`` (the server hosting Aether) will work.
-   (This is the case for the SERCOMM eNB). If the small cell does not
-   allow static routes (as is the case for the SERCOMM gNB), then
-   ``10.76.28.113`` can be installed as the default gateway, but doing
-   so requires that your server also be configured to forward IP
-   packets on to the Internet.
-
+   ``192.168.252.3``. Connecting to that address requires installing a
+   route to subnet ``192.168.252.0/24``. How you install this route is
+   device and site-dependent. If the small cell provides a means to
+   install static routes, then a route to destination
+   ``192.168.252.0/24`` via gateway ``10.76.28.113`` (the server
+   hosting Aether) will work. If the small cell does not allow static
+   routes (as is the case for the SERCOMM gNB), then ``10.76.28.113``
+   can be installed as the default gateway, but doing so requires that
+   your server also be configured to forward IP packets on to the
+   Internet.
 
 Run Diagnostics
 ~~~~~~~~~~~~~~~~~
@@ -371,10 +248,10 @@ and GTP-based user plane (N3) connections between the base station and
 Mobile Core; and traversing multiple IP subnets along the end-to-end
 path.
 
-The UE and gNB provide limited diagnostic tools. For example,
-it's possible to run ``ping`` and ``traceroute`` from both. You can
-also run the ``ksniff`` tool described in Stage 1, but the most
-helpful packet traces you can capture are shown in the following
+The UE and gNB provide limited diagnostic tools. For example, it's
+possible to run ``ping`` and ``traceroute`` from both. You can also
+run the ``ksniff`` tool described in the Networking section, but the
+most helpful packet traces you can capture are shown in the following
 commands. You can run these on the Aether server, where we use our
 example ``ens18`` interface for illustrative purposes:
 
