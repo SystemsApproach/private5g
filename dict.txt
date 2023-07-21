@@ -16,6 +16,7 @@ Azure
 Backhaul
 Barros
 Bavier
+Bilal
 Cascone
 Claypool
 CLI
@@ -91,6 +92,7 @@ RiaB
 RIC
 ROC
 RRC
+Saleem
 Shaddi
 Sunay
 Schwab
