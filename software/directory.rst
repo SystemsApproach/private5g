@@ -111,8 +111,10 @@ deployed as an operational cloud service. This process, sometimes
 referred to as GitOps, manages the *Continuous Deployment (CD)* half
 of the CI/CD pipeline. OnRamp's approach to GitOps uses a different
 mechanism than the one the ONF ops team originally used to manage its
-multi-site deployment of Aether.  That approach has a large startup
-cost, which has proven difficult for others to replicate.
+multi-site deployment of Aether.  The latter approach has a large
+startup cost, which has proven difficult for others to replicate. (It
+also locks you into deployment toolchain that may or may not be
+appropriate for your situation.)
 
 In its place, OnRamp adopts minimal Ansible tooling. This makes it
 easier to take ownership of the configuration parameters that define
@@ -132,7 +134,8 @@ It is the first repo that defines a way to integrate all of the Aether
 artifacts into an operational system. That repo, in turn,
 automatically includes the other repos as submodules. Note that each
 of the submodules is self-contained if you are interested in deploying
-just that subsystem.
+just that subsystem, but this Appendix approaches the deployment
+challenge from an integrated/end-to-end perspective.
 
 Because OnRamp uses Ansible as its primary deployment tool, a general
 understanding of Ansible is helpful (see the suggested reference).

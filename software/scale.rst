@@ -1,4 +1,4 @@
-Scale Aether
+Scale Cluster
 -----------------
 
 Everything up to this point has been done as part of the Quick Start
@@ -14,11 +14,11 @@ need to remove the Quick Start configuration by typing:
 
 There are two aspects of our deployment that scale independently. One
 is Aether proper: a Kubernetes cluster running the set of
-microservices that implement SD-Core and AMP, and optionally, other
-edge apps. The other is gNBsim: the emulated RAN that generates
+microservices that implement SD-Core and AMP (and optionally, other
+edge apps). The second is gNBsim: the emulated RAN that generates
 traffic directed at the Aether cluster. Minimally, two servers are
 required—one for the Aether cluster and one for gNBsim—with each able
-to grow independently. For example, having four servers would support
+to scale independently. For example, having four servers would support
 a 3-node Aether cluster and a 1-node workload generator. This example
 configuration corresponds to the following ``hosts.ini`` file:
 
@@ -49,7 +49,7 @@ by the Ansible client; and the last block indicate which nodes run the
 gNBsim workload generator (gNBsim scales across multiple Docker
 containers, but these containers are **not** managed by Kubernetes).
 Note that having ``master_nodes`` and ``gnbsim_nodes`` contain exactly
-one/common node is what triggers Ansible to instantiate the Quick
+one/common server is what triggers Ansible to instantiate the Quick
 Start configuration.
 
 You need to modify ``hosts.ini`` to match your target deployment.
@@ -60,7 +60,7 @@ ran before:
 .. code-block::
 
    root@host:/workdir# make aether-k8s-install
-   root@host:/workdir# make aether-5g-install
+   root@host:/workdir# make aether-5gc-install
    root@host:/workdir# make aeither-amp-install
    root@host:/workdir# make aether-gnbsim-install
    root@host:/workdir# make aether-gnbsim-run

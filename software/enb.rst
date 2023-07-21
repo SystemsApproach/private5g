@@ -1,4 +1,4 @@
-Physical Radio (4G)
+Physical RAN (4G)
 ----------------------
 
 Aether OnRamp is geared towards 5G, but it does support physical eNBs,

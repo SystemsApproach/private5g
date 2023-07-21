@@ -1,4 +1,4 @@
-Physical Radio (5G)
+Physical RAN (5G)
 -----------------------
 
 We are now ready to replace the emulated RAN with physical gNBs and

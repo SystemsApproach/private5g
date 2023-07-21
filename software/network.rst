@@ -65,7 +65,7 @@ you should see results similar to the following:
 The above output from ``ip`` shows the two interfaces visible to the
 server, but running *outside* the container. ``kubectl`` can be used
 to see what's running *inside* the UPF, where ``bessd`` is the name of
-the container that implements the UPF, and``access`` and ``core`` are
+the container that implements the UPF, and ``access`` and ``core`` are
 the last two interfaces shown below:
 
 .. code-block::
@@ -187,7 +187,7 @@ implemented by a Macvlan bridge, and named ``gnbaccess``).
     A server running multiple instances of gNBsim, connected to Aether.
 
 Finally, all of the configurable parameters used throughout this
-section are defined in ``core`` and ``gnbsim.router`` sections of the
+section are defined in ``core`` and ``gnbsim`` sections of the
 ``vars/main.yml`` file. Note that an empty value for
 ``core.ran_subnet`` implies the physical L2 network is used to connect
 RAN elements to the core, as is typically the case when connecting
