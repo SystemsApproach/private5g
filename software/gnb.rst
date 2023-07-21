@@ -1,5 +1,5 @@
-Physical gNB (5G)
----------------------
+Physical Radio (5G)
+-----------------------
 
 We are now ready to replace the emulated RAN with physical gNBs and
 real UEs. You will need to edit ``hosts.ini`` to reflect the Aether
@@ -175,11 +175,11 @@ follow:
 
 
 1. **Connect to Management Interface.** Start by connecting a laptop
-   directly to the LAN port on the small cell, pointing your laptop's web
-   browser at the device's management page (``https://10.10.10.189``).
-   You will need to assign your laptop an IP address on the same subnet
-   (e.g., ``10.10.10.100``).  Once connected, log in with the provided
-   credentials provided by the vendor.
+   directly to the LAN port on the small cell, pointing your laptop's
+   web browser at the device's management page
+   (``https://10.10.10.189``).  You will need to assign your laptop an
+   IP address on the same subnet (e.g., ``10.10.10.100``).  Once
+   connected, log in with the credentials provided by the vendor.
 
 2. **Configure WAN.** Visit the ``Settings > WAN`` page to configure
    how the small cell connects to the Internet via its WAN port,

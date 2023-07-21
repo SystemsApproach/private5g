@@ -12,7 +12,7 @@ Configure gNBsim
 ~~~~~~~~~~~~~~~~~~
 
 Two sets of parameters control gNBsim. The first set, found in the
-``gnbsim`` section of ``vars/main.yml``, control how gNBsim is
+``gnbsim`` section of ``vars/main.yml``, controls how gNBsim is
 deployed: (1) the number of servers it runs on; (2) the number of
 Docker containers running within each server; (3) what configuration
 to run in each of those containers; and
@@ -81,18 +81,33 @@ Note that the rest of the per-profile parameters are highly redundant.
 For example, they specify the IMSI- and PLMD-related information UEs
 need to connect to the Core.
 
+Finally, it is necessary to edit the ``core`` section of
+``vars/main.yml`` to indicate the address at which gNBsim can find the
+AMF. For our running example, this would look like the following:
+
+.. code-block::
+
+   core:
+       amf: "10.76.28.113"
+
+
 Install/Uninstall gNBsim
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Once you have edited the parameters (and assuming you already have
-SD-Core running), you are ready install gNBsim. This includes starting
+SD-Core running), you are ready to install gNBsim. This includes starting
 up all the containers and configuring the network so they can reach
 the Core. This is done from the main OnRamp server you've been using,
 where you type:
 
 .. code-block::
 
+   root@host:/workdir# make gnbsim-docker-install
    root@host:/workdir# make aether-gnbsim-install
+
+Note that the first step may not be necessary, depending on whether
+Docker is already installed on the server(s) you've designated to host
+gNBsim.
 
 When you are finished, the following uninstalls everything:
 
