@@ -118,28 +118,28 @@ appropriate for your situation.)
 
 In its place, OnRamp adopts minimal Ansible tooling. This makes it
 easier to take ownership of the configuration parameters that define
-your specific deployment scenario.  The rest of this appendix walks
-you through a step-by-step process of deploying and operating Aether
-on your own hardware.  For now, we simply point you at the collection
-of OnRamp repos:
+your specific deployment scenario.  The rest of this guide walks you
+through a step-by-step process of deploying and operating Aether on
+your own hardware.  For now, we simply point you at the collection of
+OnRamp repos:
 
  | Deploy Aether: https://github.com/opennetworkinglab/aether-onramp
  | Deploy 5G Core: https://github.com/opennetworkinglab/aether-5gc
  | Deploy 4G Core: https://github.com/opennetworkinglab/aether-4gc
  | Deploy Management Plane: https://github.com/opennetworkinglab/aether-amp 
  | Deploy 5G RAN Simulator: https://github.com/opennetworkinglab/aether-gnbsim
- | Deploy Kuberntes: https://github.com/opennetworkinglab/aether-k8s
+ | Deploy Kubernetes: https://github.com/opennetworkinglab/aether-k8s
  
 It is the first repo that defines a way to integrate all of the Aether
-artifacts into an operational system. That repo, in turn,
-automatically includes the other repos as submodules. Note that each
-of the submodules is self-contained if you are interested in deploying
-just that subsystem, but this Appendix approaches the deployment
-challenge from an integrated/end-to-end perspective.
+artifacts into an operational system. That repo, in turn, includes the
+other repos as submodules. Note that each of the submodules is
+self-contained if you are interested in deploying just that subsystem,
+but this guide approaches the deployment challenge from an
+integrated/end-to-end perspective.
 
 Because OnRamp uses Ansible as its primary deployment tool, a general
 understanding of Ansible is helpful (see the suggested reference).
-However, this appendix walks you, step-by-step, through the process of
+However, this guide walks you, step-by-step, through the process of
 deploying and operating Aether, so previous experience with Ansible is
 not a requirement. Note that Ansible has evolved to be both a
 "Community Toolset" anyone can use to manage a software deployment,

@@ -8,8 +8,8 @@ SD-RAN, SD-Fabric) can be downloaded, and deployment artifacts built
 from that source code (e.g., Docker Images, Helm Charts, Fleet
 Bundles, Terraform Templates) can be used to bring up a running
 instance of Aether on local hardware. (See the *Source Directory*
-section of this appendix for information about where to find the
-relevant repositories.)
+section of this guide for information about where to find the relevant
+repositories.)
 
 A multi-site deployment of Aether has been running since 2020 in
 support of the *Pronto Project*, but that deployment depends on an ops

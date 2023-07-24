@@ -12,7 +12,7 @@ assumes a low-end server that meets the following requirements:
 For example, something like an Intel NUC is more than enough to get
 started.
 
-While this appendix focuses on deploying Aether OnRamp on a physical
+While this guide focuses on deploying Aether OnRamp on a physical
 machine (in anticipation of later stages), this stage can also run in
 a VM.  Options include an AWS VM (Ubuntu 20.04 image on `t2.xlarge`
 instance); a VirtualBox VM running `bento/ubuntu-20.04` `Vagrant
@@ -57,10 +57,17 @@ need to export `PROXY_ENABLED=true` by typing the following:
 This variable can also be set in your ``~/.bashrc`` file to make it
 permanent.
 
-Proxy or no-proxy, using OnRamp involves downloading many Docker
-images and Helm Charts. If any of the steps described below fail, it
-may be due to this download taking too long, in which case
-re-executing the step is usually all it takes to make progress.
+Finally, OnRamp depends on Ansible, which you can install on your
+server as follows:
+
+.. code-block::
+
+   $ sudo apt install pipx
+   $ sudo apt install python3.8-venv
+   $ pipx install --include-deps ansible
+   $ pipx ensurepath
+   $ sudo apt-get install sshpass
+
 
 Download Aether OnRamp
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,7 +97,7 @@ four things to note:
    the per-subsystem Makefiles, meaning all the individual steps
    required to install Aether can be managed from this main directory.
    The Makefile includes comments listing the key Make targets defined
-   by the included Makefiles. *Importantly, the rest of this Appendix
+   by the included Makefiles. *Importantly, the rest of this guide
    assumes you are working in the main OnRamp directory, and not in
    the individual subsystems.*
 
@@ -114,7 +121,7 @@ four things to note:
 Set Target Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Quick Start tutorial described in this section requires that you
+The Quick Start deployment described in this section requires that you
 modify two parameters to reflect the specifics of your target
 deployment.
 
@@ -127,13 +134,12 @@ same server you will be installing Aether on.
 
    node1  ansible_host=172.16.41.103 ansible_user=aether ansible_password=aether ansible_sudo_pass=aether
 
-In this example, address ``172.16.41.103`` and the three occurrences of
-the string ``aether`` need to be replaced with the appropriate values.
-Note that if you set up your server to use SSH keys instead of
-passwords, then ``ansible_password=aether`` needs to be replaced with
-``ansible_ssh_private_key_file=workdir/id_rsa``, and you'll need to
-put a (password protected) copy of your private key in your main
-OnRamp directory.
+In this example, address ``172.16.41.103`` and the three occurrences
+of the string ``aether`` need to be replaced with the appropriate
+values.  Note that if you set up your server to use SSH keys instead
+of passwords, then ``ansible_password=aether`` needs to be replaced
+with ``ansible_ssh_private_key_file=~/.ssh/id_rsa`` (or wherever
+your private key can be found).
 
 The second parameter is in ``vars/main.yml``, where the **two** lines
 currently reading
@@ -164,7 +170,7 @@ command:
 
 In this example, the reported interface is ``ens18`` and the IP
 address is ``10.76.28.113`` on subnet ``10.76.28.0/24``.  We will use
-these three values as a running example throughout the Appendix, as a
+these three values as a running example throughout the guide, as a
 placeholder for your local details.
 
 Note that ``vars/main.yml`` and ``hosts.ini`` are the only two files
@@ -173,49 +179,12 @@ you may want to modify as we move beyond the Quick Start deployment.
 We'll identify those files throughout this section, for informational
 purposes, and revisit them in later sections.
 
-
-Install Ansible
-~~~~~~~~~~~~~~~~~~
-
-You need to first install Ansible before you can use it to manage your
-Aether deployment. While it is possible to do this directly on your
-target server, OnRamp includes a Make target to set up a Docker
-container that includes a properly configured Ansible client. Start
-this container by running
-
-.. code-block::
-
-   $ make ansible
-
-As a result of executing this command, you will see a new prompt
-that looks something like this:
-
-.. code-block::
-
-   root@host:/workdir#
-
-This prompt indicates that you are running as root in the context of
-the container, with ``/workdir`` as your current directory. This is
-the same directory you were in when you invoked ``make``, but it is
-now the root of the containerized environment. You cannot see your
-actual home directory (including your ``.ssh`` directory) without
-first exiting the container. To do that, type either ``exit`` or
-``^D`` (Control-D).
-
-Every time you invoke a Make command from here on, it is assumed to be
-from this container (with this prompt). Because there are other
-commands you will want to execute—for example, to inspect various
-aspects of what you've just deployed—we recommend having two terminal
-windows open on your server: one running the Ansible container (with
-prompt ``root@host:/workdir#``) and one running your regular login
-shell (which we designate with prompt ``$``).
-
 Many of the tasks specified in the various Ansible playbooks result in
 calls to Kubernetes, either directly (via ``kubectl``) or indirectly
 (via ``helm``). This means that after executing the sequence of
-Makefile targets described in the rest of this Appendix, you'll want
-to run some combination of the following commands (in your regular
-terminal window) to verify that the right things happened:
+Makefile targets described in the rest of this guide, you'll want to
+run some combination of the following commands to verify that the
+right things happened:
 
 .. code-block::
 
@@ -241,7 +210,7 @@ step you can take is to type the following:
 
 .. code-block::
 
-   root@host:/workdir# make aether-pingall
+   $ make aether-pingall
 
 The output should show that Ansible is able to securely connect to all
 the nodes in your deployment, which is currently just the one that
@@ -255,7 +224,7 @@ target server. Do this by typing:
 
 .. code-block::
 
-   root@host:/workdir# make aether-k8s-install
+   $ make aether-k8s-install
 
 Once the playbook completes, executing ``kubectl`` will show the
 ``kube-system`` namespace running, with output looking something like
@@ -283,9 +252,6 @@ the following:
    kube-system   rke2-ingress-nginx-controller-s68rx                     1/1     Running     0          48s
    kube-system   rke2-metrics-server-6564db4569-snnv4                    1/1     Running     0          56s
 
-Remember to run this ``kubectl`` in your regular shell, not the
-Ansible container.
-
 If you are interested in seeing the details about how Kubernetes is
 customized for Aether, look at
 ``deps/k8s/roles/rke2/templates/master-params.yaml``.  Of particular
@@ -301,7 +267,7 @@ within the Ansible container type:
 
 .. code-block::
 
-   root@host:/workdir# make aether-5gc-install
+   $ make aether-5gc-install
 
 ``kubectl`` will now show the ``omec`` namespace running (in addition
 to ``kube-system``), with output similar to the following:
@@ -351,8 +317,8 @@ We can now test SD-Core with emulated traffic by typing:
 
 .. code-block::
 
-   root@host:/workdir# make aether-gnbsim-install
-   root@host:/workdir# make aether-gnbsim-run
+   $ make aether-gnbsim-install
+   $ make aether-gnbsim-run
 
 Note that you can re-execute the ``aether-gnbsim-run`` target multiple
 times, where the results of each run are saved in a file within the
@@ -374,33 +340,34 @@ following:
    2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] Profile Status: PASS
 
 This particular test, which runs the cryptically named ``pdusessest``
-profile, emulates five UEs, each of which registers with the Core,
-initiates a user plane session, and then send a minimal data packet
-over that session. If you are interested in the config file that
-controls the test, including the option of enabling other profiles,
-take a look at ``deps/gnbsim/config/gnbsim-default.yaml``. We return
-to the issue of customizing gNBsim in a later section.
+profile, emulates five UEs, each of which: (1) registers with the
+Core, (2) initiates a user plane session, and (3) sends a minimal data
+packet over that session. If you are interested in the config file
+that controls the test, including the option of enabling other
+profiles, take a look at
+``deps/gnbsim/config/gnbsim-default.yaml``. We return to the issue of
+customizing gNBsim in a later section.
 
 
 Clean Up
 ~~~~~~~~~~~~~~~~~
 
 We recommend continuing on to the next section before wrapping up, but
-when you are ready to tear down your Quick Start version Aether,
+when you are ready to tear down your Quick Start deployment of Aether,
 simply execute the following commands:
 
 .. code-block::
 
-   root@host:/workdir# make aether-gnbsim-uninstall
-   root@host:/workdir# make aether-5gc-uninstall
-   root@host:/workdir# make aether-k8s-uninstall
+   $ make aether-gnbsim-uninstall
+   $ make aether-5gc-uninstall
+   $ make aether-k8s-uninstall
 
-Finally, note that while we stepped through the system one component
-at a time, OnRamp includes compound Make targets. For example, you
-can uninstall everything covered in this section by typing:
+Note that while we stepped through the system one component at a time,
+OnRamp includes compound Make targets. For example, you can uninstall
+everything covered in this section by typing:
 
 .. code-block::
 
-   root@host:/workdir# make aether-uninstall
+   $ make aether-uninstall
 
 Look at the ``Makefile`` to see the available set of Make targets.

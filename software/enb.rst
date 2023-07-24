@@ -4,8 +4,8 @@ Physical RAN (4G)
 Aether OnRamp is geared towards 5G, but it does support physical eNBs,
 including 4G-based versions of both SD-Core and AMP. It does not,
 however, support an emulated 4G RAN. The 4G scenario uses all the same
-Ansible machinery outlined in earlier sections, changing only certain
-parameters. The following summarizes the differences:
+Ansible machinery outlined in earlier sections, changing only the
+following details:
 
 1. There is a 4G-specific repo, which you can find in ``deps/4gc``.
 

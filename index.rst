@@ -34,7 +34,7 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
 .. toctree::
    :maxdepth: 1
    :hidden:	      
-   :caption: About the Software
+   :caption: Aether Guide
 
    software/overview.rst
    software/directory.rst

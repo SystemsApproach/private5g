@@ -75,9 +75,9 @@ new instantiation of the SD-Core:
 
 .. code-block::
 
-   root@host:/workdir# make aether-5gc-uninstall
-   root@host:/workdir# make aether-amp-install      
-   root@host:/workdir# make aether-5gc-install   
+   $ make aether-5gc-uninstall
+   $ make aether-amp-install      
+   $ make aether-5gc-install   
 
 The order is important, since the Core depends on configuration
 parameters provided by the ROC. Also note that you may need to reboot

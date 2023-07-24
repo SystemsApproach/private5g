@@ -5,12 +5,12 @@ Everything up to this point has been done as part of the Quick Start
 configuration, with all the components running in a single server (VM
 or physical machine). We now describe how to scale Aether to run on
 multiple servers, where we assume this cluster-based configuration
-throughout the rest of this Appendix. Before continuing, though, you
-need to remove the Quick Start configuration by typing:
+throughout the rest of this guide. Before continuing, though, you need
+to remove the Quick Start configuration by typing:
 
 .. code-block::
 
-   root@host:/workdir# make aether-uninstall
+   $ make aether-uninstall
 
 There are two aspects of our deployment that scale independently. One
 is Aether proper: a Kubernetes cluster running the set of
@@ -59,11 +59,11 @@ ran before:
 
 .. code-block::
 
-   root@host:/workdir# make aether-k8s-install
-   root@host:/workdir# make aether-5gc-install
-   root@host:/workdir# make aeither-amp-install
-   root@host:/workdir# make aether-gnbsim-install
-   root@host:/workdir# make aether-gnbsim-run
+   $ make aether-k8s-install
+   $ make aether-5gc-install
+   $ aeither-amp-install
+   $ make aether-gnbsim-install
+   $ make aether-gnbsim-run
 
 This will run the same gNBsim test case as before, but originating in
 a separate VM. We will return to options for scaling up the gNBsim
@@ -74,13 +74,16 @@ connect that node to one or more physical gNBs.
 
 Finally, apart from being able able to run SD-Core and gNBsim on
 separate nodes—thereby cleanly decoupling the Core from the RAN—one
-question we have not yet answered is why you might want to scale
-Aether. One answer is that you also want to run some other edge
-application, such as an IoT or AI/ML platform, on the Aether cluster.
-Such applications can be co-located with SD-Core, with the latter
-providing local breakout. For example, OpenVINO is a framework for
-deploying inference models to process local video streams streams, for
-example, detecting and counting people who enter the field of view for
+question we have not yet answered is why you might want to scale the
+Aether cluster to multiple nodes. One answer is that you are concerned
+about availability, so want to introduce redundancy.
+
+A second answer is that you want to run some other edge application,
+such as an IoT or AI/ML platform, on the Aether cluster.  Such
+applications can be co-located with SD-Core, with the latter providing
+local breakout. For example, OpenVINO is a framework for deploying
+inference models to process local video streams streams, for example,
+detecting and counting people who enter the field of view for
 5G-connected cameras. Just like SD-Core, OpenVINO is deployed as a set
 of Kubernetes pods.
 
@@ -89,17 +92,17 @@ of Kubernetes pods.
 
    `OpenVINO Toolkit <https://docs.openvino.ai>`__.
 
-A second answer is that you want to scale SD-Core itself, in support
-of a scalable number of UEs. For example, providing predictable,
-low-latency support for hundreds or thousands of IoT devices requires
-horizontally scaling the AMF. OnRamp provides a way to experiment with
-exactly that possibility. If you edit the ``core`` section of
-``vars/main.yml`` to use an alternative values file (in place of
-``5g-values.yaml``):
+A third possible answer is that you want to scale SD-Core itself, in
+support of a scalable number of UEs. For example, providing
+predictable, low-latency support for hundreds or thousands of IoT
+devices requires horizontally scaling the AMF. OnRamp provides a way
+to experiment with exactly that possibility. If you edit the ``core``
+section of ``vars/main.yml`` to use an alternative values file (in
+place of ``5g-values.yaml``):
 
 .. code-block::
 
-   values_file: "/workdir/config/hpa-5g-values.yaml"
+   values_file: "config/hpa-5g-values.yaml"
 
 you can deploy SD-Core with *Horizontal Pod Autoscaling (HPA)*
 enabled. Note that HPA is an experimental feature of SD-Core; it has

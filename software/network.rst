@@ -199,7 +199,7 @@ physical gNBs.
     core:
         standalone: "true"
         data_iface: ens18
-        values_file: "/workdir/config/hpa-5g-values.yaml"
+        values_file: "config/hpa-5g-values.yaml"
         ran_subnet: "172.20.0.0/16"
         helm:
            chart_ref: aether/sd-core

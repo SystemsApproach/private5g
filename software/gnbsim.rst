@@ -57,12 +57,11 @@ first container on second server.
 
 These config files then specify the second set of gNBsim parameters.
 A detailed description of these parameters is outside the scope of
-this Appendix (see https://github.com/omec-project/gnbsim for
-details), but at a high-level, gNBsim defines a set of *profiles*,
-each of which exercises a common usage scenario that the Core has to
-deal with. Each of these sequences is represented by a ``profileType``
-in the config file. gNBsim supports seven profiles, which we list
-here:
+this guide (see https://github.com/omec-project/gnbsim for details),
+but at a high-level, gNBsim defines a set of *profiles*, each of which
+exercises a common usage scenario that the Core has to deal with. Each
+of these sequences is represented by a ``profileType`` in the config
+file. gNBsim supports seven profiles, which we list here:
 
 .. code-block::
    
@@ -102,8 +101,8 @@ where you type:
 
 .. code-block::
 
-   root@host:/workdir# make gnbsim-docker-install
-   root@host:/workdir# make aether-gnbsim-install
+   $ make gnbsim-docker-install
+   $ make aether-gnbsim-install
 
 Note that the first step may not be necessary, depending on whether
 Docker is already installed on the server(s) you've designated to host
@@ -113,7 +112,7 @@ When you are finished, the following uninstalls everything:
 
 .. code-block::
 
-   root@host:/workdir# make aether-gnbsim-uninstall
+   $ make aether-gnbsim-uninstall
 
 Run gNBsim
 ~~~~~~~~~~~~~~~~~~
@@ -123,7 +122,7 @@ can run the simulation by typing
 
 .. code-block::
 
-   root@host:/workdir# make aether-gnbsim-run
+   $ make aether-gnbsim-run
 
 This can be done multiple times without reinstalling. For each run,
 you can use Docker to view the results, which have been saved in each

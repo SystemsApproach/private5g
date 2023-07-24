@@ -133,8 +133,8 @@ by typing the following in the Ansible container:
 
 .. code-block::
 
-   root@host:/workdir# make aether-k8s-install
-   root@host:/workdir# make aether-5gc-install
+   $ make aether-k8s-install
+   $ make aether-5gc-install
 
 You can verify the installation by running ``kubectl`` just as you did
 in earlier stages. Note that we postpone bringing up the AMP until

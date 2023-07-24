@@ -1,9 +1,9 @@
 Closer Look
 ---------------
 
-Before tearing down your Quick Start version of Aether, there are two
-additional steps you can take to watch the system in action. The first
-is to bring up the Aether Management Plane (AMP), which includes
+Before tearing down your Quick Start deployment, there are two
+additional steps you can take to watch Aether in action. The first is
+to bring up the Aether Management Plane (AMP), which includes
 Dashboards showing different aspects of Aether's runtime behavior. The
 second is to enable packet capture, and then run an analysis tool to
 trace the flow of packets into and out of SD-Core.
@@ -19,7 +19,7 @@ executing the following Make target:
 
 .. code-block::
 
-   root@host:/workdir# make aether-amp-install
+   $ make aether-amp-install
 
 Once complete, ``kubectl`` will show the ``aether-roc`` and
 ``cattle-monitoring-system`` namespaces running in support of these
@@ -35,8 +35,8 @@ respectively, at
 
 .. code-block::
 
-   http://<host_ip>3:31194
-   http://<host_ip>:30950
+   http://<server_ip>:31194
+   http://<server_ip>:30950
 
 The programmatic API underlying the Control Dashboard, which was
 introduced in Section 6.4, can be accessed at
@@ -61,7 +61,7 @@ active (green) UPF, but there will be no base stations or attached
 devices until you rerun the RAN simulator (gNBsim) introduced in the
 previous section. Doing so will also result in the UPF throughput
 panel reporting just a small trace activity. This is because gNBsim
-generates very little User Plane traffic (a few ICMP packet); it is
+generates very little User Plane traffic (a few ICMP packets); it is
 primarily designed to stress test SD-Core's Control Plane.
 
 When you are done experimenting with AMP, type the following
@@ -69,8 +69,7 @@ to tear it down:
 
 .. code-block::
 
-   root@host:/workdir# make roc-uninstall
-   root@host:/workdir# make monitor-uninstall
+   $ make aether-amp-uninstall
    
 Run Ksniff and Wireshark
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
