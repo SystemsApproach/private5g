@@ -254,7 +254,7 @@ the following:
 
 If you are interested in seeing the details about how Kubernetes is
 customized for Aether, look at
-``deps/k8s/roles/rke2/templates/master-params.yaml``.  Of particular
+``deps/k8s/roles/rke2/templates/master-config.yaml``.  Of particular
 note, we have instructed Kubernetes to allow service for ports ranging
 from ``2000`` to ``36767`` and we are using the ``multus`` and
 ``canal`` CNI plugins.
@@ -300,7 +300,7 @@ microservices discussed is Chapter 5. For example,
 reasons, the Aether Core is called ``omec`` instead of ``sd-core``.
 
 If you are interested in seeing the details about how SD-Core is
-configured, look at ``deps/5gc/templates/core/5g-values.yaml``.  This
+configured, look at ``deps/5gc/templates/core/sdcore-5g-values.yaml``.  This
 is an example of a *values override* file that Helm passes to along to
 Kubernetes when launching the service. Most of the default settings
 will remain unchanged, with the main exception being the
