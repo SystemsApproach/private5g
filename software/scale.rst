@@ -98,11 +98,11 @@ predictable, low-latency support for hundreds or thousands of IoT
 devices requires horizontally scaling the AMF. OnRamp provides a way
 to experiment with exactly that possibility. If you edit the ``core``
 section of ``vars/main.yml`` to use an alternative values file (in
-place of ``5g-values.yaml``):
+place of ``sdcore-5g-values.yaml``):
 
 .. code-block::
 
-   values_file: "config/hpa-5g-values.yaml"
+   values_file: "deps/5gc/roles/core/templates/hpa-5g-values.yaml"
 
 you can deploy SD-Core with *Horizontal Pod Autoscaling (HPA)*
 enabled. Note that HPA is an experimental feature of SD-Core; it has

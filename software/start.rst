@@ -180,8 +180,8 @@ We'll identify those files throughout this section, for informational
 purposes, and revisit them in later sections.
 
 Many of the tasks specified in the various Ansible playbooks result in
-calls to Kubernetes, either directly (via ``kubectl``) or indirectly
-(via ``helm``). This means that after executing the sequence of
+calls to Kubernetes, either directly via ``kubectl``, or indirectly
+via ``helm``. This means that after executing the sequence of
 Makefile targets described in the rest of this guide, you'll want to
 run some combination of the following commands to verify that the
 right things happened:
