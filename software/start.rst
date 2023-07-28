@@ -262,8 +262,8 @@ from ``2000`` to ``36767`` and we are using the ``multus`` and
 Install SD-Core
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We are now ready to bring up the 5G version of the SD-Core. From
-within the Ansible container type:
+We are now ready to bring up the 5G version of the SD-Core. To do
+that, type:
 
 .. code-block::
 
@@ -294,14 +294,15 @@ to ``kube-system``), with output similar to the following:
    upf-0                        5/5     Running            0             6m13s
    webui-5894ffd49d-gg2jh       1/1     Running            0             6m13s
    
-You will recognize Kubernetes pods that correspond too many of the
+You will recognize Kubernetes pods that correspond to many of the
 microservices discussed is Chapter 5. For example,
 ``amf-5887bbf6c5-pc9g2`` implements the AMF. Note that for historical
 reasons, the Aether Core is called ``omec`` instead of ``sd-core``.
 
 If you are interested in seeing the details about how SD-Core is
-configured, look at ``deps/5gc/templates/core/sdcore-5g-values.yaml``.  This
-is an example of a *values override* file that Helm passes to along to
+configured, look at
+``deps/5gc/roles/core/templates/radio-5g-values.yaml``.  This is an
+example of a *values override* file that Helm passes to along to
 Kubernetes when launching the service. Most of the default settings
 will remain unchanged, with the main exception being the
 ``subscribers`` block of the ``omec-sub-provision`` section. This

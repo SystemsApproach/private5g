@@ -65,8 +65,8 @@ you should see results similar to the following:
 The above output from ``ip`` shows the two interfaces visible to the
 server, but running *outside* the container. ``kubectl`` can be used
 to see what's running *inside* the UPF, where ``bessd`` is the name of
-the container that implements the UPF, and ``access`` and ``core`` are
-the last two interfaces shown below:
+the container image that implements the UPF, and ``access`` and
+``core`` are the last two interfaces shown below:
 
 .. code-block::
 
@@ -108,7 +108,7 @@ successful:
    Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
    192.168.252.0   0.0.0.0         255.255.255.0   U     0      0        0 access
 
-Within the UPF, the correct behavior is to forward packets between its
+Within the UPF, the correct behavior is to forward packets between the
 ``access`` and ``core`` interfaces.  Upstream packets arriving on the
 ``access`` interface have their GTP headers removed and the raw IP
 packets are forwarded to the ``core`` interface.  The routes inside
@@ -187,7 +187,7 @@ implemented by a Macvlan bridge, and named ``gnbaccess``).
     A server running multiple instances of gNBsim, connected to Aether.
 
 Finally, all of the configurable parameters used throughout this
-section are defined in ``core`` and ``gnbsim`` sections of the
+section are defined in the ``core`` and ``gnbsim`` sections of the
 ``vars/main.yml`` file. Note that an empty value for
 ``core.ran_subnet`` implies the physical L2 network is used to connect
 RAN elements to the core, as is typically the case when connecting

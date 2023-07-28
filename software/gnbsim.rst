@@ -53,7 +53,7 @@ described in the previous section on Networking. Finally, the
 ``servers`` block names the configuration files that parameterize each
 container. In this example, there are two servers with two containers
 running in each, with ``config/gnbsim-s2-p1.yaml`` parameterizing the
-first container on second server.
+first container on the second server.
 
 These config files then specify the second set of gNBsim parameters.
 A detailed description of these parameters is outside the scope of

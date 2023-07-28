@@ -25,7 +25,7 @@ using.
    core:
        standalone: "true"
        data_iface: ens18
-       values_file: "deps/5gc/templates/core/radio-5g-values.yaml"
+       values_file: "deps/5gc/roles/core/templates/radio-5g-values.yaml"
        ran_subnet: ""
        helm:
            chart_ref: aether/sd-core
@@ -68,7 +68,7 @@ from the UE. For example, we have used `APAL's 5G dongle
 
 Finally, modify the ``subscribers`` block of the
 ``omec-sub-provision`` section in file
-``deps/5gc/templates/core/radio-5g-values.yaml`` to record the IMSI,
+``deps/5gc/roles/core/templates/radio-5g-values.yaml`` to record the IMSI,
 OPc, and Key values configured onto your SIM cards. The block also
 defines a sequence number that is intended to thwart replay
 attacks. For example, the following code block adds IMSIs between
@@ -242,9 +242,9 @@ Run Diagnostics
 ~~~~~~~~~~~~~~~~~
 
 Successfully connecting a UE to the Internet is not a straightforward
-exercise. It involves configuring the UE, gNB, and SD-Core
-software in a consistent way; establishing SCTP-based control plane (N2)
-and GTP-based user plane (N3) connections between the base station and
+exercise. It involves configuring the UE, gNB, and SD-Core software in
+a consistent way; establishing SCTP-based control plane (N2) and
+GTP-based user plane (N3) connections between the base station and
 Mobile Core; and traversing multiple IP subnets along the end-to-end
 path.
 

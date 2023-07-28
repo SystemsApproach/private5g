@@ -13,13 +13,13 @@ include *Device Groups* and *Slices*. (The full set of model
 definitions can be found in `GitHub
 <https://github.com/onosproject/aether-models>`__.)  Initial settings
 of these ROC-managed parameters are recorded in
-``deps/amp/roles/5g-roc/templates/roc-5g-models.json``. We use these
-values to bootstrap the ROC database, saving us from a laborious GUI
+``deps/amp/roles/roc-load/templates/radio-5g-models.json``. We use these
+values to load the ROC database, saving us from a laborious GUI
 session.
 
 Somewhat confusingly, the *Device-Group* and *Slice* information is
-duplicated between ``deps/5gc/templates/core/radio-5g-values.yaml``
-and this ``roc-5g-models.json`` file. This makes it possible to bring
+duplicated between ``deps/5gc/roles/core/templates/radio-5g-values.yaml``
+and this ``radio-5g-models.json`` file. This makes it possible to bring
 up the SD-Core without the ROC, which simplifies the process of
 debugging an initial installation, but having two sources for this
 information leads to problems keeping them in sync, and should be
@@ -31,7 +31,7 @@ defines, so we recommend using the GUI or API to make changes over
 time, and avoiding the override values in ``radio-5gc-values.yaml``
 once you've established basic connectivity. And if you want to save
 this bootstrap state in a text file for a possible restart, we
-recommend doing so in ``roc-5g-models.json`` (although this is not a
+recommend doing so in ``radio-5g-models.json`` (although this is not a
 substitute for the operational practice of backing up the ROC
 database).
 
@@ -44,12 +44,12 @@ to ignore the ``device-groups`` and ``network-slices`` blocks of the
 ``omec-sub-provision`` section in ``radio-5gc-values.yaml``, and to instead
 retrieve this information from the ROC.
 
-The next step is to edit ``roc-5g-models.json`` to record the same
+The next step is to edit ``radio-5g-models.json`` to record the same
 IMSI information you added to ``radio-5gc-values.yaml`` in the
 previous section.  This includes modifying, adding and removing
 ``sim-card`` entries as necessary. Note that only the IMSIs need to
 match the earlier data; the ``sim-id`` and ``display-name`` values are
-arbitrary and need only be consistent *within* ``roc-5g-models.json``.
+arbitrary and need only be consistent *within* ``radio-5g-models.json``.
 
 .. code-block::
 
