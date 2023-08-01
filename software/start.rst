@@ -77,8 +77,6 @@ server:
 
 .. code-block::
 
-   $ mkdir ~/systemsapproach
-   $ cd ~/systemsapproach
    $ git clone --recursive https://github.com/opennetworkinglab/aether-onramp.git
    $ cd aether-onramp
 
@@ -106,9 +104,12 @@ four things to note:
    This file is the union of all the per-component ``var/main.yml``
    files you find in the corresponding ``deps`` directory. This
    top-level variable file overrides the per-component var files, so
-   you will not need to modify the latter. *Importantly, be aware that
-   some variables (e.g.,* ``data_iface``\ *) show up in multiple sections
-   of this top-level var file.*
+   you will not need to modify the latter. Note that the ``vars``
+   directory contains several variants of ``main.yml``, each tailored
+   for a different deployment scenario. The default ``main.yml``
+   (which is the same as ``main-quickstart.yml``) supports the Quick
+   Start deployment described in this section; we'll substitute the
+   other variants in later sections.
 
 4. File ``hosts.ini`` (host inventory) is Ansible's way of specifying
    the set of servers (physical or virtual) that Ansible targets with

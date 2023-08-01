@@ -5,9 +5,17 @@ We are now ready to replace the emulated RAN with physical gNBs and
 real UEs. You will need to edit ``hosts.ini`` to reflect the Aether
 cluster you want to support, where just a single server is sufficient
 and there is no reason to include nodes in the ``[gnbsim_nodes]`` set.
-We'll start with a single gNB, which we assume is connected to the
-same L2 network as the Aether cluster. In our running example, this
-implies both are on subnet ``10.76.28.0/24``.
+We also assume you start with a variant of ``vars/main.yml``
+customized for running physical 5G radios, which is easy to do:
+
+.. code-block::
+
+   $ cd vars
+   $ cp main-gNB.yml main.yml 
+
+The following focuses on a single gNB, which we assume is connected to
+the same L2 network as the Aether cluster. In our running example,
+this implies both are on subnet ``10.76.28.0/24``.
 
 Modify Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
