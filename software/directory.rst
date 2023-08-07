@@ -106,7 +106,7 @@ chapter of our companion Edge Cloud Operations book.
 OnRamp Repos
 ~~~~~~~~~~~~~~~~~~~
 
-The process to deploy the artifacts listed above are, sometimes
+The process to deploy the artifacts listed above, sometimes
 referred to as GitOps, manages the *Continuous Deployment (CD)* half
 of the CI/CD pipeline. OnRamp's approach to GitOps uses a different
 mechanism than the one the ONF ops team originally used to manage its

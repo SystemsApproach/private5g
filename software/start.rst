@@ -51,7 +51,7 @@ follows:
    $ pipx install --include-deps ansible
    $ pipx ensurepath
    $ sudo apt-get install sshpass
-   
+
 
 Download Aether OnRamp
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
