@@ -1,4 +1,4 @@
-Preface 
+Preface
 =======
 
 When we wrote our introductory 5G book three years ago, our goal was
@@ -61,7 +61,7 @@ Muhammad Shahbaz for their guidance and feedback.
 Thanks to the members of the community who contributed text or
 corrections to the book, including:
 
-- Edmar Candeia Gurjão  
+- Edmar Candeia Gurjão
 - Muhammad Shahbaz
 - Mugahed Izzeldin
 - Robert MacDavid

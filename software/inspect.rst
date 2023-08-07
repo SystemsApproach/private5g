@@ -27,8 +27,9 @@ two services, respectively, plus new ``atomix`` pods in the
 ``kube-system`` namespace.  Atomix is the scalable key-value store
 that keeps the ROC data model persistent.
 
-.. [#] Note that what the implementation calls ROC, Chapter 6 refers
-        to generically as *Service Orchestration*.
+.. [#] Note that what the implementation calls ROC, `Chapter 6
+        <https://5g.systemsapproach.org/cloud.html>`__ refers to
+        generically as *Service Orchestration*.
 
 You can access the dashboards for the two subsystems,
 respectively, at
@@ -39,9 +40,10 @@ respectively, at
    http://<server_ip>:30950
 
 The programmatic API underlying the Control Dashboard, which was
-introduced in Section 6.4, can be accessed at
-``http://10.76.28.113:31194/aether-roc-api/`` in our example
-deployment (where Aether runs on host ``10.76.28.113``).
+introduced in `Section 6.4
+<https://5g.systemsapproach.org/cloud.html#connectivity-api>`__, can
+be accessed at ``http://10.76.28.113:31194/aether-roc-api/`` in our
+example deployment (where Aether runs on host ``10.76.28.113``).
 
 There is much more to say about the ROC and the Aether API, which we
 return to in the section on Runtime Control. For now, we suggest you
@@ -70,7 +72,7 @@ to tear it down:
 .. code-block::
 
    $ make aether-amp-uninstall
-   
+
 Run Ksniff and Wireshark
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

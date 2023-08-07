@@ -14,16 +14,16 @@ parties. Please reach out to discuss@systemsapproach.org.
 If you make use of this work, the attribution should include the
 following information:
 
-| *Title: Private 5G: A Systems Approach* 
-| *Authors: Larry Peterson, Oguz Sunay, and Bruce Davie* 
-| *Source:* https://github.com/SystemsApproach/private5g 
+| *Title: Private 5G: A Systems Approach*
+| *Authors: Larry Peterson, Oguz Sunay, and Bruce Davie*
+| *Source:* https://github.com/SystemsApproach/private5g
 | *License:* \ `CC BY-NC-ND 4.0 <https://creativecommons.org/licenses/by-nc-nd/4.0>`__
 
 This book incorporates introductory and background content from:
 
-| *Title: 5G Mobile Networks: A Systems Approach* 
-| *Authors: Larry Peterson and Oguz Sunay* 
-| *Source:* https://github.com/SystemsApproach/5g 
+| *Title: 5G Mobile Networks: A Systems Approach*
+| *Authors: Larry Peterson and Oguz Sunay*
+| *Source:* https://github.com/SystemsApproach/5g
 | *License:* \ `CC BY-NC-ND 4.0 <https://creativecommons.org/licenses/by-nc-nd/4.0>`__
 
 a version of which was also published by Morgan & Claypool in 2020
@@ -64,8 +64,8 @@ To build a web-viewable version, you first need to download the source:
 
 .. literalinclude:: code/build.sh
 
-The build process is stored in the Makefile and requires Python be 
-installed. The Makefile will create a virtualenv (``venv-docs``) which 
+The build process is stored in the Makefile and requires Python be
+installed. The Makefile will create a virtualenv (``venv-docs``) which
 installs the documentation generation toolset.  You may also need to
 install the ``enchant`` C library using your system’s package manager
 for the spelling checker to function properly.

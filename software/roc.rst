@@ -1,10 +1,10 @@
-Runtime Control 
+Runtime Control
 -----------------------------------
 
 Aether defines an API (and associated GUI) for managing connectivity
 at runtime. This stage brings up that API/GUI, as implemented by the
 *Runtime Operational Control (ROC)* subsystem, building on the
-physical gNB we connected to Aether in the previous section. 
+physical gNB we connected to Aether in the previous section.
 
 This stage focuses on the abstractions that the ROC layers on top of
 the SD-Core. These abstractions are described in `Section 6.4
@@ -76,8 +76,8 @@ new instantiation of the SD-Core:
 .. code-block::
 
    $ make aether-5gc-uninstall
-   $ make aether-amp-install      
-   $ make aether-5gc-install   
+   $ make aether-amp-install
+   $ make aether-5gc-install
 
 The order is important, since the Core depends on configuration
 parameters provided by the ROC. Also note that you may need to reboot
@@ -108,3 +108,13 @@ and adding a new device group.
 Finally, if you do make a set of updates, select the ``Basket`` icon
 at top right when you are done, and click the ``Commit`` button. This
 causes the set of changes to be committed as a single transaction.
+
+A more complete User's Guide for the ROC is available online, although
+be aware that our OnRamp-based deployment has not yet enabled the
+secure login feature.
+
+.. _reading_roc:
+.. admonition:: Further Reading
+
+    `Aether Operations
+    <https://docs.aetherproject.org/master/operations/gui.html>`__.

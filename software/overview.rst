@@ -16,24 +16,18 @@ support of the *Pronto Project*, but that deployment depends on an ops
 team with significant insider knowledge about Aether's engineering
 details. It is difficult for others to reproduce that know-how and
 bring up their own Aether clusters.  Aether is also available as two
-self-contained software packages that were originally designed to
-support developers working on individual components.  These packages
-are straightforward to install and run, even in a VM on your laptop,
-so they also provide an easy way to get started:
+self-contained software packages designed to support developers
+working on individual components.  These packages are straightforward
+to install and run, even in a VM on your laptop, so they also provide
+an easy way to get started:
 
 * `Aether-in-a-Box (AiaB)
   <https://docs.aetherproject.org/master/developer/aiab.html>`__:
-  Includes SD-Core and the online aspects of AMP (Service
-  Orchestrator and the Monitoring Subsystem). AiaB can be configured
-  to work with either an emulated RAN or physical small cell radios
-  (both 4G and 5G).
+  Supports developers working on SD-Core and AMP.
 
 * `SDRAN-in-a-Box (RiaB)
   <https://docs.sd-ran.org/master/sdran-in-a-box/README.html>`__:
-  Includes the ONOS-based nRT-RIC, the O-RAN defined E2SM-KPI and
-  E2SM-RC Service Models, and example xApps. RiaB can be configured to
-  work with either an emulated RAN (5G) or with OAI's open source RAN stack
-  running on USRP devices (4G).
+  Supports developers working on xApps and the ONOS-based nRT-RIC.
 
 Note that these two packages do not include SD-Fabric, which depends
 on programmable switching hardware. Readers interested in learning
@@ -58,20 +52,21 @@ cloud deployed into a particular target environment. `Aether OnRamp
 re-packaging of Aether to address that gap. It provides an incremental
 path for users to:
 
-* Learn about all the moving parts in Aether.
+* Learn about and observe all the moving parts in Aether.
 * Customize Aether for different target environments.
+* Experiment with scalable edge communication.
 * Deploy and operate Aether with live traffic.
 
 Aether OnRamp begins with a *Quick Start* deployment similar to AiaB,
 but then goes on to prescribe a sequence of steps a user can follow to
-deploy increasingly complex configurations. This culminates in an
-operational Aether cluster capable of running 24/7 and supporting live
-5G workloads.
+deploy increasingly complex configurations. These include both
+emulated and physical RANs, culminating in an operational Aether
+cluster capable of running 24/7 and supporting live 5G workloads.
 
 Note that OnRamp includes support for bringing up a 4G version of
 Aether connected to one or more physical eNBs, but we postpone a
-discussion of that capability until the final section. Everything up
-to that point assumes 5G.
+discussion of that capability until a later section. Everything else
+in this guide assumes 5G.
 
 Aether OnRamp is still a work in progress, but anyone
 interested in participating in that effort is encouraged to join the

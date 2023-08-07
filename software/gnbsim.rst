@@ -13,8 +13,7 @@ for running gNBsim, which is easy to do:
 .. code-block::
 
    $ cd vars
-   $ cp main-gnbsim.yml main.yml 
-
+   $ cp main-gnbsim.yml main.yml
 
 Configure gNBsim
 ~~~~~~~~~~~~~~~~~~
@@ -32,7 +31,7 @@ following variable definitions:
    gnbsim:
        docker:
            container:
-               image: omecproject/5gc-gnbsim:main-PR_88-cc0d21b      
+               image: omecproject/5gc-gnbsim:main-PR_88-cc0d21b
                prefix: gnbsim
                count: 2
            network:
@@ -72,13 +71,13 @@ of these sequences is represented by a ``profileType`` in the config
 file. gNBsim supports seven profiles, which we list here:
 
 .. code-block::
-   
+
    - profileType: register		# UE Registration
    - profileType: pdusessest		# UE Initiated Session
    - profileType: anrelease		# Access Network (AN) Release
    - profileType: uetriggservicereq	# UE Initiated Service Request
    - profileType: deregister		# UE Initiated De-registration
-   - profileType: nwtriggeruedereg	# Network Initiated De-registration     
+   - profileType: nwtriggeruedereg	# Network Initiated De-registration
    - profileType: uereqpdusessrelease	# UE Initiated Session Release
 
 The second profile (``pdusettest``) is selected by default. It causes

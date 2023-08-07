@@ -4,7 +4,7 @@
    :target: https://systemsapproach.org
 
 |
-	    
+
 Private 5G: A Systems Approach
 ===========================================
 
@@ -14,16 +14,16 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
 |
 
 .. toctree::
-   :maxdepth: 2 
-   :caption: Table of Contents 
+   :maxdepth: 2
+   :caption: Table of Contents
    :glob:
 
    foreword.rst
-   preface.rst	     
+   preface.rst
    intro.rst
    arch.rst
    radio.rst
-   ran.rst 
+   ran.rst
    core.rst
    cloud.rst
    README.rst
@@ -33,7 +33,7 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
 
 .. toctree::
    :maxdepth: 1
-   :hidden:	      
+   :hidden:
    :caption: Aether Guide
 
    software/overview.rst
@@ -45,4 +45,3 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    software/gnbsim.rst
    software/gnb.rst
    software/roc.rst
-   software/enb.rst

@@ -195,7 +195,7 @@ physical gNBs.
 
 
 .. code-block::
-  
+
     core:
         standalone: "true"
         data_iface: ens18
@@ -203,11 +203,11 @@ physical gNBs.
         ran_subnet: "172.20.0.0/16"
         helm:
            chart_ref: aether/sd-core
-           chart_version: 0.12.6 
+           chart_version: 0.12.6
         upf:
            ip_prefix: "192.168.252.0/24"
         amf:
-           ip: "172.16.41.103" 
+           ip: "172.16.41.103"
 
     gnbsim:
         ...

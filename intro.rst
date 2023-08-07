@@ -100,9 +100,9 @@ will ultimately distinguish 5G from earlier generations.
 .. _reading_industry4.0:
 .. admonition:: Further Reading
 
-	K. Schwab. `The Fourth Industrial Revolution
-	<https://www.weforum.org/about/the-fourth-industrial-revolution-by-klaus-schwab>`__.
-	World Economic Forum.
+   K. Schwab. `The Fourth Industrial Revolution
+   <https://www.weforum.org/about/the-fourth-industrial-revolution-by-klaus-schwab>`__.
+   World Economic Forum.
 
 What this all means is that there is no simple definition of 5G, any
 more than there is for the Internet. It is a complex and evolving

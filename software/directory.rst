@@ -106,15 +106,14 @@ chapter of our companion Edge Cloud Operations book.
 OnRamp Repos
 ~~~~~~~~~~~~~~~~~~~
 
-The deployment artifacts listed above are, of course, meant to be
-deployed as an operational cloud service. This process, sometimes
+The process to deploy the artifacts listed above are, sometimes
 referred to as GitOps, manages the *Continuous Deployment (CD)* half
 of the CI/CD pipeline. OnRamp's approach to GitOps uses a different
 mechanism than the one the ONF ops team originally used to manage its
 multi-site deployment of Aether.  The latter approach has a large
-startup cost, which has proven difficult for others to replicate. (It
-also locks you into deployment toolchain that may or may not be
-appropriate for your situation.)
+startup cost, which has proven difficult to replicate. (It also locks
+you into deployment toolchain that may or may not be appropriate for
+your situation.)
 
 In its place, OnRamp adopts minimal Ansible tooling. This makes it
 easier to take ownership of the configuration parameters that define
@@ -126,10 +125,10 @@ OnRamp repos:
  | Deploy Aether: https://github.com/opennetworkinglab/aether-onramp
  | Deploy 5G Core: https://github.com/opennetworkinglab/aether-5gc
  | Deploy 4G Core: https://github.com/opennetworkinglab/aether-4gc
- | Deploy Management Plane: https://github.com/opennetworkinglab/aether-amp 
+ | Deploy Management Plane: https://github.com/opennetworkinglab/aether-amp
  | Deploy 5G RAN Simulator: https://github.com/opennetworkinglab/aether-gnbsim
  | Deploy Kubernetes: https://github.com/opennetworkinglab/aether-k8s
- 
+
 It is the first repo that defines a way to integrate all of the Aether
 artifacts into an operational system. That repo, in turn, includes the
 other repos as submodules. Note that each of the submodules is
