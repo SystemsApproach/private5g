@@ -173,7 +173,7 @@ gNB management dashboard, which we reference in the instructions that
 follow:
 
 .. _fig-sercomm:
-.. figure:: ../figures/Sercomm.png
+.. figure:: figures/Sercomm.png
     :width: 500px
     :align: center
 

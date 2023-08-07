@@ -19,7 +19,7 @@ deployment (meaning your details will be different). All the other
 names and addresses are part of a standard Aether configuration.
 
 .. _fig-macvlan:
-.. figure:: ../figures/Slide24.png
+.. figure:: figures/Slide24.png
     :width: 700px
     :align: center
 
@@ -180,7 +180,7 @@ where ``172.20.0.0/16`` is the IP subnet for the virtual network (also
 implemented by a Macvlan bridge, and named ``gnbaccess``).
 
 .. _fig-gnbsim:
-.. figure:: ../figures/Slide25.png
+.. figure:: figures/Slide25.png
     :width: 600px
     :align: center
 
