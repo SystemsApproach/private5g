@@ -106,10 +106,10 @@ Set Target Parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Quick Start deployment described in this section requires that you
-modify two parameters to reflect the specifics of your target
+modify two sets of parameters to reflect the specifics of your target
 deployment.
 
-The first is in file ``host.ini``, where you will need to give the IP
+The first set is in file ``host.ini``, where you will need to give the IP
 address and login credentials for the server you are working on. At
 this stage, we assume the server you downloaded OnRamp onto is the
 same server you will be installing Aether on.
@@ -125,7 +125,7 @@ of passwords, then ``ansible_password=aether`` needs to be replaced
 with ``ansible_ssh_private_key_file=~/.ssh/id_rsa`` (or wherever
 your private key can be found).
 
-The second parameter is in ``vars/main.yml``, where the **two** lines
+The second set of parameters is in ``vars/main.yml``, where the **two** lines
 currently reading
 
 .. code-block::
@@ -133,7 +133,15 @@ currently reading
    data_iface: ens18
 
 need to be edited to replace ``ens18`` with the device interface for
-you server. You can learn the interface using the Linux ``ip``
+you server, and the line specifying the IP address of the Core's AMF
+needs to be edited to reflect your server's IP address:
+
+.. code-block::
+
+   amf:
+      ip: "172.16.41.103"
+
+You can learn your server's IP address and interface using the Linux ``ip``
 command:
 
 .. code-block::
