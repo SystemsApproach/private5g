@@ -322,26 +322,73 @@ Docker container running the test. You can access that file by typing:
 
    $ docker exec -it gnbsim-1 cat summary.log
 
-If successful, the last lines of the output should look like the
-following:
+If successful, the output should look like the following:
 
 .. code-block::
 
-   ...
-   2023-04-20T20:21:36Z [INFO][GNBSIM][Profile][profile2] ExecuteProfile ended
-   2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] Profile Name: profile2 , Profile Type: pdusessest
-   2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] UEs Passed: 5 , UEs Failed: 0
-   2023-04-20T20:21:36Z [INFO][GNBSIM][Summary] Profile Status: PASS
+   2023-08-09T19:57:09Z [INFO][GNBSIM][Summary] Profile Name: profile2 , Profile Type: pdusessest
+   2023-08-09T19:57:09Z [INFO][GNBSIM][Summary] UEs Passed: 5 , UEs Failed: 0
+   2023-08-09T19:57:09Z [INFO][GNBSIM][Summary] Profile Status: PASS
 
 This particular test, which runs the cryptically named ``pdusessest``
 profile, emulates five UEs, each of which: (1) registers with the
 Core, (2) initiates a user plane session, and (3) sends a minimal data
-packet over that session. If you are interested in the config file
-that controls the test, including the option of enabling other
-profiles, take a look at
-``deps/gnbsim/config/gnbsim-default.yaml``. We return to the issue of
-customizing gNBsim in a later section.
+packet over that session. In addition to displaying the summary
+results, you can also open a shell in the ``gnbsim-1`` container,
+where you can view the full trace of every run of the emulation, each
+of which has been saved in a timestamped file:
 
+.. code-block::
+
+   $ docker exec -it gnbsim-1 bash
+   bash-5.1# ls
+   gnbsim                          gnbsim1-20230809T125702.config  summary.log
+   gnbsim.log                      gnbsim1-20230809T125702.log
+   bash-5.1# more gnbsim1-20230809T125702.log
+   2023-08-09T19:57:05Z [INFO][GNBSIM][App] App Name: GNBSIM
+   2023-08-09T19:57:05Z [INFO][GNBSIM][App] Setting log level to: info
+   2023-08-09T19:57:05Z [INFO][GNBSIM][GNodeB][gnb1] GNodeB IP:  GNodeB Port: 9487
+   2023-08-09T19:57:05Z [INFO][GNBSIM][GNodeB][UserPlaneTransport] User Plane transport listening on: 172.20.0.2:2152
+   2023-08-09T19:57:05Z [INFO][GNBSIM][GNodeB] Current range selector value: 63
+   2023-08-09T19:57:05Z [INFO][GNBSIM][GNodeB] Current ID range start: 1056964608 end: 1073741823
+   2023-08-09T19:57:05Z [INFO][GNBSIM][GNodeB][ControlPlaneTransport] Connected to AMF, AMF IP: 10.76.28.113 AMF Port: 38412
+   ...
+
+If you are interested in the config file that controls the test,
+including the option of enabling other profiles, take a look at
+``deps/gnbsim/config/gnbsim-default.yaml``. We return to the issue of
+customizing gNBsim in a later section, but for now there are some
+simple modifications you can try. For example, the following code
+block defines a set of parameters for ``pdusessest`` (also known as
+``profile2``):
+
+.. code-block::
+
+    - profileType: pdusessest         # UE Initiated Session
+    profileName: profile2
+    enable: true
+    gnbName: gnb1
+    execInParallel: false
+    startImsi: 208930100007487
+    ueCount: 5
+    defaultAs: "192.168.250.1"
+    perUserTimeout: 100
+    plmnId:
+       mcc: 208
+       mnc: 93
+    dataPktCount: 5
+    opc: "981d464c7c52eb6e5036234984ad0bcf"
+    key: "5122250214c33e723a5dd523fc145fc0"
+    sequenceNumber: "16f3b3f70fc2"
+
+You can edit ``ueCount`` to change the number of UEs included in the
+emulation (currently limited to 100) and you can set
+``execInParallel`` to ``true`` to emulate those UEs connecting to the
+Core in parallel (rather than serially). You can also change the
+amount of information gNBsim outputs by modifying ``logLevel`` in the
+``logger`` block at the end of the file.  For any changes you make,
+just rerun ``make aether-gnbsim-run`` to see the effects; you do not
+need to reinstall gNBsim.
 
 Clean Up
 ~~~~~~~~~~~~~~~~~
