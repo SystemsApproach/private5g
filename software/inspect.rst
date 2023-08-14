@@ -49,22 +49,36 @@ There is much more to say about the ROC and the Aether API, which we
 return to in the section on Runtime Control. For now, we suggest you
 simply peruse the Control Dashboard by starting with the dropdown menu
 in the upper right corner. For example, selecting `Devices` will show
-the set of UEs registered with Aether, and selecting `Device-Groups`
-will show how those UEs are aggregated. In an operational setting,
-these values would be entered into the ROC through either the GUI or
-the underlying API. For the Quick Start scenario we're limiting
-ourselves to in this section, these values are loaded from
+the set of UEs registered with Aether, similar to the screenshot in
+:numref:`Figure %s <fig-roc>`. In an operational setting, these values
+would be entered into the ROC through either the GUI or the underlying
+API. For the Quick Start scenario we're limiting ourselves to in this
+section, these values are loaded from
 ``deps/amp/5g-roc/templates/roc-5g-models.json``.
+
+.. _fig-roc:
+.. figure:: figures/ROC-Dashboard.png
+    :width: 700px
+    :align: center
+
+    Screenshot of the ROC dashboard, showing known *Devices*. The
+    dropdown menu on the right lists other available pages.
 
 Turning to the Monitoring Dashboard, you will initially see
 Kubernetes-related performance stats. Select the *5G Dashboard* option
-to display information reported by SD-Core. That page should show an
-active (green) UPF, but there will be no base stations or attached
-devices until you rerun the RAN simulator (gNBsim) introduced in the
-previous section. Doing so will also result in the UPF throughput
-panel reporting just a small trace activity. This is because gNBsim
-generates very little User Plane traffic (a few ICMP packets); it is
-primarily designed to stress test SD-Core's Control Plane.
+to display information reported by SD-Core. Similar to :numref:`Figure
+%s <fig-monitor>`, the page shows an active (green) UPF, and once you
+rerun the RAN simulator (gNBsim), some number of active base stations
+and connected devices. The bottom panel shows the UPF throughput,
+which due to gNBsim's focus on stressing the control plane, typically
+shows only minimal activity.
+
+.. _fig-monitor:
+.. figure:: figures/5G-Dashboard.png
+    :width: 700px
+    :align: center
+
+    Screenshot of the monitoring subsystem's 5G dashboard.
 
 When you are done experimenting with AMP, type the following
 to tear it down:
