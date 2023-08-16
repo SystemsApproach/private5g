@@ -1,14 +1,14 @@
 Repositories
 ---------------
 
-Aether is assembled from multiple components spanning several Git
-repositories. These include repos for different subsystems (e.g.,
-AMP, SD-Core, SD-RAN), but also for different stages of the development
-pipeline (e.g., source code, deployment artifacts).
-
-This section identifies all the Aether-related repositories, with the
-OnRamp repos listed at the end serving as the starting point for
-anyone that wants to come up-to-speed on the rest of the system.
+Aether is a complex system, assembled from multiple components
+spanning several Git repositories. These include repos for different
+subsystems (e.g., AMP, SD-Core, SD-RAN), but also for different stages
+of the development pipeline (e.g., source code, deployment artifacts).
+This rest of this section identifies all the Aether-related
+repositories, with the OnRamp repos listed at the end serving as the
+starting point for anyone that wants to come up-to-speed on the rest
+of the system.
 
 Source Repos
 ~~~~~~~~~~~~~~~~
