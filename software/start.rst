@@ -97,7 +97,7 @@ four things to note:
 
 4. File ``hosts.ini`` (host inventory) is Ansible's way of specifying
    the set of servers (physical or virtual) that Ansible targets with
-   various installation playbooks. The default version of ``host.ini``
+   various installation playbooks. The default version of ``hosts.ini``
    included with OnRamp is simplified to run everything on a single
    server (the one you've cloned the repo onto), with additional lines
    you may eventually need for a multi-node cluster commented out.
@@ -109,7 +109,7 @@ The Quick Start deployment described in this section requires that you
 modify two sets of parameters to reflect the specifics of your target
 deployment.
 
-The first set is in file ``host.ini``, where you will need to give the IP
+The first set is in file ``hosts.ini``, where you will need to give the IP
 address and login credentials for the server you are working on. At
 this stage, we assume the server you downloaded OnRamp onto is the
 same server you will be installing Aether on.
