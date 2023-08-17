@@ -52,6 +52,25 @@ follows:
    $ pipx ensurepath
    $ sudo apt-get install sshpass
 
+Once installed, displaying the Ansible version number should result in
+output similar to the following:
+
+.. code-block::
+
+   $ ansible --version
+   ansible [core 2.11.12]
+     config file = None
+     configured module search path = ['/home/foo/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+     ansible python module location = /home/foo/.local/lib/python3.6/site-packages/ansible
+     ansible collection location = /home/foo/.ansible/collections:/usr/share/ansible/collections
+     executable location = /home/foo/.local/bin/ansible
+     python version = 3.6.9 (default, Mar 10 2023, 16:46:00) [GCC 8.4.0]
+     jinja version = 3.0.3
+     libyaml = True
+
+Note that a fresh install of Ubuntu may be missing other packages that
+you need (e.g., ``git``, ``curl``, ``make``), but you will be prompted
+to install them as you step through the Quick Start sequence.
 
 Download Aether OnRamp
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -218,6 +237,11 @@ target server. Do this by typing:
 
    $ make aether-k8s-install
 
+Note that the Ansible playbooks triggered by this (and other) make
+targets will output red results from time-to-time (indicating an
+exception or failure), but as long as Ansible keeps progressing
+through the playbook, such output can be safely ignored.
+
 Once the playbook completes, executing ``kubectl`` will show the
 ``kube-system`` namespace running, with output looking something like
 the following:
@@ -286,7 +310,14 @@ to ``kube-system``), with output similar to the following:
    upf-0                        5/5     Running            0             6m13s
    webui-5894ffd49d-gg2jh       1/1     Running            0             6m13s
 
-You will recognize Kubernetes pods that correspond to many of the
+If you see problematic pods that are not getting into the ``Running``
+state, a re-install usually corrects the problem. Type:
+
+.. code-block::
+
+   make aether-resetcore
+
+Once running, you will recognize pods that correspond to many of the
 microservices discussed is `Chapter 5
 <https://5g.systemsapproach.org/core.html>`__. For example,
 ``amf-5887bbf6c5-pc9g2`` implements the AMF. Note that for historical
@@ -295,7 +326,7 @@ reasons, the Aether Core is called ``omec`` instead of ``sd-core``.
 If you are interested in seeing the details about how SD-Core is
 configured, look at
 ``deps/5gc/roles/core/templates/radio-5g-values.yaml``.  This is an
-example of a *values override* file that Helm passes to along to
+example of a *values override* file that Helm passes along to
 Kubernetes when launching the service. Most of the default settings
 will remain unchanged, with the main exception being the
 ``subscribers`` block of the ``omec-sub-provision`` section. This
