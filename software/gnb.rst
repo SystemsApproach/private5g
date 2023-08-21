@@ -62,6 +62,13 @@ exemplars:
 * OPc: ``69d5c2eb2e2e624750541d3bbc692ba5``
 * Key: ``000102030405060708090a0b0c0d0e0f``
 
+Note that the actual config files distributed with OnRamp have IMSIs
+constructed using PLMN id ``00101``. Both sets of examples are taken
+from working deployments, so either should work as a model you can
+emulate in your deployment, although it is certainly easiest to start
+with the existing code. So they are easy to distinguish, note that the
+IMSIs used in emulations are constructed using PLMN id ``20893``.
+
 Insert the SIM cards into whatever devices you plan to connect to
 Aether.  Be aware that not all phones support the CBRS frequency bands
 that Aether uses. Aether is known to work with recent iPhones (11 and

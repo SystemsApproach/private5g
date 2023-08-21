@@ -184,6 +184,14 @@ address is ``10.76.28.113`` on subnet ``10.76.28.0/24``.  We will use
 these three values as a running example throughout the guide, as a
 placeholder for your local details.
 
+.. admonition:: Troubleshooting Hint
+
+  Due to a limitation in gNBsim (the RAN emulator introduced later in
+  this section), it is necessary for your server to be configured with
+  IPv6 enabled (as the ``inet6`` line in the example output indicates
+  is the case for interface ``ens18``). If IPv6 is not enabled, the
+  emulated RAN will not successfully connect to the AMF.
+
 Note that ``vars/main.yml`` and ``hosts.ini`` are the only two files
 you need to modify for now, but there are additional config files that
 you may want to modify as we move beyond the Quick Start deployment.
@@ -384,6 +392,15 @@ of which has been saved in a timestamped file:
    2023-08-09T19:57:05Z [INFO][GNBSIM][GNodeB] Current ID range start: 1056964608 end: 1073741823
    2023-08-09T19:57:05Z [INFO][GNBSIM][GNodeB][ControlPlaneTransport] Connected to AMF, AMF IP: 10.76.28.113 AMF Port: 38412
    ...
+
+.. admonition:: Troubleshooting Hint
+
+  If ``summary.log`` is empty, it means the emulation did not run due
+  to a configuration error. To debug the problem, open a bash shell on
+  the gNBsim container (as shown in the preceding example), and look
+  at ``gnbsim.log``. Output that includes ``failed to connect amf``
+  and ``err: address family not supported by protocol`` indicates that
+  your server does not have IPv6 enabled.
 
 If you are interested in the config file that controls the test,
 including the option of enabling other profiles, take a look at
