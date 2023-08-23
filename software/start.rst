@@ -1,32 +1,34 @@
 Quick Start
 -----------------------
 
-Aether OnRamp provides a low-overhead way to get started. It brings up
-a one-node Kubernetes cluster, deploys a 5G version of SD-Core on that
-cluster, and runs an emulated 5G workload against the 5G Core. It
-assumes a low-end server that meets the following requirements:
+This section describes a low-overhead way to get started with OnRamp.
+It brings up a one-node Kubernetes cluster, deploys a 5G version of
+SD-Core on that cluster, and runs an emulated 5G workload against the
+5G Core. It assumes a low-end server that meets the following
+requirements:
 
 * Haswell CPU (or newer), with at least 4 CPUs and 12GB RAM.
-* Clean install of Ubuntu 20.04 or 22.04, with 4.15 (or later) kernel.
+* Clean install of Ubuntu 20.04 or 22.04, with 5.15 (or later) kernel.
 
 For example, something like an Intel NUC is more than enough to get
 started.
 
-While this guide focuses on deploying Aether OnRamp on a physical
-machine (in anticipation of later stages), this stage can also run in
-a VM.  Options include an AWS VM (Ubuntu 20.04 image on `t2.xlarge`
-instance); a VirtualBox VM running `bento/ubuntu-20.04` `Vagrant
-<https://www.vagrantup.com>`_ box on Intel Mac; a VM created using
-`Multipass <https://multipass.run>`_ on Linux, Mac, or Windows; or
-`VMware Fusion <https://www.vmware.com/products/fusion.html>`__ to run
-a VM on a Mac.
+While it's possible to use OnRamp to deploy Aether on a laptop (e.g.,
+in a VirtualBox VM), because the goal is to eventually scale a
+deployment and/or run Aether 24/7, OnRamp has been developed and
+tested on physical servers and server-based VMs. The latter includes
+Proxmox (see the example configuration in :numref:`Figure %s
+<fig-proxmox>`); AWS (specify a ``t2.xlarge`` instance); and CloudLab
+(see ``scripts/cloudlab-disksetup.sh`` once you download OnRamp for a
+script that can be used to configure the disk).
 
-For example, if you have Multipass installed on your laptop, you can
-launch a suitable VM instance by typing:
+.. _fig-proxmox:
+.. figure:: figures/proxmox.png
+    :width: 500px
+    :align: center
 
-.. code-block::
+    Example configuration of Proxmox VM.
 
-   $ multipass launch 20.04 --cpus 4 --disk 50G --memory 16G --name onramp
 
 Prep Environment
 ~~~~~~~~~~~~~~~~~~~~~
