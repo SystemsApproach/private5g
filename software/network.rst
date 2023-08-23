@@ -207,7 +207,7 @@ physical gNBs.
         upf:
            ip_prefix: "192.168.252.0/24"
         amf:
-           ip: "172.16.41.103"
+           ip: "10.76.28.113"
 
     gnbsim:
         ...

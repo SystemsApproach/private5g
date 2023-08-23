@@ -137,9 +137,9 @@ same server you will be installing Aether on.
 
 .. code-block::
 
-   node1  ansible_host=172.16.41.103 ansible_user=aether ansible_password=aether ansible_sudo_pass=aether
+   node1  ansible_host=10.76.28.113 ansible_user=aether ansible_password=aether ansible_sudo_pass=aether
 
-In this example, address ``172.16.41.103`` and the three occurrences
+In this example, address ``10.76.28.113`` and the three occurrences
 of the string ``aether`` need to be replaced with the appropriate
 values.  Note that if you set up your server to use SSH keys instead
 of passwords, then ``ansible_password=aether`` needs to be replaced
@@ -160,7 +160,7 @@ needs to be edited to reflect your server's IP address:
 .. code-block::
 
    amf:
-      ip: "172.16.41.103"
+      ip: "10.76.28.113"
 
 You can learn your server's IP address and interface using the Linux ``ip``
 command:
