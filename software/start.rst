@@ -7,7 +7,7 @@ SD-Core on that cluster, and runs an emulated 5G workload against the
 5G Core. It assumes a low-end server that meets the following
 requirements:
 
-* Haswell CPU (or newer), with at least 4 CPUs and 12GB RAM.
+* Haswell CPU (or newer), with at least 4 CPUs and 16GB RAM.
 * Clean install of Ubuntu 20.04 or 22.04, with 5.15 (or later) kernel.
 
 For example, something like an Intel NUC is more than enough to get
@@ -17,10 +17,9 @@ While it's possible to use OnRamp to deploy Aether on a laptop (e.g.,
 in a VirtualBox VM), because the goal is to eventually scale a
 deployment and/or run Aether 24/7, OnRamp has been developed and
 tested on physical servers and server-based VMs. The latter includes
-Proxmox (see the example configuration in :numref:`Figure %s
+Proxmox (see the example configuration shown in :numref:`Figure %s
 <fig-proxmox>`); AWS (specify a ``t2.xlarge`` instance); and CloudLab
-(see ``scripts/cloudlab-disksetup.sh`` once you download OnRamp for a
-script that can be used to configure the disk).
+(specify either a ``small-lan`` or ``single-pc-ubuntu`` instance).
 
 .. _fig-proxmox:
 .. figure:: figures/proxmox.png
@@ -403,6 +402,13 @@ of which has been saved in a timestamped file:
   at ``gnbsim.log``. Output that includes ``failed to connect amf``
   and ``err: address family not supported by protocol`` indicates that
   your server does not have IPv6 enabled.
+
+.. admonition:: Troubleshooting Hint
+
+  If ``summary.log`` reports ``UEs Passed: 0 , UEs Failed: 5`` then it
+  is likely the case that SD-Core did not come up cleanly. Type
+  ``make aether-resetcore``, and after verifying all pods are running
+  with ``kubectl``, run gNBsim again.
 
 If you are interested in the config file that controls the test,
 including the option of enabling other profiles, take a look at
