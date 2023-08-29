@@ -17,6 +17,15 @@ The following focuses on a single gNB, which we assume is connected to
 the same L2 network as the Aether cluster. In our running example,
 this implies both are on subnet ``10.76.28.0/24``.
 
+.. admonition:: Troubleshooting Hint
+
+  Physical gNBs connect to SD-Core (both the AMF in the control plane
+  and the UPF in the user plane) in exactly the same way as external
+  instances of gNBsim. Going through the process of bringing up gNBsim
+  in a second server, as described in the previous section, is a good
+  way to validate that your Core is "gNB-ready".
+
+
 Modify Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
