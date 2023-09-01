@@ -42,6 +42,14 @@ report ``Status: inactive``:
    $ sudo ufw status
    Status: inactive
 
+Your server should use *systemd-networkd* to configure the
+network. This is the default for Ubuntu, but you can verify it by
+typing:
+
+.. code-block::
+
+   $ systemctl status systemd-networkd.service
+
 OnRamp depends on Ansible, which you can install on your server as
 follows:
 
