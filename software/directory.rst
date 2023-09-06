@@ -4,11 +4,21 @@ Repositories
 Aether is a complex system, assembled from multiple components
 spanning several Git repositories. These include repos for different
 subsystems (e.g., AMP, SD-Core, SD-RAN), but also for different stages
-of the development pipeline (e.g., source code, deployment artifacts).
-This rest of this section identifies all the Aether-related
-repositories, with the OnRamp repos listed at the end serving as the
-starting point for anyone that wants to come up-to-speed on the rest
-of the system.
+of the development pipeline (e.g., source code, deployment artifacts,
+configuration specs).  This rest of this section identifies all the
+Aether-related repositories, with the OnRamp repos listed at the end
+serving as the starting point for anyone that wants to come
+up-to-speed on the rest of the system.
+
+.. admonition:: Troubleshooting Hint
+
+  This guide includes *Troubleshooting Hints* like this one. Our first
+  hint is to recommend that the guide be followed sequentially. This
+  is because each section establishes a milestone that may prove
+  useful when you find yourself trying to troubleshoot a problem in a
+  later section. For example, isolating a problem with a physical gNB
+  is easier if you know that connectivity to the AMF and UPF works
+  correctly, which the *Emulated RAN* section helps to establish.
 
 Source Repos
 ~~~~~~~~~~~~~~~~

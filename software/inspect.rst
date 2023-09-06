@@ -118,7 +118,7 @@ machine for viewing in Wireshark.
 
 For example, the following captures and displays traffic into and out
 of the AMF, where you need to substitute the name of the AMP pod
-you learned from ``kubectle`` in place of ``amf-5887bbf6c5-pc9g2``.
+you learned from ``kubectl`` in place of ``amf-5887bbf6c5-pc9g2``.
 
 .. code-block::
 

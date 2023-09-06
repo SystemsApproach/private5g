@@ -73,21 +73,22 @@ exemplars:
 
 Note that the actual config files distributed with OnRamp have IMSIs
 constructed using PLMN id ``00101``. Both sets of examples are taken
-from working deployments, so either should work as a model you can
-emulate in your deployment, although it is certainly easiest to start
-with the existing code. So they are easy to distinguish, note that the
-IMSIs used in emulations are constructed using PLMN id ``20893``.
+from working deployments (``315010`` for a 4G/eNB and ``00101`` for a
+5G/gNB), so in principle either should work as a model you can emulate
+in your deployment. As a practical matter, however, it is certainly
+easiest (and safest) to start with the existing code.
 
 Insert the SIM cards into whatever devices you plan to connect to
 Aether.  Be aware that not all phones support the CBRS frequency bands
-that Aether uses. Aether is known to work with recent iPhones (11 and
-greater), Google Pixel phones (4 and greater) and OnePlus phones.  CBRS
-may also be supported by recent phones from Samsung, LG Electronics and
-Motorola Mobility, but these have not been tested. Note that on each phone
-you will need to configure ``internet`` as the *Access Point Name (APN)*.
-Another good option is to use a 5G dongle connected to a Raspberry Pi
-as a demonstration UE. This makes it easier to run diagnostic tests
-from the UE. For example, we have used `APAL's 5G dongle
+that Aether uses, specifically n48 and n78. Aether is known to work
+with recent iPhones (11 and greater), Google Pixel phones (4 and
+greater), OnePlus phones, and Moto G 5G phones for band n78.  Aether
+is known to work with Moto G 5G phones for band n48; OnePlus and Pixel
+7 phones are purported to work as well. Note that on each phone you
+will need to configure ``internet`` as the *Access Point Name (APN)*.
+Another option is to use a 5G dongle connected to a Raspberry Pi as a
+demonstration UE. This makes it easier to run diagnostic tests from
+the UE. For example, we have used `APAL's 5G dongle
 <https://www.apaltec.com/dongle/>`__ with Aether.
 
 Finally, modify the ``subscribers`` block of the
@@ -171,15 +172,23 @@ gNodeB Setup
 Once the SD-Core is up and running, we are ready to bring up the
 physical gNB. The details of how to do this depend on the specific
 device you are using, but we identify the main issues you need to
-address using SERCOMM's 5G femto cell as an example. That particular
-device uses the n78 band and is on the ONF MarketPlace, where you can
-also find a User's Guide.
+address using SERCOMM's 5G femto cell (as distributed by MosoLabs) as
+an example. That particular device uses either the n48 or n78 band and
+is on the ONF MarketPlace, where you can also find a User's Guide.
 
 .. _reading_sercomm:
 .. admonition:: Further Reading
 
-   `SERCOMM – SCE5164-B78 INDOOR SMALL CELL
-   <https://opennetworking.org/products/sercomm-sce5164-b78/>`__.
+   `MOSO CANOPY 5G INDOOR SMALL CELL
+   <https://opennetworking.org/products/moso-canopy-5g-indoor-small-cell/>`__.
+
+.. admonition:: Troubleshooting Hint
+
+  The product data sheet shows support for frequency bands
+  n78/n48/n77, but individual devices do not necessarily support all
+  three. For example, we have experience with an n78 device and an n48
+  device, with the latter (n48) now becoming the default. For that
+  band, PLMN id ``00101`` is currently recommended.
 
 For the purposes of the following description, we assume the gNB is
 assigned IP address ``10.76.28.187``, which per our running example,

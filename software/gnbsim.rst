@@ -143,3 +143,15 @@ to run gNBsim, and then type
 Note that container name ``gnbsim-1`` is constructed from the
 ``prefix`` variable defined in the ``docker`` section of
 ``vars/main.yml``, with ``-1`` indicating the first container.
+
+In addition to scaling up the workload you put on the Core, you can
+also experiment with the emulation settings defined in any or all of
+the config files in ``deps/gnbsim/config/``. Focusing on ``profile2``
+in particular (because it sends data packets after registering each
+UE), variable ``defaultAs: "192.168.250.1"`` specifies the target of
+ICMP Echo Request packets. Changing the value to the IP address of a
+real-world server (e.g., ``8.8.8.8``) causes the emulated UE to
+actually ping that server. Success is a good indication that your
+Aether cluster is properly configured to support end-to-end
+connectivity.
+
