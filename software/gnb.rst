@@ -83,7 +83,7 @@ Aether.  Be aware that not all phones support the CBRS frequency bands
 that Aether uses, specifically n48 and n78. Aether is known to work
 with recent iPhones (11 and greater), Google Pixel phones (4 and
 greater), OnePlus phones, and Moto G 5G phones for band n78.  Aether
-is known to work with Moto G 5G phones for band n48; OnePlus and Pixel
+is known to work with Moto G 5G and OnePlus phones for band n48; Pixel
 7 phones are purported to work as well. Note that on each phone you
 will need to configure ``internet`` as the *Access Point Name (APN)*.
 Another option is to use a 5G dongle connected to a Raspberry Pi as a

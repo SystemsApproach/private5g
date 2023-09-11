@@ -20,6 +20,12 @@ up-to-speed on the rest of the system.
   is easier if you know that connectivity to the AMF and UPF works
   correctly, which the *Emulated RAN* section helps to establish.
 
+  Our second hint is to join the ``#aether-onramp`` channel of the
+  `ONF Workspace <https://onf-community.slack.com/>`__ on Slack, where
+  questions about using OnRamp to bring up Aether are asked and
+  answered. The ``Troubleshooting`` bookmark for that channel includes
+  summaries of known issues.
+
 Source Repos
 ~~~~~~~~~~~~~~~~
 

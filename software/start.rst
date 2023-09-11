@@ -42,13 +42,18 @@ report ``Status: inactive``:
    $ sudo ufw status
    Status: inactive
 
-Your server should use *systemd-networkd* to configure the
-network. This is the default for Ubuntu, but you can verify it by
-typing:
+Your server should use *systemd-networkd* to configure the network,
+which you can verify by typing:
 
 .. code-block::
 
    $ systemctl status systemd-networkd.service
+
+Note that Aether assumes Ubuntu Server (as opposed to Ubuntu Desktop),
+the main implication being that it uses *systemd-networkd* rather than
+*Network Manager* to manage network settings. It is possible to work
+around this requirement, but be aware that doing so may impact the
+Ansible playbook for installing SD-Core.
 
 OnRamp depends on Ansible, which you can install on your server as
 follows:
@@ -339,6 +344,14 @@ microservices discussed is `Chapter 5
 <https://5g.systemsapproach.org/core.html>`__. For example,
 ``amf-5887bbf6c5-pc9g2`` implements the AMF. Note that for historical
 reasons, the Aether Core is called ``omec`` instead of ``sd-core``.
+
+.. admonition:: Troubleshooting Hint
+
+  If you see failures of the ``find ens18's netplan network
+  directory`` task in the ``router`` role, it indicates that
+  *systemd-networkd* is not configured as expected. Check the
+  ``Troubleshooting`` bookmark on the ``#aether-onramp`` Slack channel
+  for possible workarounds.
 
 If you are interested in seeing the details about how SD-Core is
 configured, look at
