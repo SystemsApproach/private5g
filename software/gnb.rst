@@ -56,6 +56,17 @@ using.
 Prepare UEs
 ~~~~~~~~~~~~
 
+When selecting UEs to connect to Aether, be aware that not all phones
+support the CBRS frequency bands that Aether uses. For band n78,
+Aether is known to work with recent iPhones (11 and greater), Google
+Pixel phones (4 and greater), OnePlus phones, and Moto G 5G
+phones. For band n48, Aether is known to work with Moto G 5G and
+OnePlus phones; Pixel 7 phones are purported to work as well.  Another
+option is to use a 5G dongle connected to a Raspberry Pi as a
+demonstration UE. This makes it easier to run diagnostic tests from
+the UE. For example, we have used `APAL's 5G dongle
+<https://www.apaltec.com/dongle/>`__ with Aether.
+
 5G-connected devices must have a SIM card, which you are responsible
 for creating and inserting.  You will need a SIM card writer (these
 are readily available for purchase on Amazon) and a PLMN identifier
@@ -78,18 +89,11 @@ from working deployments (``315010`` for a 4G/eNB and ``00101`` for a
 in your deployment. As a practical matter, however, it is certainly
 easiest (and safest) to start with the existing code.
 
-Insert the SIM cards into whatever devices you plan to connect to
-Aether.  Be aware that not all phones support the CBRS frequency bands
-that Aether uses, specifically n48 and n78. Aether is known to work
-with recent iPhones (11 and greater), Google Pixel phones (4 and
-greater), OnePlus phones, and Moto G 5G phones for band n78.  Aether
-is known to work with Moto G 5G and OnePlus phones for band n48; Pixel
-7 phones are purported to work as well. Note that on each phone you
-will need to configure ``internet`` as the *Access Point Name (APN)*.
-Another option is to use a 5G dongle connected to a Raspberry Pi as a
-demonstration UE. This makes it easier to run diagnostic tests from
-the UE. For example, we have used `APAL's 5G dongle
-<https://www.apaltec.com/dongle/>`__ with Aether.
+After inserting the SIM card into the device and powering it up, log
+into the phone, select ``Network Settings > SIMs`` and configure the
+*Access Point Name (APN)* to be ``internet``. This value corresponds
+to variable ``dnn`` (*Data Network Name*), as defined in
+``deps/5gc/roles/core/templates/radio-5g-values.yaml``.
 
 Finally, modify the ``subscribers`` block of the
 ``omec-sub-provision`` section in file
@@ -174,7 +178,8 @@ physical gNB. The details of how to do this depend on the specific
 device you are using, but we identify the main issues you need to
 address using SERCOMM's 5G femto cell (as distributed by MosoLabs) as
 an example. That particular device uses either the n48 or n78 band and
-is on the ONF MarketPlace, where you can also find a User's Guide.
+is on the ONF MarketPlace, where you can also find a User's Guide that
+gives detailed instructions about configuring the gNB.
 
 .. _reading_sercomm:
 .. admonition:: Further Reading
@@ -270,6 +275,28 @@ follow:
    can be installed as the default gateway, but doing so requires that
    your server also be configured to forward IP packets on to the
    Internet.
+
+.. admonition:: Troubleshooting Hint
+
+  For the SERCOMM gNB, if you elect to enable GPS, then ``Setting >
+  Sync_Settings > Sync_Mode`` should be set to ``TIME``.  With GPS and
+  PTP disabled, ``Setting > Sync_Settings > Sync_Mode`` should be set
+  to ``FREE_RUNNING``.
+
+.. admonition:: Troubleshooting Hint
+
+  For the SERCOMM gNB, we recommend the following when the gNB's
+  addresses is acquired via DHCP, assuming that address is unlikely to
+  change. When configuring the WAN (via the LAN), start with DHCP
+  enabled. Note the IP address the gNB has been assigned, and then
+  after disconnecting from the LAN, connect to the GUI via this
+  address. You will be on the same L2 subnet as the Aether server,
+  which you should be able to ping using the gNB’s diagnostic tool.
+  The default gateway DHCP returns does not know how to route data
+  packets to the UPF. To fix this, modify the WAN settings to use a
+  static IP, with the DHCP-provided IP used as the gNB's static
+  address. Then set the default gateway to the IP address of your
+  Aether server.
 
 Run Diagnostics
 ~~~~~~~~~~~~~~~~~
