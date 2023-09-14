@@ -37,7 +37,6 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    :caption: Aether Guide
 
    software/overview.rst
-   software/directory.rst
    software/start.rst
    software/inspect.rst
    software/scale.rst

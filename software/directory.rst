@@ -1,5 +1,5 @@
-Repositories
----------------
+.. Repositories
+.. ---------------
 
 Aether is a complex system, assembled from multiple components
 spanning several Git repositories. These include repos for different
