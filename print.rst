@@ -8,7 +8,7 @@ print and e-books. This book is available via Amazon: `Private 5G: A Systems App
 
 
 
-`Book Series: <https://systemsapproach.org/books/>`__ Also check out
+`Book Series: <https://www.systemsapproach.org/books.html>`__ Also check out
 our companion books that cover networking and emerging topics in more depth.
 
 * `Computer Networks: A Systems Approach <https://amzn.to/3CtG81U>`__

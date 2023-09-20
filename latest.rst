@@ -9,7 +9,7 @@ up-to-date with the latest developments by following the authors on
 connect the concepts and lessons in this book to what's happening in
 the Internet today.
 
-`Book Series: <https://systemsapproach.org/books/>`__ Also check out
+`Book Series: <https://www.systemsapproach.org/books.html>`__ Also check out
 our companion books that cover emerging topics in more depth.
 
 * `TCP Congestion Control: A Systems Approach <https://tcpcc.systemsapproach.org>`__
