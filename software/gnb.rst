@@ -90,10 +90,23 @@ in your deployment. As a practical matter, however, it is certainly
 easiest (and safest) to start with the existing code.
 
 After inserting the SIM card into the device and powering it up, log
-into the phone, select ``Network Settings > SIMs`` and configure the
-*Access Point Name (APN)* to be ``internet``. This value corresponds
-to variable ``dnn`` (*Data Network Name*), as defined in
-``deps/5gc/roles/core/templates/radio-5g-values.yaml``.
+into the phone, select ``Network Settings > SIMs`` and create a new
+*Access Point Name (APN)*, configured as shown in :numref:`Figure %s
+<fig-apn>`. The entry name (``TEST SIM`` in the example) is arbitrary
+and the MCC/MNC pair is set automatically based on the newly inserted
+SIM card. The important value is the APN, which is set to
+``internet``. This value corresponds to variable ``dnn`` (*Data
+Network Name*) defined in
+``deps/5gc/roles/core/templates/radio-5g-values.yaml``. Loosely
+speaking, the role the APN plays in the mobile network is similar to
+the role an SSID plays in a WiFi network.
+
+.. _fig-apn:
+.. figure:: figures/Slide26.png
+    :width: 400px
+    :align: center
+
+    Configure an Access Point Name (APN) for the new SIM card on the UE.
 
 Finally, modify the ``subscribers`` block of the
 ``omec-sub-provision`` section in file
