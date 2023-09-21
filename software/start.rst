@@ -333,7 +333,7 @@ to ``kube-system``), with output similar to the following:
    webui-5894ffd49d-gg2jh       1/1     Running            0             6m13s
 
 If you see problematic pods that are not getting into the ``Running``
-state, a re-install usually corrects the problem. Type:
+state, a reset usually corrects the problem. Type:
 
 .. code-block::
 
@@ -427,9 +427,14 @@ of which has been saved in a timestamped file:
 .. admonition:: Troubleshooting Hint
 
   If ``summary.log`` reports ``UEs Passed: 0 , UEs Failed: 5`` then it
-  is likely the case that SD-Core did not come up cleanly. Type
+  may be the case that SD-Core did not come up cleanly. Type
   ``make aether-resetcore``, and after verifying all pods are running
   with ``kubectl``, run gNBsim again.
+
+  Another possibility is that you have multiple SD-Cores running in
+  the same broadcast domain. This causes ARP to behave in unexpected
+  ways, which interferes with OnRamp's ability to establish a route
+  to the UPF pod.
 
 If you are interested in the config file that controls the test,
 including the option of enabling other profiles, take a look at
