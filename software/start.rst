@@ -466,11 +466,15 @@ block defines a set of parameters for ``pdusessest`` (also known as
 You can edit ``ueCount`` to change the number of UEs included in the
 emulation (currently limited to 100) and you can set
 ``execInParallel`` to ``true`` to emulate those UEs connecting to the
-Core in parallel (rather than serially). You can also change the
-amount of information gNBsim outputs by modifying ``logLevel`` in the
-``logger`` block at the end of the file.  For any changes you make,
-just rerun ``make aether-gnbsim-run`` to see the effects; you do not
-need to reinstall gNBsim.
+Core in parallel (rather than serially). You can also change variable
+``defaultAs: "192.168.250.1"`` to specify the target of ICMP Echo
+Request packets sent by the emulated UEs. Selecting the IP address of
+a real-world server (e.g., ``8.8.8.8``) is a good test of end-to-end
+connectivity. Finally, you can change the amount of information gNBsim
+outputs by modifying ``logLevel`` in the ``logger`` block at the end
+of the file.  For any changes you make, just rerun ``make
+aether-gnbsim-run`` to see the effects; you do not need to reinstall
+gNBsim.
 
 Clean Up
 ~~~~~~~~~~~~~~~~~

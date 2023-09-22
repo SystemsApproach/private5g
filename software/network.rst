@@ -184,7 +184,21 @@ implemented by a Macvlan bridge, and named ``gnbaccess``).
     :width: 600px
     :align: center
 
-    A server running multiple instances of gNBsim, connected to Aether.
+    A server running multiple instances of gNBsim, connected to
+    Aether.
+
+For completeness, :numref:`Figure %s <fig-start>` shows the Macvlan
+setup for the Quick Start configuration, where both the ``gnbaccess``
+bridge and gNBsim container run in the same server as the Core (but
+with the container manged by Docker, independent of Kubernetes).
+
+.. _fig-start:
+.. figure:: figures/Slide27.png
+    :width: 275px
+    :align: center
+
+    The Quick Start configuration with all components running in a
+    single server.
 
 Finally, all of the configurable parameters used throughout this
 section are defined in the ``core`` and ``gnbsim`` sections of the
@@ -199,7 +213,7 @@ physical gNBs.
     core:
         standalone: "true"
         data_iface: ens18
-        values_file: "config/hpa-5g-values.yaml"
+        values_file: "config/sdcore-5g-values.yaml"
         ran_subnet: "172.20.0.0/16"
         helm:
            chart_ref: aether/sd-core
