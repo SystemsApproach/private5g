@@ -5,7 +5,30 @@ We are now ready to replace the emulated RAN with physical gNBs and
 real UEs. You will need to edit ``hosts.ini`` to reflect the Aether
 cluster you want to support, where just a single server is sufficient
 and there is no reason to include nodes in the ``[gnbsim_nodes]`` set.
-We also assume you start with a variant of ``vars/main.yml``
+
+In addition to the server(s) in your cluster, bringing up a physical
+RAN requires the following hardware:
+
+* One or more 5G small cell radios (e.g., MOSO CANOPY 5G INDOOR SMALL CELL).
+* One or more 5G-capable UEs (e.g., unlocked Moto G 5G).
+* A SIM reader/writer and associated software (e.g., OYEITIMES MCR3516).
+* A set of programmable SIM cards (5 blank cards included with reader).
+
+There are multiple options for each component, but finding a
+combination that works together can be challenging. This section makes
+several recommendations based on working end-to-end systems. For
+simplicity, we pared the above list back to a single example for each
+item, but these should not be interpreted as the only possibility.
+
+.. admonition:: Troubleshooting Hint
+
+  We are tracking community experience with different hardware in the
+  ``#aether-onramp`` channel of the `ONF Workspace
+  <https://onf-community.slack.com/>`__, where the ``Troubleshooting``
+  bookmark for that channel includes summaries of different
+  combinations people have tried.
+
+The following assumes you start with a variant of ``vars/main.yml``
 customized for running physical 5G radios, which is easy to do:
 
 .. code-block::
@@ -13,9 +36,9 @@ customized for running physical 5G radios, which is easy to do:
    $ cd vars
    $ cp main-gNB.yml main.yml
 
-The following focuses on a single gNB, which we assume is connected to
-the same L2 network as the Aether cluster. In our running example,
-this implies both are on subnet ``10.76.28.0/24``.
+This section focuses on bringing up a single gNB that is on the same
+L2 network as the Aether cluster. In our running example, this implies
+both are on subnet ``10.76.28.0/24``.
 
 .. admonition:: Troubleshooting Hint
 
@@ -68,15 +91,16 @@ the UE. For example, we have used `APAL's 5G dongle
 <https://www.apaltec.com/dongle/>`__ with Aether.
 
 5G-connected devices must have a SIM card, which you are responsible
-for creating and inserting.  You will need a SIM card writer (these
-are readily available for purchase on Amazon) and a PLMN identifier
-constructed from a valid MCC/MNC pair. For our purposes, we use two
-different PLMN ids: ``315010`` constructed from MCC=315 (US) and
-MNC=010 (CBRS), and ``00101`` constructed from MCC=001 (TEST) and
-MNC=01 (TEST). You should use whatever values are appropriate for your
-local environment.  You then assign an IMSI and two secret keys to
-each SIM card. Throughout this section, we use the following values as
-exemplars:
+for programming and inserting.  You will need a SIM card writer, such
+as the *OYEITIMES MCR3516* (available on Amazon), which comes with
+five blank cards. You will need to set the PLMN identifier
+(constructed from a valid MCC/MNC pair), the IMSI, and two secret keys
+for each SIM card. As working examples, we have used two different
+PLMN ids: ``315010`` constructed from MCC=315 (US) and MNC=010 (CBRS),
+and ``00101`` constructed from MCC=001 (TEST) and MNC=01 (TEST).  You
+should use whatever values are appropriate for your local environment,
+where we use the following as a running example throughout this
+section:
 
 * IMSI: each one is unique, matching pattern ``315010*********`` (up to 15 digits)
 * OPc: ``69d5c2eb2e2e624750541d3bbc692ba5``
@@ -205,8 +229,9 @@ gives detailed instructions about configuring the gNB.
   The product data sheet shows support for frequency bands
   n78/n48/n77, but individual devices do not necessarily support all
   three. For example, we have experience with an n78 device and an n48
-  device, with the latter (n48) now becoming the default. For that
-  band, PLMN id ``00101`` is currently recommended.
+  device, with the latter (n48) becoming the preferred band (due in
+  part to less risk of interfering with Radio Altimeters).  For n48,
+  PLMN id ``00101`` is currently recommended.
 
 For the purposes of the following description, we assume the gNB is
 assigned IP address ``10.76.28.187``, which per our running example,
