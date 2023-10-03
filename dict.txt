@@ -6,6 +6,7 @@ AiaB
 Ajay
 Thakur
 AMF
+Ansible
 Anthos
 Analytics
 Argela
@@ -15,6 +16,7 @@ Azure
 Backhaul
 Barros
 Bavier
+Bilal
 Cascone
 Claypool
 CLI
@@ -44,13 +46,13 @@ gNBsim
 Grafana
 GTP
 Haswell
-HSS 
+HSS
 Hasan
 https
 IaaS
 iPhones
 IoT
-IPv 
+IPv
 Jaeger
 Kahn
 Kobayashi
@@ -59,10 +61,13 @@ Lifecycle
 LTE
 Macvlan
 Makefile
+Makefiles
 Marcin
 Mbps
 Midhaul
 MIoT
+Moto
+Multipass
 Multipath
 Multiprotocol
 NFV
@@ -78,6 +83,7 @@ Parulkar
 PaaS
 Ph
 PCF
+Proxmox
 QinQ
 QoS
 Quagga
@@ -88,6 +94,7 @@ RiaB
 RIC
 ROC
 RRC
+Saleem
 Shaddi
 Sunay
 Schwab
@@ -117,7 +124,7 @@ analytics
 architected
 architecting
 aspirational
-atacenter 
+atacenter
 backend
 backhaul
 balancer
@@ -160,7 +167,7 @@ gRPC
 hoc
 hyperscalers
 hyperscaler
-indeterminant 
+indeterminant
 instantiation
 instantiations
 interoperate
@@ -191,6 +198,7 @@ operationalize
 operationalized
 operationalization
 orchestrator
+parameterizing
 performant
 pre
 prem
@@ -202,7 +210,7 @@ repo
 repos
 retargeting
 retransmissions
-retransmit 
+retransmit
 roadmap
 rollout
 runtime
@@ -214,6 +222,9 @@ subbands
 subcarrier
 subcarriers
 subcomponents
+subdirectories
+submodule
+submodules
 subnet
 subnets
 toolchain

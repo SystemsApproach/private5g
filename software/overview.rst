@@ -1,39 +1,41 @@
-Overview
-----------------
+Many of the implementation details presented in this book were
+informed by Aether, an open source 5G edge cloud connectivity
+service. This appendix serves as a guide for gaining hands-on
+experience with that software.  Aether is an active open source
+project. Anyone interested in participating is encouraged to join the
+discussion on Slack in the `ONF Community Workspace
+<https://onf-community.slack.com/>`__.  We also recommend the `Aether
+Guide <https:/docs.aetherproject.org>`__ for anyone wanting to track
+the latest updates to the software (and its documentation).
 
-Aether is an open source 5G edge cloud connectivity service.  Source
-code for all of Aether's subsystems (e.g., AMP, SD-Core, SD-RAN,
-SD-Fabric) can be downloaded, and deployment artifacts built from that
-source code (e.g., Docker Images, Helm Charts, Fleet Bundles,
-Terraform Templates) can be used to bring up a running instance of
-Aether on local hardware. See the *Source Directory* section of this
-appendix for information about where to find the relevant repositories.
+Overview 
+----------------
 
 A multi-site deployment of Aether has been running since 2020 in
 support of the *Pronto Project*, but that deployment depends on an ops
 team with significant insider knowledge about Aether's engineering
 details. It is difficult for others to reproduce that know-how and
-bring up their own Aether clusters.  Aether is also available as two
-self-contained software packages that were originally designed to
-support developers working on individual components.  These packages
-are straightforward to install and run, even in a VM on your laptop,
-so they also provide an easy way to get started:
+bring up their own Aether clusters.  `Aether OnRamp
+<https://github.com/opennetworkinglab/aether-onramp>`__ is a
+re-packaging of Aether to address that problem. It provides an
+incremental path for users to:
 
-* `Aether-in-a-Box (AiaB)
-  <https://docs.aetherproject.org/master/developer/aiab.html>`__:
-  Includes SD-Core and the online aspects of AMP (Service
-  Orchestrator and the Monitoring Subsystem). AiaB can be configured
-  to work with either an emulated RAN or physical small cell radios
-  (both 4G and 5G).
+* Learn about and observe all the moving parts in Aether.
+* Customize Aether for different target environments.
+* Experiment with scalable edge communication.
+* Deploy and operate Aether with live traffic.
 
-* `SDRAN-in-a-Box (RiaB)
-  <https://docs.sd-ran.org/master/sdran-in-a-box/README.html>`__:
-  Includes the ONOS-based nRT-RIC, the O-RAN defined E2SM-KPI and
-  E2SM-RC Service Models, and example xApps. RiaB can be configured to
-  work with either an emulated RAN (5G) or with OAI's open source RAN stack
-  running on USRP devices (4G).
+Aether OnRamp begins with a *Quick Start* deployment that is easy to
+bring up in a single VM, but then goes on to prescribe a sequence of
+steps users can follow to deploy increasingly complex configurations.
+These include both emulated and physical RANs, culminating in an
+operational Aether cluster capable of running 24/7 and supporting live
+5G workloads. (OnRamp includes support for bringing up a 4G version of
+Aether connected to physical eNBs, but we postpone a discussion of
+that capability until a later section; everything else in this guide
+assumes 5G.)
 
-Note that these two packages do not include SD-Fabric, which depends
+Note that Aether OnRamp does not include SD-Fabric, which depends
 on programmable switching hardware. Readers interested in learning
 more about that capability (including a P4-based UPF) should see the
 Hands-on Programming appendix of our companion SDN book.
@@ -41,33 +43,10 @@ Hands-on Programming appendix of our companion SDN book.
 .. _reading_pronto:
 .. admonition:: Further Reading
 
-   `Pronto Project: Building Secure Networks Through Verifiable
-   Closed-Loop Control <https://prontoproject.org/>`__.
+   `Pronto Project: Building Secure Networks Through Verifiable 
+   Closed-Loop Control <https://prontoproject.org/>`__. 
 
    `Hands-on Programming (Appendix). Software-Defined Networks: A
    Systems Approach
    <https://sdn.systemsapproach.org/exercises.html>`__. November 2021.
-
-As a tool targeted at developers, AiaB and RiaB support a streamlined
-modify-build-test loop, but a significant gap remains between these
-self-contained versions of Aether and an operational 5G-enabled edge
-cloud deployed into a particular target environment. `Aether OnRamp
-<https://github.com/SystemsApproach/aether-onramp>`__ is a
-re-packaging of Aether to address that gap. It provides an incremental
-path for users to:
-
-* Learn about all the moving parts in Aether.
-* Customize Aether for different target environments.
-* Deploy and operate Aether with live traffic.
-
-Aether OnRamp starts with AiaB, refactored to help users step through
-a sequence of increasingly complex *blueprints* (all of which include
-the SD-Core its centerpiece). OnRamp then prescribes a (mostly) linear
-sequence of steps a new user can follow to bring up an operational
-system that runs 24/7 and supports live 5G workloads.  Aether OnRamp
-is still a work in progress, but anyone interested in participating in
-that effort is encouraged to join the discussion on Slack in the `ONF
-Community Workspace <https://onf-community.slack.com/>`__. A roadmap
-for the work that needs to be done can be found in the `Aether OnRamp
-Wiki <https://github.com/SystemsApproach/aether-onramp/wiki>`__.
 

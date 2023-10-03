@@ -1,4 +1,4 @@
-Preface 
+Preface
 =======
 
 When we wrote our introductory 5G book three years ago, our goal was
@@ -53,15 +53,15 @@ Acknowledgements
 
 The software described in this book is due to the hard work of the ONF
 engineering team, the Magma engineering team, and the open source
-communities that work with them. A special thanks to Ajay Thakur, Andy
-Bavier, and Gabriel Arrobo, who were enormously helpful in getting
-Aether OnRamp (described in the *Open Source Software* Appendix) up and
-running.
+communities that work with them. Bilal Saleem did the heavy lifting on
+Aether OnRamp (described in the *About the Software* Appendix), with a
+special thanks to Ajay Thakur, Andy Bavier, Gabriel Arrobo, and
+Muhammad Shahbaz for their guidance and feedback.
 
 Thanks to the members of the community who contributed text or
 corrections to the book, including:
 
-- Edmar Candeia Gurjão  
+- Edmar Candeia Gurjão
 - Muhammad Shahbaz
 - Mugahed Izzeldin
 - Robert MacDavid
