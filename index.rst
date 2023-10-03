@@ -29,6 +29,4 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    appendix.rst
    README.rst
    authors.rst
-   latest.rst
-   print.rst
 
