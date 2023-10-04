@@ -1,5 +1,5 @@
-Verify Network
-----------------
+A.5  Verify Network
+------------------------
 
 This section goes into depth on how SD-Core (which runs *inside* the
 Kubernetes cluster) connects to either physical gNBs or an emulated

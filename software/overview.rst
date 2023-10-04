@@ -1,24 +1,25 @@
 Many of the implementation details presented in this book were
-informed by Aether, an open source 5G edge cloud connectivity
-service. This appendix serves as a guide for gaining hands-on
-experience with that software.  Aether is an active open source
-project. Anyone interested in participating is encouraged to join the
-discussion on Slack in the `ONF Community Workspace
-<https://onf-community.slack.com/>`__.  We also recommend the `Aether
-Guide <https:/docs.aetherproject.org>`__ for anyone wanting to track
-the latest updates to the software (and its documentation).
+informed by Aether, an open source Private 5G platform. This appendix
+serves as a guide for gaining hands-on experience with that software.
+Because Aether is an active open source project, we recommend the
+`Aether Guide <https:/docs.aetherproject.org>`__ for tracking the
+latest updates to the software (and its documentation). Anyone
+interested in participating in the project is also encouraged to join
+the discussion in the `ONF Community Workspace
+<https://onf-community.slack.com/>`__ on Slack.
 
-Overview 
+
+A.1  Overview
 ----------------
 
 A multi-site deployment of Aether has been running since 2020 in
-support of the *Pronto Project*, but that deployment depends on an ops
-team with significant insider knowledge about Aether's engineering
-details. It is difficult for others to reproduce that know-how and
-bring up their own Aether clusters.  `Aether OnRamp
-<https://github.com/opennetworkinglab/aether-onramp>`__ is a
-re-packaging of Aether to address that problem. It provides an
-incremental path for users to:
+support of the *Pronto Project*, but that deployment depends on an
+experienced ops team with significant insider knowledge about Aether's
+engineering details. It is difficult for others to reproduce that
+know-how and bring up their own Aether clusters.  `Aether OnRamp
+<https://github.com/opennetworkinglab/aether-onramp>`__ is a packaging
+of Aether to address that problem. It provides tooling to deploy
+Aether on your own hardware, giving you an incremental path to:
 
 * Learn about and observe all the moving parts in Aether.
 * Customize Aether for different target environments.
@@ -43,8 +44,8 @@ Hands-on Programming appendix of our companion SDN book.
 .. _reading_pronto:
 .. admonition:: Further Reading
 
-   `Pronto Project: Building Secure Networks Through Verifiable 
-   Closed-Loop Control <https://prontoproject.org/>`__. 
+   `Pronto Project: Building Secure Networks Through Verifiable
+   Closed-Loop Control <https://prontoproject.org/>`__.
 
    `Hands-on Programming (Appendix). Software-Defined Networks: A
    Systems Approach

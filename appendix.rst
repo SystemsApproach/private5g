@@ -1,4 +1,4 @@
-Appendix: Open Source Software
+Appendix A: Aether Guide
 ==================================
 
 .. include:: software/overview.rst

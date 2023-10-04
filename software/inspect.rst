@@ -1,5 +1,5 @@
-Closer Look
----------------
+A.3  Closer Look
+-------------------------
 
 Before tearing down your Quick Start deployment, there are two
 additional steps you can take to watch Aether in action. The first is

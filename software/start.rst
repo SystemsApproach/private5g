@@ -1,4 +1,4 @@
-Quick Start
+A.2  Quick Start
 -----------------------
 
 This section describes a low-overhead way to get started with OnRamp.

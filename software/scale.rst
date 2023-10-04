@@ -1,5 +1,5 @@
-Scale Cluster
------------------
+A.4  Scale Cluster
+-------------------------
 
 Everything up to this point has been done as part of the Quick Start
 configuration, with all the components running in a single server (VM

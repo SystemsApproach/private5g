@@ -1,5 +1,5 @@
-Physical RAN
----------------
+A.7  Physical RAN
+-------------------------------
 
 We are now ready to replace the emulated RAN with physical gNBs and
 real UEs. You will need to edit ``hosts.ini`` to reflect the Aether

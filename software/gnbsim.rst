@@ -1,5 +1,5 @@
-Emulated RAN
-----------------
+A.6  Emulated RAN
+-----------------------------
 
 gNBsim emulates a 5G RAN, generating (mostly) Control Plane traffic
 that can be directed at SD-Core. This section describes how to
