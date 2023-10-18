@@ -158,6 +158,7 @@ femto
 ffice
 frontend
 fronthaul
+glommed
 gNB
 gNBs
 gNodeB
@@ -233,6 +234,7 @@ transformative
 touchpoints
 tunnelled
 uber
+uncomment
 unicast
 unsetting
 uplink
