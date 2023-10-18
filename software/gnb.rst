@@ -28,8 +28,8 @@ item, but these should not be interpreted as the only possibility.
   bookmark for that channel includes summaries of different
   combinations people have tried.
 
-The following assumes you start with a variant of ``vars/main.yml``
-customized for running physical 5G radios, which is easy to do:
+This blueprint assumes you start with a variant of ``vars/main.yml``
+customized for running physical 5G radios. This is easy to do:
 
 .. code-block::
 
@@ -396,8 +396,8 @@ Support for eNBs
 
 Aether OnRamp is geared towards 5G, but it does support physical eNBs,
 including 4G-based versions of both SD-Core and AMP. It does not
-support an emulated 4G RAN. The 4G scenario uses all the same Ansible
-machinery outlined in earlier sections, but uses a variant of
+support an emulated 4G RAN. The 4G blueprint uses all the same Ansible
+machinery outlined in earlier sections, but starts with a variant of
 ``vars/main.yml`` customized for running physical 4G radios:
 
 .. code-block::

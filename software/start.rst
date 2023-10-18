@@ -122,11 +122,12 @@ four things to note:
    files you find in the corresponding ``deps`` directory. This
    top-level variable file overrides the per-component var files, so
    you will not need to modify the latter. Note that the ``vars``
-   directory contains several variants of ``main.yml``, each tailored
-   for a different deployment scenario. The default ``main.yml``
-   (which is the same as ``main-quickstart.yml``) supports the Quick
-   Start deployment described in this section; we'll substitute the
-   other variants in later sections.
+   directory contains several variants of ``main.yml``, where we think
+   of each as specifying a *blueprint* for a different configuration
+   of Aether. The default ``main.yml`` (which is the same as
+   ``main-quickstart.yml``) gives the blueprint for the Quick Start
+   deployment described in this section; we'll substitute the other
+   blueprints in later sections.
 
 4. File ``hosts.ini`` (host inventory) is Ansible's way of specifying
    the set of servers (physical or virtual) that Ansible targets with

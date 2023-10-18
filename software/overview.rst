@@ -21,11 +21,12 @@ incremental path for users to:
 Aether OnRamp begins with a *Quick Start* deployment that is easy to
 bring up in a single VM, but then goes on to prescribe a sequence of
 steps users can follow to deploy increasingly complex configurations.
-These include both emulated and physical RANs, culminating in an
-operational Aether cluster capable of running 24/7 and supporting live
-5G workloads. (OnRamp includes support for bringing up a 4G version of
-Aether connected to physical eNBs, but we postpone a discussion of
-that capability until a later section; everything else in this guide
+OnRamp refers to each such configuration as a *blueprint*, and the set
+supports both emulated and physical RANs, along with the runtime
+machinery needed to operate an Aether cluster supporting live 5G
+workloads.  (OnRamp also defines a 4G blueprint that can be used to
+connect one or more physical eNBs, but we postpone a discussion of
+that capability until a later section. Everything else in this guide
 assumes 5G.)
 
 Note that Aether OnRamp does not include SD-Fabric, which depends
