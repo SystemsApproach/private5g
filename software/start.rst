@@ -233,10 +233,7 @@ deployed in the ``kube-system`` namespace.
 
 If you are not familiar with ``kubectl`` (the CLI for Kubernetes), we
 recommend that you start with `Kubernetes Tutorial
-<https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.  And
-although not required, you may also want to install
-`k9s <https://k9scli.io/>`__\ , a terminal-based UI that provides a
-convenient alternative to ``kubectl`` for interacting with Kubernetes.
+<https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.
 
 Note that we have not yet installed Kubernetes or Helm, so these
 commands are not yet available. At this point, the only verification
