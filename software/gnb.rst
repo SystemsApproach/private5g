@@ -24,9 +24,10 @@ item, but these should not be interpreted as the only possibility.
 
   We are tracking community experience with different hardware in the
   ``#aether-onramp`` channel of the `ONF Workspace
-  <https://onf-community.slack.com/>`__, where the ``Troubleshooting``
-  bookmark for that channel includes summaries of different
-  combinations people have tried.
+  <https://onf-community.slack.com/>`__, with summaries of different
+  combinations people have tried reported in the OnRamp
+  `Troubleshooting Wiki Page
+  <https://github.com/opennetworkinglab/aether-onramp/wiki/Troubleshooting>`__.
 
 This blueprint assumes you start with a variant of ``vars/main.yml``
 customized for running physical 5G radios. This is easy to do:
