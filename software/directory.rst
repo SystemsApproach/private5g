@@ -7,8 +7,8 @@ subsystems (e.g., AMP, SD-Core, SD-RAN), but also for different stages
 of the development pipeline (e.g., source code, deployment artifacts,
 configuration specs).  This rest of this section identifies all the
 Aether-related repositories, with the OnRamp repos listed at the end
-serving as the starting point for anyone that wants to come
-up-to-speed on the rest of the system.
+serving as the starting point for anyone who wants to come
+up to speed on the rest of the system.
 
 .. admonition:: Troubleshooting Hint
 
@@ -88,7 +88,7 @@ Note that as of version 1.20.8, Kubernetes uses the `Containerd
 <https://containerd.io/>`__ runtime system instead of Docker. This is
 transparent to anyone using Aether, which manages containers
 indirectly through Kubernetes (e.g., using ``kubectl``), but does
-impact anyone that directly depends on the Docker toolchain. Also note
+impact anyone who directly depends on the Docker toolchain. Also note
 that while Aether documentation often refers its use of "Docker
 containers," it is now more accurate to say that Aether uses
 `OCI-Compliant containers <https://opencontainers.org/>`__.
@@ -150,7 +150,7 @@ artifacts into an operational system. That repo, in turn, includes the
 other repos as submodules. Note that each of the submodules is
 self-contained if you are interested in deploying just that subsystem,
 but this guide approaches the deployment challenge from an
-integrated/end-to-end perspective.
+integrated, end-to-end perspective.
 
 Because OnRamp uses Ansible as its primary deployment tool, a general
 understanding of Ansible is helpful (see the suggested reference).

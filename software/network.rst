@@ -28,7 +28,7 @@ names and addresses are part of a standard Aether configuration.
     ``10.76.28.187``, ``10.76.28.113``, ``ens18`` are specific to
     a particular deployment site.
 
-As shown in the figure, there are two Macvlan bridges that connect the
+As shown in the figure, there are two bridges that connect the
 physical interface (``ens18`` in our example) with the UPF
 container. The ``access`` bridge connects the UPF downstream to the
 RAN (this corresponds to 3GPP's N3 interface) and is assigned IP subnet

@@ -7,10 +7,10 @@ SD-Core on that cluster, and runs an emulated 5G workload against the
 5G Core. It assumes a low-end server that meets the following
 requirements:
 
-* Haswell CPU (or newer), with at least 4 CPUs and 16GB RAM.
+* Haswell CPU (or newer), with at least 4 CPU cores and 16GB RAM.
 * Clean install of Ubuntu 20.04 or 22.04, with 5.15 (or later) kernel.
 
-For example, something like an Intel NUC is more than enough to get
+For example, something like an Intel NUC is likely more than enough to get
 started.
 
 While it's possible to use OnRamp to deploy Aether on a laptop (e.g.,
@@ -167,7 +167,7 @@ currently reading
    data_iface: ens18
 
 need to be edited to replace ``ens18`` with the device interface for
-you server, and the line specifying the IP address of the Core's AMF
+your server, and the line specifying the IP address of the Core's AMF
 needs to be edited to reflect your server's IP address:
 
 .. code-block::
