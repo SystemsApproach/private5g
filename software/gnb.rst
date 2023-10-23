@@ -10,15 +10,20 @@ In addition to the server(s) in your cluster, bringing up a physical
 RAN requires the following hardware:
 
 * One or more 5G small cell radios (e.g., MOSO CANOPY 5G INDOOR SMALL CELL).
-* One or more 5G-capable UEs (e.g., unlocked Moto G 5G).
+* One or more 5G-capable UEs (e.g., unlocked Motorola Moto G 5G).
 * A SIM reader/writer and associated software (e.g., OYEITIMES MCR3516).
-* A set of programmable SIM cards (5 blank cards included with reader).
+* A set of programmable SIM cards (blank cards likely included with reader/writer).
 
 There are multiple options for each component, but finding a
 combination that works together can be challenging. This section makes
 several recommendations based on working end-to-end systems. For
 simplicity, we pared the above list back to a single example for each
 item, but these should not be interpreted as the only possibility.
+
+Note also that our example relies on the availability of spectrum
+in the CBRS band, which is available in North America. Spectrum
+options are likely to be different (and possibly unavailable) in other
+geographic regions. 
 
 .. admonition:: Troubleshooting Hint
 
