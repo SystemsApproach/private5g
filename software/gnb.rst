@@ -20,10 +20,9 @@ several recommendations based on working end-to-end systems. For
 simplicity, we pared the above list back to a single example for each
 item, but these should not be interpreted as the only possibility.
 
-Note also that our example relies on the availability of spectrum
-in the CBRS band, which is available in North America. Spectrum
-options are likely to be different (and possibly unavailable) in other
-geographic regions. 
+Note also that our example relies on the availability of spectrum in
+the CBRS band, which is available in the United States. Spectrum
+options are likely to be different in other countries.
 
 .. admonition:: Troubleshooting Hint
 
