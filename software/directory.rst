@@ -108,6 +108,11 @@ found here:
 
  | https://gerrit.opencord.org/plugins/gitiles/aether-system-tests
 
+The specification for the CI pipeline, which invokes these QA tests,
+gates merge requests, and publishes artifacts, can be found here:
+
+ | https://gerrit.opencord.org/plugins/gitiles/aether-ci-management
+
 For more information about Aether's CI pipeline, including its QA and
 version control strategy, we recommend the Lifecycle Management
 chapter of our companion Edge Cloud Operations book.

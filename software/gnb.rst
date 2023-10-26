@@ -41,18 +41,19 @@ customized for running physical 5G radios. This is easy to do:
    $ cd vars
    $ cp main-gNB.yml main.yml
 
-This section focuses on bringing up a single gNB that is on the same
-L2 network as the Aether cluster. In our running example, this implies
-both are on subnet ``10.76.28.0/24``.
+This section focuses on bringing up a single gNB, and assumes that gNB
+is on the same L2 network as the Aether cluster. In our running
+example, this implies both are on subnet ``10.76.28.0/24``.
 
 .. admonition:: Troubleshooting Hint
 
-  Physical gNBs connect to SD-Core (both the AMF in the control plane
-  and the UPF in the user plane) in exactly the same way as external
-  instances of gNBsim. Going through the process of bringing up gNBsim
-  in a second server, as described in the previous section, is a good
-  way to validate that your Core is "gNB-ready".
-
+  Be aware that enterprise and campus networks have been known to
+  filter packets in ways that impact gNB-to-Core connectivity.
+  Fortunately, physical gNBs connect to SD-Core (both the AMF in the
+  control plane and the UPF in the user plane) in exactly the same way
+  as external instances of gNBsim. Going through the process of
+  bringing up gNBsim in a second server, as described in the previous
+  section, is a good way to validate that your Core is "gNB-ready".
 
 Modify Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
