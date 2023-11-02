@@ -61,7 +61,7 @@ ran before:
 
    $ make aether-k8s-install
    $ make aether-5gc-install
-   $ aeither-amp-install
+   $ make aether-amp-install
    $ make aether-gnbsim-install
    $ make aether-gnbsim-run
 
