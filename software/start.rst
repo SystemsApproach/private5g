@@ -7,10 +7,10 @@ SD-Core on that cluster, and runs an emulated 5G workload against the
 5G Core. It assumes a low-end server that meets the following
 requirements:
 
-* Haswell CPU (or newer), with at least 4 CPUs and 16GB RAM.
+* Haswell CPU (or newer), with at least 4 CPU cores and 16GB RAM.
 * Clean install of Ubuntu 20.04 or 22.04, with 5.15 (or later) kernel.
 
-For example, something like an Intel NUC is more than enough to get
+For example, something like an Intel NUC is likely more than enough to get
 started.
 
 While it's possible to use OnRamp to deploy Aether on a laptop (e.g.,
@@ -122,11 +122,12 @@ four things to note:
    files you find in the corresponding ``deps`` directory. This
    top-level variable file overrides the per-component var files, so
    you will not need to modify the latter. Note that the ``vars``
-   directory contains several variants of ``main.yml``, each tailored
-   for a different deployment scenario. The default ``main.yml``
-   (which is the same as ``main-quickstart.yml``) supports the Quick
-   Start deployment described in this section; we'll substitute the
-   other variants in later sections.
+   directory contains several variants of ``main.yml``, where we think
+   of each as specifying a *blueprint* for a different configuration
+   of Aether. The default ``main.yml`` (which is the same as
+   ``main-quickstart.yml``) gives the blueprint for the Quick Start
+   deployment described in this section; we'll substitute the other
+   blueprints in later sections.
 
 4. File ``hosts.ini`` (host inventory) is Ansible's way of specifying
    the set of servers (physical or virtual) that Ansible targets with
@@ -166,7 +167,7 @@ currently reading
    data_iface: ens18
 
 need to be edited to replace ``ens18`` with the device interface for
-you server, and the line specifying the IP address of the Core's AMF
+your server, and the line specifying the IP address of the Core's AMF
 needs to be edited to reflect your server's IP address:
 
 .. code-block::
@@ -232,10 +233,7 @@ deployed in the ``kube-system`` namespace.
 
 If you are not familiar with ``kubectl`` (the CLI for Kubernetes), we
 recommend that you start with `Kubernetes Tutorial
-<https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.  And
-although not required, you may also want to install
-`k9s <https://k9scli.io/>`__\ , a terminal-based UI that provides a
-convenient alternative to ``kubectl`` for interacting with Kubernetes.
+<https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.
 
 Note that we have not yet installed Kubernetes or Helm, so these
 commands are not yet available. At this point, the only verification
@@ -349,8 +347,9 @@ reasons, the Aether Core is called ``omec`` instead of ``sd-core``.
 
   If you see failures of the ``find ens18's netplan network
   directory`` task in the ``router`` role, it indicates that
-  *systemd-networkd* is not configured as expected. Check the
-  ``Troubleshooting`` bookmark on the ``#aether-onramp`` Slack channel
+  *systemd-networkd* is not configured as expected. Check the OnRamp
+  `Troubleshooting Wiki Page
+  <https://github.com/opennetworkinglab/aether-onramp/wiki/Troubleshooting>`__
   for possible workarounds.
 
 If you are interested in seeing the details about how SD-Core is

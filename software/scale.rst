@@ -49,8 +49,8 @@ by the Ansible client; and the last block indicate which nodes run the
 gNBsim workload generator (gNBsim scales across multiple Docker
 containers, but these containers are **not** managed by Kubernetes).
 Note that having ``master_nodes`` and ``gnbsim_nodes`` contain exactly
-one/common server is what triggers Ansible to instantiate the Quick
-Start configuration.
+one common server (as we did previously) is what triggers Ansible to
+instantiate the Quick Start configuration.
 
 You need to modify ``hosts.ini`` to match your target deployment.
 Once you've done that (and assuming you deleted your earlier Quick

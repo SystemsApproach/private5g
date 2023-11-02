@@ -28,7 +28,7 @@ names and addresses are part of a standard Aether configuration.
     ``10.76.28.187``, ``10.76.28.113``, ``ens18`` are specific to
     a particular deployment site.
 
-As shown in the figure, there are two Macvlan bridges that connect the
+As shown in the figure, there are two bridges that connect the
 physical interface (``ens18`` in our example) with the UPF
 container. The ``access`` bridge connects the UPF downstream to the
 RAN (this corresponds to 3GPP's N3 interface) and is assigned IP subnet
@@ -174,7 +174,7 @@ scenario). This works when the gNB is physical or when we want to run
 a single gNBsim traffic source, but once we scale up the gNBsim by
 co-locating multiple containers on a single server, we need to
 introduce another network so each container has a unique IP address
-(even though they are all hosted at the same IP address). This more
+(even though the containers are all hosted on the same node). This more
 complex configuration is depicted in :numref:`Figure %s <fig-gnbsim>`,
 where ``172.20.0.0/16`` is the IP subnet for the virtual network (also
 implemented by a Macvlan bridge, and named ``gnbaccess``).

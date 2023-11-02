@@ -3,12 +3,12 @@ A.6  Emulated RAN
 
 gNBsim emulates a 5G RAN, generating (mostly) Control Plane traffic
 that can be directed at SD-Core. This section describes how to
-configure gNBsim, so as to both customize and scale the workload it
+configure gNBsim to customize and scale the workload it
 generates. We assume gNBsim runs in one or more servers, independent
 of the server(s) that host SD-Core. These servers are specified in the
-``hosts.ini`` file, as described in the section on Scaling Aether. We
-also assume you start with a variant of ``vars/main.yml`` customized
-for running gNBsim, which is easy to do:
+``hosts.ini`` file, as described in the section on Scaling Aether. This
+blueprint assumes you start with a variant of ``vars/main.yml``
+customized for running gNBsim. This is easy to do:
 
 .. code-block::
 

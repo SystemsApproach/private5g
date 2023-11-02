@@ -10,9 +10,9 @@ In addition to the server(s) in your cluster, bringing up a physical
 RAN requires the following hardware:
 
 * One or more 5G small cell radios (e.g., MOSO CANOPY 5G INDOOR SMALL CELL).
-* One or more 5G-capable UEs (e.g., unlocked Moto G 5G).
+* One or more 5G-capable UEs (e.g., unlocked Motorola Moto G 5G).
 * A SIM reader/writer and associated software (e.g., OYEITIMES MCR3516).
-* A set of programmable SIM cards (5 blank cards included with reader).
+* A set of programmable SIM cards (blank cards likely included with reader/writer).
 
 There are multiple options for each component, but finding a
 combination that works together can be challenging. This section makes
@@ -20,34 +20,40 @@ several recommendations based on working end-to-end systems. For
 simplicity, we pared the above list back to a single example for each
 item, but these should not be interpreted as the only possibility.
 
+Note also that our example relies on the availability of spectrum in
+the CBRS band, which is available in the United States. Spectrum
+options are likely to be different in other countries.
+
 .. admonition:: Troubleshooting Hint
 
   We are tracking community experience with different hardware in the
   ``#aether-onramp`` channel of the `ONF Workspace
-  <https://onf-community.slack.com/>`__, where the ``Troubleshooting``
-  bookmark for that channel includes summaries of different
-  combinations people have tried.
+  <https://onf-community.slack.com/>`__, with summaries of different
+  combinations people have tried reported in the OnRamp
+  `Troubleshooting Wiki Page
+  <https://github.com/opennetworkinglab/aether-onramp/wiki/Troubleshooting>`__.
 
-The following assumes you start with a variant of ``vars/main.yml``
-customized for running physical 5G radios, which is easy to do:
+This blueprint assumes you start with a variant of ``vars/main.yml``
+customized for running physical 5G radios. This is easy to do:
 
 .. code-block::
 
    $ cd vars
    $ cp main-gNB.yml main.yml
 
-This section focuses on bringing up a single gNB that is on the same
-L2 network as the Aether cluster. In our running example, this implies
-both are on subnet ``10.76.28.0/24``.
+This section focuses on bringing up a single gNB, and assumes that gNB
+is on the same L2 network as the Aether cluster. In our running
+example, this implies both are on subnet ``10.76.28.0/24``.
 
 .. admonition:: Troubleshooting Hint
 
-  Physical gNBs connect to SD-Core (both the AMF in the control plane
-  and the UPF in the user plane) in exactly the same way as external
-  instances of gNBsim. Going through the process of bringing up gNBsim
-  in a second server, as described in the previous section, is a good
-  way to validate that your Core is "gNB-ready".
-
+  Be aware that enterprise and campus networks have been known to
+  filter packets in ways that impact gNB-to-Core connectivity.
+  Fortunately, physical gNBs connect to SD-Core (both the AMF in the
+  control plane and the UPF in the user plane) in exactly the same way
+  as external instances of gNBsim. Going through the process of
+  bringing up gNBsim in a second server, as described in the previous
+  section, is a good way to validate that your Core is "gNB-ready".
 
 Modify Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -396,8 +402,8 @@ Support for eNBs
 
 Aether OnRamp is geared towards 5G, but it does support physical eNBs,
 including 4G-based versions of both SD-Core and AMP. It does not
-support an emulated 4G RAN. The 4G scenario uses all the same Ansible
-machinery outlined in earlier sections, but uses a variant of
+support an emulated 4G RAN. The 4G blueprint uses all the same Ansible
+machinery outlined in earlier sections, but starts with a variant of
 ``vars/main.yml`` customized for running physical 4G radios:
 
 .. code-block::
