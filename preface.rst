@@ -54,7 +54,7 @@ Acknowledgements
 The software described in this book is due to the hard work of the ONF
 engineering team, the Magma engineering team, and the open source
 communities that work with them. Bilal Saleem did the heavy lifting on
-Aether OnRamp (described in the *About the Software* Appendix), with a
+Aether OnRamp (described in the Appendix), with a
 special thanks to Ajay Thakur, Andy Bavier, Gabriel Arrobo, and
 Muhammad Shahbaz for their guidance and feedback.
 
