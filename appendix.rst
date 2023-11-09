@@ -1,4 +1,4 @@
-Appendix A: Aether Guide
+Appendix A:  Aether Software
 ==================================
 
 .. include:: software/overview.rst

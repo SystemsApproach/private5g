@@ -1,6 +1,6 @@
 Many of the implementation details presented in this book were
 informed by Aether, an open source Private 5G platform. This appendix
-serves as a guide for gaining hands-on experience with that software.
+serves as a tutorial for gaining hands-on experience with that software.
 Because Aether is an active open source project, we recommend the
 `Aether Guide <https:/docs.aetherproject.org>`__ for tracking the
 latest updates to the software (and its documentation). Anyone
@@ -13,13 +13,12 @@ A.1  Overview
 ----------------
 
 A multi-site deployment of Aether has been running since 2020 in
-support of the *Pronto Project*, but that deployment depends on an
-experienced ops team with significant insider knowledge about Aether's
-engineering details. It is difficult for others to reproduce that
-know-how and bring up their own Aether clusters.  `Aether OnRamp
-<https://github.com/opennetworkinglab/aether-onramp>`__ is a packaging
-of Aether to address that problem. It provides tooling to deploy
-Aether on your own hardware, giving you an incremental path to:
+support of the *Pronto Project*, but that deployment depends on an ops
+team with significant insider knowledge about Aether’s engineering
+details. It is difficult for others to reproduce that know-how and
+bring up their own Aether clusters. *Aether OnRamp*, which serves as
+the basis for this tutorial, is a packaging of Aether to address that
+problem. It provides an incremental path for users to:
 
 * Learn about and observe all the moving parts in Aether.
 * Customize Aether for different target environments.
