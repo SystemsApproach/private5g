@@ -383,7 +383,7 @@ implementation in this book.
 
     L. Peterson, *et al*. `Central Office Re-architected as a
     Datacenter.
-    <https://wiki.opencord.org/download/attachments/1278027/PETERSON_CORD.pdf>`__.
+    <https://wiki-archive.opencord.org/attachments/1278027/1966399.pdf>`__.
     IEEE Communications, October 2016.
 
     A.D. Little Report. `Who Dares Wins!  How Access Transformation Can
