@@ -1,4 +1,4 @@
-Sphinx~=4.4.0
+Sphinx~=5.3.0
 doc8~=0.10.1
 docutils~=0.17.1
 reuse~=0.14.0
