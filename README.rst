@@ -1,7 +1,7 @@
 About The Book
 ===============
 
-.. image:: https://github.com/SystemsApproach/private5g/actions/workflows/publish-docs.yaml/badge.svg
+.. image:: https://github.com/SystemsApproach/private5g/actions/workflows/publish-docs.yml/badge.svg
   :align: left
   :alt: deployment status button
   :target: https://github.com/SystemsApproach/private5g/actions/
