@@ -85,7 +85,7 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -103,9 +103,9 @@ numfig_format = {
     }
 
 # Ignore link check for the following websites
-# linkcheck_ignore = [
-#     'https://SDN.systemspproach.org/',
-# ]
+linkcheck_ignore = [
+     'https://amzn.to/', 'https://amazon.com',
+]
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -126,6 +126,11 @@ html_theme_options = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+html_css_files = [
+    'css/rtd_theme_mods.css',
+    ]
+
 
 # HTML Favicon
 html_favicon = '_static/bridge.ico'
@@ -252,8 +257,6 @@ GA_INVOKE_JS = """
 
 def setup(app):
 
-    app.add_css_file('css/rtd_theme_mods.css')
 
-
-    app.add_js_file('https://www.googletagmanager.com/gtag/js?id=G-C4RNJ35K6B')
+    app.add_js_file('https://www.googletagmanager.com/gtag/js?id=G-C4RNJ35K6B', loading_method="async")
     app.add_js_file(None, body=GA_INVOKE_JS)
