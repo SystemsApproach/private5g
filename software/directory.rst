@@ -10,7 +10,7 @@ Aether-related repositories, with the OnRamp repos listed at the end
 serving as the starting point for anyone who wants to come
 up to speed on the rest of the system.
 
-.. admonition:: Troubleshooting Hint
+.. sidebar:: Troubleshooting Hint
 
   This guide includes *Troubleshooting Hints* like this one. Our first
   hint is to recommend that the guide be followed sequentially. This

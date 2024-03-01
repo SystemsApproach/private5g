@@ -74,4 +74,4 @@ The picture of a Magma deployment in Chapter 5 was provided by Shaddi
 Hasan.  The cover photo is by `Erwan Hesry <https://unsplash.com/@erwanhesry>`__ and published on `Unsplash <https://unsplash.com>`__.
 
 | Larry Peterson, Oguz Sunay, and Bruce Davie
-| May 2023
+| November 2023

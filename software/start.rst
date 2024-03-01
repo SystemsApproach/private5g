@@ -199,7 +199,7 @@ address is ``10.76.28.113`` on subnet ``10.76.28.0/24``.  We will use
 these three values as a running example throughout the guide, as a
 placeholder for your local details.
 
-.. admonition:: Troubleshooting Hint
+.. sidebar:: Troubleshooting Hint
 
   Due to a limitation in gNBsim (the RAN emulator introduced later in
   this section), it is necessary for your server to be configured with
@@ -343,7 +343,7 @@ microservices discussed is `Chapter 5
 ``amf-5887bbf6c5-pc9g2`` implements the AMF. Note that for historical
 reasons, the Aether Core is called ``omec`` instead of ``sd-core``.
 
-.. admonition:: Troubleshooting Hint
+.. sidebar:: Troubleshooting Hint
 
   If you see failures of the ``find ens18's netplan network
   directory`` task in the ``router`` role, it indicates that
@@ -414,7 +414,7 @@ of which has been saved in a timestamped file:
    2023-08-09T19:57:05Z [INFO][GNBSIM][GNodeB][ControlPlaneTransport] Connected to AMF, AMF IP: 10.76.28.113 AMF Port: 38412
    ...
 
-.. admonition:: Troubleshooting Hint
+.. sidebar:: Troubleshooting Hint
 
   If ``summary.log`` is empty, it means the emulation did not run due
   to a configuration error. To debug the problem, open a bash shell on
@@ -422,9 +422,7 @@ of which has been saved in a timestamped file:
   at ``gnbsim.log``. Output that includes ``failed to connect amf``
   and ``err: address family not supported by protocol`` indicates that
   your server does not have IPv6 enabled.
-
-.. admonition:: Troubleshooting Hint
-
+  
   If ``summary.log`` reports ``UEs Passed: 0 , UEs Failed: 5`` then it
   may be the case that SD-Core did not come up cleanly. Type
   ``make aether-resetcore``, and after verifying all pods are running
@@ -435,6 +433,7 @@ of which has been saved in a timestamped file:
   ways, which interferes with OnRamp's ability to establish a route
   to the UPF pod.
 
+   
 If you are interested in the config file that controls the test,
 including the option of enabling other profiles, take a look at
 ``deps/gnbsim/config/gnbsim-default.yaml``. We return to the issue of
@@ -474,6 +473,8 @@ outputs by modifying ``logLevel`` in the ``logger`` block at the end
 of the file.  For any changes you make, just rerun ``make
 aether-gnbsim-run`` to see the effects; you do not need to reinstall
 gNBsim.
+
+
 
 Clean Up
 ~~~~~~~~~~~~~~~~~

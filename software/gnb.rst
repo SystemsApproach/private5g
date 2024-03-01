@@ -24,7 +24,7 @@ Note also that our example relies on the availability of spectrum in
 the CBRS band, which is available in the United States. Spectrum
 options are likely to be different in other countries.
 
-.. admonition:: Troubleshooting Hint
+.. sidebar:: Troubleshooting Hint
 
   We are tracking community experience with different hardware in the
   ``#aether-onramp`` channel of the `ONF Workspace
@@ -45,7 +45,7 @@ This section focuses on bringing up a single gNB, and assumes that gNB
 is on the same L2 network as the Aether cluster. In our running
 example, this implies both are on subnet ``10.76.28.0/24``.
 
-.. admonition:: Troubleshooting Hint
+.. sidebar:: Troubleshooting Hint
 
   Be aware that enterprise and campus networks have been known to
   filter packets in ways that impact gNB-to-Core connectivity.
@@ -230,7 +230,7 @@ gives detailed instructions about configuring the gNB.
    `MOSO CANOPY 5G INDOOR SMALL CELL
    <https://opennetworking.org/products/moso-canopy-5g-indoor-small-cell/>`__.
 
-.. admonition:: Troubleshooting Hint
+.. sidebar:: Troubleshooting Hint
 
   The product data sheet shows support for frequency bands
   n78/n48/n77, but individual devices do not necessarily support all
@@ -320,14 +320,14 @@ follow:
    your server also be configured to forward IP packets on to the
    Internet.
 
-.. admonition:: Troubleshooting Hint
+.. sidebar:: Troubleshooting Hint
 
   For the SERCOMM gNB, if you elect to enable GPS, then ``Setting >
   Sync_Settings > Sync_Mode`` should be set to ``TIME``.  With GPS and
   PTP disabled, ``Setting > Sync_Settings > Sync_Mode`` should be set
   to ``FREE_RUNNING``.
 
-.. admonition:: Troubleshooting Hint
+.. sidebar:: Troubleshooting Hint
 
   For the SERCOMM gNB, we recommend the following when the gNB's
   addresses is acquired via DHCP, assuming that address is unlikely to
