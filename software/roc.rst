@@ -71,7 +71,10 @@ arbitrary and need only be consistent *within* ``radio-5g-models.json``.
 
 Once you are done with these edits, uninstall the SD-Core you had
 running in the previous stage, and then bring up the ROC followed by a
-new instantiation of the SD-Core:
+new instantiation of the SD-Core. The order is important because the
+Core depends on configuration parameters provided by the ROC. (You may
+also need to reboot the gNB, although it typically does so
+automatically when it detects that the Core has restarted.)
 
 .. code-block::
 
@@ -79,10 +82,19 @@ new instantiation of the SD-Core:
    $ make aether-amp-install
    $ make aether-5gc-install
 
-The order is important, since the Core depends on configuration
-parameters provided by the ROC. Also note that you may need to reboot
-the gNB, although it typically does so automatically when it detects
-that the Core has restarted.
+As an aside, the above uses the ``aether-amp-install`` Make target to
+install ROC, but that target also installs the monitoring service. The
+latter is not required in this situation, but you are always free to
+use subsystem-specific targets (as documented in the ``Makefile``)
+rather than the Aether-wide targets we've been using. For example,
+installing just ROC can be done in two steps: the first provisions ROC
+as a Kubernetes application, and the second loads the json files that
+define the Models into that service.
+
+.. code-block::
+
+   $ make roc-install
+   $ make roc-load
 
 To see these initial configuration values using the GUI, open the
 dashboard available at ``http://<server-ip>:31194``. If you select

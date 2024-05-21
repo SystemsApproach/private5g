@@ -44,3 +44,5 @@ Larry Peterson, Oguz Sunay, and Bruce Davie
    software/gnbsim.rst
    software/gnb.rst
    software/roc.rst
+   software/devel.rst
+   software/blueprints.rst

@@ -3,11 +3,16 @@ Verify Network
 
 This section goes into depth on how SD-Core (which runs *inside* the
 Kubernetes cluster) connects to either physical gNBs or an emulated
-RAN (both running *outside* the Kubernetes cluster). For the purpose
-of this section, we assume you already have a scalable cluster running
-(as outlined in the previous section), SD-Core has been installed on
-that cluster, and you have a terminal window open on the Master node
-in that cluster.
+RAN (both running *outside* the Kubernetes cluster). It also describes
+how to run diagnostics to debug potential problems.
+
+For the purpose of this section, we assume you already have a scalable
+cluster running (as outlined in the previous section), SD-Core has
+been installed on that cluster, and you have a terminal window open on
+the Master node in that cluster.
+
+Network Schematic
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :numref:`Figure %s <fig-macvlan>` shows a high-level schematic of
 Aether's end-to-end User Plane connectivity, where we start by
@@ -230,3 +235,58 @@ physical gNBs.
             macvlan:
                 iface: gnbaccess
                 subnet_prefix: "172.20"
+
+Packet Traces
+~~~~~~~~~~~~~~~~~
+
+Successfully connecting a UE to the Internet involves configuring the
+UE, gNB, and SD-Core software in a consistent way; establishing
+SCTP-based control plane (N2) and GTP-based user plane (N3)
+connections between the base station and Mobile Core; and traversing
+multiple IP subnets along the end-to-end path.
+
+Packet traces are the best way to diagnose your deployment, and the
+most helpful traces you can capture are shown in the following
+commands. You can run these on the Aether server, where we use our
+example ``ens18`` interface for illustrative purposes:
+
+.. code-block::
+
+   $ sudo tcpdump -i any sctp -w sctp-test.pcap
+   $ sudo tcpdump -i ens18 port 2152 -w gtp-outside.pcap
+   $ sudo tcpdump -i access port 2152 -w gtp-inside.pcap
+   $ sudo tcpdump -i core net 172.250.0.0/16 -w n6-inside.pcap
+   $ sudo tcpdump -i ens18 net 172.250.0.0/16 -w n6-outside.pcap
+
+The first trace, saved in file ``sctp.pcap``, captures SCTP packets
+sent to establish the control path between the base station and the
+Mobile Core (i.e., N2 messages). Toggling "Mobile Data" on a physical
+UE, for example by turning Airplane Mode off and on, will generate the
+relevant control plane traffic; gNBsim automatically triggers this
+activity.
+
+The second and third traces, saved in files ``gtp-outside.pcap`` and
+``gtp-inside.pcap``, respectively, capture GTP packets (tunneled
+through port ``2152`` ) on the RAN side of the UPF. Setting the
+interface to ``ens18`` corresponds to "outside" the UPF and setting
+the interface to ``access`` corresponds to "inside" the UPF.  Running
+``ping`` from a physical UE will generate the relevant user plane (N3)
+traffic; gNBsim automatically triggers this activity.
+
+Similarly, the fourth and fifth traces, saved in files
+``n6-inside.pcap`` and ``n6-outside.pcap``, respectively, capture IP
+packets on the Internet side of the UPF (which is known as the **N6**
+interface in 3GPP). In these two tests, ``net 172.250.0.0/16``
+corresponds to the IP addresses assigned to UEs by the SMF. Running
+``ping`` from a physical UE will generate the relevant user plane
+traffic; gNBsim automatically triggers this activity.
+
+If the ``gtp-outside.pcap`` has packets and the ``gtp-inside.pcap``
+is empty (no packets captured), you may run the following commands
+to make sure packets are forwarded from the ``ens18`` interface
+to the ``access`` interface and vice versa:
+
+.. code-block::
+
+   $ sudo iptables -A FORWARD -i ens18 -o access -j ACCEPT
+   $ sudo iptables -A FORWARD -i access -o ens18 -j ACCEPT

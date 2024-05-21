@@ -60,31 +60,28 @@ follows:
 
 .. code-block::
 
-   $ sudo apt install pipx
-   $ sudo apt install python3.8-venv
+   $ sudo apt install sshpass python3-venv pipx make git
    $ pipx install --include-deps ansible
    $ pipx ensurepath
-   $ sudo apt-get install sshpass
+   $ source ~/.bashrc
 
 Once installed, displaying the Ansible version number should result in
-output similar to the following:
+output similar to the following on Ubuntu 20.04. (Ubuntu 22.04 will
+show ``ansible [core 2.16.4]``.)
 
 .. code-block::
 
    $ ansible --version
-   ansible [core 2.11.12]
+   ansible [core 2.13.13]
      config file = None
-     configured module search path = ['/home/foo/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
-     ansible python module location = /home/foo/.local/lib/python3.6/site-packages/ansible
-     ansible collection location = /home/foo/.ansible/collections:/usr/share/ansible/collections
-     executable location = /home/foo/.local/bin/ansible
-     python version = 3.6.9 (default, Mar 10 2023, 16:46:00) [GCC 8.4.0]
-     jinja version = 3.0.3
+     configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+     ansible python module location = /home/ubuntu/.local/pipx/venvs/ansible/lib/python3.8/site-packages/ansible
+     ansible collection location = /home/ubuntu/.ansible/collections:/usr/share/ansible/collections
+     executable location = /home/ubuntu/.local/bin/ansible
+     python version = 3.8.10 (default, Nov 22 2023, 10:22:35) [GCC 9.4.0]
+     jinja version = 3.1.3
      libyaml = True
 
-Note that a fresh install of Ubuntu may be missing other packages that
-you need (e.g., ``git``, ``curl``, ``make``), but you will be prompted
-to install them as you step through the Quick Start sequence.
 
 Download Aether OnRamp
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -154,10 +151,16 @@ same server you will be installing Aether on.
 
 In this example, address ``10.76.28.113`` and the three occurrences
 of the string ``aether`` need to be replaced with the appropriate
-values.  Note that if you set up your server to use SSH keys instead
-of passwords, then ``ansible_password=aether`` needs to be replaced
-with ``ansible_ssh_private_key_file=~/.ssh/id_rsa`` (or wherever
-your private key can be found).
+values.
+
+Note that if you set up your server to use SSH keys instead
+of passwords, update the ``hosts.ini`` with your private key (accordingly
+adjust the location and filename of your private key)
+
+.. code-block::
+
+   node1  ansible_host=10.76.28.113 ansible_user=aether ansible_ssh_private_key_file=~/.ssh/id_rsa
+
 
 The second set of parameters is in ``vars/main.yml``, where the **two** lines
 currently reading
@@ -213,31 +216,7 @@ you may want to modify as we move beyond the Quick Start deployment.
 We'll identify those files throughout this section, for informational
 purposes, and revisit them in later sections.
 
-Many of the tasks specified in the various Ansible playbooks result in
-calls to Kubernetes, either directly via ``kubectl``, or indirectly
-via ``helm``. This means that after executing the sequence of
-Makefile targets described in the rest of this guide, you'll want to
-run some combination of the following commands to verify that the
-right things happened:
-
-.. code-block::
-
-   $ kubectl get pods --all-namespaces
-   $ helm repo list
-   $ helm list --namespace kube-system
-
-The first reports the set of Kubernetes namespaces currently running;
-the second shows the known set of repos you are pulling charts from;
-and the third shows the version numbers of the charts currently
-deployed in the ``kube-system`` namespace.
-
-If you are not familiar with ``kubectl`` (the CLI for Kubernetes), we
-recommend that you start with `Kubernetes Tutorial
-<https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.
-
-Note that we have not yet installed Kubernetes or Helm, so these
-commands are not yet available. At this point, the only verification
-step you can take is to type the following:
+At this point, the only verification step you can take is to type the following:
 
 .. code-block::
 
@@ -261,6 +240,26 @@ Note that the Ansible playbooks triggered by this (and other) make
 targets will output red results from time-to-time (indicating an
 exception or failure), but as long as Ansible keeps progressing
 through the playbook, such output can be safely ignored.
+
+Many of the tasks specified in the various Ansible playbooks result in
+calls to Kubernetes, either directly via ``kubectl``, or indirectly
+via ``helm``. This means that you may want to run some combination of the
+following commands to verify that the right things happened:
+
+.. code-block::
+
+   $ kubectl get pods --all-namespaces
+   $ helm repo list
+   $ helm list --namespace kube-system
+
+The first reports the set of Kubernetes namespaces currently running;
+the second shows the known set of repos you are pulling charts from;
+and the third shows the version numbers of the charts currently
+deployed in the ``kube-system`` namespace.
+
+If you are not familiar with ``kubectl`` (the CLI for Kubernetes), we
+recommend that you start with `Kubernetes Tutorial
+<https://kubernetes.io/docs/tutorials/kubernetes-basics/>`__.
 
 Once the playbook completes, executing ``kubectl`` will show the
 ``kube-system`` namespace running, with output looking something like
@@ -349,7 +348,7 @@ reasons, the Aether Core is called ``omec`` instead of ``sd-core``.
   directory`` task in the ``router`` role, it indicates that
   *systemd-networkd* is not configured as expected. Check the OnRamp
   `Troubleshooting Wiki Page
-  <https://github.com/opennetworkinglab/aether-onramp/wiki/Troubleshooting>`__
+  <https://wiki.aetherproject.org/display/HOME/Troubleshooting>`__
   for possible workarounds.
 
 If you are interested in seeing the details about how SD-Core is

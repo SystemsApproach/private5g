@@ -3,12 +3,13 @@ Emulated RAN
 
 gNBsim emulates a 5G RAN, generating (mostly) Control Plane traffic
 that can be directed at SD-Core. This section describes how to
-configure gNBsim to customize and scale the workload it
-generates. We assume gNBsim runs in one or more servers, independent
-of the server(s) that host SD-Core. These servers are specified in the
-``hosts.ini`` file, as described in the section on Scaling Aether. This
-blueprint assumes you start with a variant of ``vars/main.yml``
-customized for running gNBsim. This is easy to do:
+configure gNBsim to customize and scale the workload it generates. We
+assume gNBsim runs in one or more servers, independent of the
+server(s) that host SD-Core. These servers are specified in the
+``hosts.ini`` file, as described in the `Scale Cluster
+<scale.html>`__ section. This blueprint assumes you start with a
+variant of ``vars/main.yml`` customized for running gNBsim. This is
+easy to do:
 
 .. code-block::
 
@@ -56,11 +57,12 @@ The ``container.count`` variable in the ``docker`` block specifies how
 many containers run in each server (``2`` in this example). The
 ``router`` block then gives the network specification needed for these
 containers to connect to the SD-Core; all of these variables are
-described in the previous section on Networking. Finally, the
-``servers`` block names the configuration files that parameterize each
-container. In this example, there are two servers with two containers
-running in each, with ``config/gnbsim-s2-p1.yaml`` parameterizing the
-first container on the second server.
+described in the `Verify Network <network.html>`__
+section. Finally, the ``servers`` block names the configuration files
+that parameterize each container. In this example, there are two
+servers with two containers running in each, with
+``config/gnbsim-s2-p1.yaml`` parameterizing the first container on the
+second server.
 
 These config files then specify the second set of gNBsim parameters.
 A detailed description of these parameters is outside the scope of

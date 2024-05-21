@@ -16,11 +16,12 @@ There are two aspects of our deployment that scale independently. One
 is Aether proper: a Kubernetes cluster running the set of
 microservices that implement SD-Core and AMP (and optionally, other
 edge apps). The second is gNBsim: the emulated RAN that generates
-traffic directed at the Aether cluster. Minimally, two servers are
-required—one for the Aether cluster and one for gNBsim—with each able
-to scale independently. For example, having four servers would support
-a 3-node Aether cluster and a 1-node workload generator. This example
-configuration corresponds to the following ``hosts.ini`` file:
+traffic directed at the Aether cluster. The assumption in this section
+is that there are at least two servers—one for the Aether cluster and
+one for gNBsim—with each able to scale independently. For example,
+having four servers would support a 3-node Aether cluster and a 1-node
+workload generator. This example configuration corresponds to the
+following ``hosts.ini`` file:
 
 .. code-block::
 
@@ -36,21 +37,27 @@ configuration corresponds to the following ``hosts.ini`` file:
    [worker_nodes]
    node2
    node3
-   node4
 
    [gnbsim_nodes]
    node4
 
 The first block identifies all the nodes; the second block designates
-which node runs the Ansible client and the Kubernetes control plane
-(this is the node you ssh into and invoke Make targets and ``kubectl``
-commands); the third block designates the worker nodes being managed
-by the Ansible client; and the last block indicate which nodes run the
-gNBsim workload generator (gNBsim scales across multiple Docker
+which node runs the Kubernetes control plane (and where you invoke
+``kubectl`` commands); the third block designates the worker nodes in
+the Kubernetes cluster; and the last block indicate which nodes run
+the gNBsim workload generator (gNBsim scales across multiple Docker
 containers, but these containers are **not** managed by Kubernetes).
-Note that having ``master_nodes`` and ``gnbsim_nodes`` contain exactly
-one common server (as we did previously) is what triggers Ansible to
-instantiate the Quick Start configuration.
+
+Although not a requirement, this and the following sections make the
+simplifying assumption that you install OnRamp and invoke Make targets
+on the ``master_nodes``. (In general, the Ansible client that OnRamp
+uses to deploy Aether need not run on one of the servers listed in
+``hosts.ini``.) Also note that having ``master_nodes`` and
+``gnbsim_nodes`` contain exactly one common server (as we did
+previously) is what triggers Ansible to instantiate the Quick Start
+configuration. (In general, the node groups need not be disjoint, so
+for example, a single node could be part of ``worker_nodes`` and
+``gnbsim_nodes``.)
 
 You need to modify ``hosts.ini`` to match your target deployment.
 Once you've done that (and assuming you deleted your earlier Quick

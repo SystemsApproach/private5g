@@ -47,15 +47,15 @@ be accessed at ``http://10.76.28.113:31194/aether-roc-api/`` in our
 example deployment (where Aether runs on host ``10.76.28.113``).
 
 There is much more to say about the ROC and the Aether API, which we
-return to in the section on Runtime Control. For now, we suggest you
-simply peruse the Control Dashboard by starting with the dropdown menu
-in the upper right corner. For example, selecting `Devices` will show
-the set of UEs registered with Aether, similar to the screenshot in
-:numref:`Figure %s <fig-roc>`. In an operational setting, these values
-would be entered into the ROC through either the GUI or the underlying
-API. For the Quick Start scenario we're limiting ourselves to in this
-section, these values are loaded from
-``deps/amp/5g-roc/templates/roc-5g-models.json``.
+return to in the `Runtime Control <roc.html>`__ section. For
+now, we suggest you simply peruse the Control Dashboard by starting
+with the dropdown menu in the upper right corner. For example,
+selecting `Devices` will show the set of UEs registered with Aether,
+similar to the screenshot in :numref:`Figure %s <fig-roc>`. In an
+operational setting, these values would be entered into the ROC
+through either the GUI or the underlying API. For the Quick Start
+scenario we're limiting ourselves to in this section, these values are
+loaded from ``deps/amp/5g-roc/templates/roc-5g-models.json``.
 
 .. _fig-roc:
 .. figure:: figures/ROC-Dashboard.png
