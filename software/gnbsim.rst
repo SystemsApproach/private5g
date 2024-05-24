@@ -157,3 +157,8 @@ actually ping that server. Success is a good indication that your
 Aether cluster is properly configured to support end-to-end
 connectivity.
 
+Yet another option is to configure a single instance of gNBsim to direct
+multiple workloads at SD-Core. For example, editing ``vars/main.yml``
+to use ``config/gnbsim-all.yaml`` in place of
+``config/gnbsim-default.yaml`` causes gNBsim to activate all the
+profiles.
