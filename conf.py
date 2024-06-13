@@ -39,7 +39,7 @@ release = version
 # -- Project information -----------------------------------------------------
 
 project = u'Private 5G: A Systems Approach'
-copyright = u'2022, Systems Approach LLC (Publisher)'
+copyright = u'2023, Systems Approach LLC (Publisher)'
 author = u'Peterson, Sunay, Davie'
 
 # -- General configuration ---------------------------------------------------
