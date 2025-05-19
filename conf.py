@@ -130,6 +130,10 @@ html_static_path = ['_static']
 html_css_files = [
     'css/rtd_theme_mods.css',
     ]
+#load the rybbit analytics script
+html_js_files = [
+    ('https://app.rybbit.io/api/script.js',{'data-site-id': '626', 'async': 'async'})
+    ]
 
 
 # HTML Favicon
