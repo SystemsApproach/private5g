@@ -3,17 +3,28 @@
 :pop:`Read the Latest!`
 ========================
 
-`Substack Newsletter: <https://systemsapproach.substack.com/>`__ Stay
-up-to-date with the latest developments by following the authors on
-`Substack <https://systemsapproach.substack.com/>`__, where they
+`Systems Approach Newsletter: <https://systemsapproach.org/newsletter>`__ Stay
+up to date with the latest developments by subscribing to the
+`Systems Approach Newsletter
+<https://systemsapproach.org/newsletter>`__, where the authors
 connect the concepts and lessons in this book to what's happening in
 the Internet today.
 
-`Book Series: <https://www.systemsapproach.org/books.html>`__ Also check out
+`Book Series: <https://systemsapproach.org/books/>`__ Also check out
 our companion books that cover emerging topics in more depth.
 
-* `TCP Congestion Control: A Systems Approach <https://tcpcc.systemsapproach.org>`__
 
-* `Edge Cloud Operations: A Systems Approach <https://ops.systemsapproach.org>`__
+* `Network Security: A Systems Approach <https://systemsapproach.org/books/#securitybook>`__
 
-* `Software-Defined Networks: A Systems Approach <https://sdn.systemsapproach.org>`__
+* `What We Talk About When We Talk About Systems: Essays on the
+  Systems Approach <https://systemsapproach.org/books/#essaybook>`__
+
+* `Software-Defined Networks: A Systems Approach <https://systemsapproach.org/books/#sdnbook>`__
+
+* `Edge Cloud Operations: A Systems Approach
+  <https://systemsapproach.org/books/#opsbook>`__
+
+* `TCP Congestion Control: A Systems Approach <https://systemsapproach.org/books/#tcpbook>`__
+
+
+
